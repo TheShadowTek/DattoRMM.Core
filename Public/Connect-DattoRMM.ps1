@@ -76,11 +76,16 @@ function Connect-DattoRMM {
         TokenType = $Response.token_type
         ExpiresAt = (Get-Date).AddSeconds($Response.expires_in)
         AutoRefresh = $AutoRefresh.IsPresent
+        AuthHeader = @{ Authorization = "$($Response.token_type) $($Response.access_token)" }
     }
+
     if ($AutoRefresh) {
+
         $script:RMMAuth.Key = $AuthKey
         $script:RMMAuth.Secret = $AuthSecret | ConvertTo-SecureString -AsPlainText -Force
+
     }
+    
     # Get initial rate limit status
     $RateStatus = Get-RMMRequestRate
     $Utilization = 1 - ($RateStatus.accountCount / [math]::Max($RateStatus.accountRateLimit, 1))
@@ -88,4 +93,5 @@ function Connect-DattoRMM {
     $script:RMMThrottle.Remaining = $RateStatus.accountRateLimit - $RateStatus.accountCount
     $script:RMMThrottle.Reset = (Get-Date).AddSeconds($RateStatus.slidingTimeWindowSizeSeconds)
     $script:RMMThrottle.CheckInterval = [math]::Max(1, [int](30 * (1 - $Utilization)))
+
 }
