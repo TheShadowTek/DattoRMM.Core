@@ -1,3 +1,12 @@
+# enum types
+enum ExtendedProperty {
+    Settings
+    Variables
+    Filters
+}
+
+# classes
+
 class DRMMObject {
 
     [string]$ApiBaseUrl
@@ -164,7 +173,7 @@ class DRMMProxySettings : DRMMObject {
 
     }
 
-    static [DRMMProxySettings] FromApi([pscustomobject]$Response) {
+    static [DRMMProxySettings] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) { return $null }
 
@@ -193,7 +202,6 @@ class DRMMProxySettings : DRMMObject {
         return $ProxySettings
 
     }
-
 }
 
 class DRMMDevicesStatus : DRMMObject {
@@ -206,7 +214,7 @@ class DRMMDevicesStatus : DRMMObject {
 
     }
 
-    static [DRMMDevicesStatus] FromApi([pscustomobject]$Response) {
+    static [DRMMDevicesStatus] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) { return $null }
 
@@ -223,29 +231,82 @@ class DRMMDevicesStatus : DRMMObject {
 
 class DRMMSiteSettings : DRMMObject {
 
-    [bool]$AutoPatch
-    [string]$Timezone
-    [string]$MaintenanceWindow
-    [bool]$EnableAlerts
+    [DRMMGeneralSettings]$GeneralSettings
+    [DRMMProxySettings]$ProxySettings  # Reuse existing class
+    [DRMMMailRecipient[]]$MailRecipients
 
     DRMMSiteSettings() : base() {
 
     }
 
-    static [DRMMSiteSettings] FromApi([pscustomobject]$Response) {
+    static [DRMMSiteSettings] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {return $null}
 
         $Settings = [DRMMSiteSettings]::new()
-        $Settings.AutoPatch = $Response.autoPatch
-        $Settings.Timezone = $Response.timezone
-        $Settings.MaintenanceWindow = $Response.maintenanceWindow
-        $Settings.EnableAlerts = $Response.enableAlerts
+
+        if ($Response.generalSettings) {
+
+            $Settings.GeneralSettings = [DRMMGeneralSettings]::FromAPIMethod($Response.generalSettings)
+
+        }
+
+        if ($Response.proxySettings) {
+
+            $Settings.ProxySettings = [DRMMProxySettings]::FromAPIMethod($Response.proxySettings)
+            
+        }
+
+        $Settings.MailRecipients = $Response.mailRecipients | ForEach-Object {[DRMMMailRecipient]::FromAPIMethod($_)}
+        
+        return $Settings
+    }
+}
+
+class DRMMGeneralSettings : DRMMObject {
+
+    [string]$Name
+    [string]$Uid
+    [string]$Description
+    [bool]$OnDemand
+
+    DRMMGeneralSettings() : base() {}
+
+    static [DRMMGeneralSettings] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {return $null}
+
+        $Settings = [DRMMGeneralSettings]::new()
+        $Settings.Name = $Response.name
+        $Settings.Uid = $Response.uid
+        $Settings.Description = $Response.description
+        $Settings.OnDemand = $Response.onDemand
 
         return $Settings
 
     }
+}
 
+class DRMMMailRecipient : DRMMObject {
+
+    [string]$Name
+    [string]$Email
+    [string]$Type
+
+    DRMMMailRecipient() : base() {}
+
+    static [DRMMMailRecipient] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {return $null}
+
+        $Recipient = [DRMMMailRecipient]::new()
+        $Recipient.Name = $Response.name
+        $Recipient.Email = $Response.email
+        $Recipient.Type = $Response.type
+
+        return $Recipient
+
+    }
 }
 
 class DRMMSite : DRMMObject {
@@ -261,19 +322,17 @@ class DRMMSite : DRMMObject {
     [DRMMProxySettings]$ProxySettings
     [DRMMDevicesStatus]$DevicesStatus
     [DRMMSiteSettings]$SiteSettings
+    [DRMMVariable[]]$Variables
+    [object]$Filters  # Placeholder for filters data
     [string]$AutotaskCompanyName
     [string]$AutotaskCompanyId
     [string]$PortalUrl
-    [datetime]$CreatedAt
-    [long]$CreatedAtEpoch
-    [datetime]$UpdatedAt
-    [long]$UpdatedAtEpoch
 
     DRMMSite() : base() {
 
     }
 
-    static [DRMMSite] FromApi([pscustomobject]$Response) {
+    static [DRMMSite] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) { return $null }
 
@@ -289,29 +348,12 @@ class DRMMSite : DRMMObject {
         $Site.AutotaskCompanyName = $Response.autotaskCompanyName
         $Site.AutotaskCompanyId = $Response.autotaskCompanyId
         $Site.PortalUrl = $Response.portalUrl
-        $CreatedEpoch = $Response.createdAt
-
-        if ($null -ne $CreatedEpoch) {
-
-            $Site.CreatedAtEpoch = [long]$CreatedEpoch
-            $Site.CreatedAt = [DRMMObject]::ConvertEpochToDateTime($Site.CreatedAtEpoch)
-
-        }
-
-        $UpdatedEpoch = $Response.updatedAt
-
-        if ($null -ne $UpdatedEpoch) {
-
-            $Site.UpdatedAtEpoch = [long]$UpdatedEpoch
-            $Site.UpdatedAt = [DRMMObject]::ConvertEpochToDateTime($Site.UpdatedAtEpoch)
-
-        }
 
         $ProxySettingsResponse = $Response.proxySettings
 
         if ($ProxySettingsResponse) {
 
-            $Site.ProxySettings = [DRMMProxySettings]::FromApi($ProxySettingsResponse)
+            $Site.ProxySettings = [DRMMProxySettings]::FromAPIMethod($ProxySettingsResponse)
 
         }
 
@@ -319,7 +361,7 @@ class DRMMSite : DRMMObject {
 
         if ($DevicesStatusResponse) {
 
-            $Site.DevicesStatus = [DRMMDevicesStatus]::FromApi($DevicesStatusResponse)
+            $Site.DevicesStatus = [DRMMDevicesStatus]::FromAPIMethod($DevicesStatusResponse)
 
         }
 
@@ -327,7 +369,7 @@ class DRMMSite : DRMMObject {
 
         if ($SiteSettingsResponse) {
 
-            $Site.SiteSettings = [DRMMSiteSettings]::FromApi($SiteSettingsResponse)
+            $Site.SiteSettings = [DRMMSiteSettings]::FromAPIMethod($SiteSettingsResponse)
 
         }
 
@@ -337,7 +379,7 @@ class DRMMSite : DRMMObject {
 
     [string] GetSummary() {
 
-        $DeviceCount = if ($this.DevicesStatus -and $null -ne $this.DevicesStatus.NumberOfDevices) { $this.DevicesStatus.NumberOfDevices.ToString() } else { '0' }
+        $DeviceCount = if ($this.DevicesStatus -and $null -ne $this.DevicesStatus.NumberOfDevices) {"$($this.DevicesStatus.NumberOfDevices)"} else {'0'}
 
         return "$($this.Name) ($($this.Uid)) - Devices: $DeviceCount"
 
@@ -360,7 +402,7 @@ class DRMMSite : DRMMObject {
 
         }
 
-        return [DRMMSite]::FromApi($ResponseObject)
+        return [DRMMSite]::FromAPIMethod($ResponseObject)
 
     }
 
@@ -381,63 +423,41 @@ class DRMMSite : DRMMObject {
 class DRMMVariable : DRMMObject {
 
     [long]$Id
-    [string]$Key
+    [string]$Name
     [object]$Value
     [string]$Scope
-    [string]$SiteUid
+    [Nullable[guid]]$SiteUid
     [bool]$IsSecret
-    [string]$Description
-    [datetime]$CreatedAt
-    [long]$CreatedAtEpoch
-    [datetime]$UpdatedAt
-    [long]$UpdatedAtEpoch
 
     DRMMVariable() : base() {
 
     }
 
-    static [DRMMVariable] FromApi([pscustomobject]$Response) {
+    static [DRMMVariable] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
 
         if ($null -eq $Response) { return $null }
 
         $Variable = [DRMMVariable]::new()
-
-        if ($Response.PSObject.Properties.Name -contains 'id')          { $Variable.Id = $Response.id }
-        if ($Response.PSObject.Properties.Name -contains 'key')         { $Variable.Key = $Response.key }
-        if ($Response.PSObject.Properties.Name -contains 'value')       { $Variable.Value = $Response.value }
-        if ($Response.PSObject.Properties.Name -contains 'scope')       { $Variable.Scope = $Response.scope }
-        if ($Response.PSObject.Properties.Name -contains 'siteUid')     { $Variable.SiteUid = $Response.siteUid }
-        if ($Response.PSObject.Properties.Name -contains 'isSecret')    { $Variable.IsSecret = $Response.isSecret }
-        if ($Response.PSObject.Properties.Name -contains 'description') { $Variable.Description = $Response.description }
-
-        if ($Response.PSObject.Properties.Name -contains 'creationDate') {
-
-            $ParseDate = [DRMMObject]::ParseApiDate($Response.creationDate)
-            $Variable.CreatedAt = $ParseDate.DateTime; $Variable.CreatedAtEpoch = $ParseDate.Epoch
-
-        }
-
-        if ($Response.PSObject.Properties.Name -contains 'updatedDate') {
-
-            $ParseDate = [DRMMObject]::ParseApiDate($Response.updatedDate)
-            $Variable.UpdatedAt = $ParseDate.DateTime; $Variable.UpdatedAtEpoch = $ParseDate.Epoch
-
-        }
+        $Variable.Id = $Response.id
+        $Variable.Name = $Response.name
+        $Variable.Value = $Response.value
+        $Variable.IsSecret = $Response.masked
+        $Variable.Scope = $Scope
+        $Variable.SiteUid = $SiteUid
 
         return $Variable
 
     }
 
-    [bool] IsGlobal() { return ($this.Scope -eq 'global') }
-    [bool] IsSite()   { return ($this.Scope -eq 'site') }
+    [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
+    [bool] IsSite()   { return ($this.Scope -eq 'Site') }
 
     [string] GetSummary([bool]$RevealValue = $false) {
 
         $Val = if ($this.IsSecret -and -not $RevealValue) { [DRMMObject]::MaskString([string]$this.Value) } else { $this.Value }
-        $ScopeValue = if ($this.Scope) { $this.Scope } else { 'global' }
+        $ScopeValue = if ($this.Scope) { $this.Scope } else { 'Global' }
 
-        return "$($this.Key) [$ScopeValue] = $Val"
+        return "$($this.Name) [$ScopeValue] = $Val"
 
     }
-
 }

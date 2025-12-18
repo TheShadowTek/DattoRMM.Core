@@ -94,7 +94,7 @@ function Invoke-APIMethod {
 
     if ($Parameters) {
 
-        $RequestParams.Uri += '?' + ($Parameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } | -join '&')
+        $RequestParams.Uri += '?' + ($Parameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join '&'
 
     }
 
@@ -123,11 +123,9 @@ function Invoke-APIMethod {
             }
 
         } else {
-
+            
             Invoke-RestMethod @RequestParams
-
         }
-        
     } catch {
 
         throw $_
