@@ -1,5 +1,5 @@
 function Invoke-APIMethod {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Default')]
 
     param (
 
@@ -19,7 +19,7 @@ function Invoke-APIMethod {
         # Enable pagination
         [Parameter(
             ParameterSetName = 'Paginate',
-            Mandatory = $true
+            Mandatory = $false
         )]
         [switch]
         $Paginate,
@@ -108,6 +108,7 @@ function Invoke-APIMethod {
     try {
 
         Write-Debug "Invoking RMM API: $Method $Path"
+        Write-Debug "Uri: $($RequestParams.Uri)"
 
         if ($Paginate) {
 
@@ -116,6 +117,7 @@ function Invoke-APIMethod {
 
             while ($Result.pageDetails.nextPageUrl) {
 
+                Write-Debug "Fetching next page: $($Result.pageDetails.nextPageUrl)"
                 $RequestParams.Uri = $Result.pageDetails.nextPageUrl
                 $Result = Invoke-RestMethod @RequestParams
                 $Result.$PageElement

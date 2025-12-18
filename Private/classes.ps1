@@ -9,15 +9,7 @@ enum ExtendedProperty {
 
 class DRMMObject {
 
-    [string]$ApiBaseUrl
-    [string]$AccountUid
-
-    DRMMObject([string]$ApiBaseUrl = $null, [string]$AccountUid = $null) {
-
-        $this.ApiBaseUrl = $ApiBaseUrl
-        $this.AccountUid = $AccountUid
-
-    }
+    DRMMObject() {}
 
     static [object] GetValue([pscustomobject]$InputObject, [string]$Key) {
 
@@ -202,6 +194,13 @@ class DRMMProxySettings : DRMMObject {
         return $ProxySettings
 
     }
+
+    [string] GetSummary() {
+
+        $ProxyInfo = if ($this.Host) {"$($this.Type)://$($this.Host)$(if ($this.Port) {":$($this.Port)"})"} else {$null}
+        return $ProxyInfo
+
+    }
 }
 
 class DRMMDevicesStatus : DRMMObject {
@@ -227,6 +226,11 @@ class DRMMDevicesStatus : DRMMObject {
 
     }
 
+    [string] GetSummary() {
+
+        return "Devices: $($this.NumberOfDevices), Online: $($this.NumberOfOnlineDevices), Offline: $($this.NumberOfOfflineDevices)"
+
+    }
 }
 
 class DRMMSiteSettings : DRMMObject {
@@ -261,6 +265,16 @@ class DRMMSiteSettings : DRMMObject {
         
         return $Settings
     }
+
+    [string] GetSummary() {
+
+        $GeneralInfo = if ($this.GeneralSettings) { "General: $($this.GeneralSettings.Name)" } else { "No General Settings" }
+        $ProxyInfo = if ($this.ProxySettings) { " | Proxy: $($this.ProxySettings.Host)" } else { "" }
+        $MailCount = if ($this.MailRecipients) { " | Mail Recipients: $($this.MailRecipients.Count)" } else { "" }
+
+        return "$GeneralInfo$ProxyInfo$MailCount"
+
+    }    
 }
 
 class DRMMGeneralSettings : DRMMObject {
@@ -394,7 +408,8 @@ class DRMMSite : DRMMObject {
         }
 
         $Path = "site/$($this.Uid)"
-        $ResponseObject = Invoke-APIMethod -Method 'POST' -Path $Path -Body $UpdatePayload
+        Write-Debug "Updating site $($this.Name) ($($this.Uid)) in Datto RMM: $Path"
+        $ResponseObject = $null #Invoke-APIMethod -Method 'POST' -Path $Path -Body $UpdatePayload
 
         if ($null -eq $ResponseObject) {
 
@@ -415,7 +430,8 @@ class DRMMSite : DRMMObject {
         }
 
         $Path = "site/$($this.Uid)"
-        Invoke-APIMethod -Method 'DELETE' -Path $Path | Out-Null
+        Write-Debug "Deleting site $($this.Name) ($($this.Uid)) from Datto RMM: $Path"
+        #Invoke-APIMethod -Method 'DELETE' -Path $Path | Out-Null
 
     }
 }

@@ -4,7 +4,7 @@
 RootModule = 'Datto-RMM.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.5'
+ModuleVersion = '0.0.6'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -52,7 +52,7 @@ PowerShellVersion = '7.0'
 # ScriptsToProcess = @()
 
 # Type files (.ps1xml) to be loaded when importing this module
-# TypesToProcess = @()
+TypesToProcess = @('Datto-RMM.Types.ps1xml')
 
 # Format files (.ps1xml) to be loaded when importing this module
 # FormatsToProcess = @()
@@ -61,7 +61,7 @@ PowerShellVersion = '7.0'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @('Connect-DattoRMM', 'Disconnect-RMM', 'Get-RMMRequestRate')
+FunctionsToExport = @('Connect-DattoRMM', 'Disconnect-RMM', 'Get-RMMRequestRate', 'Get-RMMsite')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
