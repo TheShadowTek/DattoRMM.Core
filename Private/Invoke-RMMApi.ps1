@@ -1,12 +1,11 @@
-function Invoke-RMMApi {
-
+function Invoke-APIMethod {
     [CmdletBinding()]
 
     param (
 
         [Parameter(Mandatory)]
         [string]
-        $Uri,
+        $Path,
 
         [Microsoft.PowerShell.Commands.WebRequestMethod]
         $Method = 'Get',
@@ -15,7 +14,23 @@ function Invoke-RMMApi {
         $Parameters,
 
         [object]
-        $Body
+        $Body,
+
+        # Enable pagination
+        [Parameter(
+            ParameterSetName = 'Paginate',
+            Mandatory = $true
+        )]
+        [switch]
+        $Paginate,
+
+        # Name of the element in the response that contains the paginated items
+        [Parameter(
+            ParameterSetName = 'Paginate',
+            Mandatory = $true
+        )]
+        [string]
+        $PageElement
     )
 
     if (-not $script:RMMAuth) {
@@ -32,7 +47,6 @@ function Invoke-RMMApi {
         if ($script:RMMAuth.AutoRefresh) {
 
             # Refresh
-
             Connect-DattoRMM -Key $script:RMMAuth.Key -Secret $script:RMMAuth.Secret -AutoRefresh
 
         } else {
@@ -46,31 +60,42 @@ function Invoke-RMMApi {
     if ($script:RMMThrottle.LastRequest) {
 
         $Utilization = 1 - ($script:RMMThrottle.Remaining / [math]::Max($script:RMMThrottle.Limit, 1))
+        Write-Debug "Throttling: Utilization=$([math]::Round($Utilization * 100, 2))%, CheckInterval=$($script:RMMThrottle.CheckInterval), RequestCount=$($script:RMMThrottle.RequestCount), Remaining=$($script:RMMThrottle.Remaining)"
 
-        if ($Utilization -gt 0.85) {
+        if ($Utilization -gt 0.5) {
 
-            Start-Sleep -Seconds 60
+            if ($Utilization -gt 0.85) {
 
-        } else {
+                Write-Warning "High API utilization detected ($([math]::Round($Utilization * 100, 2))%). Pausing requests to avoid throttling."
+                Start-Sleep -Seconds 60
 
-            $DelayMs = $Utilization * 10000 # milliseconds, max 10 seconds
+            } else {
 
-            if ($DelayMs -gt 0) {
+                $DelayMs = $Utilization * 1000
 
-                Start-Sleep -Milliseconds $DelayMs
+                if ($DelayMs -gt 0) {
 
+                    Write-Debug "Delaying next request by $DelayMs ms to avoid throttling."
+                    Start-Sleep -Milliseconds $DelayMs
+
+                }
             }
-
         }
-
     }
 
-    $FullUri = "$($script:API)$Uri"
+    # Invoke the API request
+
     $RequestParams = @{
-        Uri = $FullUri
+        Uri = "$API/$Path"
         Method = $Method
         ContentType = 'application/json'
         Headers = $RMMAuth.AuthHeader
+    }
+
+    if ($Parameters) {
+
+        $RequestParams.Uri += '?' + ($Parameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } | -join '&')
+
     }
 
     if ($Body) {
@@ -80,25 +105,51 @@ function Invoke-RMMApi {
 
     }
 
-    $Response = Invoke-WebRequest @RequestParams
-    $Content = $Response.Content | ConvertFrom-Json
+    try {
+
+        Write-Debug "Invoking RMM API: $Method $Path"
+
+        if ($Paginate) {
+
+            $Result = Invoke-RestMethod @RequestParams
+            $Result.$PageElement
+
+            while ($Result.pageDetails.nextPageUrl) {
+
+                $RequestParams.Uri = $Result.pageDetails.nextPageUrl
+                $Result = Invoke-RestMethod @RequestParams
+                $Result.$PageElement
+
+            }
+
+        } else {
+
+            Invoke-RestMethod @RequestParams
+
+        }
+        
+    } catch {
+
+        throw $_
+
+    }
+    
 
     # Update throttling
     $script:RMMThrottle.RequestCount++
 
     if ($script:RMMThrottle.RequestCount % $script:RMMThrottle.CheckInterval -eq 0) {
 
+        Write-Debug "Updating request rate status from Datto RMM API."
         $RateInfo = Get-RMMRequestRate
         $script:RMMThrottle.Limit = $RateInfo.accountRateLimit
         $script:RMMThrottle.Remaining = $RateInfo.accountRateLimit - $RateInfo.accountCount
         $script:RMMThrottle.Reset = $Now.AddSeconds($RateInfo.slidingTimeWindowSizeSeconds)
-        $Utilization = 1 - ($RateInfo.accountCount / [math]::Max($RateInfo.accountRateLimit, 1))
-        $script:RMMThrottle.CheckInterval = [math]::Max(1, [int](30 * (1 - $Utilization)))
+        $Utilization = $RateInfo.accountCount / [math]::Max($RateInfo.accountRateLimit, 1)
+        $script:RMMThrottle.CheckInterval = if ($Utilization -le 0.5) { $script:RMMThrottle.LowUtilCheckInterval } else { [math]::Max(1, [int](50 * (1 - $Utilization))) }
 
     }
 
     $script:RMMThrottle.LastRequest = $Now
-
-    return $Content
 
 }

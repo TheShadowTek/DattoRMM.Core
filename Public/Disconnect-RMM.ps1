@@ -1,6 +1,6 @@
 function Disconnect-RMM {
 
-    $script:RMMAuth = $null
+    $Script:RMMAuth = $null
     write-Verbose "Disconnected from Datto RMM API."
 
 }

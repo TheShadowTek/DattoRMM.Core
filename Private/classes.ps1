@@ -345,14 +345,14 @@ class DRMMSite : DRMMObject {
 
     [DRMMSite] Update([pscustomobject]$UpdatePayload) {
 
-        if (-not (Get-Command -Name Invoke-RMMAPI -ErrorAction SilentlyContinue)) {
+        if (-not (Get-Command -Name Invoke-APIMethod -ErrorAction SilentlyContinue)) {
 
             [DRMMObject]::ThrowMissingHelperError()
 
         }
 
-        $Path = "/v2/site/$($this.Uid)"
-        $ResponseObject = Invoke-RMMAPI -Method 'POST' -Path $Path -Body $UpdatePayload
+        $Path = "site/$($this.Uid)"
+        $ResponseObject = Invoke-APIMethod -Method 'POST' -Path $Path -Body $UpdatePayload
 
         if ($null -eq $ResponseObject) {
 
@@ -366,14 +366,14 @@ class DRMMSite : DRMMObject {
 
     [void] Delete() {
 
-        if (-not (Get-Command -Name Invoke-RMMAPI -ErrorAction SilentlyContinue)) {
+        if (-not (Get-Command -Name Invoke-APIMethod -ErrorAction SilentlyContinue)) {
 
             [DRMMObject]::ThrowMissingHelperError()
 
         }
 
-        $Path = "/v2/site/$($this.Uid)"
-        Invoke-RMMAPI -Method 'DELETE' -Path $Path | Out-Null
+        $Path = "site/$($this.Uid)"
+        Invoke-APIMethod -Method 'DELETE' -Path $Path | Out-Null
 
     }
 }

@@ -1,16 +1,20 @@
 function Get-RMMRequestRate {
+    [CmdletBinding()]
+    
+    param ()
 
-    if (-not $script:RMMAuth) {
+    if (-not $Script:RMMAuth) {
 
         throw "Not connected. Use Connect-DattoRMM first."
 
     }
 
-    $InvokeRMMApi = @{
-        Uri = "$API/system/request_rate"
+    $APIMethod = @{
+        Path = "system/request_rate"
         Method = 'Get'
     }
 
-    Invoke-RMMApi @InvokeRMMApi # pipe to create class when class has been created
+    Write-Debug "Getting request rate information from Datto RMM API."
+    Invoke-APIMethod @APIMethod # pipe to create class when class has been created
 
 }

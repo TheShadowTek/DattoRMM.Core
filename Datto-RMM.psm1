@@ -2,21 +2,22 @@
 # Main module file for Datto RMM API v2 PowerShell module
 
 # Default API base URL
-$script:APIUrl = 'https://pinotage-api.centrastage.net'
-$script:API = "$APIUrl/api/v2"
+$Script:APIUrl = 'https://pinotage-api.centrastage.net'
+$Script:API = "$APIUrl/api/v2"
 
 
 # Initialize script-scoped auth object
-$script:RMMAuth = $null
+$Script:RMMAuth = $null
 
 # Throttling state
-$script:RMMThrottle = @{
+$Script:RMMThrottle = @{
     Limit = 100
     Remaining = 100
     Reset = (Get-Date).AddMinutes(1)
     LastRequest = $null
     RequestCount = 0
     CheckInterval = 10
+    LowUtilCheckInterval = 50
 }
 $Script:TokenExpireHours = 100
 

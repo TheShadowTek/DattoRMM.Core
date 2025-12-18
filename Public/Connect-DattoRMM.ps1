@@ -71,7 +71,7 @@ function Connect-DattoRMM {
     }
 
     # Build the auth hashtable
-    $script:RMMAuth = @{
+    $Script:RMMAuth = @{
         AccessToken = $Response.access_token
         TokenType = $Response.token_type
         ExpiresAt = (Get-Date).AddSeconds($Response.expires_in)
@@ -81,17 +81,37 @@ function Connect-DattoRMM {
 
     if ($AutoRefresh) {
 
-        $script:RMMAuth.Key = $AuthKey
-        $script:RMMAuth.Secret = $AuthSecret | ConvertTo-SecureString -AsPlainText -Force
+        $Script:RMMAuth.Key = $AuthKey
+        $Script:RMMAuth.Secret = $AuthSecret | ConvertTo-SecureString -AsPlainText -Force
 
     }
-    
+
+    # Test connection and set page size
+    Write-Debug "Testing connection to Datto RMM API."
+    $PageSizeMethod = @{
+        Path = "system/pagination"
+        Method = 'Get'
+    }
+
+    try {
+
+            $Script:PageSize = (Invoke-APIMethod @PageSizeMethod).max
+            Write-Verbose "Set page size to $Script:PageSize."
+
+    } catch {
+
+        $HttpResponseCode = $_.Exception.Response.StatusCode.value__
+        $HttpResponseDescription = $_.Exception.Response.StatusDescription.value__
+        throw "Failed to connect to Datto RMM API! Response: $HttpResponseCode $HttpResponseDescription"
+
+    }
+
     # Get initial rate limit status
     $RateStatus = Get-RMMRequestRate
     $Utilization = 1 - ($RateStatus.accountCount / [math]::Max($RateStatus.accountRateLimit, 1))
-    $script:RMMThrottle.Limit = $RateStatus.accountRateLimit
-    $script:RMMThrottle.Remaining = $RateStatus.accountRateLimit - $RateStatus.accountCount
-    $script:RMMThrottle.Reset = (Get-Date).AddSeconds($RateStatus.slidingTimeWindowSizeSeconds)
-    $script:RMMThrottle.CheckInterval = [math]::Max(1, [int](30 * (1 - $Utilization)))
+    $Script:RMMThrottle.Limit = $RateStatus.accountRateLimit
+    $Script:RMMThrottle.Remaining = $RateStatus.accountRateLimit - $RateStatus.accountCount
+    $Script:RMMThrottle.Reset = (Get-Date).AddSeconds($RateStatus.slidingTimeWindowSizeSeconds)
+    $Script:RMMThrottle.CheckInterval = if ($Utilization -le 0.5) { $Script:RMMThrottle.LowUtilCheckInterval } else { [math]::Max(1, [int](30 * (1 - $Utilization))) }
 
 }
