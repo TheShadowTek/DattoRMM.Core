@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+    <ViewDefinitions>
+        <View>
+            <Name>DRMMSite.List</Name>
+            <ViewSelectedBy>
+                <TypeName>DRMMSite</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <Label>Name</Label>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Uid</Label>
+                                <PropertyName>Uid</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Id</Label>
+                                <PropertyName>Id</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>DeviceStatus</Label>
+                                <ScriptBlock>
+                                    if ($_.DevicesStatus) {$_.DevicesStatus.GetSummary() } else {''}
+                                </ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>ProxySettings</Label>
+                                <ScriptBlock>
+                                    if ($_.ProxySettings) {$_.ProxySettings.GetSummary() } else {''}
+                                </ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>PortalUrl</Label>
+                                <PropertyName>PortalUrl</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+        <View>
+            <Name>DRMMSite.Table</Name>
+            <ViewSelectedBy>
+                <TypeName>DRMMSite</TypeName>
+            </ViewSelectedBy>
+
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Name</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Uid</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Id</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>DeviceStatus</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>ProxySettings</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>PortalUrl</Label>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Uid</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Id</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.DevicesStatus) {$_.DevicesStatus.GetSummary()} else {''}
+                                </ScriptBlock>
+                            </TableColumnItem>
+
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.ProxySettings) {$_.ProxySettings.GetSummary()} else {''}
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>PortalUrl</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+
+    </ViewDefinitions>
+</Configuration>

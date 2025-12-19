@@ -27,6 +27,6 @@ function Update-Throttle {
 
     }
 
-    Write-Debug "`n`tThrottling: Utilisation=$([math]::Round($Script:RMMThrottle.Utilisation * 100, 2))%`n`tCheckInterval=$($script:RMMThrottle.CheckInterval)`n`tRequestCount=$($RateInfo.accountCount)`n`tRemaining=$($RateInfo.accountRateLimit - $RateInfo.accountCount)`n`tDelayMS=$($Script:RMMThrottle.DelayMS)`n`tPause=$($Script:RMMThrottle.Pause)"
+    Write-Debug "Throttling:`n   Utilisation=$([math]::Round($Script:RMMThrottle.Utilisation * 100, 2))%`n   CheckInterval=$($script:RMMThrottle.CheckInterval)`n   RequestCount=$($RateInfo.accountCount)`n   Remaining=$($RateInfo.accountRateLimit - $RateInfo.accountCount)`n   DelayMS=$($Script:RMMThrottle.DelayMS)`n   Pause=$($Script:RMMThrottle.Pause)"
 
 }

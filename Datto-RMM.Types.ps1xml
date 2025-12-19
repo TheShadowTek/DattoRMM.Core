@@ -9,4 +9,22 @@
       </ScriptMethod>
     </Members>
   </Type>
-  </Types>
+  <Type>
+    <Name>DRMMProxySettings</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+  <Type>
+    <Name>DRMMSiteSettings</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+</Types>

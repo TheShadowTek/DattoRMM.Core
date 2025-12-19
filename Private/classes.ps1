@@ -169,10 +169,10 @@ class DRMMProxySettings : DRMMObject {
 
         if ($null -eq $Response) { return $null }
 
-        $ProxySettings = [DRMMProxySettings]::new()
-        $ProxySettings.Host = $Response.host
-        $ProxySettings.Username = $Response.username
-        $RawPassword = $Response.password
+            $ProxySettings = [DRMMProxySettings]::new()
+            $ProxySettings.Host = $Response.host
+            $ProxySettings.Username = $Response.username
+            $RawPassword = $Response.password
 
         if ($RawPassword -is [securestring]) {
 
@@ -217,12 +217,12 @@ class DRMMDevicesStatus : DRMMObject {
 
         if ($null -eq $Response) { return $null }
 
-        $DevicesStatus = [DRMMDevicesStatus]::new()
-        $DevicesStatus.NumberOfDevices = $Response.numberOfDevices
-        $DevicesStatus.NumberOfOnlineDevices = $Response.numberOfOnlineDevices
-        $DevicesStatus.NumberOfOfflineDevices = $Response.numberOfOfflineDevices
+            $DevicesStatus = [DRMMDevicesStatus]::new()
+            $DevicesStatus.NumberOfDevices = $Response.numberOfDevices
+            $DevicesStatus.NumberOfOnlineDevices = $Response.numberOfOnlineDevices
+            $DevicesStatus.NumberOfOfflineDevices = $Response.numberOfOfflineDevices
 
-        return $DevicesStatus
+            return $DevicesStatus
 
     }
 
