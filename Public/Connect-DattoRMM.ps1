@@ -26,24 +26,41 @@ function Connect-DattoRMM {
         $Credential,
 
         [switch]
-        $AutoRefresh
+        $AutoRefresh,
 
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateSet(
+            'Pinotage',
+            'Concord',
+            'Vidal',
+            'Merlot',
+            'Zinfandel',
+            'Syrah'
+        )]
+        [string]
+        $Platform = 'Pinotage'
     )
 
     # Build the request body
+    $APIServer = "$($Platform.ToLower())-api"
+    $Script:APIUrl = "https://$APIServer.centrastage.net"
+    $Script:API = "$APIUrl/api/v2"
 
     switch ($PSCmdlet.ParameterSetName) {
 
         'Cred' {
 
-                $AuthKey = $Credential.UserName
-                $AuthSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password))
+            $AuthKey = $Credential.UserName
+            $AuthSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password))
+
         }
 
         'Key' {
 
-                $AuthKey = $Key.ToString()
-                $AuthSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Secret))
+            $AuthKey = $Key.ToString()
+            $AuthSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Secret))
 
         }
     }
@@ -54,7 +71,7 @@ function Connect-DattoRMM {
         Credential = $PublicCredential
         Uri = "$APIUrl/auth/oauth/token"
         Method = 'Post'
-        Body = "grant_type=password&username=$authkey&password=$authsecret"
+        Body = "grant_type=password&username=$AuthKey&password=$AuthSecret"
         ContentType = 'application/x-www-form-urlencoded'
     }
 
@@ -63,8 +80,7 @@ function Connect-DattoRMM {
         $Response = Invoke-RestMethod @TokenRequest
         Write-Verbose "Successfully authenticated to Datto RMM API."
 
-    }
-    catch {
+    } catch {
 
         throw $_
 
@@ -105,5 +121,4 @@ function Connect-DattoRMM {
         throw "Failed to connect to Datto RMM API! Response: $HttpResponseCode $HttpResponseDescription"
 
     }
-
 }

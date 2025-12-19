@@ -153,56 +153,6 @@ class DRMMObject {
 
 }
 
-class DRMMProxySettings : DRMMObject {
-
-    [string]$Host
-    [string]$Username
-    [securestring]$Password
-    [int]$Port
-    [string]$Type
-
-    DRMMProxySettings() : base() {
-
-    }
-
-    static [DRMMProxySettings] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) { return $null }
-
-            $ProxySettings = [DRMMProxySettings]::new()
-            $ProxySettings.Host = $Response.host
-            $ProxySettings.Username = $Response.username
-            $RawPassword = $Response.password
-
-        if ($RawPassword -is [securestring]) {
-
-            $ProxySettings.Password = $RawPassword
-
-        } elseif ($RawPassword -is [string] -and $RawPassword.Length -gt 0) {
-
-            $ProxySettings.Password = ConvertTo-SecureString -String $RawPassword -AsPlainText -Force
-
-        } else {
-
-            $ProxySettings.Password = $null
-
-        }
-
-        $ProxySettings.Port = $Response.port
-        $ProxySettings.Type = $Response.type
-
-        return $ProxySettings
-
-    }
-
-    [string] GetSummary() {
-
-        $ProxyInfo = if ($this.Host) {"$($this.Type)://$($this.Host)$(if ($this.Port) {":$($this.Port)"})"} else {$null}
-        return $ProxyInfo
-
-    }
-}
-
 class DRMMDevicesStatus : DRMMObject {
 
     [long]$NumberOfDevices
@@ -253,12 +203,20 @@ class DRMMSiteSettings : DRMMObject {
 
             $Settings.GeneralSettings = [DRMMGeneralSettings]::FromAPIMethod($Response.generalSettings)
 
+        } else {
+
+            $Settings.GeneralSettings = $null
+
         }
 
         if ($Response.proxySettings) {
 
             $Settings.ProxySettings = [DRMMProxySettings]::FromAPIMethod($Response.proxySettings)
             
+        } else {
+
+            $Settings.ProxySettings = $null
+
         }
 
         $Settings.MailRecipients = $Response.mailRecipients | ForEach-Object {[DRMMMailRecipient]::FromAPIMethod($_)}
@@ -268,13 +226,63 @@ class DRMMSiteSettings : DRMMObject {
 
     [string] GetSummary() {
 
-        $GeneralInfo = if ($this.GeneralSettings) { "General: $($this.GeneralSettings.Name)" } else { "No General Settings" }
-        $ProxyInfo = if ($this.ProxySettings) { " | Proxy: $($this.ProxySettings.Host)" } else { "" }
-        $MailCount = if ($this.MailRecipients) { " | Mail Recipients: $($this.MailRecipients.Count)" } else { "" }
+        $GeneralInfo = if ($this.GeneralSettings) { "OnDemand: $($this.GeneralSettings.OnDemand)" } else { "OnDemand: -" }
+        $ProxyInfo = if ($this.ProxySettings) { " | Proxy: $($this.ProxySettings.GetSummary())" } else { " | Proxy: -" }
+        $MailCount = if ($this.MailRecipients) { " | Mail Recipients: $($this.MailRecipients.Count)" } else { " | Mail Recipients: 0" }
 
         return "$GeneralInfo$ProxyInfo$MailCount"
 
     }    
+}
+
+class DRMMProxySettings : DRMMObject {
+
+    [string]$Host
+    [string]$Username
+    [securestring]$Password
+    [int]$Port
+    [string]$Type
+
+    DRMMProxySettings() : base() {
+
+    }
+
+    static [DRMMProxySettings] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+            $ProxySettings = [DRMMProxySettings]::new()
+            $ProxySettings.Host = $Response.host
+            $ProxySettings.Username = $Response.username
+            $RawPassword = $Response.password
+
+        if ($RawPassword -is [securestring]) {
+
+            $ProxySettings.Password = $RawPassword
+
+        } elseif ($RawPassword -is [string] -and $RawPassword.Length -gt 0) {
+
+            $ProxySettings.Password = ConvertTo-SecureString -String $RawPassword -AsPlainText -Force
+
+        } else {
+
+            $ProxySettings.Password = $null
+
+        }
+
+        $ProxySettings.Port = $Response.port
+        $ProxySettings.Type = $Response.type
+
+        return $ProxySettings
+
+    }
+
+    [string] GetSummary() {
+
+        $ProxyInfo = if ($this.Host) {"$($this.Type)://$($this.Host)$(if ($this.Port) {":$($this.Port)"})"} else {$null}
+        return $ProxyInfo
+
+    }
 }
 
 class DRMMGeneralSettings : DRMMObject {
@@ -297,6 +305,12 @@ class DRMMGeneralSettings : DRMMObject {
         $Settings.OnDemand = $Response.onDemand
 
         return $Settings
+
+    }
+
+    [string] GetSummary() {
+
+        return "OnDemand: $($this.OnDemand)"
 
     }
 }

@@ -35,6 +35,12 @@
                                 </ScriptBlock>
                             </ListItem>
                             <ListItem>
+                                <Label>SiteSettings</Label>
+                                <ScriptBlock>
+                                    if ($_.SiteSettings) {$_.SiteSettings.GetSummary() } else {''}
+                                </ScriptBlock>
+                            </ListItem>
+                            <ListItem>
                                 <Label>PortalUrl</Label>
                                 <PropertyName>PortalUrl</PropertyName>
                             </ListItem>
@@ -67,6 +73,9 @@
                         <Label>ProxySettings</Label>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Label>SiteSettings</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                         <Label>PortalUrl</Label>
                     </TableColumnHeader>
                 </TableHeaders>
@@ -91,6 +100,11 @@
                             <TableColumnItem>
                                 <ScriptBlock>
                                     if ($_.ProxySettings) {$_.ProxySettings.GetSummary()} else {''}
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.SiteSettings) {$_.SiteSettings.GetSummary()} else {''}
                                 </ScriptBlock>
                             </TableColumnItem>
                             <TableColumnItem>

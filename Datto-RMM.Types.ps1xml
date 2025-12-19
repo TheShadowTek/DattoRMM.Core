@@ -27,4 +27,13 @@
       </ScriptMethod>
     </Members>
   </Type>
+  <Type>
+    <Name>DRMMGeneralSettings</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
 </Types>

@@ -40,7 +40,7 @@ function Get-RMMSite {
             $Response = Invoke-APIMethod @APIMethod
             $Site = [DRMMSite]::FromAPIMethod($Response)
 
-            if ($ExtendedProperties) {
+            if ($ExtendedProperties.Count -gt 0) {
                 
                 Add-SiteExtendedProperties -Site $Site -ExtendedProperties $ExtendedProperties
 
@@ -66,7 +66,7 @@ function Get-RMMSite {
 
                 $Site = [DRMMSite]::FromAPIMethod($_)
 
-                if ($ExtendedProperties) {
+                if ($ExtendedProperties.Count -gt 0) {
 
                     Add-SiteExtendedProperties -Site $Site -ExtendedProperties $ExtendedProperties
 
