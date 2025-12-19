@@ -23,7 +23,7 @@ function Get-RMMSite {
         [string]
         $SiteName,
 
-        [ExtendedProperty[]]
+        [RMMSiteExtendedProperty[]]
         $ExtendedProperties
     )
 
@@ -84,17 +84,17 @@ function Add-SiteExtendedProperties {
         [DRMMSite]
         $Site,
 
-        [ExtendedProperty[]]
+        [RMMSiteExtendedProperty[]]
         $ExtendedProperties
     )
 
-    if ($ExtendedProperties -contains [ExtendedProperty]::Settings) {
+    if ($ExtendedProperties -contains [RMMSiteExtendedProperty]::Settings) {
 
         $Site.SiteSettings = Get-RMMSiteSettings -Uid $Site.Uid
 
     }
 
-    if ($ExtendedProperties -contains [ExtendedProperty]::Variables) {
+    if ($ExtendedProperties -contains [RMMSiteExtendedProperty]::Variables) {
 
         Write-Debug "Getting variables for site $($Site.Name) ($($Site.Uid))"
         $VariablesResponse = Invoke-APIMethod -Path "site/$($Site.Uid)/variable" -Paginate -PageElement 'variables'
@@ -102,7 +102,7 @@ function Add-SiteExtendedProperties {
 
     }
 
-    if ($ExtendedProperties -contains [ExtendedProperty]::Filters) {
+    if ($ExtendedProperties -contains [RMMSiteExtendedProperty]::Filters) {
 
         Write-Debug "Getting filters for site $($Site.Name) ($($Site.Uid))"
         $FiltersResponse = Invoke-APIMethod -Path "site/$($Site.Uid)/filters" -Paginate -PageElement 'filters'

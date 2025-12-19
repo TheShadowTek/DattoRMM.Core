@@ -1,5 +1,5 @@
 # enum types
-enum ExtendedProperty {
+enum RMMSiteExtendedProperty {
     Settings
     Variables
     Filters
