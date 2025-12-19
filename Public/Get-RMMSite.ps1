@@ -90,9 +90,7 @@ function Add-SiteExtendedProperties {
 
     if ($ExtendedProperties -contains [ExtendedProperty]::Settings) {
 
-        Write-Debug "Getting settings for site $($Site.Name) ($($Site.Uid))"
-        $SettingsResponse = Invoke-APIMethod -Path "site/$($Site.Uid)/settings"
-        $Site.SiteSettings = [DRMMSiteSettings]::FromAPIMethod($SettingsResponse)
+        $Site.SiteSettings = Get-RMMSiteSettings -Uid $Site.Uid
 
     }
 

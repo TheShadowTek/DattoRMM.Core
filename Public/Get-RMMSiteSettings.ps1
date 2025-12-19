@@ -1,21 +1,22 @@
 function Get-RMMSiteSettings {
-    [CmdletBinding(DefaultParameterSetName = 'ByUid')]
+    [CmdletBinding(DefaultParameterSetName = 'Site')]
     param (
-        [Parameter(
-            ParameterSetName = 'ByUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [guid]
-        $SiteUid,
-
         [Parameter(
             ParameterSetName = 'BySite',
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
         [DRMMSite]
-        $Site
+        $Site,
+
+        [Parameter(
+            ParameterSetName = 'ByUid',
+            Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [Alias('SiteUid')]
+        [guid]
+        $Uid
     )
 
     process {
@@ -24,8 +25,7 @@ function Get-RMMSiteSettings {
 
             'ByUid' {
 
-                Write-Debug "Getting site object for UID $SiteUid"
-                $SettingsSiteUid = $SiteUid
+                $SettingsSiteUid = $Uid
 
             }
 
