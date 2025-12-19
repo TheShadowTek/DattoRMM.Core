@@ -1,8 +1,9 @@
 function Get-RMMSiteSettings {
     [CmdletBinding(DefaultParameterSetName = 'Site')]
+    
     param (
         [Parameter(
-            ParameterSetName = 'BySite',
+            ParameterSetName = 'Site',
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
@@ -10,7 +11,7 @@ function Get-RMMSiteSettings {
         $Site,
 
         [Parameter(
-            ParameterSetName = 'ByUid',
+            ParameterSetName = 'Uid',
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
         )]
@@ -23,13 +24,13 @@ function Get-RMMSiteSettings {
 
         switch ($PSCmdlet.ParameterSetName) {
 
-            'ByUid' {
+            'Uid' {
 
                 $SettingsSiteUid = $Uid
 
             }
 
-            'BySite' {
+            'Site' {
                 
                 $SettingsSiteUid = $Site.Uid
 

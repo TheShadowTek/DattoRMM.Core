@@ -31,20 +31,12 @@ function Connect-DattoRMM {
         [Parameter(
             Mandatory = $false
         )]
-        [ValidateSet(
-            'Pinotage',
-            'Concord',
-            'Vidal',
-            'Merlot',
-            'Zinfandel',
-            'Syrah'
-        )]
-        [string]
-        $Platform = 'Pinotage'
+        [RMMPlatform]
+        $Platform = [RMMPlatform]::Pinotage
     )
 
     # Build the request body
-    $APIServer = "$($Platform.ToLower())-api"
+    $APIServer = "$($Platform.ToString().ToLower())-api"
     $Script:APIUrl = "https://$APIServer.centrastage.net"
     $Script:API = "$APIUrl/api/v2"
 

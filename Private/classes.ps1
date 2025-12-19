@@ -5,6 +5,20 @@ enum ExtendedProperty {
     Filters
 }
 
+enum RMMScope {
+    Global
+    Site
+}
+
+enum RMMPlatform {
+    Pinotage
+    Concord
+    Vidal
+    Merlot
+    Zinfandel
+    Syrah
+}
+
 # classes
 
 class DRMMObject {
