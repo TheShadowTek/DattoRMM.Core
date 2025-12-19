@@ -106,12 +106,4 @@ function Connect-DattoRMM {
 
     }
 
-    # Get initial rate limit status
-    $RateStatus = Get-RMMRequestRate
-    $Utilization = 1 - ($RateStatus.accountCount / [math]::Max($RateStatus.accountRateLimit, 1))
-    $Script:RMMThrottle.Limit = $RateStatus.accountRateLimit
-    $Script:RMMThrottle.Remaining = $RateStatus.accountRateLimit - $RateStatus.accountCount
-    $Script:RMMThrottle.Reset = (Get-Date).AddSeconds($RateStatus.slidingTimeWindowSizeSeconds)
-    $Script:RMMThrottle.CheckInterval = if ($Utilization -le 0.5) { $Script:RMMThrottle.LowUtilCheckInterval } else { [math]::Max(1, [int](30 * (1 - $Utilization))) }
-
 }

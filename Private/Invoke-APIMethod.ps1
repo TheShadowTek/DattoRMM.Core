@@ -56,34 +56,39 @@ function Invoke-APIMethod {
         }
     }
 
-    # Throttling
-    if ($script:RMMThrottle.LastRequest) {
+    # Throttle review
+    if ($Script:RMMThrottle.CheckCount -ge $Script:RMMThrottle.CheckInterval) {
 
-        $Utilization = 1 - ($script:RMMThrottle.Remaining / [math]::Max($script:RMMThrottle.Limit, 1))
-        Write-Debug "Throttling: Utilization=$([math]::Round($Utilization * 100, 2))%, CheckInterval=$($script:RMMThrottle.CheckInterval), RequestCount=$($script:RMMThrottle.RequestCount), Remaining=$($script:RMMThrottle.Remaining)"
+        $Script:RMMThrottle.CheckCount = 1
+        Write-Debug "Updating request rate status from Datto RMM API."
+        Update-Throttle
 
-        if ($Utilization -gt 0.5) {
+    } else {
 
-            if ($Utilization -gt 0.85) {
+        $script:RMMThrottle.CheckCount++
 
-                Write-Warning "High API utilization detected ($([math]::Round($Utilization * 100, 2))%). Pausing requests to avoid throttling."
-                Start-Sleep -Seconds 60
+    }
 
-            } else {
+    # Apply throttling if required
+    if ($Script:RMMThrottle.Throttle) {
 
-                $DelayMs = $Utilization * 1000
+        while ($Script:RMMThrottle.Pause) {
 
-                if ($DelayMs -gt 0) {
+            Write-Warning "High API Utilisation detected ($([math]::Round($Script:RMMThrottle.Utilisation * 100, 2))%). Pausing requests to avoid throttling."
+            Start-Sleep -Seconds 60
+            Update-Throttle
+            
+        }
 
-                    Write-Debug "Delaying next request by $DelayMs ms to avoid throttling."
-                    Start-Sleep -Milliseconds $DelayMs
+        if ($Script:RMMThrottle.DelayMS -gt 0) {
 
-                }
-            }
+            Write-Debug "Delaying next request by $($Script:RMMThrottle.DelayMS) ms to avoid throttling."
+            Start-Sleep -Milliseconds $Script:RMMThrottle.DelayMS
+
         }
     }
 
-    # Invoke the API request
+    # Invoke the API method
 
     $RequestParams = @{
         Uri = "$API/$Path"
@@ -128,28 +133,10 @@ function Invoke-APIMethod {
             
             Invoke-RestMethod @RequestParams
         }
+
     } catch {
 
         throw $_
 
     }
-    
-
-    # Update throttling
-    $script:RMMThrottle.RequestCount++
-
-    if ($script:RMMThrottle.RequestCount % $script:RMMThrottle.CheckInterval -eq 0) {
-
-        Write-Debug "Updating request rate status from Datto RMM API."
-        $RateInfo = Get-RMMRequestRate
-        $script:RMMThrottle.Limit = $RateInfo.accountRateLimit
-        $script:RMMThrottle.Remaining = $RateInfo.accountRateLimit - $RateInfo.accountCount
-        $script:RMMThrottle.Reset = $Now.AddSeconds($RateInfo.slidingTimeWindowSizeSeconds)
-        $Utilization = $RateInfo.accountCount / [math]::Max($RateInfo.accountRateLimit, 1)
-        $script:RMMThrottle.CheckInterval = if ($Utilization -le 0.5) { $script:RMMThrottle.LowUtilCheckInterval } else { [math]::Max(1, [int](50 * (1 - $Utilization))) }
-
-    }
-
-    $script:RMMThrottle.LastRequest = $Now
-
 }

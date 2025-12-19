@@ -11,13 +11,13 @@ $Script:RMMAuth = $null
 
 # Throttling state
 $Script:RMMThrottle = @{
-    Limit = 100
-    Remaining = 100
-    Reset = (Get-Date).AddMinutes(1)
-    LastRequest = $null
-    RequestCount = 0
-    CheckInterval = 10
-    LowUtilCheckInterval = 50
+    CheckInterval = 1
+    CheckCount = 1
+    Utilisation = 0
+    LowUtilCheckInterval = 50 # How often to check rate when utilisation is low (<=50%)
+    DelayMS = 0
+    Pause = $false
+    Throttle = $false
 }
 $Script:TokenExpireHours = 100
 
