@@ -202,12 +202,13 @@ class DRMMSiteSettings : DRMMObject {
     [DRMMGeneralSettings]$GeneralSettings
     [DRMMProxySettings]$ProxySettings  # Reuse existing class
     [DRMMMailRecipient[]]$MailRecipients
+    [guid]$SiteUid
 
     DRMMSiteSettings() : base() {
 
     }
 
-    static [DRMMSiteSettings] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMSiteSettings] FromAPIMethod([pscustomobject]$Response, $SiteUid) {
 
         if ($null -eq $Response) {return $null}
 
@@ -234,6 +235,7 @@ class DRMMSiteSettings : DRMMObject {
         }
 
         $Settings.MailRecipients = $Response.mailRecipients | ForEach-Object {[DRMMMailRecipient]::FromAPIMethod($_)}
+        $Settings.SiteUid = $SiteUid
         
         return $Settings
     }
@@ -496,12 +498,12 @@ class DRMMVariable : DRMMObject {
     [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
     [bool] IsSite()   { return ($this.Scope -eq 'Site') }
 
-    [string] GetSummary([bool]$RevealValue = $false) {
+    [string] GetSummary() {
 
-        $Val = if ($this.IsSecret -and -not $RevealValue) { [DRMMObject]::MaskString([string]$this.Value) } else { $this.Value }
+        # API already returns masked values for secret variables
         $ScopeValue = if ($this.Scope) { $this.Scope } else { 'Global' }
 
-        return "$($this.Name) [$ScopeValue] = $Val"
+        return "$($this.Name) [$ScopeValue] = $($this.Value)"
 
     }
 }

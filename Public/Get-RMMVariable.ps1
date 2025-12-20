@@ -69,174 +69,99 @@ function Get-RMMVariable {
         $Name
     )
 
-    Write-Debug "Getting RMM variable(s) using parameter set: $($PSCmdlet.ParameterSetName)"
+    process {
 
-    if ($PSCmdlet.ParameterSetName -match '^Site') {
+        Write-Debug "Getting RMM variable(s) using parameter set: $($PSCmdlet.ParameterSetName)"
 
-        if ($Site) {
+        if ($PSCmdlet.ParameterSetName -match '^Site') {
 
-            $SiteUid = $Site.Uid
+            if ($Site) {
 
-        }
+                $SiteUid = $Site.Uid
 
-        $APIMethod = @{
-            Path = "site/$SiteUid/variables"
-            Method = 'Get'
-            Paginate = $true
-            PageElement = 'variables'
-        }
+            }
 
-        switch ($PSCmdlet.ParameterSetName) {
+            $APIMethod = @{
+                Path = "site/$SiteUid/variables"
+                Method = 'Get'
+                Paginate = $true
+                PageElement = 'variables'
+            }
 
-            {$_ -in 'SiteAll','SiteAllUid'} {
+            switch ($PSCmdlet.ParameterSetName) {
 
-                Invoke-APIMethod @APIMethod | ForEach-Object {
+                {$_ -in 'SiteAll','SiteAllUid'} {
 
-                    Write-Debug "Getting all variables for site UID: $SiteUid"
-                    [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
+                    Invoke-APIMethod @APIMethod | ForEach-Object {
 
+                        Write-Debug "Getting all variables for site UID: $SiteUid"
+                        [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
+
+                    }
+                }
+
+                {$_ -in 'SiteById','SiteUidById'} {
+
+                    Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
+
+                        Write-Debug "Getting site variable by ID: $Id for site UID: $SiteUid"
+                        [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
+
+                    }
+                }
+
+                {$_ -in 'SiteByName','SiteUidByName'} {
+
+                    Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
+
+                        Write-Debug "Getting site variable by Name: $Name for site UID: $SiteUid"
+                        [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
+
+                    }
                 }
             }
 
-            {$_ -in 'SiteById','SiteUidById'} {
+        } else {
 
-                Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
-
-                    Write-Debug "Getting site variable by ID: $Id for site UID: $SiteUid"
-                    [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
-
-                }
+            $APIMethod = @{
+                Path = 'account/variables'
+                Method = 'Get'
+                Paginate = $true
+                PageElement = 'variables'
             }
 
-            {$_ -in 'SiteByName','SiteUidByName'} {
+            switch ($PSCmdlet.ParameterSetName) {
 
-                Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
+                'GlobalAll' {
 
-                    Write-Debug "Getting site variable by Name: $Name for site UID: $SiteUid"
-                    [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
+                    Invoke-APIMethod @APIMethod | ForEach-Object {
 
+                        Write-Debug "Getting all global variables"
+                        [DRMMVariable]::FromAPIMethod($_, 'Global', $null)
+
+                    }
                 }
-            }
-        }
 
-    } else {
+                'GlobalById' {
 
-        $APIMethod = @{
-            Path = 'account/variables'
-            Method = 'Get'
-            Paginate = $true
-            PageElement = 'variables'
-        }
+                    Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
 
-        switch ($PSCmdlet.ParameterSetName) {
+                        Write-Debug "Getting global variable by ID: $Id"
+                        [DRMMVariable]::FromAPIMethod($_, 'Global', $null)
 
-            'GlobalAll' {
-
-                Invoke-APIMethod @APIMethod | ForEach-Object {
-
-                    Write-Debug "Getting all global variables"
-                    [DRMMVariable]::FromAPIMethod($_, 'Global', $null)
-
+                    }
                 }
-            }
 
-            'GlobalById' {
+                'GlobalByName' {
 
-                Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
+                    Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
 
-                    Write-Debug "Getting global variable by ID: $Id"
-                    [DRMMVariable]::FromAPIMethod($_, 'Global', $null)
+                        Write-Debug "Getting global variable by Name: $Name"
+                        [DRMMVariable]::FromAPIMethod($_, 'Global', $null)
 
-                }
-            }
-
-            'GlobalByName' {
-
-                Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
-
-                    Write-Debug "Getting global variable by Name: $Name"
-                    [DRMMVariable]::FromAPIMethod($_, 'Global', $null)
-
+                    }
                 }
             }
         }
     }
 }
-
-
-<#
-function Get-RMMVariable {
-    [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]
-    param (
-        [Parameter(
-            ParameterSetName = 'SiteAll',
-            Mandatory = $true,
-            ValueFromPipeline = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteById',
-            Mandatory = $true,
-            ValueFromPipeline = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteByName',
-            Mandatory = $true,
-            ValueFromPipeline = $true
-        )]
-        [DRMMSite]
-        $Site,
-
-        [Parameter(
-            ParameterSetName = 'SiteAllUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidById',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidByName',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Alias('Uid')]
-        [guid]
-        $SiteUid,
-
-        [Parameter(
-            ParameterSetName = 'GlobalById',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteById',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidById',
-            Mandatory = $true
-        )]
-        [int]
-        $Id,
-
-        [Parameter(
-            ParameterSetName = 'GlobalByName',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteByName',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidByName',
-            Mandatory = $true
-        )]
-        [string]
-        $Name
-    )
-
-    Write-Debug "Getting RMM variable(s) using parameter set: $($PSCmdlet.ParameterSetName)"
-
-}
-#>

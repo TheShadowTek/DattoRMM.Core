@@ -31,7 +31,7 @@ function Get-RMMSiteSettings {
 
         Write-Debug "Getting settings for site $SiteUid"
         $Response = Invoke-APIMethod -Path "site/$SiteUid/settings"
-        [DRMMSiteSettings]::FromAPIMethod($Response)
+        [DRMMSiteSettings]::FromAPIMethod($Response, $SiteUid)
 
     }
 }
