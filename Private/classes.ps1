@@ -488,6 +488,20 @@ class DRMMSite : DRMMObject {
         return Get-RMMAlert -SiteUid $this.Uid -Status $Status
 
     }
+
+    [void] OpenPortal() {
+
+        if ($this.PortalUrl) {
+
+            Start-Process $this.PortalUrl
+
+        } else {
+
+            Write-Warning "Portal URL is not available for site $($this.Name)"
+
+        }
+
+    }
 }
 
 class DRMMVariable : DRMMObject {
@@ -1125,5 +1139,32 @@ class DRMMDevice : DRMMObject {
 
         return Get-RMMAlert -DeviceUid $this.Uid -Status $Status
 
+    }
+
+    [void] OpenPortal() {
+
+        if ($this.PortalUrl) {
+
+            Start-Process $this.PortalUrl
+
+        } else {
+
+            Write-Warning "Portal URL is not available for device $($this.Hostname)"
+
+        }
+
+    }
+
+    [void] OpenWebRemote() {
+
+        if ($this.WebRemoteUrl) {
+
+            Start-Process $this.WebRemoteUrl
+
+        } else {
+
+            Write-Warning "Web Remote URL is not available for device $($this.Hostname)"
+
+        }
     }
 }
