@@ -559,3 +559,231 @@ class DRMMFilter : DRMMObject {
 
     }
 }
+
+class DRMMAlertMonitorInfo : DRMMObject {
+
+    [bool]$SendsEmails
+    [bool]$CreatesTicket
+
+    DRMMAlertMonitorInfo() : base() {
+
+    }
+
+    static [DRMMAlertMonitorInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $MonitorInfo = [DRMMAlertMonitorInfo]::new()
+        $MonitorInfo.SendsEmails = $Response.sendsEmails
+        $MonitorInfo.CreatesTicket = $Response.createsTicket
+
+        return $MonitorInfo
+
+    }
+}
+
+class DRMMAlertSourceInfo : DRMMObject {
+
+    [string]$DeviceUid
+    [string]$DeviceName
+    [string]$SiteUid
+    [string]$SiteName
+
+    DRMMAlertSourceInfo() : base() {
+
+    }
+
+    static [DRMMAlertSourceInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $SourceInfo = [DRMMAlertSourceInfo]::new()
+        $SourceInfo.DeviceUid = $Response.deviceUid
+        $SourceInfo.DeviceName = $Response.deviceName
+        $SourceInfo.SiteUid = $Response.siteUid
+        $SourceInfo.SiteName = $Response.siteName
+
+        return $SourceInfo
+
+    }
+}
+
+class DRMMResponseAction : DRMMObject {
+
+    [Nullable[datetime]]$ActionTime
+    [string]$ActionType
+    [string]$Description
+    [string]$ActionReference
+    [string]$ActionReferenceInt
+
+    DRMMResponseAction() : base() {
+
+    }
+
+    static [DRMMResponseAction] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $ResponseAction = [DRMMResponseAction]::new()
+
+        $ActionDate = [DRMMObject]::ParseApiDate($Response.actionTime)
+        $ResponseAction.ActionTime = $ActionDate.DateTime
+
+        $ResponseAction.ActionType = $Response.actionType
+
+        $ResponseAction.Description = $Response.description
+
+        $ResponseAction.ActionReference = $Response.actionReference
+
+        $ResponseAction.ActionReferenceInt = $Response.actionReferenceInt
+
+        return $ResponseAction
+
+    }
+}
+
+class DRMMAlertContext : DRMMObject {
+
+    [string]$Class
+    [hashtable]$Properties
+
+    DRMMAlertContext() : base() {
+
+    }
+
+    static [DRMMAlertContext] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Context = [DRMMAlertContext]::new()
+        $Context.Class = $Response.'@class'
+        
+        # Store all properties except @class
+        $Context.Properties = @{}
+        foreach ($Property in $Response.PSObject.Properties) {
+
+            if ($Property.Name -ne '@class') {
+
+                $Context.Properties[$Property.Name] = $Property.Value
+
+            }
+
+        }
+
+        return $Context
+
+    }
+
+    [string] GetContextType() {
+        
+        if ($this.Class) {
+
+            return $this.Class -replace 'Context$', ''
+
+        }
+
+        return 'Unknown'
+
+    }
+}
+
+class DRMMAlert : DRMMObject {
+
+    [guid]$AlertUid
+    [string]$Priority
+    [string]$Diagnostics
+    [bool]$Resolved
+    [string]$ResolvedBy
+    [Nullable[datetime]]$ResolvedOn
+    [bool]$Muted
+    [string]$TicketNumber
+    [Nullable[datetime]]$Timestamp
+    [DRMMAlertMonitorInfo]$AlertMonitorInfo
+    [DRMMAlertContext]$AlertContext
+    [DRMMAlertSourceInfo]$AlertSourceInfo
+    [DRMMResponseAction[]]$ResponseActions
+    [Nullable[int]]$AutoresolveMins
+    [string]$Scope
+    [Nullable[guid]]$SiteUid
+
+    DRMMAlert() : base() {
+
+    }
+
+    static [DRMMAlert] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Alert = [DRMMAlert]::new()
+        $Alert.AlertUid = $Response.alertUid
+        $Alert.Priority = $Response.priority
+        $Alert.Diagnostics = $Response.diagnostics
+        $Alert.Resolved = $Response.resolved
+        $Alert.ResolvedBy = $Response.resolvedBy
+        $Alert.Muted = $Response.muted
+        $Alert.TicketNumber = $Response.ticketNumber
+        $Alert.AutoresolveMins = $Response.autoresolveMins
+        $Alert.Scope = $Scope
+        $Alert.SiteUid = $SiteUid
+
+        $Alert.AlertMonitorInfo = [DRMMAlertMonitorInfo]::FromAPIMethod($Response.alertMonitorInfo)
+        $Alert.AlertContext = [DRMMAlertContext]::FromAPIMethod($Response.alertContext)
+        $Alert.AlertSourceInfo = [DRMMAlertSourceInfo]::FromAPIMethod($Response.alertSourceInfo)
+
+        if ($null -ne $Response.responseActions) {
+
+            $Alert.ResponseActions = $Response.responseActions | ForEach-Object {
+
+                [DRMMResponseAction]::FromAPIMethod($_)
+                
+            }
+
+        }
+
+        #$ResolvedDate = [DRMMObject]::ParseApiDate($Response.resolvedOn)
+        #$Alert.ResolvedOn = $ResolvedDate.DateTime
+        $Alert.ResolvedOn = $Response.resolvedOn
+        #$TimestampDate = [DRMMObject]::ParseApiDate($Response.timestamp)
+        #$Alert.Timestamp = $TimestampDate.DateTime
+        $Alert.Timestamp = $Response.timestamp
+
+        return $Alert
+
+    }
+
+    [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
+    [bool] IsSite()   { return ($this.Scope -eq 'Site') }
+    [bool] IsOpen()   { return (-not $this.Resolved) }
+    [bool] IsCritical() { return ($this.Priority -eq 'Critical') }
+    [bool] IsHigh()   { return ($this.Priority -eq 'High') }
+
+    [string] GetSummary() {
+
+        $StatusValue = if ($this.Resolved) { 'Resolved' } else { 'Open' }
+        $MutedValue = if ($this.Muted) { ' (Muted)' } else { '' }
+        $DeviceName = if ($this.AlertSourceInfo.DeviceName) { $this.AlertSourceInfo.DeviceName } else { 'Unknown' }
+
+        return "[$StatusValue$MutedValue] $($this.Priority) - $DeviceName"
+
+    }
+}
