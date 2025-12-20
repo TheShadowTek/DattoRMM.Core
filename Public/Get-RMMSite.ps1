@@ -105,9 +105,7 @@ function Add-SiteExtendedProperties {
 
     if ($ExtendedProperties -contains [RMMSiteExtendedProperty]::Filters) {
 
-        Write-Debug "Getting filters for site $($Site.Name) ($($Site.Uid))"
-        $FiltersResponse = Invoke-APIMethod -Path "site/$($Site.Uid)/filters" -Paginate -PageElement 'filters'
-        $Site.Filters = $FiltersResponse  # Assuming direct assignment; adjust if schema defines structure
+        $Site.Filters = Get-RMMFilter -SiteUid $Site.Uid
         
     }
 }

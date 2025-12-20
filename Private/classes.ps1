@@ -507,3 +507,55 @@ class DRMMVariable : DRMMObject {
 
     }
 }
+
+class DRMMFilter : DRMMObject {
+
+    [long]$Id
+    [string]$Name
+    [string]$Description
+    [string]$Type
+    [string]$Scope
+    [Nullable[guid]]$SiteUid
+    [Nullable[datetime]]$DateCreate
+    [Nullable[datetime]]$LastUpdated
+
+    DRMMFilter() : base() {
+
+    }
+
+    static [DRMMFilter] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
+
+        if ($null -eq $Response) { return $null }
+
+        $Filter = [DRMMFilter]::new()
+        $Filter.Id = $Response.id
+        $Filter.Name = $Response.name
+        $Filter.Description = $Response.description
+        $Filter.Type = $Response.type
+        $Filter.Scope = $Scope
+        $Filter.SiteUid = $SiteUid
+
+        $CreateDate = [DRMMObject]::ParseApiDate($Response.dateCreate)
+        $Filter.DateCreate = $CreateDate.DateTime
+
+        $UpdatedDate = [DRMMObject]::ParseApiDate($Response.lastUpdated)
+        $Filter.LastUpdated = $UpdatedDate.DateTime
+
+        return $Filter
+
+    }
+
+    [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
+    [bool] IsSite()   { return ($this.Scope -eq 'Site') }
+    [bool] IsDefault() { return ($this.Type -eq 'rmm_default') }
+    [bool] IsCustom()  { return ($this.Type -eq 'custom') }
+
+    [string] GetSummary() {
+
+        $ScopeValue = if ($this.Scope) { $this.Scope } else { 'Global' }
+        $TypeValue = if ($this.Type) { " ($($this.Type))" } else { '' }
+
+        return "$($this.Name) [$ScopeValue]$TypeValue"
+
+    }
+}

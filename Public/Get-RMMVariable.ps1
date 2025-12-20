@@ -92,9 +92,9 @@ function Get-RMMVariable {
 
                 {$_ -in 'SiteAll','SiteAllUid'} {
 
+                    Write-Debug "Getting all variables for site UID: $SiteUid"
                     Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                        Write-Debug "Getting all variables for site UID: $SiteUid"
                         [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
 
                     }
@@ -102,9 +102,9 @@ function Get-RMMVariable {
 
                 {$_ -in 'SiteById','SiteUidById'} {
 
+                    Write-Debug "Getting site variable by ID: $Id for site UID: $SiteUid"
                     Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
 
-                        Write-Debug "Getting site variable by ID: $Id for site UID: $SiteUid"
                         [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
 
                     }
@@ -112,9 +112,9 @@ function Get-RMMVariable {
 
                 {$_ -in 'SiteByName','SiteUidByName'} {
 
+                    Write-Debug "Getting site variable by Name: $Name for site UID: $SiteUid"
                     Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
 
-                        Write-Debug "Getting site variable by Name: $Name for site UID: $SiteUid"
                         [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
 
                     }
