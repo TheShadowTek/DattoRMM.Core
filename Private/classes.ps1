@@ -811,3 +811,319 @@ class DRMMAlert : DRMMObject {
 
     }
 }
+
+class DRMMUdf : DRMMObject {
+
+    [int]$Number
+    [string]$Value
+
+    DRMMUdf() : base() {
+
+    }
+
+    DRMMUdf([int]$Number, [string]$Value) : base() {
+
+        $this.Number = $Number
+        $this.Value = $Value
+
+    }
+}
+
+class DRMMUdfs : DRMMObject {
+
+    [DRMMUdf[]]$Udfs
+
+    DRMMUdfs() : base() {
+
+        $this.Udfs = @()
+
+    }
+
+    static [DRMMUdfs] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $UdfEntries = [DRMMUdfs]::new()
+        $UdfList = @()
+
+        for ($i = 1; $i -le 30; $i++) {
+
+            $PropName = "udf$i"
+
+            if ($Response.PSObject.Properties.Name -contains $PropName) {
+
+                $Value = $Response.$PropName
+
+                if ($null -ne $Value -and $Value -ne '') {
+
+                    $UdfList += [DRMMUdf]::new($i, $Value)
+
+                }
+
+            }
+
+        }
+
+        $UdfEntries.Udfs = $UdfList
+
+        return $UdfEntries
+
+    }
+
+    [DRMMUdf] GetUdf([int]$Number) {
+
+        return $this.Udfs | Where-Object { $_.Number -eq $Number } | Select-Object -First 1
+
+    }
+}
+
+class DRMMDeviceType : DRMMObject {
+
+    [string]$Category
+    [string]$Type
+
+    DRMMDeviceType() : base() {
+
+    }
+
+    static [DRMMDeviceType] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $DeviceType = [DRMMDeviceType]::new()
+        $DeviceType.Category = $Response.category
+        $DeviceType.Type = $Response.type
+
+        return $DeviceType
+
+    }
+}
+
+class DRMMAntivirusInfo : DRMMObject {
+
+    [string]$AntivirusProduct
+    [string]$AntivirusStatus
+
+    DRMMAntivirusInfo() : base() {
+
+    }
+
+    static [DRMMAntivirusInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $AntivirusInfo = [DRMMAntivirusInfo]::new()
+        $AntivirusInfo.AntivirusProduct = $Response.antivirusProduct
+        $AntivirusInfo.AntivirusStatus = $Response.antivirusStatus
+
+        return $AntivirusInfo
+
+    }
+
+    [bool] IsRunning() {
+
+        return ($this.AntivirusStatus -match '^Running')
+
+    }
+
+    [bool] IsUpToDate() {
+
+        return ($this.AntivirusStatus -eq 'RunningAndUpToDate')
+
+    }
+
+    [string] GetSummary() {
+
+        return "$($this.AntivirusProduct) - $($this.AntivirusStatus)"
+
+    }
+}
+
+class DRMMPatchManagement : DRMMObject {
+
+    [string]$PatchStatus
+    [Nullable[long]]$PatchesApprovedPending
+    [Nullable[long]]$PatchesNotApproved
+    [Nullable[long]]$PatchesInstalled
+
+    DRMMPatchManagement() : base() {
+
+    }
+
+    static [DRMMPatchManagement] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $PatchMgmt = [DRMMPatchManagement]::new()
+        $PatchMgmt.PatchStatus = $Response.patchStatus
+        $PatchMgmt.PatchesApprovedPending = $Response.patchesApprovedPending
+        $PatchMgmt.PatchesNotApproved = $Response.patchesNotApproved
+        $PatchMgmt.PatchesInstalled = $Response.patchesInstalled
+
+        return $PatchMgmt
+
+    }
+}
+
+class DRMMDevice : DRMMObject {
+
+    [long]$Id
+    [guid]$Uid
+    [long]$SiteId
+    [guid]$SiteUid
+    [string]$SiteName
+    [DRMMDeviceType]$DeviceType
+    [string]$Hostname
+    [string]$IntIpAddress
+    [string]$OperatingSystem
+    [string]$LastLoggedInUser
+    [string]$Domain
+    [string]$CagVersion
+    [string]$DisplayVersion
+    [string]$ExtIpAddress
+    [string]$Description
+    [bool]$A64Bit
+    [bool]$RebootRequired
+    [bool]$Online
+    [bool]$Suspended
+    [bool]$Deleted
+    [Nullable[datetime]]$LastSeen
+    [Nullable[datetime]]$LastReboot
+    [Nullable[datetime]]$LastAuditDate
+    [Nullable[datetime]]$CreationDate
+    [DRMMUdfs]$Udf
+    [bool]$SnmpEnabled
+    [string]$DeviceClass
+    [string]$PortalUrl
+    [string]$WarrantyDate
+    [DRMMAntivirusInfo]$Antivirus
+    [DRMMPatchManagement]$PatchManagement
+    [string]$SoftwareStatus
+    [string]$WebRemoteUrl
+    [bool]$NetworkProbe
+    [bool]$OnboardedViaNetworkMonitor
+    [bool]$RevealLastLoggedInUser
+
+    DRMMDevice() : base() {
+
+        $this.RevealLastLoggedInUser = $false
+
+    }
+
+    static [DRMMDevice] FromAPIMethod([pscustomobject]$Response) {
+
+        return [DRMMDevice]::FromAPIMethod($Response, $false)
+
+    }
+
+    static [DRMMDevice] FromAPIMethod([pscustomobject]$Response, [bool]$RevealLastLoggedInUser) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Device = [DRMMDevice]::new()
+        $Device.Id = $Response.id
+        $Device.Uid = $Response.uid
+        $Device.SiteId = $Response.siteId
+        $Device.SiteUid = $Response.siteUid
+        $Device.SiteName = $Response.siteName
+        $Device.Hostname = $Response.hostname
+        $Device.IntIpAddress = $Response.intIpAddress
+        $Device.OperatingSystem = $Response.operatingSystem
+        $Device.RevealLastLoggedInUser = $RevealLastLoggedInUser
+
+        if ($RevealLastLoggedInUser) {
+
+            $Device.LastLoggedInUser = $Response.lastLoggedInUser
+
+        } else {
+
+            $Device.LastLoggedInUser = [DRMMObject]::MaskString([string]$Response.lastLoggedInUser, 2, '*')
+
+        }
+
+        $Device.Domain = $Response.domain
+        $Device.CagVersion = $Response.cagVersion
+        $Device.DisplayVersion = $Response.displayVersion
+        $Device.ExtIpAddress = $Response.extIpAddress
+        $Device.Description = $Response.description
+        $Device.A64Bit = $Response.a64Bit
+        $Device.RebootRequired = $Response.rebootRequired
+        $Device.Online = $Response.online
+        $Device.Suspended = $Response.suspended
+        $Device.Deleted = $Response.deleted
+        $Device.SnmpEnabled = $Response.snmpEnabled
+        $Device.DeviceClass = $Response.deviceClass
+        $Device.PortalUrl = $Response.portalUrl
+        $Device.WarrantyDate = $Response.warrantyDate
+        $Device.SoftwareStatus = $Response.softwareStatus
+        $Device.WebRemoteUrl = $Response.webRemoteUrl
+        $Device.NetworkProbe = $Response.networkProbe
+        $Device.OnboardedViaNetworkMonitor = $Response.onboardedViaNetworkMonitor
+
+        $Device.DeviceType = [DRMMDeviceType]::FromAPIMethod($Response.deviceType)
+        $Device.Udf = [DRMMUdfs]::FromAPIMethod($Response.udf)
+        $Device.Antivirus = [DRMMAntivirusInfo]::FromAPIMethod($Response.antivirus)
+        $Device.PatchManagement = [DRMMPatchManagement]::FromAPIMethod($Response.patchManagement)
+
+        $Device.LastSeen = ([DRMMObject]::ParseApiDate($Response.lastSeen)).DateTime
+        $Device.LastReboot = ([DRMMObject]::ParseApiDate($Response.lastReboot)).DateTime
+        $Device.LastAuditDate = ([DRMMObject]::ParseApiDate($Response.lastAuditDate)).DateTime
+        $Device.CreationDate = ([DRMMObject]::ParseApiDate($Response.creationDate)).DateTime
+
+        return $Device
+
+    }
+
+    [string] GetSummary() {
+
+        $OnlineStatus = if ($this.Online) { 'Online' } else { 'Offline' }
+        $RebootStatus = if ($this.RebootRequired) { ' [Reboot Required]' } else { '' }
+
+        return "$($this.Hostname) ($($this.OperatingSystem)) - $OnlineStatus$RebootStatus"
+
+    }
+
+    [DRMMAlert[]] GetAlerts() {
+
+        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMAlert -DeviceUid $this.Uid -Status 'All'
+
+    }
+
+    [DRMMAlert[]] GetAlerts([string]$Status) {
+
+        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMAlert -DeviceUid $this.Uid -Status $Status
+
+    }
+}
