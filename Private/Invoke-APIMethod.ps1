@@ -123,6 +123,39 @@ function Invoke-APIMethod {
             while ($Result.pageDetails.nextPageUrl) {
 
                 Write-Debug "Fetching next page: $($Result.pageDetails.nextPageUrl)"
+
+                # Apply throttling for each page request
+                if ($Script:RMMThrottle.CheckCount -ge $Script:RMMThrottle.CheckInterval) {
+
+                    $Script:RMMThrottle.CheckCount = 1
+                    Write-Debug "Updating request rate status from Datto RMM API."
+                    Update-Throttle
+
+                } else {
+
+                    $script:RMMThrottle.CheckCount++
+
+                }
+
+                if ($Script:RMMThrottle.Throttle) {
+
+                    while ($Script:RMMThrottle.Pause) {
+
+                        Write-Warning "High API Utilisation detected ($([math]::Round($Script:RMMThrottle.Utilisation * 100, 2))%). Pausing requests to avoid throttling."
+                        Start-Sleep -Seconds 60
+                        Update-Throttle
+                        
+                    }
+
+                    if ($Script:RMMThrottle.DelayMS -gt 0) {
+
+                        Write-Debug "Delaying next request by $($Script:RMMThrottle.DelayMS) ms to avoid throttling."
+                        Start-Sleep -Milliseconds $Script:RMMThrottle.DelayMS
+
+                    }
+
+                }
+
                 $RequestParams.Uri = $Result.pageDetails.nextPageUrl
                 $Result = Invoke-RestMethod @RequestParams
                 $Result.$PageElement
