@@ -464,6 +464,30 @@ class DRMMSite : DRMMObject {
         #Invoke-APIMethod -Method 'DELETE' -Path $Path | Out-Null
 
     }
+
+    [DRMMAlert[]] GetAlerts() {
+
+        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMAlert -SiteUid $this.Uid -Status 'All'
+
+    }
+
+    [DRMMAlert[]] GetAlerts([string]$Status) {
+
+        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMAlert -SiteUid $this.Uid -Status $Status
+
+    }
 }
 
 class DRMMVariable : DRMMObject {
