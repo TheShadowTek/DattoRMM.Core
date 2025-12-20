@@ -103,6 +103,23 @@ function Invoke-APIMethod {
 
     }
 
+    # Add page size parameter for paginated requests
+    if ($Paginate -and $Script:PageSize) {
+
+        $PageSizeParam = "max=$($Script:PageSize)"
+
+        if ($RequestParams.Uri -match '\?') {
+
+            $RequestParams.Uri += "&$PageSizeParam"
+
+        } else {
+
+            $RequestParams.Uri += "?$PageSizeParam"
+
+        }
+
+    }
+
     if ($Body) {
 
         $RequestParams.Body = $Body | ConvertTo-Json

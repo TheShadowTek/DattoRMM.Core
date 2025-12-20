@@ -103,8 +103,20 @@ function Connect-DattoRMM {
 
     try {
 
-            $Script:PageSize = (Invoke-APIMethod @PageSizeMethod).max
-            Write-Verbose "Set page size to $Script:PageSize."
+            $AccountMaxPageSize = (Invoke-APIMethod @PageSizeMethod).max
+            $Script:MaxPageSize = $AccountMaxPageSize
+
+            # If PageSize was previously set and is within limits, keep it
+            if ($Script:PageSize -and $Script:PageSize -le $AccountMaxPageSize) {
+
+                Write-Verbose "Retaining previously set page size: $($Script:PageSize)."
+
+            } else {
+
+                $Script:PageSize = $AccountMaxPageSize
+                Write-Verbose "Set page size to account maximum: $($Script:PageSize)."
+
+            }
 
     } catch {
 
