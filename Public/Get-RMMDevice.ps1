@@ -1,5 +1,5 @@
 function Get-RMMDevice {
-    [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]
+    [CmdletBinding(DefaultParameterSetName = 'GlobalAll', SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param (
         [Parameter(
             ParameterSetName = 'SiteAll',
@@ -106,18 +106,12 @@ function Get-RMMDevice {
 
     begin {
 
-        if ($IncludeLastLoggedInUser -and -not $Force) {
+        if ($IncludeLastLoggedInUser -and -not $Force -and -not $PSCmdlet.ShouldProcess("Device information", "Retrieve last logged in user data")) {
 
-            $ConfirmMessage = "Revealing last logged in user information. This may contain sensitive data. Continue?"
-            $ConfirmCaption = "Confirm Reveal Last Logged In User"
+            return
 
-            if (-not $PSCmdlet.ShouldContinue($ConfirmMessage, $ConfirmCaption)) {
-
-                Write-Warning "Operation cancelled by user."
-                return
-
-            }
         }
+
     }
 
     process {
