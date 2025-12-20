@@ -24,9 +24,21 @@ function Get-RMMAlert {
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
         )]
-        [Alias('Uid')]
         [guid]
         $SiteUid,
+
+        [Parameter(
+            ParameterSetName = 'DeviceAll',
+            Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [Parameter(
+            ParameterSetName = 'DeviceByUid',
+            Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [guid]
+        $DeviceUid,
 
         [Parameter(
             ParameterSetName = 'GlobalByUid',
@@ -38,6 +50,10 @@ function Get-RMMAlert {
         )]
         [Parameter(
             ParameterSetName = 'SiteUidByUid',
+            Mandatory = $true
+        )]
+        [Parameter(
+            ParameterSetName = 'DeviceByUid',
             Mandatory = $true
         )]
         [string]
@@ -61,6 +77,12 @@ function Get-RMMAlert {
         [Parameter(
             ParameterSetName = 'SiteUidByUid'
         )]
+        [Parameter(
+            ParameterSetName = 'DeviceAll'
+        )]
+        [Parameter(
+            ParameterSetName = 'DeviceByUid'
+        )]
         [ValidateSet('All', 'Open', 'Resolved')]
         [string]
         $Status = 'All'
@@ -70,7 +92,76 @@ function Get-RMMAlert {
 
         Write-Debug "Getting RMM alert(s) using parameter set: $($PSCmdlet.ParameterSetName)"
 
-        if ($PSCmdlet.ParameterSetName -match '^Site') {
+        if ($PSCmdlet.ParameterSetName -match '^Device') {
+
+            # Device scope - handle Open, Resolved, or All
+            $Methods = @()
+
+            switch ($Status) {
+
+                'Open' {
+
+                    $Methods += @{
+                        Path = "device/$DeviceUid/alerts/open"
+                        Scope = 'Device'
+                    }
+                }
+
+                'Resolved' {
+
+                    $Methods += @{
+                        Path = "device/$DeviceUid/alerts/resolved"
+                        Scope = 'Device'
+                    }
+                }
+
+                'All' {
+
+                    $Methods += @{
+                        Path = "device/$DeviceUid/alerts/open"
+                        Scope = 'Device'
+                    }
+                    $Methods += @{
+                        Path = "device/$DeviceUid/alerts/resolved"
+                        Scope = 'Device'
+                    }
+                }
+            }
+
+            foreach ($Method in $Methods) {
+
+                $APIMethod = @{
+                    Path = $Method.Path
+                    Method = 'Get'
+                    Paginate = $true
+                    PageElement = 'alerts'
+                }
+
+                switch ($PSCmdlet.ParameterSetName) {
+
+                    'DeviceAll' {
+
+                        Write-Debug "Getting device alerts from $($Method.Path)"
+                        Invoke-APIMethod @APIMethod | ForEach-Object {
+
+                            [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $null)
+
+                        }
+                    }
+
+                    'DeviceByUid' {
+
+                        Write-Debug "Getting device alert by UID: $AlertUid from $($Method.Path)"
+                        Invoke-APIMethod @APIMethod | Where-Object {$_.alertUid -eq $AlertUid} | ForEach-Object {
+
+                            [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $null)
+
+                        }
+                    }
+                }
+            }
+
+        } elseif ($PSCmdlet.ParameterSetName -match '^Site') {
 
             if ($Site) {
 
