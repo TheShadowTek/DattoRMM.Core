@@ -90,15 +90,13 @@ function Add-SiteExtendedProperties {
 
     if ($ExtendedProperties -contains [RMMSiteExtendedProperty]::Settings) {
 
-        $Site.SiteSettings = Get-RMMSiteSettings -Uid $Site.Uid
+        $Site.SiteSettings = Get-RMMSiteSettings -SiteUid $Site.Uid
 
     }
 
     if ($ExtendedProperties -contains [RMMSiteExtendedProperty]::Variables) {
 
-        Write-Debug "Getting variables for site $($Site.Name) ($($Site.Uid))"
-        $VariablesResponse = Invoke-APIMethod -Path "site/$($Site.Uid)/variable" -Paginate -PageElement 'variables'
-        $Site.Variables = $VariablesResponse | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Site', $Site.Uid)}
+        $Site.Variables = Get-RMMVariable -SiteUid $Site.Uid
 
     }
 

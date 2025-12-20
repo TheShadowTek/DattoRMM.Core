@@ -15,30 +15,22 @@ function Get-RMMSiteSettings {
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
         )]
-        [Alias('SiteUid')]
+        [Alias('Uid')]
         [guid]
-        $Uid
+        $SiteUid
     )
 
     process {
 
-        switch ($PSCmdlet.ParameterSetName) {
+        if ($PSCmdlet.ParameterSetName -eq 'Site') {
 
-            'Uid' {
-
-                $SettingsSiteUid = $Uid
-
-            }
-
-            'Site' {
                 
-                $SettingsSiteUid = $Site.Uid
+            $SiteUid = $Site.Uid
 
-            }
         }
 
-        Write-Debug "Getting settings for site $SettingsSiteUid"
-        $Response = Invoke-APIMethod -Path "site/$SettingsSiteUid/settings"
+        Write-Debug "Getting settings for site $SiteUid"
+        $Response = Invoke-APIMethod -Path "site/$SiteUid/settings"
         [DRMMSiteSettings]::FromAPIMethod($Response)
 
     }
