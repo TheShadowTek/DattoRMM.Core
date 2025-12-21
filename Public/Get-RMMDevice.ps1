@@ -7,7 +7,7 @@ function Get-RMMDevice {
             ValueFromPipeline = $true
         )]
         [Parameter(
-            ParameterSetName = 'SiteByUid',
+            ParameterSetName = 'SiteNetSummary',
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
@@ -20,7 +20,7 @@ function Get-RMMDevice {
             ValueFromPipelineByPropertyName = $true
         )]
         [Parameter(
-            ParameterSetName = 'SiteUidByUid',
+            ParameterSetName = 'SiteUidNetSummary',
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
         )]
@@ -33,75 +33,49 @@ function Get-RMMDevice {
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
         )]
-        [Parameter(
-            ParameterSetName = 'GlobalByUid',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteByUid',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidByUid',
-            Mandatory = $true
-        )]
         [guid]
         $DeviceUid,
 
-        [Parameter(
-            ParameterSetName = 'GlobalByHostname',
-            Mandatory = $true
-        )]
+        [Parameter(ParameterSetName = 'GlobalAll')]
         [string]
         $Hostname,
 
         [Parameter(ParameterSetName = 'GlobalAll')]
-        [Parameter(ParameterSetName = 'GlobalByUid')]
-        [Parameter(ParameterSetName = 'GlobalByHostname')]
         [Parameter(ParameterSetName = 'SiteAll')]
         [Parameter(ParameterSetName = 'SiteAllUid')]
         [long]
         $FilterId,
 
         [Parameter(ParameterSetName = 'GlobalAll')]
-        [Parameter(ParameterSetName = 'GlobalByUid')]
-        [Parameter(ParameterSetName = 'GlobalByHostname')]
         [string]
         $DeviceType,
 
         [Parameter(ParameterSetName = 'GlobalAll')]
-        [Parameter(ParameterSetName = 'GlobalByUid')]
-        [Parameter(ParameterSetName = 'GlobalByHostname')]
         [string]
         $OperatingSystem,
 
         [Parameter(ParameterSetName = 'GlobalAll')]
-        [Parameter(ParameterSetName = 'GlobalByUid')]
-        [Parameter(ParameterSetName = 'GlobalByHostname')]
         [string]
         $SiteName,
 
         [Parameter(ParameterSetName = 'GlobalAll')]
-        [Parameter(ParameterSetName = 'GlobalByUid')]
-        [Parameter(ParameterSetName = 'GlobalByHostname')]
         [Parameter(ParameterSetName = 'SiteAll')]
-        [Parameter(ParameterSetName = 'SiteByUid')]
         [Parameter(ParameterSetName = 'SiteAllUid')]
-        [Parameter(ParameterSetName = 'SiteUidByUid')]
         [Parameter(ParameterSetName = 'DeviceByUid')]
         [switch]
         $IncludeLastLoggedInUser,
 
         [Parameter(ParameterSetName = 'GlobalAll')]
-        [Parameter(ParameterSetName = 'GlobalByUid')]
-        [Parameter(ParameterSetName = 'GlobalByHostname')]
         [Parameter(ParameterSetName = 'SiteAll')]
-        [Parameter(ParameterSetName = 'SiteByUid')]
         [Parameter(ParameterSetName = 'SiteAllUid')]
-        [Parameter(ParameterSetName = 'SiteUidByUid')]
         [Parameter(ParameterSetName = 'DeviceByUid')]
         [switch]
-        $Force
+        $Force,
+
+        [Parameter(ParameterSetName = 'SiteNetSummary', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'SiteUidNetSummary', Mandatory = $true)]
+        [switch]
+        $NetSummary
     )
 
     begin {
@@ -111,7 +85,6 @@ function Get-RMMDevice {
             return
 
         }
-
     }
 
     process {
@@ -130,6 +103,28 @@ function Get-RMMDevice {
             $Response = Invoke-APIMethod @APIMethod
 
             [DRMMDevice]::FromAPIMethod($Response, $IncludeLastLoggedInUser.IsPresent)
+
+        } elseif ($PSCmdlet.ParameterSetName -in 'SiteNetSummary', 'SiteUidNetSummary') {
+
+            if ($Site) {
+
+                $SiteUid = $Site.Uid
+
+            }
+
+            $APIMethod = @{
+                Path = "site/$SiteUid/devices/network-interface"
+                Method = 'Get'
+                Paginate = $true
+                PageElement = 'devices'
+            }
+
+            Write-Debug "Getting all devices with network interfaces for site UID: $SiteUid"
+            Invoke-APIMethod @APIMethod | ForEach-Object {
+
+                [DRMMDeviceNetworkInterface]::FromAPIMethod($_)
+
+            }
 
         } elseif ($PSCmdlet.ParameterSetName -match '^Site') {
 
@@ -156,24 +151,14 @@ function Get-RMMDevice {
 
                 {$_ -in 'SiteAll','SiteAllUid'} {
 
-                    Write-Debug "Getting all devices for site UID: $SiteUid"
-                    Invoke-APIMethod @APIMethod | ForEach-Object {
+                        Write-Debug "Getting all devices for site UID: $SiteUid"
+                        Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                        [DRMMDevice]::FromAPIMethod($_, $IncludeLastLoggedInUser.IsPresent)
+                            [DRMMDevice]::FromAPIMethod($_, $IncludeLastLoggedInUser.IsPresent)
 
+                        }
                     }
                 }
-
-                {$_ -in 'SiteByUid','SiteUidByUid'} {
-
-                    Write-Debug "Getting site device by UID: $DeviceUid for site UID: $SiteUid"
-                    Invoke-APIMethod @APIMethod | Where-Object {$_.uid -eq $DeviceUid} | ForEach-Object {
-
-                        [DRMMDevice]::FromAPIMethod($_, $IncludeLastLoggedInUser.IsPresent)
-
-                    }
-                }
-            }
 
         } else {
 
@@ -204,37 +189,11 @@ function Get-RMMDevice {
 
             }
 
-            switch ($PSCmdlet.ParameterSetName) {
+            Write-Debug "Getting global devices"
+            Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                'GlobalAll' {
+                [DRMMDevice]::FromAPIMethod($_, $IncludeLastLoggedInUser.IsPresent)
 
-                    Write-Debug "Getting all global devices"
-                    Invoke-APIMethod @APIMethod | ForEach-Object {
-
-                        [DRMMDevice]::FromAPIMethod($_, $IncludeLastLoggedInUser.IsPresent)
-
-                    }
-                }
-
-                'GlobalByUid' {
-
-                    Write-Debug "Getting global device by UID: $DeviceUid"
-                    Invoke-APIMethod @APIMethod | Where-Object {$_.uid -eq $DeviceUid} | ForEach-Object {
-
-                        [DRMMDevice]::FromAPIMethod($_, $IncludeLastLoggedInUser.IsPresent)
-
-                    }
-                }
-
-                'GlobalByHostname' {
-
-                    Write-Debug "Getting global device by Hostname: $Hostname"
-                    Invoke-APIMethod @APIMethod | ForEach-Object {
-
-                        [DRMMDevice]::FromAPIMethod($_, $IncludeLastLoggedInUser.IsPresent)
-
-                    }
-                }
             }
         }
     }

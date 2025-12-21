@@ -923,6 +923,91 @@ class DRMMDeviceType : DRMMObject {
     }
 }
 
+class DRMMNetworkInterface : DRMMObject {
+
+    [string]$Instance
+    [string]$Ipv4
+    [string]$Ipv6
+    [string]$MacAddress
+    [string]$Type
+
+    DRMMNetworkInterface() : base() {
+
+    }
+
+    static [DRMMNetworkInterface] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Nic = [DRMMNetworkInterface]::new()
+        $Nic.Instance = $Response.instance
+        $Nic.Ipv4 = $Response.ipv4
+        $Nic.Ipv6 = $Response.ipv6
+        $Nic.MacAddress = $Response.macAddress
+        $Nic.Type = $Response.type
+
+        return $Nic
+
+    }
+}
+
+class DRMMDeviceNetworkInterface : DRMMObject {
+
+    [long]$Id
+    [guid]$Uid
+    [long]$SiteId
+    [guid]$SiteUid
+    [string]$SiteName
+    [DRMMDeviceType]$DeviceType
+    [string]$Hostname
+    [string]$IntIpAddress
+    [string]$ExtIpAddress
+    [DRMMNetworkInterface[]]$Nics
+
+    DRMMDeviceNetworkInterface() : base() {
+
+        $this.Nics = @()
+
+    }
+
+    static [DRMMDeviceNetworkInterface] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Device = [DRMMDeviceNetworkInterface]::new()
+        $Device.Id = $Response.id
+        $Device.Uid = $Response.uid
+        $Device.SiteId = $Response.siteId
+        $Device.SiteUid = $Response.siteUid
+        $Device.SiteName = $Response.siteName
+        $Device.DeviceType = [DRMMDeviceType]::FromAPIMethod($Response.deviceType)
+        $Device.Hostname = $Response.hostname
+        $Device.IntIpAddress = $Response.intIpAddress
+        $Device.ExtIpAddress = $Response.extIpAddress
+
+        if ($Response.nics) {
+
+            $Device.Nics = $Response.nics | ForEach-Object {
+
+                [DRMMNetworkInterface]::FromAPIMethod($_)
+
+            }
+
+        }
+
+        return $Device
+
+    }
+}
+
 class DRMMAntivirusInfo : DRMMObject {
 
     [string]$AntivirusProduct
@@ -1301,7 +1386,7 @@ class DRMMDevice : DRMMObject {
                     if ($Value -match '^\-?\d+$') {
 
                         try {
-                            
+
                             $TypedValue = [int]$Value
 
                         } catch {
