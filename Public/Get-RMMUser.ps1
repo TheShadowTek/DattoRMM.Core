@@ -1,5 +1,5 @@
 function Get-RMMUser {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
 
     param (
         [switch]

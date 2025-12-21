@@ -1,5 +1,5 @@
 function Get-RMMDevice {
-    [CmdletBinding(DefaultParameterSetName = 'GlobalAll', SupportsShouldProcess, ConfirmImpact = 'Medium')]
+    [CmdletBinding(DefaultParameterSetName = 'GlobalAll', SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(
             ParameterSetName = 'SiteAll',
