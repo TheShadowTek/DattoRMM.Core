@@ -135,11 +135,51 @@ function Invoke-APIMethod {
         if ($Paginate) {
 
             $Result = Invoke-RestMethod @RequestParams
+
+            # Parse the original URI to extract query parameters (excluding max and page)
+            $OriginalUri = [System.Uri]$RequestParams.Uri
+            $OriginalParams = @{}
+            
+            if ($OriginalUri.Query) {
+
+                $QueryString = $OriginalUri.Query.TrimStart('?')
+
+                foreach ($Param in $QueryString.Split('&')) {
+
+                    $KeyValue = $Param.Split('=')
+
+                    if ($KeyValue.Count -eq 2 -and $KeyValue[0] -notin @('max', 'page')) {
+
+                        $OriginalParams[$KeyValue[0]] = $KeyValue[1]
+
+                    }
+                }
+            }
+
             $Result.$PageElement
 
             while ($Result.pageDetails.nextPageUrl) {
 
-                Write-Debug "Fetching next page: $($Result.pageDetails.nextPageUrl)"
+                $NextUrl = $Result.pageDetails.nextPageUrl
+
+                # If we have original parameters, append them to the next page URL
+                if ($OriginalParams.Count -gt 0) {
+
+                    $NextUri = [System.Uri]$NextUrl
+                    $AdditionalParams = ($OriginalParams.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join '&'
+                    
+                    if ($NextUrl -match '\?') {
+
+                        $NextUrl = "$NextUrl&$AdditionalParams"
+
+                    } else {
+
+                        $NextUrl = "$NextUrl?$AdditionalParams"
+                        
+                    }
+                }
+
+                Write-Debug "Fetching next page: $NextUrl"
 
                 # Apply throttling for each page request
                 if ($Script:RMMThrottle.CheckCount -ge $Script:RMMThrottle.CheckInterval) {
@@ -173,7 +213,7 @@ function Invoke-APIMethod {
 
                 }
 
-                $RequestParams.Uri = $Result.pageDetails.nextPageUrl
+                $RequestParams.Uri = $NextUrl
                 $Result = Invoke-RestMethod @RequestParams
                 $Result.$PageElement
 
