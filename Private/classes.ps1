@@ -1251,15 +1251,6 @@ class DRMMDevice : DRMMObject {
 
     }
 
-    [string] GetSummary() {
-
-        $OnlineStatus = if ($this.Online) { 'Online' } else { 'Offline' }
-        $RebootStatus = if ($this.RebootRequired) { ' [Reboot Required]' } else { '' }
-
-        return "$($this.Hostname) ($($this.OperatingSystem)) - $OnlineStatus$RebootStatus"
-
-    }
-
     [DRMMAlert[]] GetAlerts() {
 
         if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
@@ -1295,7 +1286,6 @@ class DRMMDevice : DRMMObject {
             Write-Warning "Portal URL is not available for device $($this.Hostname)"
 
         }
-
     }
 
     [void] OpenWebRemote() {
@@ -1417,6 +1407,13 @@ class DRMMDevice : DRMMObject {
         }
 
         return [pscustomobject]$Result
+
+    }
+
+    [string] GetSummary() {
+
+        $DeviceTypeStr = if ($this.DeviceType) { "$($this.DeviceType.Category)" } else { 'Unknown' }
+        return "$($this.Hostname)|$DeviceTypeStr"
 
     }
 }

@@ -36,4 +36,13 @@
       </ScriptMethod>
     </Members>
   </Type>
+  <Type>
+    <Name>DRMMDevice</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
 </Types>
