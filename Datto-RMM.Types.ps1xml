@@ -37,8 +37,29 @@
     </Members>
   </Type>
   <Type>
+    <Name>DRMMSite</Name>
+    <Members>
+      <AliasProperty>
+        <Name>SiteUid</Name>
+        <ReferencedMemberName>Uid</ReferencedMemberName>
+      </AliasProperty>
+      <AliasProperty>
+        <Name>SiteId</Name>
+        <ReferencedMemberName>Id</ReferencedMemberName>
+      </AliasProperty>
+    </Members>
+  </Type>
+  <Type>
     <Name>DRMMDevice</Name>
     <Members>
+      <AliasProperty>
+        <Name>DeviceUid</Name>
+        <ReferencedMemberName>Uid</ReferencedMemberName>
+      </AliasProperty>
+      <AliasProperty>
+        <Name>DeviceId</Name>
+        <ReferencedMemberName>Id</ReferencedMemberName>
+      </AliasProperty>
       <ScriptMethod>
         <Name>ToString</Name>
         <Script>$this.GetSummary()</Script>
