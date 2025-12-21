@@ -162,20 +162,45 @@ function Invoke-APIMethod {
 
                 $NextUrl = $Result.pageDetails.nextPageUrl
 
-                # If we have original parameters, append them to the next page URL
+                # If we have original parameters, check which ones are missing from nextPageUrl
                 if ($OriginalParams.Count -gt 0) {
 
                     $NextUri = [System.Uri]$NextUrl
-                    $AdditionalParams = ($OriginalParams.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join '&'
+                    $ExistingParams = @()
                     
-                    if ($NextUrl -match '\?') {
+                    # Parse the nextPageUrl to see what parameters it already has
+                    if ($NextUri.Query) {
 
-                        $NextUrl = "$NextUrl&$AdditionalParams"
+                        $NextQueryString = $NextUri.Query.TrimStart('?')
 
-                    } else {
+                        foreach ($Param in $NextQueryString.Split('&')) {
 
-                        $NextUrl = "$NextUrl?$AdditionalParams"
+                            $KeyValue = $Param.Split('=')
+
+                            if ($KeyValue.Count -eq 2) {
+
+                                $ExistingParams += $KeyValue[0]
+
+                            }
+                        }
+                    }
+
+                    # Only add parameters that are missing from the nextPageUrl
+                    $MissingParams = $OriginalParams.GetEnumerator() | Where-Object { $_.Key -notin $ExistingParams }
+                    
+                    if ($MissingParams) {
+
+                        $AdditionalParams = ($MissingParams | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join '&'
                         
+                        if ($NextUrl -match '\?') {
+
+                            $NextUrl = "$NextUrl&$AdditionalParams"
+
+                        } else {
+
+                            $NextUrl = "$NextUrl?$AdditionalParams"
+                            
+                        }
                     }
                 }
 
