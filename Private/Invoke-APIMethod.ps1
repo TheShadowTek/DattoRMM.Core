@@ -117,7 +117,6 @@ function Invoke-APIMethod {
             $RequestParams.Uri += "?$PageSizeParam"
 
         }
-
     }
 
     if ($Body) {
@@ -235,7 +234,6 @@ function Invoke-APIMethod {
                         Start-Sleep -Milliseconds $Script:RMMThrottle.DelayMS
 
                     }
-
                 }
 
                 $RequestParams.Uri = $NextUrl

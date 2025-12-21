@@ -27,9 +27,6 @@ function Get-RMMSite {
         $ExtendedProperties
     )
 
-    # Exclude 'Deleted Devices' site from results due invalid site uid
-    $DeletedDevicesSiteUid = '49a10001-00000000'
-
     $APIMethod = @{
         Path = ''
         Method = 'Get'

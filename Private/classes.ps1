@@ -123,7 +123,6 @@ class DRMMObject {
             return @{ DateTime = $null; Epoch = $null; Raw = $Value }
 
         }
-
     }
 
     static [string] MaskString([string]$Value, [int]$VisibleChars = 1, [string]$MaskChar = '*') {
@@ -164,7 +163,6 @@ class DRMMObject {
         throw [DRMMObject]::GetMissingHelperErrorMessage()
 
     }
-
 }
 
 class DRMMStatus : DRMMObject {
@@ -538,7 +536,6 @@ class DRMMSite : DRMMObject {
             Write-Warning "Portal URL is not available for site $($this.Name)"
 
         }
-
     }
 }
 
@@ -716,13 +713,9 @@ class DRMMResponseAction : DRMMObject {
 
         $ActionDate = [DRMMObject]::ParseApiDate($Response.actionTime)
         $ResponseAction.ActionTime = $ActionDate.DateTime
-
         $ResponseAction.ActionType = $Response.actionType
-
         $ResponseAction.Description = $Response.description
-
         $ResponseAction.ActionReference = $Response.actionReference
-
         $ResponseAction.ActionReferenceInt = $Response.actionReferenceInt
 
         return $ResponseAction
@@ -759,7 +752,6 @@ class DRMMAlertContext : DRMMObject {
                 $Context.Properties[$Property.Name] = $Property.Value
 
             }
-
         }
 
         return $Context
@@ -833,7 +825,6 @@ class DRMMAlert : DRMMObject {
                 [DRMMResponseAction]::FromAPIMethod($_)
                 
             }
-
         }
 
         #$ResolvedDate = [DRMMObject]::ParseApiDate($Response.resolvedOn)
@@ -925,9 +916,7 @@ class DRMMUdfs : DRMMObject {
                     $UdfEntries.$UdfPropName = $Value
 
                 }
-
             }
-
         }
 
         return $UdfEntries
@@ -1038,7 +1027,6 @@ class DRMMDeviceNetworkInterface : DRMMObject {
                 [DRMMNetworkInterface]::FromAPIMethod($_)
 
             }
-
         }
 
         return $Device
@@ -1274,12 +1262,10 @@ class DRMMDevice : DRMMObject {
         $Device.WebRemoteUrl = $Response.webRemoteUrl
         $Device.NetworkProbe = $Response.networkProbe
         $Device.OnboardedViaNetworkMonitor = $Response.onboardedViaNetworkMonitor
-
         $Device.DeviceType = [DRMMDeviceType]::FromAPIMethod($Response.deviceType)
         $Device.Udfs = [DRMMUdfs]::FromAPIMethod($Response.udf)
         $Device.Antivirus = [DRMMAntivirusInfo]::FromAPIMethod($Response.antivirus)
         $Device.PatchManagement = [DRMMPatchManagement]::FromAPIMethod($Response.patchManagement)
-
         $Device.LastSeen = ([DRMMObject]::ParseApiDate($Response.lastSeen)).DateTime
         $Device.LastReboot = ([DRMMObject]::ParseApiDate($Response.lastReboot)).DateTime
         $Device.LastAuditDate = ([DRMMObject]::ParseApiDate($Response.lastAuditDate)).DateTime
@@ -1612,8 +1598,11 @@ class DRMMAccountDevicesStatus : DRMMObject {
     [double] GetOnlinePercentage() {
 
         if ($this.NumberOfDevices -eq 0) {
+
             return 0
+
         }
+
         return [Math]::Round(($this.NumberOfOnlineDevices / $this.NumberOfDevices) * 100, 2)
 
     }
@@ -1649,14 +1638,20 @@ class DRMMAccount : DRMMObject {
 
         # Parse descriptor
         $DescriptorData = [DRMMObject]::GetValue($Response, 'descriptor')
+
         if ($null -ne $DescriptorData) {
+
             $Account.Descriptor = [DRMMAccountDescriptor]::FromAPIMethod($DescriptorData)
+
         }
 
         # Parse devices status
         $DevicesStatusData = [DRMMObject]::GetValue($Response, 'devicesStatus')
+
         if ($null -ne $DevicesStatusData) {
+
             $Account.DevicesStatus = [DRMMAccountDevicesStatus]::FromAPIMethod($DevicesStatusData)
+
         }
 
         return $Account
@@ -1666,6 +1661,7 @@ class DRMMAccount : DRMMObject {
     [string] GetSummary() {
 
         $DeviceInfo = if ($this.DevicesStatus) { $this.DevicesStatus.GetSummary() } else { 'No device status' }
+
         return "$($this.Name) - $DeviceInfo"
 
     }
@@ -1701,14 +1697,13 @@ class DRMMNetMapping : DRMMObject {
         $NetMapping.AccountUid = $Response.accountUid
         $NetMapping.Name = $Response.name
         $NetMapping.Description = $Response.description
+        $NetMapping.PortalUrl = $Response.portalUrl
         
         if ($Response.dattoNetworkingNetworkIds) {
 
             $NetMapping.DatatoNetworkingNetworkIds = $Response.dattoNetworkingNetworkIds
 
         }
-
-        $NetMapping.PortalUrl = $Response.portalUrl
 
         return $NetMapping
 
@@ -1738,7 +1733,11 @@ class DRMMJobComponentVariable : DRMMObject {
 
     static [DRMMJobComponentVariable] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Variable = [DRMMJobComponentVariable]::new()
         $Variable.Name = [DRMMObject]::GetValue($Response, 'name')
@@ -1761,7 +1760,11 @@ class DRMMJobComponent : DRMMObject {
 
     static [DRMMJobComponent] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Component = [DRMMJobComponent]::new()
         $Component.Uid = [DRMMObject]::GetValue($Response, 'uid')
@@ -1774,7 +1777,6 @@ class DRMMJobComponent : DRMMObject {
                 [DRMMJobComponentVariable]::FromAPIMethod($_)
 
             }
-
         }
 
         return $Component
@@ -1797,7 +1799,11 @@ class DRMMJobComponentResult : DRMMObject {
 
     static [DRMMJobComponentResult] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Result = [DRMMJobComponentResult]::new()
         $Result.ComponentUid = [DRMMObject]::GetValue($Response, 'componentUid')
@@ -1826,7 +1832,11 @@ class DRMMJobResults : DRMMObject {
 
     static [DRMMJobResults] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Results = [DRMMJobResults]::new()
         $Results.JobUid = [DRMMObject]::GetValue($Response, 'jobUid')
@@ -1874,7 +1884,11 @@ class DRMMJobStdData : DRMMObject {
 
     static [DRMMJobStdData] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Result = [DRMMJobStdData]::new()
         $Result.ComponentUid = [DRMMObject]::GetValue($Response, 'componentUid')
@@ -1900,7 +1914,11 @@ class DRMMJob : DRMMObject {
 
     static [DRMMJob] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Job = [DRMMJob]::new()
         $Job.Id = [DRMMObject]::GetValue($Response, 'id')
@@ -1909,6 +1927,7 @@ class DRMMJob : DRMMObject {
         $Job.Status = [DRMMObject]::GetValue($Response, 'status')
 
         $DateCreatedValue = [DRMMObject]::GetValue($Response, 'dateCreated')
+        
         if ($null -ne $DateCreatedValue) {
 
             try {

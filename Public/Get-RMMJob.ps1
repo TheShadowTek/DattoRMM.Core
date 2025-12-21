@@ -157,7 +157,6 @@ function Get-RMMJob {
                     [DRMMJobComponent]::FromAPIMethod($_)
 
                 }
-
             }
         }
     }

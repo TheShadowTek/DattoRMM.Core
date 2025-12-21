@@ -18,6 +18,5 @@ function Get-RMMNetMapping {
             [DRMMNetMapping]::FromAPIMethod($_)
 
         }
-
     }
 }

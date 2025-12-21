@@ -13,7 +13,6 @@ function Get-RMMUser {
             return
 
         }
-
     }
 
     process {
@@ -33,7 +32,5 @@ function Get-RMMUser {
             [DRMMUser]::FromAPIMethod($_)
 
         }
-
     }
-
 }

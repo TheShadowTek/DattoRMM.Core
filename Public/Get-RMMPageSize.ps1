@@ -14,5 +14,4 @@ function Get-RMMPageSize {
         CurrentPageSize = $Script:PageSize
         MaximumPageSize = $Script:MaxPageSize
     }
-
 }

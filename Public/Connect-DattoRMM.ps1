@@ -1,9 +1,7 @@
 function Connect-DattoRMM {
-
     [CmdletBinding(DefaultParameterSetName = 'Key')]
 
     param (
-
         [Parameter(
             ParameterSetName = 'Key',
             Mandatory = $true
