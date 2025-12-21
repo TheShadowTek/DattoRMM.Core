@@ -65,7 +65,7 @@ function Get-RMMSite {
 
             }
 
-            Invoke-APIMethod @APIMethod | Where-Object {$_.uid -ne $DeletedDevicesSiteUid} | ForEach-Object {
+            Invoke-APIMethod @APIMethod | Where-Object {try {[void][guid]$_.uid; $true} catch {$false}} | ForEach-Object {
 
                 $Site = [DRMMSite]::FromAPIMethod($_)
 
