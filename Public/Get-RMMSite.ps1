@@ -105,7 +105,7 @@ function Add-SiteExtendedProperties {
 
     if ($ExtendedProperties -contains [RMMSiteExtendedProperty]::Filters) {
 
-        $Site.Filters = Get-RMMFilter -SiteUid $Site.Uid
+        $Site.Filters = Get-RMMDeviceFilter -SiteUid $Site.Uid
         
     }
 }

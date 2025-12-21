@@ -4,7 +4,7 @@
 RootModule = 'Datto-RMM.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.0.29'
+ModuleVersion = '0.0.30'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -61,7 +61,22 @@ FormatsToProcess = @('Datto-RMM.Format.ps1xml')
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @('Connect-DattoRMM', 'Disconnect-RMM', 'Get-RMMAccount', 'Get-RMMAlert', 'Get-RMMComponent', 'Get-RMMDevice', 'Get-RMMFilter', 'Get-RMMPageSize', 'Get-RMMRequestRate', 'Get-RMMsite', 'Get-RMMSiteSettings', 'Get-RMMUser', 'Get-RMMVariable', 'Set-RMMPageSize')
+FunctionsToExport = @(
+    'Connect-DattoRMM',
+    'Disconnect-RMM',
+    'Get-RMMAccount',
+    'Get-RMMAlert',
+    'Get-RMMComponent',
+    'Get-RMMDevice',
+    'Get-RMMDeviceFilter',
+    'Get-RMMPageSize',
+    'Get-RMMRequestRate',
+    'Get-RMMsite',
+    'Get-RMMSiteSettings',
+    'Get-RMMUser',
+    'Get-RMMVariable',
+    'Set-RMMPageSize'
+)
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()

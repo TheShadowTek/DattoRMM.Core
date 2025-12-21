@@ -1,4 +1,4 @@
-function Get-RMMFilter {
+function Get-RMMDeviceFilter {
     [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]
     param (
         [Parameter(
