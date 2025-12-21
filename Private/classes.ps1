@@ -1223,6 +1223,79 @@ class DRMMDevice : DRMMObject {
 
         }
     }
+
+    [object] GetUdfAsJson([int]$UdfNumber) {
+
+        if ($UdfNumber -lt 1 -or $UdfNumber -gt 30) {
+            throw "UDF number must be between 1 and 30"
+        }
+
+        $UdfItem = $this.Udf.GetUdf($UdfNumber)
+
+        if ($null -eq $UdfItem -or [string]::IsNullOrWhiteSpace($UdfItem.Value)) {
+
+            return $null
+
+        }
+
+        try {
+
+            return $UdfItem.Value | ConvertFrom-Json
+
+        } catch {
+
+            throw "Failed to parse UDF $UdfNumber as JSON: $_"
+
+        }
+    }
+
+    [pscustomobject] GetUdfAsCsv([int]$UdfNumber, [string]$Delimiter, [string[]]$ColumnHeaders) {
+
+        if ($UdfNumber -lt 1 -or $UdfNumber -gt 30) {
+
+            throw "UDF number must be between 1 and 30"
+
+        }
+
+        if ([string]::IsNullOrEmpty($Delimiter)) {
+
+            throw "Delimiter cannot be null or empty"
+
+        }
+
+        if ($null -eq $ColumnHeaders -or $ColumnHeaders.Count -eq 0) {
+
+            throw "ColumnHeaders must contain at least one column name"
+
+        }
+
+        $UdfItem = $this.Udf.GetUdf($UdfNumber)
+
+        if ($null -eq $UdfItem -or [string]::IsNullOrWhiteSpace($UdfItem.Value)) {
+            
+            return $null
+
+        }
+
+        $Values = $UdfItem.Value -split [regex]::Escape($Delimiter)
+        $Result = [ordered]@{}
+
+        for ($i = 0; $i -lt $ColumnHeaders.Count; $i++) {
+
+            if ($i -lt $Values.Count) {
+
+                $Result[$ColumnHeaders[$i]] = $Values[$i]
+
+            } else {
+
+                $Result[$ColumnHeaders[$i]] = $null
+
+            }
+        }
+
+        return [pscustomobject]$Result
+
+    }
 }
 
 class DRMMComponentVariable : DRMMObject {
