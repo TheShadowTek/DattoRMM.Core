@@ -1727,3 +1727,202 @@ class DRMMNetMapping : DRMMObject {
         }
     }
 }
+class DRMMJobComponentVariable : DRMMObject {
+
+    [string]$Name
+    [string]$Value
+
+    DRMMJobComponentVariable() : base() {
+
+    }
+
+    static [DRMMJobComponentVariable] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+        $Variable = [DRMMJobComponentVariable]::new()
+        $Variable.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Variable.Value = [DRMMObject]::GetValue($Response, 'value')
+
+        return $Variable
+
+    }
+}
+
+class DRMMJobComponent : DRMMObject {
+
+    [guid]$Uid
+    [string]$Name
+    [DRMMJobComponentVariable[]]$Variables
+
+    DRMMJobComponent() : base() {
+
+    }
+
+    static [DRMMJobComponent] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+        $Component = [DRMMJobComponent]::new()
+        $Component.Uid = [DRMMObject]::GetValue($Response, 'uid')
+        $Component.Name = [DRMMObject]::GetValue($Response, 'name')
+        
+        if ($Response.variables) {
+
+            $Component.Variables = $Response.variables | ForEach-Object {
+
+                [DRMMJobComponentVariable]::FromAPIMethod($_)
+
+            }
+
+        }
+
+        return $Component
+
+    }
+}
+
+class DRMMJobComponentResult : DRMMObject {
+
+    [guid]$ComponentUid
+    [string]$ComponentName
+    [string]$ComponentStatus
+    [int]$NumberOfWarnings
+    [bool]$HasStdOut
+    [bool]$HasStdErr
+
+    DRMMJobComponentResult() : base() {
+
+    }
+
+    static [DRMMJobComponentResult] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+        $Result = [DRMMJobComponentResult]::new()
+        $Result.ComponentUid = [DRMMObject]::GetValue($Response, 'componentUid')
+        $Result.ComponentName = [DRMMObject]::GetValue($Response, 'componentName')
+        $Result.ComponentStatus = [DRMMObject]::GetValue($Response, 'componentStatus')
+        $Result.NumberOfWarnings = [DRMMObject]::GetValue($Response, 'numberOfWarnings')
+        $Result.HasStdOut = [DRMMObject]::GetValue($Response, 'hasStdOut')
+        $Result.HasStdErr = [DRMMObject]::GetValue($Response, 'hasStdErr')
+
+        return $Result
+
+    }
+}
+
+class DRMMJobResults : DRMMObject {
+
+    [guid]$JobUid
+    [guid]$DeviceUid
+    [Nullable[datetime]]$RanOn
+    [string]$JobDeploymentStatus
+    [DRMMJobComponentResult[]]$ComponentResults
+
+    DRMMJobResults() : base() {
+
+    }
+
+    static [DRMMJobResults] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+        $Results = [DRMMJobResults]::new()
+        $Results.JobUid = [DRMMObject]::GetValue($Response, 'jobUid')
+        $Results.DeviceUid = [DRMMObject]::GetValue($Response, 'deviceUid')
+        $Results.JobDeploymentStatus = [DRMMObject]::GetValue($Response, 'jobDeploymentStatus')
+
+        $RanOnValue = [DRMMObject]::GetValue($Response, 'ranOn')
+        if ($null -ne $RanOnValue) {
+
+            try {
+
+                $Results.RanOn = [datetime]::Parse($RanOnValue)
+
+            } catch {
+
+                $Results.RanOn = $null
+
+            }
+        }
+
+        if ($Response.componentResults) {
+
+            $Results.ComponentResults = $Response.componentResults | ForEach-Object {
+
+                [DRMMJobComponentResult]::FromAPIMethod($_)
+
+            }
+
+        }
+
+        return $Results
+
+    }
+}
+
+class DRMMJobStdData : DRMMObject {
+
+    [guid]$ComponentUid
+    [string]$ComponentName
+    [string]$StdData
+
+    DRMMJobStdData() : base() {
+
+    }
+
+    static [DRMMJobStdData] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+        $Result = [DRMMJobStdData]::new()
+        $Result.ComponentUid = [DRMMObject]::GetValue($Response, 'componentUid')
+        $Result.ComponentName = [DRMMObject]::GetValue($Response, 'componentName')
+        $Result.StdData = [DRMMObject]::GetValue($Response, 'stdData')
+
+        return $Result
+
+    }
+}
+
+class DRMMJob : DRMMObject {
+
+    [long]$Id
+    [guid]$Uid
+    [string]$Name
+    [Nullable[datetime]]$DateCreated
+    [string]$Status
+
+    DRMMJob() : base() {
+
+    }
+
+    static [DRMMJob] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+        $Job = [DRMMJob]::new()
+        $Job.Id = [DRMMObject]::GetValue($Response, 'id')
+        $Job.Uid = [DRMMObject]::GetValue($Response, 'uid')
+        $Job.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Job.Status = [DRMMObject]::GetValue($Response, 'status')
+
+        $DateCreatedValue = [DRMMObject]::GetValue($Response, 'dateCreated')
+        if ($null -ne $DateCreatedValue) {
+
+            try {
+
+                $Job.DateCreated = [datetime]::Parse($DateCreatedValue)
+
+            } catch {
+
+                $Job.DateCreated = $null
+
+            }
+        }
+
+        return $Job
+
+    }
+}
