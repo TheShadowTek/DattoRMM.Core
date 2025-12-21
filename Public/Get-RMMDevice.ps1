@@ -36,6 +36,36 @@ function Get-RMMDevice {
         [guid]
         $DeviceUid,
 
+        [Parameter(
+            ParameterSetName = 'DeviceById',
+            Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [Alias('Id')]
+        [int]
+        $DeviceId,
+
+        [Parameter(
+            ParameterSetName = 'DeviceByMacAddress',
+            Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [ValidateScript({
+            $Normalized = $_ -replace '[:\-\.]', ''
+            
+            if ($Normalized -match '^[0-9A-Fa-f]{12}$') {
+
+                $true
+
+            } else {
+
+                throw "Invalid MAC address format. Expected 12 hexadecimal characters (e.g., 001122334455, 00:11:22:33:44:55, or 00-11-22-33-44-55)"
+
+            }
+        })]
+        [string]
+        $MacAddress,
+
         [Parameter(ParameterSetName = 'GlobalAll')]
         [string]
         $Hostname,
@@ -62,6 +92,8 @@ function Get-RMMDevice {
         [Parameter(ParameterSetName = 'SiteAll')]
         [Parameter(ParameterSetName = 'SiteAllUid')]
         [Parameter(ParameterSetName = 'DeviceByUid')]
+        [Parameter(ParameterSetName = 'DeviceById')]
+        [Parameter(ParameterSetName = 'DeviceByMacAddress')]
         [switch]
         $IncludeLastLoggedInUser,
 
@@ -69,6 +101,8 @@ function Get-RMMDevice {
         [Parameter(ParameterSetName = 'SiteAll')]
         [Parameter(ParameterSetName = 'SiteAllUid')]
         [Parameter(ParameterSetName = 'DeviceByUid')]
+        [Parameter(ParameterSetName = 'DeviceById')]
+        [Parameter(ParameterSetName = 'DeviceByMacAddress')]
         [switch]
         $Force,
 
@@ -103,6 +137,39 @@ function Get-RMMDevice {
             $Response = Invoke-APIMethod @APIMethod
 
             [DRMMDevice]::FromAPIMethod($Response, $IncludeLastLoggedInUser.IsPresent)
+
+        } elseif ($PSCmdlet.ParameterSetName -eq 'DeviceById') {
+
+            # Single device by ID
+            $APIMethod = @{
+                Path = "device/id/$DeviceId"
+                Method = 'Get'
+            }
+
+            Write-Debug "Getting device by ID: $DeviceId"
+            $Response = Invoke-APIMethod @APIMethod
+
+            [DRMMDevice]::FromAPIMethod($Response, $IncludeLastLoggedInUser.IsPresent)
+
+        } elseif ($PSCmdlet.ParameterSetName -eq 'DeviceByMacAddress') {
+
+            # Single or multiple devices by MAC address
+            # Normalize MAC address by removing separators
+            $NormalizedMacAddress = $MacAddress -replace '[:\-\.]', ''
+            
+            $APIMethod = @{
+                Path = "device/macAddress/$NormalizedMacAddress"
+                Method = 'Get'
+                Paginate = $true
+                PageElement = 'devices'
+            }
+
+            Write-Debug "Getting device(s) by MAC address: $NormalizedMacAddress"
+            Invoke-APIMethod @APIMethod | ForEach-Object {
+
+                [DRMMDevice]::FromAPIMethod($_, $IncludeLastLoggedInUser.IsPresent)
+
+            }
 
         } elseif ($PSCmdlet.ParameterSetName -in 'SiteNetSummary', 'SiteUidNetSummary') {
 
