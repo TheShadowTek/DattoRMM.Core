@@ -826,30 +826,40 @@ class DRMMAlert : DRMMObject {
     }
 }
 
-class DRMMUdf : DRMMObject {
-
-    [int]$Number
-    [string]$Value
-
-    DRMMUdf() : base() {
-
-    }
-
-    DRMMUdf([int]$Number, [string]$Value) : base() {
-
-        $this.Number = $Number
-        $this.Value = $Value
-
-    }
-}
-
 class DRMMUdfs : DRMMObject {
 
-    [DRMMUdf[]]$Udfs
+    [string]$Udf1
+    [string]$Udf2
+    [string]$Udf3
+    [string]$Udf4
+    [string]$Udf5
+    [string]$Udf6
+    [string]$Udf7
+    [string]$Udf8
+    [string]$Udf9
+    [string]$Udf10
+    [string]$Udf11
+    [string]$Udf12
+    [string]$Udf13
+    [string]$Udf14
+    [string]$Udf15
+    [string]$Udf16
+    [string]$Udf17
+    [string]$Udf18
+    [string]$Udf19
+    [string]$Udf20
+    [string]$Udf21
+    [string]$Udf22
+    [string]$Udf23
+    [string]$Udf24
+    [string]$Udf25
+    [string]$Udf26
+    [string]$Udf27
+    [string]$Udf28
+    [string]$Udf29
+    [string]$Udf30
 
     DRMMUdfs() : base() {
-
-        $this.Udfs = @()
 
     }
 
@@ -862,11 +872,11 @@ class DRMMUdfs : DRMMObject {
         }
 
         $UdfEntries = [DRMMUdfs]::new()
-        $UdfList = @()
 
         for ($i = 1; $i -le 30; $i++) {
 
             $PropName = "udf$i"
+            $UdfPropName = "Udf$i"
 
             if ($Response.PSObject.Properties.Name -contains $PropName) {
 
@@ -874,7 +884,7 @@ class DRMMUdfs : DRMMObject {
 
                 if ($null -ne $Value -and $Value -ne '') {
 
-                    $UdfList += [DRMMUdf]::new($i, $Value)
+                    $UdfEntries.$UdfPropName = $Value
 
                 }
 
@@ -882,15 +892,7 @@ class DRMMUdfs : DRMMObject {
 
         }
 
-        $UdfEntries.Udfs = $UdfList
-
         return $UdfEntries
-
-    }
-
-    [DRMMUdf] GetUdf([int]$Number) {
-
-        return $this.Udfs | Where-Object { $_.Number -eq $Number } | Select-Object -First 1
 
     }
 }
@@ -1077,7 +1079,7 @@ class DRMMDevice : DRMMObject {
     [Nullable[datetime]]$LastReboot
     [Nullable[datetime]]$LastAuditDate
     [Nullable[datetime]]$CreationDate
-    [DRMMUdfs]$Udf
+    [DRMMUdfs]$Udfs
     [bool]$SnmpEnabled
     [string]$DeviceClass
     [string]$PortalUrl
@@ -1151,7 +1153,7 @@ class DRMMDevice : DRMMObject {
         $Device.OnboardedViaNetworkMonitor = $Response.onboardedViaNetworkMonitor
 
         $Device.DeviceType = [DRMMDeviceType]::FromAPIMethod($Response.deviceType)
-        $Device.Udf = [DRMMUdfs]::FromAPIMethod($Response.udf)
+        $Device.Udfs = [DRMMUdfs]::FromAPIMethod($Response.udf)
         $Device.Antivirus = [DRMMAntivirusInfo]::FromAPIMethod($Response.antivirus)
         $Device.PatchManagement = [DRMMPatchManagement]::FromAPIMethod($Response.patchManagement)
 
@@ -1227,12 +1229,15 @@ class DRMMDevice : DRMMObject {
     [object] GetUdfAsJson([int]$UdfNumber) {
 
         if ($UdfNumber -lt 1 -or $UdfNumber -gt 30) {
+
             throw "UDF number must be between 1 and 30"
+
         }
 
-        $UdfItem = $this.Udf.GetUdf($UdfNumber)
+        $UdfPropName = "Udf$UdfNumber"
+        $UdfValue = $this.Udfs.$UdfPropName
 
-        if ($null -eq $UdfItem -or [string]::IsNullOrWhiteSpace($UdfItem.Value)) {
+        if ([string]::IsNullOrWhiteSpace($UdfValue)) {
 
             return $null
 
@@ -1240,7 +1245,7 @@ class DRMMDevice : DRMMObject {
 
         try {
 
-            return $UdfItem.Value | ConvertFrom-Json
+            return $UdfValue | ConvertFrom-Json
 
         } catch {
 
@@ -1269,22 +1274,55 @@ class DRMMDevice : DRMMObject {
 
         }
 
-        $UdfItem = $this.Udf.GetUdf($UdfNumber)
+        $UdfPropName = "Udf$UdfNumber"
+        $UdfValue = $this.Udfs.$UdfPropName
 
-        if ($null -eq $UdfItem -or [string]::IsNullOrWhiteSpace($UdfItem.Value)) {
+        if ([string]::IsNullOrWhiteSpace($UdfValue)) {
             
             return $null
 
         }
 
-        $Values = $UdfItem.Value -split [regex]::Escape($Delimiter)
+        $Values = $UdfValue -split [regex]::Escape($Delimiter)
         $Result = [ordered]@{}
 
         for ($i = 0; $i -lt $ColumnHeaders.Count; $i++) {
 
             if ($i -lt $Values.Count) {
 
-                $Result[$ColumnHeaders[$i]] = $Values[$i]
+                $Value = $Values[$i]
+                
+                # Attempt automatic type conversion
+                $TypedValue = $Value
+
+                if (-not [string]::IsNullOrWhiteSpace($Value)) {
+
+                    # Try converting to number
+                    if ($Value -match '^\-?\d+$') {
+
+                        try {
+                            
+                            $TypedValue = [int]$Value
+
+                        } catch {
+
+                            # If too large for int, use long
+                            $TypedValue = [long]$Value
+
+                        }
+
+                    } elseif ($Value -match '^\-?\d+\.\d+$') {
+
+                        $TypedValue = [double]$Value
+
+                    } elseif ($Value -eq 'true' -or $Value -eq 'false') {
+
+                        $TypedValue = [bool]::Parse($Value)
+
+                    }
+                }
+
+                $Result[$ColumnHeaders[$i]] = $TypedValue
 
             } else {
 
