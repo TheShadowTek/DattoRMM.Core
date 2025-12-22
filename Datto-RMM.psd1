@@ -4,7 +4,7 @@
 RootModule = 'Datto-RMM.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.0.45'
+ModuleVersion = '0.0.46'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -65,6 +65,7 @@ FunctionsToExport = @(
     'Connect-DattoRMM',
     'Disconnect-DattoRMM',
     'Get-RMMAccount',
+    'Get-RMMActivityLog',
     'Get-RMMAlert',
     'Get-RMMComponent',
     'Get-RMMDevice',
