@@ -1927,7 +1927,7 @@ class DRMMJob : DRMMObject {
         $Job.Status = [DRMMObject]::GetValue($Response, 'status')
 
         $DateCreatedValue = [DRMMObject]::GetValue($Response, 'dateCreated')
-        
+
         if ($null -ne $DateCreatedValue) {
 
             try {
@@ -1942,6 +1942,486 @@ class DRMMJob : DRMMObject {
         }
 
         return $Job
+
+    }
+}
+
+class DRMMSoftware : DRMMObject {
+
+    [string]$Name
+    [string]$Version
+
+    DRMMSoftware() : base() {
+
+    }
+
+    static [DRMMSoftware] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Software = [DRMMSoftware]::new()
+        $Software.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Software.Version = [DRMMObject]::GetValue($Response, 'version')
+
+        return $Software
+
+    }
+}
+
+class DRMMSystemInfo : DRMMObject {
+
+    [string]$Manufacturer
+    [string]$Model
+    [long]$TotalPhysicalMemory
+    [string]$Username
+    [string]$DotNetVersion
+    [int]$TotalCpuCores
+
+    DRMMSystemInfo() : base() {
+
+    }
+
+    static [DRMMSystemInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $SystemInfo = [DRMMSystemInfo]::new()
+        $SystemInfo.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
+        $SystemInfo.Model = [DRMMObject]::GetValue($Response, 'model')
+        $SystemInfo.TotalPhysicalMemory = [DRMMObject]::GetValue($Response, 'totalPhysicalMemory')
+        $SystemInfo.Username = [DRMMObject]::GetValue($Response, 'username')
+        $SystemInfo.DotNetVersion = [DRMMObject]::GetValue($Response, 'dotNetVersion')
+        $SystemInfo.TotalCpuCores = [DRMMObject]::GetValue($Response, 'totalCpuCores')
+
+        return $SystemInfo
+
+    }
+}
+
+class DRMMBios : DRMMObject {
+
+    [string]$Manufacturer
+    [string]$Name
+    [string]$SerialNumber
+    [string]$SmbiosBiosVersion
+
+    DRMMBios() : base() {
+
+    }
+
+    static [DRMMBios] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Bios = [DRMMBios]::new()
+        $Bios.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
+        $Bios.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Bios.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
+        $Bios.SmbiosBiosVersion = [DRMMObject]::GetValue($Response, 'smbiosBiosVersion')
+
+        return $Bios
+
+    }
+}
+
+class DRMMBaseBoard : DRMMObject {
+
+    [string]$Manufacturer
+    [string]$Product
+    [string]$SerialNumber
+
+    DRMMBaseBoard() : base() {
+
+    }
+
+    static [DRMMBaseBoard] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $BaseBoard = [DRMMBaseBoard]::new()
+        $BaseBoard.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
+        $BaseBoard.Product = [DRMMObject]::GetValue($Response, 'product')
+        $BaseBoard.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
+
+        return $BaseBoard
+
+    }
+}
+
+class DRMMDisplay : DRMMObject {
+
+    [string]$Instance
+    [int]$ScreenHeight
+    [int]$ScreenWidth
+
+    DRMMDisplay() : base() {
+
+    }
+
+    static [DRMMDisplay] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Display = [DRMMDisplay]::new()
+        $Display.Instance = [DRMMObject]::GetValue($Response, 'instance')
+        $Display.ScreenHeight = [DRMMObject]::GetValue($Response, 'screenHeight')
+        $Display.ScreenWidth = [DRMMObject]::GetValue($Response, 'screenWidth')
+
+        return $Display
+
+    }
+}
+
+class DRMMLogicalDisk : DRMMObject {
+
+    [string]$Description
+    [string]$DiskIdentifier
+    [long]$Freespace
+    [long]$Size
+
+    DRMMLogicalDisk() : base() {
+
+    }
+
+    static [DRMMLogicalDisk] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Disk = [DRMMLogicalDisk]::new()
+        $Disk.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Disk.DiskIdentifier = [DRMMObject]::GetValue($Response, 'diskIdentifier')
+        $Disk.Freespace = [DRMMObject]::GetValue($Response, 'freespace')
+        $Disk.Size = [DRMMObject]::GetValue($Response, 'size')
+
+        return $Disk
+
+    }
+}
+
+class DRMMMobileInfo : DRMMObject {
+
+    [string]$Iccid
+    [string]$Imei
+    [string]$Number
+    [string]$Operator
+
+    DRMMMobileInfo() : base() {
+
+    }
+
+    static [DRMMMobileInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Mobile = [DRMMMobileInfo]::new()
+        $Mobile.Iccid = [DRMMObject]::GetValue($Response, 'iccid')
+        $Mobile.Imei = [DRMMObject]::GetValue($Response, 'imei')
+        $Mobile.Number = [DRMMObject]::GetValue($Response, 'number')
+        $Mobile.Operator = [DRMMObject]::GetValue($Response, 'operator')
+
+        return $Mobile
+
+    }
+}
+
+class DRMMProcessor : DRMMObject {
+
+    [string]$Name
+
+    DRMMProcessor() : base() {
+
+    }
+
+    static [DRMMProcessor] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Processor = [DRMMProcessor]::new()
+        $Processor.Name = [DRMMObject]::GetValue($Response, 'name')
+
+        return $Processor
+
+    }
+}
+
+class DRMMVideoBoard : DRMMObject {
+
+    [string]$DisplayAdapter
+
+    DRMMVideoBoard() : base() {
+
+    }
+
+    static [DRMMVideoBoard] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $VideoBoard = [DRMMVideoBoard]::new()
+        $VideoBoard.DisplayAdapter = [DRMMObject]::GetValue($Response, 'displayAdapter')
+
+        return $VideoBoard
+
+    }
+}
+
+class DRMMAttachedDevice : DRMMObject {
+
+    [string]$Description
+    [string]$Instance
+
+    DRMMAttachedDevice() : base() {
+
+    }
+
+    static [DRMMAttachedDevice] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Device = [DRMMAttachedDevice]::new()
+        $Device.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Device.Instance = [DRMMObject]::GetValue($Response, 'instance')
+
+        return $Device
+
+    }
+}
+
+class DRMMSnmpInfo : DRMMObject {
+
+    [string]$Contact
+    [string]$Description
+    [string]$Location
+    [string]$Name
+
+    DRMMSnmpInfo() : base() {
+
+    }
+
+    static [DRMMSnmpInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Snmp = [DRMMSnmpInfo]::new()
+        $Snmp.Contact = [DRMMObject]::GetValue($Response, 'contact')
+        $Snmp.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Snmp.Location = [DRMMObject]::GetValue($Response, 'location')
+        $Snmp.Name = [DRMMObject]::GetValue($Response, 'name')
+
+        return $Snmp
+
+    }
+}
+
+class DRMMPhysicalMemory : DRMMObject {
+
+    [string]$BankLabel
+    [long]$Capacity
+    [string]$Manufacturer
+    [string]$PartNumber
+    [string]$SerialNumber
+    [int]$Speed
+
+    DRMMPhysicalMemory() : base() {
+
+    }
+
+    static [DRMMPhysicalMemory] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Memory = [DRMMPhysicalMemory]::new()
+        $Memory.BankLabel = [DRMMObject]::GetValue($Response, 'bankLabel')
+        $Memory.Capacity = [DRMMObject]::GetValue($Response, 'capacity')
+        $Memory.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
+        $Memory.PartNumber = [DRMMObject]::GetValue($Response, 'partNumber')
+        $Memory.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
+        $Memory.Speed = [DRMMObject]::GetValue($Response, 'speed')
+
+        return $Memory
+
+    }
+}
+
+class DRMMDeviceAudit : DRMMObject {
+
+    [guid]$DeviceUid
+    [string]$PortalUrl
+    [string]$WebRemoteUrl
+    [DRMMSystemInfo]$SystemInfo
+    [DRMMNetworkInterface[]]$Nics
+    [DRMMBios]$Bios
+    [DRMMBaseBoard]$BaseBoard
+    [DRMMDisplay[]]$Displays
+    [DRMMLogicalDisk[]]$LogicalDisks
+    [DRMMMobileInfo[]]$MobileInfo
+    [DRMMProcessor[]]$Processors
+    [DRMMVideoBoard[]]$VideoBoards
+    [DRMMAttachedDevice[]]$AttachedDevices
+    [DRMMSnmpInfo]$SnmpInfo
+    [DRMMPhysicalMemory[]]$PhysicalMemory
+    [DRMMSoftware[]]$Software
+
+    DRMMDeviceAudit() : base() {
+
+    }
+
+    static [DRMMDeviceAudit] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Audit = [DRMMDeviceAudit]::new()
+        $Audit.PortalUrl = [DRMMObject]::GetValue($Response, 'portalUrl')
+        $Audit.WebRemoteUrl = [DRMMObject]::GetValue($Response, 'webRemoteUrl')
+        
+        # System info
+        $SystemInfoData = [DRMMObject]::GetValue($Response, 'systemInfo')
+        if ($null -ne $SystemInfoData) {
+
+            $Audit.SystemInfo = [DRMMSystemInfo]::FromAPIMethod($SystemInfoData)
+
+        }
+
+        # BIOS
+        $BiosData = [DRMMObject]::GetValue($Response, 'bios')
+        if ($null -ne $BiosData) {
+
+            $Audit.Bios = [DRMMBios]::FromAPIMethod($BiosData)
+
+        }
+
+        # Base board
+        $BaseBoardData = [DRMMObject]::GetValue($Response, 'baseBoard')
+        if ($null -ne $BaseBoardData) {
+
+            $Audit.BaseBoard = [DRMMBaseBoard]::FromAPIMethod($BaseBoardData)
+
+        }
+
+        # SNMP info
+        $SnmpData = [DRMMObject]::GetValue($Response, 'snmpInfo')
+        if ($null -ne $SnmpData) {
+
+            $Audit.SnmpInfo = [DRMMSnmpInfo]::FromAPIMethod($SnmpData)
+
+        }
+
+        # Network interfaces
+        $NicsData = [DRMMObject]::GetValue($Response, 'nics')
+        if ($null -ne $NicsData -and $NicsData.Count -gt 0) {
+
+            $Audit.Nics = @($NicsData | ForEach-Object { [DRMMNetworkInterface]::FromAPIMethod($_) })
+
+        }
+
+        # Displays
+        $DisplaysData = [DRMMObject]::GetValue($Response, 'displays')
+        if ($null -ne $DisplaysData -and $DisplaysData.Count -gt 0) {
+
+            $Audit.Displays = @($DisplaysData | ForEach-Object { [DRMMDisplay]::FromAPIMethod($_) })
+
+        }
+
+        # Logical disks
+        $DisksData = [DRMMObject]::GetValue($Response, 'logicalDisks')
+        if ($null -ne $DisksData -and $DisksData.Count -gt 0) {
+
+            $Audit.LogicalDisks = @($DisksData | ForEach-Object { [DRMMLogicalDisk]::FromAPIMethod($_) })
+
+        }
+
+        # Mobile info
+        $MobileData = [DRMMObject]::GetValue($Response, 'mobileInfo')
+        if ($null -ne $MobileData -and $MobileData.Count -gt 0) {
+
+            $Audit.MobileInfo = @($MobileData | ForEach-Object { [DRMMMobileInfo]::FromAPIMethod($_) })
+
+        }
+
+        # Processors
+        $ProcessorsData = [DRMMObject]::GetValue($Response, 'processors')
+        if ($null -ne $ProcessorsData -and $ProcessorsData.Count -gt 0) {
+
+            $Audit.Processors = @($ProcessorsData | ForEach-Object { [DRMMProcessor]::FromAPIMethod($_) })
+
+        }
+
+        # Video boards
+        $VideoData = [DRMMObject]::GetValue($Response, 'videoBoards')
+        if ($null -ne $VideoData -and $VideoData.Count -gt 0) {
+
+            $Audit.VideoBoards = @($VideoData | ForEach-Object { [DRMMVideoBoard]::FromAPIMethod($_) })
+
+        }
+
+        # Attached devices
+        $AttachedData = [DRMMObject]::GetValue($Response, 'attachedDevices')
+        if ($null -ne $AttachedData -and $AttachedData.Count -gt 0) {
+
+            $Audit.AttachedDevices = @($AttachedData | ForEach-Object { [DRMMAttachedDevice]::FromAPIMethod($_) })
+
+        }
+
+        # Physical memory
+        $MemoryData = [DRMMObject]::GetValue($Response, 'physicalMemory')
+        if ($null -ne $MemoryData -and $MemoryData.Count -gt 0) {
+
+            $Audit.PhysicalMemory = @($MemoryData | ForEach-Object { [DRMMPhysicalMemory]::FromAPIMethod($_) })
+
+        }
+
+        return $Audit
 
     }
 }
