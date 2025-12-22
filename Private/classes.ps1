@@ -2465,7 +2465,11 @@ class DRMMDevicesStatus : DRMMObject {
 
     static [DRMMDevicesStatus] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
             $DevicesStatus = [DRMMDevicesStatus]::new()
             $DevicesStatus.NumberOfDevices = $Response.numberOfDevices
@@ -2595,7 +2599,11 @@ class DRMMFilter : DRMMObject {
 
     static [DRMMFilter] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Filter = [DRMMFilter]::new()
         $Filter.Id = $Response.id
@@ -3010,7 +3018,11 @@ class DRMMSite : DRMMObject {
 
     static [DRMMSite] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Site = [DRMMSite]::new()
         $Site.Id = $Response.id
@@ -3146,7 +3158,11 @@ class DRMMSiteGeneralSettings : DRMMObject {
 
     static [DRMMSiteGeneralSettings] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) {return $null}
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Settings = [DRMMSiteGeneralSettings]::new()
         $Settings.Name = $Response.name
@@ -3175,7 +3191,11 @@ class DRMMSiteMailRecipient : DRMMObject {
 
     static [DRMMSiteMailRecipient] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) {return $null}
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Recipient = [DRMMSiteMailRecipient]::new()
         $Recipient.Name = $Response.name
@@ -3201,7 +3221,11 @@ class DRMMSiteProxySettings : DRMMObject {
 
     static [DRMMSiteProxySettings] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
             $ProxySettings = [DRMMSiteProxySettings]::new()
             $ProxySettings.Host = $Response.host
@@ -3250,7 +3274,11 @@ class DRMMSiteSettings : DRMMObject {
 
     static [DRMMSiteSettings] FromAPIMethod([pscustomobject]$Response, $SiteUid) {
 
-        if ($null -eq $Response) {return $null}
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Settings = [DRMMSiteSettings]::new()
 
@@ -3303,7 +3331,11 @@ class DRMMStatus : DRMMObject {
 
     static [DRMMStatus] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Result = [DRMMStatus]::new()
         $Result.Version = [DRMMObject]::GetValue($Response, 'version')
@@ -3378,7 +3410,7 @@ class DRMMUser : DRMMObject {
     [string] GetSummary() {
 
         $FullName = $this.GetFullName()
-        $StatusText = if ($this.Disabled) { " (Disabled)" } else { "" }
+        $StatusText = if ($this.Disabled) {" (Disabled)"} else {""}
 
         return "$FullName ($($this.Username))$StatusText"
 
@@ -3400,7 +3432,11 @@ class DRMMVariable : DRMMObject {
 
     static [DRMMVariable] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
 
         $Variable = [DRMMVariable]::new()
         $Variable.Id = $Response.id
