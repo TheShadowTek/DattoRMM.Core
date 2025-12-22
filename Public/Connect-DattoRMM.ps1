@@ -76,7 +76,7 @@ function Connect-DattoRMM {
         On module removal, the authentication information is cleared from memory.
 
     .LINK
-        Disconnect-RMM
+        Disconnect-DattoRMM
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'Key')]
