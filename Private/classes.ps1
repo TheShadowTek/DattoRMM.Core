@@ -165,6 +165,8 @@ class DRMMObject {
 }
 
 
+
+
 class DRMMAccount : DRMMObject {
 
     [int]$Id
@@ -637,41 +639,6 @@ class DRMMAlertContextBackupManagement : DRMMAlertContext {
     }
 }
 
-class DRMMAlertContextGeneric : DRMMAlertContext {
-
-    [hashtable]$Properties
-
-    DRMMAlertContextGeneric() : base() {
-
-    }
-
-    static [DRMMAlertContextGeneric] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Context = [DRMMAlertContextGeneric]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        
-        # Store all properties except @class
-        $Context.Properties = @{}
-        foreach ($Property in $Response.PSObject.Properties) {
-
-            if ($Property.Name -ne '@class') {
-
-                $Context.Properties[$Property.Name] = $Property.Value
-
-            }
-        }
-
-        return $Context
-
-    }
-}
-
 class DRMMAlertContextCustomSNMP : DRMMAlertContext {
 
     [string]$DisplayName
@@ -914,16 +881,15 @@ class DRMMAlertContextFileSystem : DRMMAlertContext {
     }
 }
 
-class DRMMAlertMonitorInfo : DRMMObject {
+class DRMMAlertContextGeneric : DRMMAlertContext {
 
-    [bool]$SendsEmails
-    [bool]$CreatesTicket
+    [hashtable]$Properties
 
-    DRMMAlertMonitorInfo() : base() {
+    DRMMAlertContextGeneric() : base() {
 
     }
 
-    static [DRMMAlertMonitorInfo] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextGeneric] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -931,20 +897,21 @@ class DRMMAlertMonitorInfo : DRMMObject {
 
         }
 
-        $MonitorInfo = [DRMMAlertMonitorInfo]::new()
-        $MonitorInfo.SendsEmails = $Response.sendsEmails
-        $MonitorInfo.CreatesTicket = $Response.createsTicket
+        $Context = [DRMMAlertContextGeneric]::new()
+        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
+        
+        # Store all properties except @class
+        $Context.Properties = @{}
+        foreach ($Property in $Response.PSObject.Properties) {
 
-        return $MonitorInfo
+            if ($Property.Name -ne '@class') {
 
-    }
+                $Context.Properties[$Property.Name] = $Property.Value
 
-    [string] GetSummary() {
+            }
+        }
 
-        $EmailStatus = if ($this.SendsEmails) { 'Emails' } else { 'NoEmails' }
-        $TicketStatus = if ($this.CreatesTicket) { 'Ticket' } else { 'NoTicket' }
-
-        return "$EmailStatus, $TicketStatus"
+        return $Context
 
     }
 }
@@ -1320,45 +1287,6 @@ class DRMMAlertContextSNMPProbe : DRMMAlertContext {
     }
 }
 
-class DRMMAlertSourceInfo : DRMMObject {
-
-    [string]$DeviceUid
-    [string]$DeviceName
-    [string]$SiteUid
-    [string]$SiteName
-
-    DRMMAlertSourceInfo() : base() {
-
-    }
-
-    static [DRMMAlertSourceInfo] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $SourceInfo = [DRMMAlertSourceInfo]::new()
-        $SourceInfo.DeviceUid = $Response.deviceUid
-        $SourceInfo.DeviceName = $Response.deviceName
-        $SourceInfo.SiteUid = $Response.siteUid
-        $SourceInfo.SiteName = $Response.siteName
-
-        return $SourceInfo
-
-    }
-
-    [string] GetSummary() {
-
-        $Device = if ($this.DeviceName) { $this.DeviceName } else { 'Unknown' }
-        $Site = if ($this.SiteName) { $this.SiteName } else { 'Unknown' }
-
-        return "$Device @ $Site"
-
-    }
-}
-
 class DRMMAlertContextStatus : DRMMAlertContext {
 
     [string]$ProcessName
@@ -1459,6 +1387,80 @@ class DRMMAlertContextWmi : DRMMAlertContext {
         $Context.Value = [DRMMObject]::GetValue($Response, 'value')
 
         return $Context
+
+    }
+}
+
+class DRMMAlertMonitorInfo : DRMMObject {
+
+    [bool]$SendsEmails
+    [bool]$CreatesTicket
+
+    DRMMAlertMonitorInfo() : base() {
+
+    }
+
+    static [DRMMAlertMonitorInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $MonitorInfo = [DRMMAlertMonitorInfo]::new()
+        $MonitorInfo.SendsEmails = $Response.sendsEmails
+        $MonitorInfo.CreatesTicket = $Response.createsTicket
+
+        return $MonitorInfo
+
+    }
+
+    [string] GetSummary() {
+
+        $EmailStatus = if ($this.SendsEmails) { 'Emails' } else { 'NoEmails' }
+        $TicketStatus = if ($this.CreatesTicket) { 'Ticket' } else { 'NoTicket' }
+
+        return "$EmailStatus, $TicketStatus"
+
+    }
+}
+
+class DRMMAlertSourceInfo : DRMMObject {
+
+    [string]$DeviceUid
+    [string]$DeviceName
+    [string]$SiteUid
+    [string]$SiteName
+
+    DRMMAlertSourceInfo() : base() {
+
+    }
+
+    static [DRMMAlertSourceInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $SourceInfo = [DRMMAlertSourceInfo]::new()
+        $SourceInfo.DeviceUid = $Response.deviceUid
+        $SourceInfo.DeviceName = $Response.deviceName
+        $SourceInfo.SiteUid = $Response.siteUid
+        $SourceInfo.SiteName = $Response.siteName
+
+        return $SourceInfo
+
+    }
+
+    [string] GetSummary() {
+
+        $Device = if ($this.DeviceName) { $this.DeviceName } else { 'Unknown' }
+        $Site = if ($this.SiteName) { $this.SiteName } else { 'Unknown' }
+
+        return "$Device @ $Site"
 
     }
 }
@@ -1593,7 +1595,7 @@ class DRMMDevice : DRMMObject {
     [Nullable[datetime]]$LastReboot
     [Nullable[datetime]]$LastAuditDate
     [Nullable[datetime]]$CreationDate
-    [DRMMUdfs]$Udfs
+    [DRMMDeviceUdfs]$Udfs
     [bool]$SnmpEnabled
     [string]$DeviceClass
     [string]$PortalUrl
@@ -1666,7 +1668,7 @@ class DRMMDevice : DRMMObject {
         $Device.NetworkProbe = $Response.networkProbe
         $Device.OnboardedViaNetworkMonitor = $Response.onboardedViaNetworkMonitor
         $Device.DeviceType = [DRMMDeviceType]::FromAPIMethod($Response.deviceType)
-        $Device.Udfs = [DRMMUdfs]::FromAPIMethod($Response.udf)
+        $Device.Udfs = [DRMMDeviceUdfs]::FromAPIMethod($Response.udf)
         $Device.Antivirus = [DRMMDeviceAntivirusInfo]::FromAPIMethod($Response.antivirus)
         $Device.PatchManagement = [DRMMDevicePatchManagement]::FromAPIMethod($Response.patchManagement)
         $Device.LastSeen = ([DRMMObject]::ParseApiDate($Response.lastSeen)).DateTime
@@ -2507,6 +2509,75 @@ class DRMMDeviceType : DRMMObject {
     }
 }
 
+class DRMMDeviceUdfs : DRMMObject {
+
+    [string]$Udf1
+    [string]$Udf2
+    [string]$Udf3
+    [string]$Udf4
+    [string]$Udf5
+    [string]$Udf6
+    [string]$Udf7
+    [string]$Udf8
+    [string]$Udf9
+    [string]$Udf10
+    [string]$Udf11
+    [string]$Udf12
+    [string]$Udf13
+    [string]$Udf14
+    [string]$Udf15
+    [string]$Udf16
+    [string]$Udf17
+    [string]$Udf18
+    [string]$Udf19
+    [string]$Udf20
+    [string]$Udf21
+    [string]$Udf22
+    [string]$Udf23
+    [string]$Udf24
+    [string]$Udf25
+    [string]$Udf26
+    [string]$Udf27
+    [string]$Udf28
+    [string]$Udf29
+    [string]$Udf30
+
+    DRMMDeviceUdfs() : base() {
+
+    }
+
+    static [DRMMDeviceUdfs] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $UdfEntries = [DRMMDeviceUdfs]::new()
+
+        for ($i = 1; $i -le 30; $i++) {
+
+            $PropName = "udf$i"
+            $UdfPropName = "Udf$i"
+
+            if ($Response.PSObject.Properties.Name -contains $PropName) {
+
+                $Value = $Response.$PropName
+
+                if ($null -ne $Value -and $Value -ne '') {
+
+                    $UdfEntries.$UdfPropName = $Value
+
+                }
+            }
+        }
+
+        return $UdfEntries
+
+    }
+}
+
 class DRMMFilter : DRMMObject {
 
     [long]$Id
@@ -2555,36 +2626,6 @@ class DRMMFilter : DRMMObject {
         $TypeValue = if ($this.Type) { " ($($this.Type))" } else { '' }
 
         return "$($this.Name) [$ScopeValue]$TypeValue"
-
-    }
-}
-
-class DRMMGeneralSettings : DRMMObject {
-
-    [string]$Name
-    [string]$Uid
-    [string]$Description
-    [bool]$OnDemand
-
-    DRMMGeneralSettings() : base() {}
-
-    static [DRMMGeneralSettings] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {return $null}
-
-        $Settings = [DRMMGeneralSettings]::new()
-        $Settings.Name = $Response.name
-        $Settings.Uid = $Response.uid
-        $Settings.Description = $Response.description
-        $Settings.OnDemand = $Response.onDemand
-
-        return $Settings
-
-    }
-
-    [string] GetSummary() {
-
-        return "OnDemand: $($this.OnDemand)"
 
     }
 }
@@ -2813,28 +2854,6 @@ class DRMMJobStdData : DRMMObject {
     }
 }
 
-class DRMMMailRecipient : DRMMObject {
-
-    [string]$Name
-    [string]$Email
-    [string]$Type
-
-    DRMMMailRecipient() : base() {}
-
-    static [DRMMMailRecipient] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {return $null}
-
-        $Recipient = [DRMMMailRecipient]::new()
-        $Recipient.Name = $Response.name
-        $Recipient.Email = $Response.email
-        $Recipient.Type = $Response.type
-
-        return $Recipient
-
-    }
-}
-
 class DRMMNetMapping : DRMMObject {
 
     [long]$Id
@@ -2923,56 +2942,6 @@ class DRMMNetworkInterface : DRMMObject {
     }
 }
 
-class DRMMProxySettings : DRMMObject {
-
-    [string]$Host
-    [string]$Username
-    [securestring]$Password
-    [int]$Port
-    [string]$Type
-
-    DRMMProxySettings() : base() {
-
-    }
-
-    static [DRMMProxySettings] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) { return $null }
-
-            $ProxySettings = [DRMMProxySettings]::new()
-            $ProxySettings.Host = $Response.host
-            $ProxySettings.Username = $Response.username
-            $RawPassword = $Response.password
-
-        if ($RawPassword -is [securestring]) {
-
-            $ProxySettings.Password = $RawPassword
-
-        } elseif ($RawPassword -is [string] -and $RawPassword.Length -gt 0) {
-
-            $ProxySettings.Password = ConvertTo-SecureString -String $RawPassword -AsPlainText -Force
-
-        } else {
-
-            $ProxySettings.Password = $null
-
-        }
-
-        $ProxySettings.Port = $Response.port
-        $ProxySettings.Type = $Response.type
-
-        return $ProxySettings
-
-    }
-
-    [string] GetSummary() {
-
-        $ProxyInfo = if ($this.Host) {"$($this.Type)://$($this.Host)$(if ($this.Port) {":$($this.Port)"})"} else {$null}
-        return $ProxyInfo
-
-    }
-}
-
 class DRMMResponseAction : DRMMObject {
 
     [Nullable[datetime]]$ActionTime
@@ -3026,7 +2995,7 @@ class DRMMSite : DRMMObject {
     [string]$Notes
     [bool]$OnDemand
     [bool]$SplashtopAutoInstall
-    [DRMMProxySettings]$ProxySettings
+    [DRMMSiteProxySettings]$ProxySettings
     [DRMMDevicesStatus]$DevicesStatus
     [DRMMSiteSettings]$SiteSettings
     [DRMMVariable[]]$Variables
@@ -3060,7 +3029,7 @@ class DRMMSite : DRMMObject {
 
         if ($ProxySettingsResponse) {
 
-            $Site.ProxySettings = [DRMMProxySettings]::FromAPIMethod($ProxySettingsResponse)
+            $Site.ProxySettings = [DRMMSiteProxySettings]::FromAPIMethod($ProxySettingsResponse)
 
         }
 
@@ -3166,11 +3135,113 @@ class DRMMSite : DRMMObject {
     }
 }
 
+class DRMMSiteGeneralSettings : DRMMObject {
+
+    [string]$Name
+    [string]$Uid
+    [string]$Description
+    [bool]$OnDemand
+
+    DRMMSiteGeneralSettings() : base() {}
+
+    static [DRMMSiteGeneralSettings] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {return $null}
+
+        $Settings = [DRMMSiteGeneralSettings]::new()
+        $Settings.Name = $Response.name
+        $Settings.Uid = $Response.uid
+        $Settings.Description = $Response.description
+        $Settings.OnDemand = $Response.onDemand
+
+        return $Settings
+
+    }
+
+    [string] GetSummary() {
+
+        return "OnDemand: $($this.OnDemand)"
+
+    }
+}
+
+class DRMMSiteMailRecipient : DRMMObject {
+
+    [string]$Name
+    [string]$Email
+    [string]$Type
+
+    DRMMSiteMailRecipient() : base() {}
+
+    static [DRMMSiteMailRecipient] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {return $null}
+
+        $Recipient = [DRMMSiteMailRecipient]::new()
+        $Recipient.Name = $Response.name
+        $Recipient.Email = $Response.email
+        $Recipient.Type = $Response.type
+
+        return $Recipient
+
+    }
+}
+
+class DRMMSiteProxySettings : DRMMObject {
+
+    [string]$Host
+    [string]$Username
+    [securestring]$Password
+    [int]$Port
+    [string]$Type
+
+    DRMMSiteProxySettings() : base() {
+
+    }
+
+    static [DRMMSiteProxySettings] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+            $ProxySettings = [DRMMSiteProxySettings]::new()
+            $ProxySettings.Host = $Response.host
+            $ProxySettings.Username = $Response.username
+            $RawPassword = $Response.password
+
+        if ($RawPassword -is [securestring]) {
+
+            $ProxySettings.Password = $RawPassword
+
+        } elseif ($RawPassword -is [string] -and $RawPassword.Length -gt 0) {
+
+            $ProxySettings.Password = ConvertTo-SecureString -String $RawPassword -AsPlainText -Force
+
+        } else {
+
+            $ProxySettings.Password = $null
+
+        }
+
+        $ProxySettings.Port = $Response.port
+        $ProxySettings.Type = $Response.type
+
+        return $ProxySettings
+
+    }
+
+    [string] GetSummary() {
+
+        $ProxyInfo = if ($this.Host) {"$($this.Type)://$($this.Host)$(if ($this.Port) {":$($this.Port)"})"} else {$null}
+        return $ProxyInfo
+
+    }
+}
+
 class DRMMSiteSettings : DRMMObject {
 
-    [DRMMGeneralSettings]$GeneralSettings
-    [DRMMProxySettings]$ProxySettings  # Reuse existing class
-    [DRMMMailRecipient[]]$MailRecipients
+    [DRMMSiteGeneralSettings]$GeneralSettings
+    [DRMMSiteProxySettings]$ProxySettings  # Reuse existing class
+    [DRMMSiteMailRecipient[]]$MailRecipients
     [guid]$SiteUid
 
     DRMMSiteSettings() : base() {
@@ -3185,7 +3256,7 @@ class DRMMSiteSettings : DRMMObject {
 
         if ($Response.generalSettings) {
 
-            $Settings.GeneralSettings = [DRMMGeneralSettings]::FromAPIMethod($Response.generalSettings)
+            $Settings.GeneralSettings = [DRMMSiteGeneralSettings]::FromAPIMethod($Response.generalSettings)
 
         } else {
 
@@ -3195,7 +3266,7 @@ class DRMMSiteSettings : DRMMObject {
 
         if ($Response.proxySettings) {
 
-            $Settings.ProxySettings = [DRMMProxySettings]::FromAPIMethod($Response.proxySettings)
+            $Settings.ProxySettings = [DRMMSiteProxySettings]::FromAPIMethod($Response.proxySettings)
             
         } else {
 
@@ -3203,7 +3274,7 @@ class DRMMSiteSettings : DRMMObject {
 
         }
 
-        $Settings.MailRecipients = $Response.mailRecipients | ForEach-Object {[DRMMMailRecipient]::FromAPIMethod($_)}
+        $Settings.MailRecipients = $Response.mailRecipients | ForEach-Object {[DRMMSiteMailRecipient]::FromAPIMethod($_)}
         $Settings.SiteUid = $SiteUid
         
         return $Settings
@@ -3254,75 +3325,6 @@ class DRMMStatus : DRMMObject {
         }
 
         return $Result
-
-    }
-}
-
-class DRMMUdfs : DRMMObject {
-
-    [string]$Udf1
-    [string]$Udf2
-    [string]$Udf3
-    [string]$Udf4
-    [string]$Udf5
-    [string]$Udf6
-    [string]$Udf7
-    [string]$Udf8
-    [string]$Udf9
-    [string]$Udf10
-    [string]$Udf11
-    [string]$Udf12
-    [string]$Udf13
-    [string]$Udf14
-    [string]$Udf15
-    [string]$Udf16
-    [string]$Udf17
-    [string]$Udf18
-    [string]$Udf19
-    [string]$Udf20
-    [string]$Udf21
-    [string]$Udf22
-    [string]$Udf23
-    [string]$Udf24
-    [string]$Udf25
-    [string]$Udf26
-    [string]$Udf27
-    [string]$Udf28
-    [string]$Udf29
-    [string]$Udf30
-
-    DRMMUdfs() : base() {
-
-    }
-
-    static [DRMMUdfs] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $UdfEntries = [DRMMUdfs]::new()
-
-        for ($i = 1; $i -le 30; $i++) {
-
-            $PropName = "udf$i"
-            $UdfPropName = "Udf$i"
-
-            if ($Response.PSObject.Properties.Name -contains $PropName) {
-
-                $Value = $Response.$PropName
-
-                if ($null -ne $Value -and $Value -ne '') {
-
-                    $UdfEntries.$UdfPropName = $Value
-
-                }
-            }
-        }
-
-        return $UdfEntries
 
     }
 }
