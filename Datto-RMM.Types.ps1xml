@@ -37,7 +37,41 @@
     </Members>
   </Type>
   <Type>
-    <Name>DRMMSite</Name>
+    <Name>DRMMAlertContext</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+  <Type>    <Name>DRMMAlertMonitorInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+  <Type>
+    <Name>DRMMAlertSourceInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+  <Type>
+    <Name>DRMMResponseAction</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+  <Type>    <Name>DRMMSite</Name>
     <Members>
       <AliasProperty>
         <Name>SiteUid</Name>
