@@ -1,11 +1,6 @@
 # Datto-RMM.psm1
 # Main module file for Datto RMM API v2 PowerShell module
 
-# Default API base URL
-#$Script:APIUrl = 'https://pinotage-api.centrastage.net'
-#$Script:API = "$APIUrl/api/v2"
-
-
 # Initialize script-scoped auth object
 $Script:RMMAuth = $null
 
@@ -19,6 +14,8 @@ $Script:RMMThrottle = @{
     Pause = $false
     Throttle = $false
 }
+
+# Token refresh interval (hours)
 $Script:TokenExpireHours = 100
 
 # Dot-source all .ps1 files in Private folder
@@ -40,3 +37,27 @@ if (Test-Path $PSScriptRoot\Public) {
 # Export functions from Public folder (if any)
 # This will be updated as functions are added
 # Export-ModuleMember -Function *
+
+# Module removal handler - cleanup module variables
+$MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
+    # Remove authentication variable
+    if ($Script:RMMAuth) {
+
+        Remove-Variable -Name RMMAuth -Scope Script -ErrorAction SilentlyContinue
+
+    }
+    
+    # Remove throttle state variable
+    if ($Script:RMMThrottle) {
+
+        Remove-Variable -Name RMMThrottle -Scope Script -ErrorAction SilentlyContinue
+
+    }
+    
+    # Remove token expiration variable
+    if ($Script:TokenExpireHours) {
+
+        Remove-Variable -Name TokenExpireHours -Scope Script -ErrorAction SilentlyContinue
+        
+    }
+}
