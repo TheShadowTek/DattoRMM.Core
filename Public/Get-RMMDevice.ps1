@@ -15,20 +15,6 @@ function Get-RMMDevice {
         $Site,
 
         [Parameter(
-            ParameterSetName = 'SiteAllUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidNetSummary',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Alias('Uid')]
-        [guid]
-        $SiteUid,
-
-        [Parameter(
             ParameterSetName = 'DeviceByUid',
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
@@ -44,6 +30,20 @@ function Get-RMMDevice {
         [Alias('Id')]
         [int]
         $DeviceId,
+
+        [Parameter(
+            ParameterSetName = 'SiteAllUid',
+            Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [Parameter(
+            ParameterSetName = 'SiteUidNetSummary',
+            Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [Alias('Uid')]
+        [guid]
+        $SiteUid,
 
         [Parameter(
             ParameterSetName = 'DeviceByMacAddress',

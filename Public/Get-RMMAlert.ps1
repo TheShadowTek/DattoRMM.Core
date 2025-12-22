@@ -1,4 +1,98 @@
 function Get-RMMAlert {
+    <#
+    .SYNOPSIS
+        Retrieves alerts from the Datto RMM API.
+
+    .DESCRIPTION
+        The Get-RMMAlert function retrieves alerts at different scopes: global (account-level),
+        site-level, or device-level. Alerts can be filtered by status (Open, Resolved, or All)
+        and can be retrieved for specific objects by UID.
+
+        The function supports pipeline input from Get-RMMSite and Get-RMMDevice, making it easy
+        to retrieve alerts for filtered sets of sites or devices.
+
+    .PARAMETER Site
+        A DRMMSite object to retrieve alerts for. Accepts pipeline input from Get-RMMSite.
+
+    .PARAMETER SiteUid
+        The unique identifier (GUID) of a site to retrieve alerts for.
+
+    .PARAMETER DeviceUid
+        The unique identifier (GUID) of a device to retrieve alerts for. Accepts pipeline input
+        from Get-RMMDevice.
+
+    .PARAMETER AlertUid
+        The unique identifier of a specific alert to retrieve.
+
+    .PARAMETER Status
+        Filter alerts by status. Valid values: 'All', 'Open', 'Resolved'. Default is 'All'.
+
+    .EXAMPLE
+        Get-RMMAlert
+
+        Retrieves all alerts (both open and resolved) at the account level.
+
+    .EXAMPLE
+        Get-RMMAlert -Status Open
+
+        Retrieves only open alerts at the account level.
+
+    .EXAMPLE
+        Get-RMMDevice -FilterId 12345 | Get-RMMAlert -Status Open
+
+        Gets all devices matching filter 12345 and retrieves their open alerts.
+
+    .EXAMPLE
+        Get-RMMSite -Name "Contoso" | Get-RMMAlert -Status Resolved
+
+        Gets the site named "Contoso" and retrieves all resolved alerts for that site.
+
+    .EXAMPLE
+        Get-RMMSite | Where-Object {$_.Name -like "Branch*"} | Get-RMMAlert
+
+        Gets all sites with names starting with "Branch" and retrieves all alerts (open and resolved).
+
+    .EXAMPLE
+        Get-RMMDevice -Hostname "SERVER01" | Get-RMMAlert -Status All
+
+        Gets the device named "SERVER01" and retrieves all its alerts.
+
+    .EXAMPLE
+        Get-RMMAlert -AlertUid "0e6cf376-e60a-4dc2-95b3-daa122e74de9"
+
+        Retrieves a specific alert by its unique identifier.
+
+    .EXAMPLE
+        $Site = Get-RMMSite -Name "Main Office"
+        PS > Get-RMMAlert -SiteUid $Site.Uid -Status Open
+
+        Retrieves open alerts for a specific site using its UID.
+
+    .INPUTS
+        DRMMSite. You can pipe site objects from Get-RMMSite.
+        You can also pipe objects with DeviceUid or SiteUid properties.
+
+    .OUTPUTS
+        DRMMAlert. Returns alert objects with details about the alert status, priority, source, and more.
+
+    .NOTES
+        This function requires an active connection to the Datto RMM API.
+        Use Connect-DattoRMM to authenticate before calling this function.
+
+        When piping devices or sites, the Status parameter applies to all objects in the pipeline.
+
+        The function retrieves alerts in batches and automatically handles pagination.
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        Get-RMMDevice
+
+    .LINK
+        Get-RMMSite
+    #>
+
     [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]
     param (
         [Parameter(
@@ -6,34 +100,11 @@ function Get-RMMAlert {
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [Parameter(
-            ParameterSetName = 'SiteByUid',
-            Mandatory = $true,
-            ValueFromPipeline = $true
-        )]
         [DRMMSite]
         $Site,
 
         [Parameter(
-            ParameterSetName = 'SiteAllUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidByUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [guid]
-        $SiteUid,
-
-        [Parameter(
             ParameterSetName = 'DeviceAll',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'DeviceByUid',
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
         )]
@@ -41,22 +112,18 @@ function Get-RMMAlert {
         $DeviceUid,
 
         [Parameter(
+            ParameterSetName = 'SiteAllUid',
+            Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [guid]
+        $SiteUid,
+
+        [Parameter(
             ParameterSetName = 'GlobalByUid',
             Mandatory = $true
         )]
-        [Parameter(
-            ParameterSetName = 'SiteByUid',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidByUid',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'DeviceByUid',
-            Mandatory = $true
-        )]
-        [string]
+        [guid]
         $AlertUid,
 
         [Parameter(
@@ -72,16 +139,7 @@ function Get-RMMAlert {
             ParameterSetName = 'SiteAllUid'
         )]
         [Parameter(
-            ParameterSetName = 'SiteByUid'
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidByUid'
-        )]
-        [Parameter(
             ParameterSetName = 'DeviceAll'
-        )]
-        [Parameter(
-            ParameterSetName = 'DeviceByUid'
         )]
         [ValidateSet('All', 'Open', 'Resolved')]
         [string]
@@ -137,27 +195,11 @@ function Get-RMMAlert {
                     PageElement = 'alerts'
                 }
 
-                switch ($PSCmdlet.ParameterSetName) {
+                Write-Debug "Getting device alerts from $($Method.Path)"
+                Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                    'DeviceAll' {
+                    [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $null)
 
-                        Write-Debug "Getting device alerts from $($Method.Path)"
-                        Invoke-APIMethod @APIMethod | ForEach-Object {
-
-                            [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $null)
-
-                        }
-                    }
-
-                    'DeviceByUid' {
-
-                        Write-Debug "Getting device alert by UID: $AlertUid from $($Method.Path)"
-                        Invoke-APIMethod @APIMethod | Where-Object {$_.alertUid -eq $AlertUid} | ForEach-Object {
-
-                            [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $null)
-
-                        }
-                    }
                 }
             }
 
@@ -212,27 +254,11 @@ function Get-RMMAlert {
                     PageElement = 'alerts'
                 }
 
-                switch ($PSCmdlet.ParameterSetName) {
+                Write-Debug "Getting site alerts from $($Method.Path)"
+                Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                    {$_ -in 'SiteAll','SiteAllUid'} {
+                    [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $SiteUid)
 
-                        Write-Debug "Getting site alerts from $($Method.Path)"
-                        Invoke-APIMethod @APIMethod | ForEach-Object {
-
-                            [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $SiteUid)
-
-                        }
-                    }
-
-                    {$_ -in 'SiteByUid','SiteUidByUid'} {
-
-                        Write-Debug "Getting site alert by UID: $AlertUid from $($Method.Path)"
-                        Invoke-APIMethod @APIMethod | Where-Object {$_.alertUid -eq $AlertUid} | ForEach-Object {
-
-                            [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $SiteUid)
-
-                        }
-                    }
                 }
             }
 
