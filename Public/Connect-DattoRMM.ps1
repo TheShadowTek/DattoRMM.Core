@@ -1,4 +1,84 @@
 function Connect-DattoRMM {
+    <#
+    .SYNOPSIS
+        Connects to the Datto RMM API and authenticates using API credentials.
+
+    .DESCRIPTION
+        The Connect-DattoRMM function establishes a connection to the Datto RMM API using either
+        an API key and secret combination or a PSCredential object. Upon successful authentication,
+        an access token is obtained and stored for subsequent API requests.
+
+        The function supports automatic token refresh and allows selection of different Datto RMM
+        platform regions.
+
+    .PARAMETER Key
+        The API key for authentication. Used in conjunction with the Secret parameter.
+
+    .PARAMETER Secret
+        The API secret as a SecureString. Used in conjunction with the Key parameter.
+        Use Read-Host -AsSecureString to securely capture the secret.
+
+    .PARAMETER Credential
+        A PSCredential object containing the API key as the username and the API secret as the password.
+        This provides an alternative authentication method to using Key and Secret parameters separately.
+
+    .PARAMETER AutoRefresh
+        When specified, the function will store credentials and automatically refresh the access token
+        when it expires during subsequent API calls.
+
+    .PARAMETER Platform
+        Specifies the Datto RMM platform region to connect to. Default is 'Pinotage'.
+        Valid values: Pinotage, Concord, Vidal, Merlot, Zinfandel, Syrah
+
+    .EXAMPLE
+        $Secret = Read-Host -Prompt "Enter API Secret" -AsSecureString
+        PS > Connect-DattoRMM -Key "your-api-key" -Secret $Secret
+
+        Connects to the Datto RMM API using an API key and securely prompted secret.
+
+    .EXAMPLE
+        $Secret = Read-Host -AsSecureString -Prompt "Enter API Secret"
+        PS > Connect-DattoRMM -Key "your-api-key" -Secret $Secret -AutoRefresh
+
+        Connects to the API with automatic token refresh enabled.
+
+    .EXAMPLE
+        $Cred = Get-Credential -Message "Enter API Key as username and API Secret as password"
+        PS > Connect-DattoRMM -Credential $Cred
+
+        Connects using a PSCredential object where the username is the API key and password is the secret.
+
+    .EXAMPLE
+        $Secret = Read-Host -AsSecureString -Prompt "Enter API Secret"
+        PS > Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Platform Merlot
+
+        Connects to the Merlot platform region.
+
+    .EXAMPLE
+        $Cred = Get-Credential -Message "Enter Datto RMM API credentials"
+        PS > Connect-DattoRMM -Credential $Cred -AutoRefresh -Platform Pinotage
+
+        Creates a credential object using Get-Credential and connects with auto-refresh to the Pinotage platform.
+
+    .INPUTS
+        None. You cannot pipe objects to Connect-DattoRMM.
+
+    .OUTPUTS
+        None. This function does not generate output but stores authentication information in module scope.
+
+    .NOTES
+        The function stores the authentication token in the module's script scope. This token is used by all
+        subsequent API calls made through the module.
+
+        When AutoRefresh is enabled, credentials are stored securely and the token will be automatically
+        refreshed when it expires.
+
+        On module removal, the authentication information is cleared from memory.
+
+    .LINK
+        Disconnect-RMM
+    #>
+
     [CmdletBinding(DefaultParameterSetName = 'Key')]
 
     param (
