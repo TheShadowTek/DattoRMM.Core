@@ -22,7 +22,7 @@ function Get-RMMDeviceSoftware {
 
         Invoke-APIMethod @APIMethod | ForEach-Object {
 
-            [DRMMSoftware]::FromAPIMethod($_)
+            [DRMMDeviceAuditSoftware]::FromAPIMethod($_)
 
         }
     }

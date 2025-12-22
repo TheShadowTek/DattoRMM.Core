@@ -20,7 +20,6 @@ enum RMMPlatform {
 }
 
 # classes
-
 class DRMMObject {
 
     DRMMObject() {}
@@ -165,587 +164,352 @@ class DRMMObject {
     }
 }
 
-class DRMMStatus : DRMMObject {
 
-    [string]$Version
-    [string]$Status
-    [Nullable[datetime]]$Started
+class DRMMAccount : DRMMObject {
 
-    DRMMStatus() : base() {
-
-    }
-
-    static [DRMMStatus] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) { return $null }
-
-        $Result = [DRMMStatus]::new()
-        $Result.Version = [DRMMObject]::GetValue($Response, 'version')
-        $Result.Status = [DRMMObject]::GetValue($Response, 'status')
-        
-        $StartedValue = [DRMMObject]::GetValue($Response, 'started')
-
-        if ($null -ne $StartedValue) {
-            
-            try {
-
-                $Result.Started = [datetime]::Parse($StartedValue)
-
-            } catch {
-
-                $Result.Started = $null
-
-            }
-        }
-
-        return $Result
-
-    }
-}
-
-class DRMMDevicesStatus : DRMMObject {
-
-    [long]$NumberOfDevices
-    [long]$NumberOfOnlineDevices
-    [long]$NumberOfOfflineDevices
-
-    DRMMDevicesStatus() : base() {
-
-    }
-
-    static [DRMMDevicesStatus] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) { return $null }
-
-            $DevicesStatus = [DRMMDevicesStatus]::new()
-            $DevicesStatus.NumberOfDevices = $Response.numberOfDevices
-            $DevicesStatus.NumberOfOnlineDevices = $Response.numberOfOnlineDevices
-            $DevicesStatus.NumberOfOfflineDevices = $Response.numberOfOfflineDevices
-
-            return $DevicesStatus
-
-    }
-
-    [string] GetSummary() {
-
-        return "Devices: $($this.NumberOfDevices), Online: $($this.NumberOfOnlineDevices), Offline: $($this.NumberOfOfflineDevices)"
-
-    }
-}
-
-class DRMMSiteSettings : DRMMObject {
-
-    [DRMMGeneralSettings]$GeneralSettings
-    [DRMMProxySettings]$ProxySettings  # Reuse existing class
-    [DRMMMailRecipient[]]$MailRecipients
-    [guid]$SiteUid
-
-    DRMMSiteSettings() : base() {
-
-    }
-
-    static [DRMMSiteSettings] FromAPIMethod([pscustomobject]$Response, $SiteUid) {
-
-        if ($null -eq $Response) {return $null}
-
-        $Settings = [DRMMSiteSettings]::new()
-
-        if ($Response.generalSettings) {
-
-            $Settings.GeneralSettings = [DRMMGeneralSettings]::FromAPIMethod($Response.generalSettings)
-
-        } else {
-
-            $Settings.GeneralSettings = $null
-
-        }
-
-        if ($Response.proxySettings) {
-
-            $Settings.ProxySettings = [DRMMProxySettings]::FromAPIMethod($Response.proxySettings)
-            
-        } else {
-
-            $Settings.ProxySettings = $null
-
-        }
-
-        $Settings.MailRecipients = $Response.mailRecipients | ForEach-Object {[DRMMMailRecipient]::FromAPIMethod($_)}
-        $Settings.SiteUid = $SiteUid
-        
-        return $Settings
-    }
-
-    [string] GetSummary() {
-
-        $GeneralInfo = if ($this.GeneralSettings) { "OnDemand: $($this.GeneralSettings.OnDemand)" } else { "OnDemand: -" }
-        $ProxyInfo = if ($this.ProxySettings) { " | Proxy: $($this.ProxySettings.GetSummary())" } else { " | Proxy: -" }
-        $MailCount = if ($this.MailRecipients) { " | Mail Recipients: $($this.MailRecipients.Count)" } else { " | Mail Recipients: 0" }
-
-        return "$GeneralInfo$ProxyInfo$MailCount"
-
-    }    
-}
-
-class DRMMProxySettings : DRMMObject {
-
-    [string]$Host
-    [string]$Username
-    [securestring]$Password
-    [int]$Port
-    [string]$Type
-
-    DRMMProxySettings() : base() {
-
-    }
-
-    static [DRMMProxySettings] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) { return $null }
-
-            $ProxySettings = [DRMMProxySettings]::new()
-            $ProxySettings.Host = $Response.host
-            $ProxySettings.Username = $Response.username
-            $RawPassword = $Response.password
-
-        if ($RawPassword -is [securestring]) {
-
-            $ProxySettings.Password = $RawPassword
-
-        } elseif ($RawPassword -is [string] -and $RawPassword.Length -gt 0) {
-
-            $ProxySettings.Password = ConvertTo-SecureString -String $RawPassword -AsPlainText -Force
-
-        } else {
-
-            $ProxySettings.Password = $null
-
-        }
-
-        $ProxySettings.Port = $Response.port
-        $ProxySettings.Type = $Response.type
-
-        return $ProxySettings
-
-    }
-
-    [string] GetSummary() {
-
-        $ProxyInfo = if ($this.Host) {"$($this.Type)://$($this.Host)$(if ($this.Port) {":$($this.Port)"})"} else {$null}
-        return $ProxyInfo
-
-    }
-}
-
-class DRMMGeneralSettings : DRMMObject {
-
-    [string]$Name
+    [int]$Id
     [string]$Uid
-    [string]$Description
-    [bool]$OnDemand
+    [string]$Name
+    [string]$Currency
+    [DRMMAccountDescriptor]$Descriptor
+    [DRMMAccountDevicesStatus]$DevicesStatus
 
-    DRMMGeneralSettings() : base() {}
+    DRMMAccount() : base() {
 
-    static [DRMMGeneralSettings] FromAPIMethod([pscustomobject]$Response) {
+    }
 
-        if ($null -eq $Response) {return $null}
+    static [DRMMAccount] FromAPIMethod([pscustomobject]$Response) {
 
-        $Settings = [DRMMGeneralSettings]::new()
-        $Settings.Name = $Response.name
-        $Settings.Uid = $Response.uid
-        $Settings.Description = $Response.description
-        $Settings.OnDemand = $Response.onDemand
+        $Account = [DRMMAccount]::new()
 
-        return $Settings
+        $Account.Id = [DRMMObject]::GetValue($Response, 'id')
+        $Account.Uid = [DRMMObject]::GetValue($Response, 'uid')
+        $Account.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Account.Currency = [DRMMObject]::GetValue($Response, 'currency')
+
+        # Parse descriptor
+        $DescriptorData = [DRMMObject]::GetValue($Response, 'descriptor')
+
+        if ($null -ne $DescriptorData) {
+
+            $Account.Descriptor = [DRMMAccountDescriptor]::FromAPIMethod($DescriptorData)
+
+        }
+
+        # Parse devices status
+        $DevicesStatusData = [DRMMObject]::GetValue($Response, 'devicesStatus')
+
+        if ($null -ne $DevicesStatusData) {
+
+            $Account.DevicesStatus = [DRMMAccountDevicesStatus]::FromAPIMethod($DevicesStatusData)
+
+        }
+
+        return $Account
 
     }
 
     [string] GetSummary() {
 
-        return "OnDemand: $($this.OnDemand)"
+        $DeviceInfo = if ($this.DevicesStatus) { $this.DevicesStatus.GetSummary() } else { 'No device status' }
+
+        return "$($this.Name) - $DeviceInfo"
 
     }
 }
 
-class DRMMMailRecipient : DRMMObject {
+class DRMMAccountDescriptor : DRMMObject {
 
-    [string]$Name
-    [string]$Email
-    [string]$Type
+    [string]$BillingEmail
+    [int]$DeviceLimit
+    [string]$TimeZone
 
-    DRMMMailRecipient() : base() {}
+    DRMMAccountDescriptor() : base() {
 
-    static [DRMMMailRecipient] FromAPIMethod([pscustomobject]$Response) {
+    }
 
-        if ($null -eq $Response) {return $null}
+    static [DRMMAccountDescriptor] FromAPIMethod([pscustomobject]$Response) {
 
-        $Recipient = [DRMMMailRecipient]::new()
-        $Recipient.Name = $Response.name
-        $Recipient.Email = $Response.email
-        $Recipient.Type = $Response.type
+        $Descriptor = [DRMMAccountDescriptor]::new()
 
-        return $Recipient
+        $Descriptor.BillingEmail = [DRMMObject]::GetValue($Response, 'bilingEmail')
+        $Descriptor.DeviceLimit = [DRMMObject]::GetValue($Response, 'deviceLimit')
+        $Descriptor.TimeZone = [DRMMObject]::GetValue($Response, 'timeZone')
+
+        return $Descriptor
 
     }
 }
 
-class DRMMSite : DRMMObject {
+class DRMMAccountDevicesStatus : DRMMObject {
+
+    [int]$NumberOfDevices
+    [int]$NumberOfOnlineDevices
+    [int]$NumberOfOfflineDevices
+    [int]$NumberOfOnDemandDevices
+    [int]$NumberOfManagedDevices
+
+    DRMMAccountDevicesStatus() : base() {
+
+    }
+
+    static [DRMMAccountDevicesStatus] FromAPIMethod([pscustomobject]$Response) {
+
+        $Status = [DRMMAccountDevicesStatus]::new()
+
+        $Status.NumberOfDevices = [DRMMObject]::GetValue($Response, 'numberOfDevices')
+        $Status.NumberOfOnlineDevices = [DRMMObject]::GetValue($Response, 'numberOfOnlineDevices')
+        $Status.NumberOfOfflineDevices = [DRMMObject]::GetValue($Response, 'numberOfOfflineDevices')
+        $Status.NumberOfOnDemandDevices = [DRMMObject]::GetValue($Response, 'numberOfOnDemandDevices')
+        $Status.NumberOfManagedDevices = [DRMMObject]::GetValue($Response, 'numberOfManagedDevices')
+
+        return $Status
+
+    }
+
+    [double] GetOnlinePercentage() {
+
+        if ($this.NumberOfDevices -eq 0) {
+
+            return 0
+
+        }
+
+        return [Math]::Round(($this.NumberOfOnlineDevices / $this.NumberOfDevices) * 100, 2)
+
+    }
+
+    [string] GetSummary() {
+
+        return "$($this.NumberOfOnlineDevices)/$($this.NumberOfDevices) online ($($this.GetOnlinePercentage())%)"
+
+    }
+}
+
+class DRMMActivityLog : DRMMObject {
+
+    [string]$Id
+    [string]$Entity
+    [string]$Category
+    [string]$Action
+    [Nullable[datetime]]$Date
+    [DRMMActivityLogSite]$Site
+    [Nullable[long]]$DeviceId
+    [string]$Hostname
+    [DRMMActivityLogUser]$User
+    [string]$Details
+    [bool]$HasStdOut
+    [bool]$HasStdErr
+
+    DRMMActivityLog() : base() {
+
+    }
+
+    static [DRMMActivityLog] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Log = [DRMMActivityLog]::new()
+        $Log.Id = $Response.id
+        $Log.Entity = $Response.entity
+        $Log.Category = $Response.category
+        $Log.Action = $Response.action
+        $Log.DeviceId = $Response.deviceId
+        $Log.Hostname = $Response.hostname
+        $Log.Details = $Response.details
+        $Log.HasStdOut = $Response.hasStdOut
+        $Log.HasStdErr = $Response.hasStdErr
+
+        # Parse the date
+        $DateValue = [DRMMObject]::ParseApiDate($Response.date)
+        $Log.Date = $DateValue.DateTime
+
+        # Parse nested objects
+        if ($null -ne $Response.site) {
+
+            $Log.Site = [DRMMActivityLogSite]::FromAPIMethod($Response.site)
+
+        }
+
+        if ($null -ne $Response.user) {
+
+            $Log.User = [DRMMActivityLogUser]::FromAPIMethod($Response.user)
+
+        }
+
+        return $Log
+
+    }
+
+    [string] GetSummary() {
+
+        $EntityStr = if ($this.Entity) { $this.Entity } else { 'Unknown' }
+        $CategoryStr = if ($this.Category) { $this.Category } else { 'Unknown' }
+        $ActionStr = if ($this.Action) { $this.Action } else { 'Unknown' }
+        $TargetStr = if ($this.Hostname) { $this.Hostname } elseif ($this.User) { $this.User.UserName } else { '' }
+
+        return "[$EntityStr] ${CategoryStr}: ${ActionStr} - $TargetStr"
+
+    }
+}
+
+class DRMMActivityLogSite : DRMMObject {
 
     [long]$Id
-    [string]$Uid
-    [string]$AccountUid
     [string]$Name
-    [string]$Description
-    [string]$Notes
-    [bool]$OnDemand
-    [bool]$SplashtopAutoInstall
-    [DRMMProxySettings]$ProxySettings
-    [DRMMDevicesStatus]$DevicesStatus
-    [DRMMSiteSettings]$SiteSettings
-    [DRMMVariable[]]$Variables
-    [object]$Filters  # Placeholder for filters data
-    [string]$AutotaskCompanyName
-    [string]$AutotaskCompanyId
-    [string]$PortalUrl
 
-    DRMMSite() : base() {
+    DRMMActivityLogSite() : base() {
 
     }
 
-    static [DRMMSite] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMActivityLogSite] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
 
-        $Site = [DRMMSite]::new()
+            return $null
+
+        }
+
+        $Site = [DRMMActivityLogSite]::new()
         $Site.Id = $Response.id
-        $Site.Uid = $Response.uid
-        $Site.AccountUid = $Response.accountUid
         $Site.Name = $Response.name
-        $Site.Description = $Response.description
-        $Site.Notes = $Response.notes
-        $Site.OnDemand = $Response.onDemand
-        $Site.SplashtopAutoInstall = $Response.splashtopAutoInstall
-        $Site.AutotaskCompanyName = $Response.autotaskCompanyName
-        $Site.AutotaskCompanyId = $Response.autotaskCompanyId
-        $Site.PortalUrl = $Response.portalUrl
-
-        $ProxySettingsResponse = $Response.proxySettings
-
-        if ($ProxySettingsResponse) {
-
-            $Site.ProxySettings = [DRMMProxySettings]::FromAPIMethod($ProxySettingsResponse)
-
-        }
-
-        $DevicesStatusResponse = $Response.devicesStatus
-
-        if ($DevicesStatusResponse) {
-
-            $Site.DevicesStatus = [DRMMDevicesStatus]::FromAPIMethod($DevicesStatusResponse)
-
-        }
-
-        $SiteSettingsResponse = $Response.siteSettings
-
-        if ($SiteSettingsResponse) {
-
-            $Site.SiteSettings = [DRMMSiteSettings]::FromAPIMethod($SiteSettingsResponse)
-
-        }
 
         return $Site
 
     }
+}
 
-    [string] GetSummary() {
+class DRMMActivityLogUser : DRMMObject {
 
-        $DeviceCount = if ($this.DevicesStatus -and $null -ne $this.DevicesStatus.NumberOfDevices) {"$($this.DevicesStatus.NumberOfDevices)"} else {'0'}
+    [long]$Id
+    [string]$UserName
+    [string]$FirstName
+    [string]$LastName
 
-        return "$($this.Name) ($($this.Uid)) - Devices: $DeviceCount"
+    DRMMActivityLogUser() : base() {
 
     }
 
-    [DRMMSite] Update([pscustomobject]$UpdatePayload) {
+    static [DRMMActivityLogUser] FromAPIMethod([pscustomobject]$Response) {
 
-        if (-not (Get-Command -Name Invoke-APIMethod -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
-        $Path = "site/$($this.Uid)"
-        Write-Debug "Updating site $($this.Name) ($($this.Uid)) in Datto RMM: $Path"
-        $ResponseObject = $null #Invoke-APIMethod -Method 'POST' -Path $Path -Body $UpdatePayload
-
-        if ($null -eq $ResponseObject) {
+        if ($null -eq $Response) {
 
             return $null
 
         }
 
-        return [DRMMSite]::FromAPIMethod($ResponseObject)
+        $User = [DRMMActivityLogUser]::new()
+        $User.Id = $Response.id
+        $User.UserName = $Response.userName
+        $User.FirstName = $Response.firstName
+        $User.LastName = $Response.lastName
+
+        return $User
 
     }
 
-    [void] Delete() {
+    [string] GetSummary() {
 
-        if (-not (Get-Command -Name Invoke-APIMethod -ErrorAction SilentlyContinue)) {
+        if ($this.FirstName -and $this.LastName) {
 
-            [DRMMObject]::ThrowMissingHelperError()
+            return "$($this.FirstName) $($this.LastName) ($($this.UserName))"
 
-        }
+        } elseif ($this.UserName) {
 
-        $Path = "site/$($this.Uid)"
-        Write-Debug "Deleting site $($this.Name) ($($this.Uid)) from Datto RMM: $Path"
-        #Invoke-APIMethod -Method 'DELETE' -Path $Path | Out-Null
-
-    }
-
-    [DRMMAlert[]] GetAlerts() {
-
-        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
-        return Get-RMMAlert -SiteUid $this.Uid -Status 'All'
-
-    }
-
-    [DRMMAlert[]] GetAlerts([string]$Status) {
-
-        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
-        return Get-RMMAlert -SiteUid $this.Uid -Status $Status
-
-    }
-
-    [void] OpenPortal() {
-
-        if ($this.PortalUrl) {
-
-            Start-Process $this.PortalUrl
+            return $this.UserName
 
         } else {
 
-            Write-Warning "Portal URL is not available for site $($this.Name)"
+            return "User $($this.Id)"
 
         }
     }
 }
 
-class DRMMVariable : DRMMObject {
+class DRMMAlert : DRMMObject {
 
-    [long]$Id
-    [string]$Name
-    [object]$Value
+    [guid]$AlertUid
+    [string]$Priority
+    [string]$Diagnostics
+    [bool]$Resolved
+    [string]$ResolvedBy
+    [Nullable[datetime]]$ResolvedOn
+    [bool]$Muted
+    [string]$TicketNumber
+    [Nullable[datetime]]$Timestamp
+    [DRMMAlertMonitorInfo]$AlertMonitorInfo
+    [DRMMAlertContext]$AlertContext
+    [DRMMAlertSourceInfo]$AlertSourceInfo
+    [DRMMResponseAction[]]$ResponseActions
+    [Nullable[int]]$AutoresolveMins
     [string]$Scope
     [Nullable[guid]]$SiteUid
-    [bool]$IsSecret
 
-    DRMMVariable() : base() {
+    DRMMAlert() : base() {
 
     }
 
-    static [DRMMVariable] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
+    static [DRMMAlert] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
 
-        if ($null -eq $Response) { return $null }
+        if ($null -eq $Response) {
 
-        $Variable = [DRMMVariable]::new()
-        $Variable.Id = $Response.id
-        $Variable.Name = $Response.name
-        $Variable.Value = $Response.value
-        $Variable.IsSecret = $Response.masked
-        $Variable.Scope = $Scope
-        $Variable.SiteUid = $SiteUid
+            return $null
 
-        return $Variable
+        }
+
+        $Alert = [DRMMAlert]::new()
+        $Alert.AlertUid = $Response.alertUid
+        $Alert.Priority = $Response.priority
+        $Alert.Diagnostics = $Response.diagnostics
+        $Alert.Resolved = $Response.resolved
+        $Alert.ResolvedBy = $Response.resolvedBy
+        $Alert.Muted = $Response.muted
+        $Alert.TicketNumber = $Response.ticketNumber
+        $Alert.AutoresolveMins = $Response.autoresolveMins
+        $Alert.Scope = $Scope
+        $Alert.SiteUid = $SiteUid
+
+        $Alert.AlertMonitorInfo = [DRMMAlertMonitorInfo]::FromAPIMethod($Response.alertMonitorInfo)
+        $Alert.AlertContext = [DRMMAlertContext]::FromAPIMethod($Response.alertContext)
+        $Alert.AlertSourceInfo = [DRMMAlertSourceInfo]::FromAPIMethod($Response.alertSourceInfo)
+
+        if ($null -ne $Response.responseActions) {
+
+            $Alert.ResponseActions = $Response.responseActions | ForEach-Object {
+
+                [DRMMResponseAction]::FromAPIMethod($_)
+                
+            }
+        }
+
+        #$ResolvedDate = [DRMMObject]::ParseApiDate($Response.resolvedOn)
+        #$Alert.ResolvedOn = $ResolvedDate.DateTime
+        $Alert.ResolvedOn = $Response.resolvedOn
+        #$TimestampDate = [DRMMObject]::ParseApiDate($Response.timestamp)
+        #$Alert.Timestamp = $TimestampDate.DateTime
+        $Alert.Timestamp = $Response.timestamp
+
+        return $Alert
 
     }
 
     [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
     [bool] IsSite()   { return ($this.Scope -eq 'Site') }
+    [bool] IsOpen()   { return (-not $this.Resolved) }
+    [bool] IsCritical() { return ($this.Priority -eq 'Critical') }
+    [bool] IsHigh()   { return ($this.Priority -eq 'High') }
 
     [string] GetSummary() {
 
-        # API already returns masked values for secret variables
-        $ScopeValue = if ($this.Scope) { $this.Scope } else { 'Global' }
+        $StatusValue = if ($this.Resolved) { 'Resolved' } else { 'Open' }
+        $MutedValue = if ($this.Muted) { ' (Muted)' } else { '' }
+        $DeviceName = if ($this.AlertSourceInfo.DeviceName) { $this.AlertSourceInfo.DeviceName } else { 'Unknown' }
 
-        return "$($this.Name) [$ScopeValue] = $($this.Value)"
-
-    }
-}
-
-class DRMMFilter : DRMMObject {
-
-    [long]$Id
-    [string]$Name
-    [string]$Description
-    [string]$Type
-    [string]$Scope
-    [Nullable[guid]]$SiteUid
-    [Nullable[datetime]]$DateCreate
-    [Nullable[datetime]]$LastUpdated
-
-    DRMMFilter() : base() {
-
-    }
-
-    static [DRMMFilter] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
-
-        if ($null -eq $Response) { return $null }
-
-        $Filter = [DRMMFilter]::new()
-        $Filter.Id = $Response.id
-        $Filter.Name = $Response.name
-        $Filter.Description = $Response.description
-        $Filter.Type = $Response.type
-        $Filter.Scope = $Scope
-        $Filter.SiteUid = $SiteUid
-
-        $CreateDate = [DRMMObject]::ParseApiDate($Response.dateCreate)
-        $Filter.DateCreate = $CreateDate.DateTime
-
-        $UpdatedDate = [DRMMObject]::ParseApiDate($Response.lastUpdated)
-        $Filter.LastUpdated = $UpdatedDate.DateTime
-
-        return $Filter
-
-    }
-
-    [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
-    [bool] IsSite()   { return ($this.Scope -eq 'Site') }
-    [bool] IsDefault() { return ($this.Type -eq 'rmm_default') }
-    [bool] IsCustom()  { return ($this.Type -eq 'custom') }
-
-    [string] GetSummary() {
-
-        $ScopeValue = if ($this.Scope) { $this.Scope } else { 'Global' }
-        $TypeValue = if ($this.Type) { " ($($this.Type))" } else { '' }
-
-        return "$($this.Name) [$ScopeValue]$TypeValue"
-
-    }
-}
-
-class DRMMAlertMonitorInfo : DRMMObject {
-
-    [bool]$SendsEmails
-    [bool]$CreatesTicket
-
-    DRMMAlertMonitorInfo() : base() {
-
-    }
-
-    static [DRMMAlertMonitorInfo] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $MonitorInfo = [DRMMAlertMonitorInfo]::new()
-        $MonitorInfo.SendsEmails = $Response.sendsEmails
-        $MonitorInfo.CreatesTicket = $Response.createsTicket
-
-        return $MonitorInfo
-
-    }
-
-    [string] GetSummary() {
-
-        $EmailStatus = if ($this.SendsEmails) { 'Emails' } else { 'NoEmails' }
-        $TicketStatus = if ($this.CreatesTicket) { 'Ticket' } else { 'NoTicket' }
-
-        return "$EmailStatus, $TicketStatus"
-
-    }
-}
-
-class DRMMAlertSourceInfo : DRMMObject {
-
-    [string]$DeviceUid
-    [string]$DeviceName
-    [string]$SiteUid
-    [string]$SiteName
-
-    DRMMAlertSourceInfo() : base() {
-
-    }
-
-    static [DRMMAlertSourceInfo] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $SourceInfo = [DRMMAlertSourceInfo]::new()
-        $SourceInfo.DeviceUid = $Response.deviceUid
-        $SourceInfo.DeviceName = $Response.deviceName
-        $SourceInfo.SiteUid = $Response.siteUid
-        $SourceInfo.SiteName = $Response.siteName
-
-        return $SourceInfo
-
-    }
-
-    [string] GetSummary() {
-
-        $Device = if ($this.DeviceName) { $this.DeviceName } else { 'Unknown' }
-        $Site = if ($this.SiteName) { $this.SiteName } else { 'Unknown' }
-
-        return "$Device @ $Site"
-
-    }
-}
-
-class DRMMResponseAction : DRMMObject {
-
-    [Nullable[datetime]]$ActionTime
-    [string]$ActionType
-    [string]$Description
-    [string]$ActionReference
-    [string]$ActionReferenceInt
-
-    DRMMResponseAction() : base() {
-
-    }
-
-    static [DRMMResponseAction] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $ResponseAction = [DRMMResponseAction]::new()
-
-        $ActionDate = [DRMMObject]::ParseApiDate($Response.actionTime)
-        $ResponseAction.ActionTime = $ActionDate.DateTime
-        $ResponseAction.ActionType = $Response.actionType
-        $ResponseAction.Description = $Response.description
-        $ResponseAction.ActionReference = $Response.actionReference
-        $ResponseAction.ActionReferenceInt = $Response.actionReferenceInt
-
-        return $ResponseAction
-
-    }
-
-    [string] GetSummary() {
-
-        $Type = if ($this.ActionType) { $this.ActionType } else { 'Unknown' }
-        $Desc = if ($this.Description) { $this.Description } else { '' }
-
-        return "${Type}: ${Desc}"
+        return "[$StatusValue$MutedValue] $($this.Priority) - $DeviceName"
 
     }
 }
@@ -819,177 +583,6 @@ class DRMMAlertContext : DRMMObject {
     }
 }
 
-class DRMMAlertContextGeneric : DRMMAlertContext {
-
-    [hashtable]$Properties
-
-    DRMMAlertContextGeneric() : base() {
-
-    }
-
-    static [DRMMAlertContextGeneric] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Context = [DRMMAlertContextGeneric]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        
-        # Store all properties except @class
-        $Context.Properties = @{}
-        foreach ($Property in $Response.PSObject.Properties) {
-
-            if ($Property.Name -ne '@class') {
-
-                $Context.Properties[$Property.Name] = $Property.Value
-
-            }
-        }
-
-        return $Context
-
-    }
-}
-
-class DRMMAlertOnlineOfflineStatusContext : DRMMAlertContext {
-
-    [string]$Status
-
-    DRMMAlertOnlineOfflineStatusContext() : base() {
-
-    }
-
-    static [DRMMAlertOnlineOfflineStatusContext] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Context = [DRMMAlertOnlineOfflineStatusContext]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Status = [DRMMObject]::GetValue($Response, 'status')
-
-        return $Context
-
-    }
-}
-
-class DRMMAlertRansomWareContext : DRMMAlertContext {
-
-    [int]$State
-    [int]$ConfidenceFactor
-    [string[]]$AffectedDirectories
-    [string[]]$WatchPaths
-    [string]$Rwextension
-    [Nullable[datetime]]$MetaAlertTime
-    [Nullable[datetime]]$AlertTime
-
-    DRMMAlertRansomWareContext() : base() {
-
-    }
-
-    static [DRMMAlertRansomWareContext] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Context = [DRMMAlertRansomWareContext]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.State = [DRMMObject]::GetValue($Response, 'state')
-        $Context.ConfidenceFactor = [DRMMObject]::GetValue($Response, 'confidenceFactor')
-        $Context.AffectedDirectories = [DRMMObject]::GetValue($Response, 'affectedDirectories')
-        $Context.WatchPaths = [DRMMObject]::GetValue($Response, 'watchPaths')
-        $Context.Rwextension = [DRMMObject]::GetValue($Response, 'rwextension')
-        $Context.MetaAlertTime = ([DRMMObject]::ParseApiDate([DRMMObject]::GetValue($Response, 'metaAlertTime'))).DateTime
-        $Context.AlertTime = ([DRMMObject]::ParseApiDate([DRMMObject]::GetValue($Response, 'alertTime'))).DateTime
-
-        return $Context
-
-    }
-}
-
-class DRMMAlertEventLogContext : DRMMAlertContext {
-
-    [string]$LogName
-    [string]$Code
-    [string]$Type
-    [string]$Source
-    [string]$Description
-    [int]$TriggerCount
-    [Nullable[datetime]]$LastTriggered
-    [bool]$CausedSuspension
-
-    DRMMAlertEventLogContext() : base() {
-
-    }
-
-    static [DRMMAlertEventLogContext] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Context = [DRMMAlertEventLogContext]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.LogName = [DRMMObject]::GetValue($Response, 'logName')
-        $Context.Code = [DRMMObject]::GetValue($Response, 'code')
-        $Context.Type = [DRMMObject]::GetValue($Response, 'type')
-        $Context.Source = [DRMMObject]::GetValue($Response, 'source')
-        $Context.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Context.TriggerCount = [DRMMObject]::GetValue($Response, 'triggerCount')
-        $Context.LastTriggered = ([DRMMObject]::ParseApiDate([DRMMObject]::GetValue($Response, 'lastTriggered'))).DateTime
-        $Context.CausedSuspension = [DRMMObject]::GetValue($Response, 'causedSuspension')
-
-        return $Context
-
-    }
-}
-
-class DRMMAlertScriptContext : DRMMAlertContext {
-
-    [hashtable]$Samples
-
-    DRMMAlertScriptContext() : base() {
-
-    }
-
-    static [DRMMAlertScriptContext] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Context = [DRMMAlertScriptContext]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        
-        $SamplesData = [DRMMObject]::GetValue($Response, 'samples')
-        if ($null -ne $SamplesData) {
-
-            $Context.Samples = @{}
-            foreach ($Property in $SamplesData.PSObject.Properties) {
-
-                $Context.Samples[$Property.Name] = $Property.Value
-
-            }
-        }
-
-        return $Context
-
-    }
-}
-
 class DRMMAlertAntivirusContext : DRMMAlertContext {
 
     [string]$Status
@@ -1038,6 +631,41 @@ class DRMMAlertBackupManagementContext : DRMMAlertContext {
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.ErrorMessage = [DRMMObject]::GetValue($Response, 'errorMessage')
         $Context.Timeout = [DRMMObject]::GetValue($Response, 'timeout')
+
+        return $Context
+
+    }
+}
+
+class DRMMAlertContextGeneric : DRMMAlertContext {
+
+    [hashtable]$Properties
+
+    DRMMAlertContextGeneric() : base() {
+
+    }
+
+    static [DRMMAlertContextGeneric] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Context = [DRMMAlertContextGeneric]::new()
+        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
+        
+        # Store all properties except @class
+        $Context.Properties = @{}
+        foreach ($Property in $Response.PSObject.Properties) {
+
+            if ($Property.Name -ne '@class') {
+
+                $Context.Properties[$Property.Name] = $Property.Value
+
+            }
+        }
 
         return $Context
 
@@ -1187,6 +815,45 @@ class DRMMAlertEndpointSecurityWindowsDefenderContext : DRMMAlertContext {
     }
 }
 
+class DRMMAlertEventLogContext : DRMMAlertContext {
+
+    [string]$LogName
+    [string]$Code
+    [string]$Type
+    [string]$Source
+    [string]$Description
+    [int]$TriggerCount
+    [Nullable[datetime]]$LastTriggered
+    [bool]$CausedSuspension
+
+    DRMMAlertEventLogContext() : base() {
+
+    }
+
+    static [DRMMAlertEventLogContext] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Context = [DRMMAlertEventLogContext]::new()
+        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
+        $Context.LogName = [DRMMObject]::GetValue($Response, 'logName')
+        $Context.Code = [DRMMObject]::GetValue($Response, 'code')
+        $Context.Type = [DRMMObject]::GetValue($Response, 'type')
+        $Context.Source = [DRMMObject]::GetValue($Response, 'source')
+        $Context.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Context.TriggerCount = [DRMMObject]::GetValue($Response, 'triggerCount')
+        $Context.LastTriggered = ([DRMMObject]::ParseApiDate([DRMMObject]::GetValue($Response, 'lastTriggered'))).DateTime
+        $Context.CausedSuspension = [DRMMObject]::GetValue($Response, 'causedSuspension')
+
+        return $Context
+
+    }
+}
+
 class DRMMAlertFanContext : DRMMAlertContext {
 
     [string]$Reason
@@ -1247,6 +914,41 @@ class DRMMAlertFileSystemContext : DRMMAlertContext {
     }
 }
 
+class DRMMAlertMonitorInfo : DRMMObject {
+
+    [bool]$SendsEmails
+    [bool]$CreatesTicket
+
+    DRMMAlertMonitorInfo() : base() {
+
+    }
+
+    static [DRMMAlertMonitorInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $MonitorInfo = [DRMMAlertMonitorInfo]::new()
+        $MonitorInfo.SendsEmails = $Response.sendsEmails
+        $MonitorInfo.CreatesTicket = $Response.createsTicket
+
+        return $MonitorInfo
+
+    }
+
+    [string] GetSummary() {
+
+        $EmailStatus = if ($this.SendsEmails) { 'Emails' } else { 'NoEmails' }
+        $TicketStatus = if ($this.CreatesTicket) { 'Ticket' } else { 'NoTicket' }
+
+        return "$EmailStatus, $TicketStatus"
+
+    }
+}
+
 class DRMMAlertNetworkMonitorContext : DRMMAlertContext {
 
     [string]$Description
@@ -1266,6 +968,31 @@ class DRMMAlertNetworkMonitorContext : DRMMAlertContext {
         $Context = [DRMMAlertNetworkMonitorContext]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Description = [DRMMObject]::GetValue($Response, 'description')
+
+        return $Context
+
+    }
+}
+
+class DRMMAlertOnlineOfflineStatusContext : DRMMAlertContext {
+
+    [string]$Status
+
+    DRMMAlertOnlineOfflineStatusContext() : base() {
+
+    }
+
+    static [DRMMAlertOnlineOfflineStatusContext] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Context = [DRMMAlertOnlineOfflineStatusContext]::new()
+        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
+        $Context.Status = [DRMMObject]::GetValue($Response, 'status')
 
         return $Context
 
@@ -1390,6 +1117,43 @@ class DRMMAlertPsuContext : DRMMAlertContext {
     }
 }
 
+class DRMMAlertRansomWareContext : DRMMAlertContext {
+
+    [int]$State
+    [int]$ConfidenceFactor
+    [string[]]$AffectedDirectories
+    [string[]]$WatchPaths
+    [string]$Rwextension
+    [Nullable[datetime]]$MetaAlertTime
+    [Nullable[datetime]]$AlertTime
+
+    DRMMAlertRansomWareContext() : base() {
+
+    }
+
+    static [DRMMAlertRansomWareContext] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Context = [DRMMAlertRansomWareContext]::new()
+        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
+        $Context.State = [DRMMObject]::GetValue($Response, 'state')
+        $Context.ConfidenceFactor = [DRMMObject]::GetValue($Response, 'confidenceFactor')
+        $Context.AffectedDirectories = [DRMMObject]::GetValue($Response, 'affectedDirectories')
+        $Context.WatchPaths = [DRMMObject]::GetValue($Response, 'watchPaths')
+        $Context.Rwextension = [DRMMObject]::GetValue($Response, 'rwextension')
+        $Context.MetaAlertTime = ([DRMMObject]::ParseApiDate([DRMMObject]::GetValue($Response, 'metaAlertTime'))).DateTime
+        $Context.AlertTime = ([DRMMObject]::ParseApiDate([DRMMObject]::GetValue($Response, 'alertTime'))).DateTime
+
+        return $Context
+
+    }
+}
+
 class DRMMAlertResourceUsageContext : DRMMAlertContext {
 
     [string]$ProcessName
@@ -1419,20 +1183,15 @@ class DRMMAlertResourceUsageContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertSNMPProbeContext : DRMMAlertContext {
+class DRMMAlertScriptContext : DRMMAlertContext {
 
-    [string]$IpAddress
-    [string]$Oid
-    [string]$RuleName
-    [string]$ResponseValue
-    [string]$DeviceName
-    [string]$MonitorName
+    [hashtable]$Samples
 
-    DRMMAlertSNMPProbeContext() : base() {
+    DRMMAlertScriptContext() : base() {
 
     }
 
-    static [DRMMAlertSNMPProbeContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertScriptContext] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1440,15 +1199,19 @@ class DRMMAlertSNMPProbeContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertSNMPProbeContext]::new()
+        $Context = [DRMMAlertScriptContext]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.IpAddress = [DRMMObject]::GetValue($Response, 'ipAddress')
-        $Context.OID = [DRMMObject]::GetValue($Response, 'OID')
-        $Context.RuleName = [DRMMObject]::GetValue($Response, 'ruleName')
-        $Context.ResponseValue = [DRMMObject]::GetValue($Response, 'responseValue')
-        $Context.DeviceName = [DRMMObject]::GetValue($Response, 'deviceName')
-        $Context.MonitorName = [DRMMObject]::GetValue($Response, 'monitorName')
-        $Context.Oid = [DRMMObject]::GetValue($Response, 'oid')
+        
+        $SamplesData = [DRMMObject]::GetValue($Response, 'samples')
+        if ($null -ne $SamplesData) {
+
+            $Context.Samples = @{}
+            foreach ($Property in $SamplesData.PSObject.Properties) {
+
+                $Context.Samples[$Property.Name] = $Property.Value
+
+            }
+        }
 
         return $Context
 
@@ -1517,6 +1280,81 @@ class DRMMAlertSecurityManagementContext : DRMMAlertContext {
         $Context.ExpiryLicenseForDays = [DRMMObject]::GetValue($Response, 'expiryLicenseForDays')
 
         return $Context
+
+    }
+}
+
+class DRMMAlertSNMPProbeContext : DRMMAlertContext {
+
+    [string]$IpAddress
+    [string]$Oid
+    [string]$RuleName
+    [string]$ResponseValue
+    [string]$DeviceName
+    [string]$MonitorName
+
+    DRMMAlertSNMPProbeContext() : base() {
+
+    }
+
+    static [DRMMAlertSNMPProbeContext] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Context = [DRMMAlertSNMPProbeContext]::new()
+        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
+        $Context.IpAddress = [DRMMObject]::GetValue($Response, 'ipAddress')
+        $Context.OID = [DRMMObject]::GetValue($Response, 'OID')
+        $Context.RuleName = [DRMMObject]::GetValue($Response, 'ruleName')
+        $Context.ResponseValue = [DRMMObject]::GetValue($Response, 'responseValue')
+        $Context.DeviceName = [DRMMObject]::GetValue($Response, 'deviceName')
+        $Context.MonitorName = [DRMMObject]::GetValue($Response, 'monitorName')
+        $Context.Oid = [DRMMObject]::GetValue($Response, 'oid')
+
+        return $Context
+
+    }
+}
+
+class DRMMAlertSourceInfo : DRMMObject {
+
+    [string]$DeviceUid
+    [string]$DeviceName
+    [string]$SiteUid
+    [string]$SiteName
+
+    DRMMAlertSourceInfo() : base() {
+
+    }
+
+    static [DRMMAlertSourceInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $SourceInfo = [DRMMAlertSourceInfo]::new()
+        $SourceInfo.DeviceUid = $Response.deviceUid
+        $SourceInfo.DeviceName = $Response.deviceName
+        $SourceInfo.SiteUid = $Response.siteUid
+        $SourceInfo.SiteName = $Response.siteName
+
+        return $SourceInfo
+
+    }
+
+    [string] GetSummary() {
+
+        $Device = if ($this.DeviceName) { $this.DeviceName } else { 'Unknown' }
+        $Site = if ($this.SiteName) { $this.SiteName } else { 'Unknown' }
+
+        return "$Device @ $Site"
 
     }
 }
@@ -1625,395 +1463,106 @@ class DRMMAlertWmiContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlert : DRMMObject {
+class DRMMComponent : DRMMObject {
 
-    [guid]$AlertUid
-    [string]$Priority
-    [string]$Diagnostics
-    [bool]$Resolved
-    [string]$ResolvedBy
-    [Nullable[datetime]]$ResolvedOn
-    [bool]$Muted
-    [string]$TicketNumber
-    [Nullable[datetime]]$Timestamp
-    [DRMMAlertMonitorInfo]$AlertMonitorInfo
-    [DRMMAlertContext]$AlertContext
-    [DRMMAlertSourceInfo]$AlertSourceInfo
-    [DRMMResponseAction[]]$ResponseActions
-    [Nullable[int]]$AutoresolveMins
-    [string]$Scope
-    [Nullable[guid]]$SiteUid
+    [int]$Id
+    [string]$Uid
+    [string]$Name
+    [string]$Description
+    [string]$CategoryCode
+    [bool]$CredentialsRequired
+    [DRMMComponentVariable[]]$Variables
 
-    DRMMAlert() : base() {
+    DRMMComponent() : base() {
 
     }
 
-    static [DRMMAlert] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
+    static [DRMMComponent] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) {
+        $Component = [DRMMComponent]::new()
 
-            return $null
+        $Component.Id = [DRMMObject]::GetValue($Response, 'id')
+        $Component.Uid = [DRMMObject]::GetValue($Response, 'uid')
+        $Component.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Component.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Component.CategoryCode = [DRMMObject]::GetValue($Response, 'categoryCode')
+        $Component.CredentialsRequired = [DRMMObject]::GetValue($Response, 'credentialsRequired')
 
-        }
+        # Parse variables array
+        $Component.Variables = @()
+        $VariablesArray = [DRMMObject]::GetValue($Response, 'variables')
+        if ($null -ne $VariablesArray -and $VariablesArray.Count -gt 0) {
 
-        $Alert = [DRMMAlert]::new()
-        $Alert.AlertUid = $Response.alertUid
-        $Alert.Priority = $Response.priority
-        $Alert.Diagnostics = $Response.diagnostics
-        $Alert.Resolved = $Response.resolved
-        $Alert.ResolvedBy = $Response.resolvedBy
-        $Alert.Muted = $Response.muted
-        $Alert.TicketNumber = $Response.ticketNumber
-        $Alert.AutoresolveMins = $Response.autoresolveMins
-        $Alert.Scope = $Scope
-        $Alert.SiteUid = $SiteUid
+            foreach ($VarItem in $VariablesArray) {
 
-        $Alert.AlertMonitorInfo = [DRMMAlertMonitorInfo]::FromAPIMethod($Response.alertMonitorInfo)
-        $Alert.AlertContext = [DRMMAlertContext]::FromAPIMethod($Response.alertContext)
-        $Alert.AlertSourceInfo = [DRMMAlertSourceInfo]::FromAPIMethod($Response.alertSourceInfo)
+                $Component.Variables += [DRMMComponentVariable]::FromAPIMethod($VarItem)
 
-        if ($null -ne $Response.responseActions) {
-
-            $Alert.ResponseActions = $Response.responseActions | ForEach-Object {
-
-                [DRMMResponseAction]::FromAPIMethod($_)
-                
             }
         }
 
-        #$ResolvedDate = [DRMMObject]::ParseApiDate($Response.resolvedOn)
-        #$Alert.ResolvedOn = $ResolvedDate.DateTime
-        $Alert.ResolvedOn = $Response.resolvedOn
-        #$TimestampDate = [DRMMObject]::ParseApiDate($Response.timestamp)
-        #$Alert.Timestamp = $TimestampDate.DateTime
-        $Alert.Timestamp = $Response.timestamp
-
-        return $Alert
+        return $Component
 
     }
 
-    [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
-    [bool] IsSite()   { return ($this.Scope -eq 'Site') }
-    [bool] IsOpen()   { return (-not $this.Resolved) }
-    [bool] IsCritical() { return ($this.Priority -eq 'Critical') }
-    [bool] IsHigh()   { return ($this.Priority -eq 'High') }
+    [DRMMComponentVariable] GetVariable([string]$Name) {
+
+        return $this.Variables | Where-Object {$_.Name -eq $Name} | Select-Object -First 1
+
+    }
+
+    [DRMMComponentVariable[]] GetInputVariables() {
+
+        return $this.Variables | Where-Object {$_.Direction -eq $true}
+
+    }
+
+    [DRMMComponentVariable[]] GetOutputVariables() {
+
+        return $this.Variables | Where-Object {$_.Direction -eq $false}
+
+    }
 
     [string] GetSummary() {
 
-        $StatusValue = if ($this.Resolved) { 'Resolved' } else { 'Open' }
-        $MutedValue = if ($this.Muted) { ' (Muted)' } else { '' }
-        $DeviceName = if ($this.AlertSourceInfo.DeviceName) { $this.AlertSourceInfo.DeviceName } else { 'Unknown' }
-
-        return "[$StatusValue$MutedValue] $($this.Priority) - $DeviceName"
+        $VarCount = if ($this.Variables) {$this.Variables.Count} else {0}
+        $CredText = if ($this.CredentialsRequired) {' [Credentials Required]'} else {''}
+        return "$($this.Name)$CredText - $VarCount variable(s) - $($this.CategoryCode)"
 
     }
 }
 
-class DRMMUdfs : DRMMObject {
+class DRMMComponentVariable : DRMMObject {
 
-    [string]$Udf1
-    [string]$Udf2
-    [string]$Udf3
-    [string]$Udf4
-    [string]$Udf5
-    [string]$Udf6
-    [string]$Udf7
-    [string]$Udf8
-    [string]$Udf9
-    [string]$Udf10
-    [string]$Udf11
-    [string]$Udf12
-    [string]$Udf13
-    [string]$Udf14
-    [string]$Udf15
-    [string]$Udf16
-    [string]$Udf17
-    [string]$Udf18
-    [string]$Udf19
-    [string]$Udf20
-    [string]$Udf21
-    [string]$Udf22
-    [string]$Udf23
-    [string]$Udf24
-    [string]$Udf25
-    [string]$Udf26
-    [string]$Udf27
-    [string]$Udf28
-    [string]$Udf29
-    [string]$Udf30
-
-    DRMMUdfs() : base() {
-
-    }
-
-    static [DRMMUdfs] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $UdfEntries = [DRMMUdfs]::new()
-
-        for ($i = 1; $i -le 30; $i++) {
-
-            $PropName = "udf$i"
-            $UdfPropName = "Udf$i"
-
-            if ($Response.PSObject.Properties.Name -contains $PropName) {
-
-                $Value = $Response.$PropName
-
-                if ($null -ne $Value -and $Value -ne '') {
-
-                    $UdfEntries.$UdfPropName = $Value
-
-                }
-            }
-        }
-
-        return $UdfEntries
-
-    }
-}
-
-class DRMMDeviceType : DRMMObject {
-
-    [string]$Category
+    [string]$Name
+    [string]$DefaultValue
     [string]$Type
+    [bool]$Direction
+    [string]$Description
+    [int]$Index
 
-    DRMMDeviceType() : base() {
-
-    }
-
-    static [DRMMDeviceType] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $DeviceType = [DRMMDeviceType]::new()
-        $DeviceType.Category = $Response.category
-        $DeviceType.Type = $Response.type
-
-        return $DeviceType
-
-    }
-}
-
-class DRMMNetworkInterface : DRMMObject {
-
-    [string]$Instance
-    [string]$Ipv4
-    [string]$Ipv6
-    [string]$MacAddress
-    [string]$Type
-
-    DRMMNetworkInterface() : base() {
+    DRMMComponentVariable() : base() {
 
     }
 
-    static [DRMMNetworkInterface] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMComponentVariable] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) {
+        $Variable = [DRMMComponentVariable]::new()
 
-            return $null
+        $Variable.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Variable.DefaultValue = [DRMMObject]::GetValue($Response, 'defaultVal')
+        $Variable.Type = [DRMMObject]::GetValue($Response, 'type')
+        $Variable.Direction = [DRMMObject]::GetValue($Response, 'direction')
+        $Variable.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Variable.Index = [DRMMObject]::GetValue($Response, 'variablesIdx')
 
-        }
-
-        $Nic = [DRMMNetworkInterface]::new()
-        $Nic.Instance = $Response.instance
-        $Nic.Ipv4 = $Response.ipv4
-        $Nic.Ipv6 = $Response.ipv6
-        $Nic.MacAddress = $Response.macAddress
-        $Nic.Type = $Response.type
-
-        return $Nic
-
-    }
-}
-
-class DRMMDeviceNetworkInterface : DRMMObject {
-
-    [long]$Id
-    [guid]$Uid
-    [long]$SiteId
-    [guid]$SiteUid
-    [string]$SiteName
-    [DRMMDeviceType]$DeviceType
-    [string]$Hostname
-    [string]$IntIpAddress
-    [string]$ExtIpAddress
-    [DRMMNetworkInterface[]]$Nics
-
-    DRMMDeviceNetworkInterface() : base() {
-
-        $this.Nics = @()
-
-    }
-
-    static [DRMMDeviceNetworkInterface] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Device = [DRMMDeviceNetworkInterface]::new()
-        $Device.Id = $Response.id
-        $Device.Uid = $Response.uid
-        $Device.SiteId = $Response.siteId
-        $Device.SiteUid = $Response.siteUid
-        $Device.SiteName = $Response.siteName
-        $Device.DeviceType = [DRMMDeviceType]::FromAPIMethod($Response.deviceType)
-        $Device.Hostname = $Response.hostname
-        $Device.IntIpAddress = $Response.intIpAddress
-        $Device.ExtIpAddress = $Response.extIpAddress
-
-        if ($Response.nics) {
-
-            $Device.Nics = $Response.nics | ForEach-Object {
-
-                [DRMMNetworkInterface]::FromAPIMethod($_)
-
-            }
-        }
-
-        return $Device
-
-    }
-}
-
-class DRMMAntivirusInfo : DRMMObject {
-
-    [string]$AntivirusProduct
-    [string]$AntivirusStatus
-
-    DRMMAntivirusInfo() : base() {
-
-    }
-
-    static [DRMMAntivirusInfo] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $AntivirusInfo = [DRMMAntivirusInfo]::new()
-        $AntivirusInfo.AntivirusProduct = $Response.antivirusProduct
-        $AntivirusInfo.AntivirusStatus = $Response.antivirusStatus
-
-        return $AntivirusInfo
-
-    }
-
-    [bool] IsRunning() {
-
-        return ($this.AntivirusStatus -match '^Running')
-
-    }
-
-    [bool] IsUpToDate() {
-
-        return ($this.AntivirusStatus -eq 'RunningAndUpToDate')
+        return $Variable
 
     }
 
     [string] GetSummary() {
 
-        return "$($this.AntivirusProduct) - $($this.AntivirusStatus)"
-
-    }
-}
-
-class DRMMUser : DRMMObject {
-
-    [string]$FirstName
-    [string]$LastName
-    [string]$Username
-    [string]$Email
-    [string]$Telephone
-    [string]$Status
-    [Nullable[datetime]]$Created
-    [Nullable[datetime]]$LastAccess
-    [bool]$Disabled
-
-    DRMMUser() : base() {
-
-    }
-
-    static [DRMMUser] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $User = [DRMMUser]::new()
-        $User.FirstName = $Response.firstName
-        $User.LastName = $Response.lastName
-        $User.Username = $Response.username
-        $User.Email = $Response.email
-        $User.Telephone = $Response.telephone
-        $User.Status = $Response.status
-        $User.Disabled = $Response.disabled
-
-        $User.Created = ([DRMMObject]::ParseApiDate($Response.created)).DateTime
-        $User.LastAccess = ([DRMMObject]::ParseApiDate($Response.lastAccess)).DateTime
-
-        return $User
-
-    }
-
-    [string] GetFullName() {
-
-        return "$($this.FirstName) $($this.LastName)".Trim()
-
-    }
-
-    [string] GetSummary() {
-
-        $FullName = $this.GetFullName()
-        $StatusText = if ($this.Disabled) { " (Disabled)" } else { "" }
-
-        return "$FullName ($($this.Username))$StatusText"
-
-    }
-}
-
-class DRMMPatchManagement : DRMMObject {
-
-    [string]$PatchStatus
-    [Nullable[long]]$PatchesApprovedPending
-    [Nullable[long]]$PatchesNotApproved
-    [Nullable[long]]$PatchesInstalled
-
-    DRMMPatchManagement() : base() {
-
-    }
-
-    static [DRMMPatchManagement] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $PatchMgmt = [DRMMPatchManagement]::new()
-        $PatchMgmt.PatchStatus = $Response.patchStatus
-        $PatchMgmt.PatchesApprovedPending = $Response.patchesApprovedPending
-        $PatchMgmt.PatchesNotApproved = $Response.patchesNotApproved
-        $PatchMgmt.PatchesInstalled = $Response.patchesInstalled
-
-        return $PatchMgmt
+        $DirectionText = if ($this.Direction) { 'Input' } else { 'Output' }
+        return "[$DirectionText] $($this.Name) ($($this.Type))"
 
     }
 }
@@ -2049,8 +1598,8 @@ class DRMMDevice : DRMMObject {
     [string]$DeviceClass
     [string]$PortalUrl
     [string]$WarrantyDate
-    [DRMMAntivirusInfo]$Antivirus
-    [DRMMPatchManagement]$PatchManagement
+    [DRMMDeviceAntivirusInfo]$Antivirus
+    [DRMMDevicePatchManagement]$PatchManagement
     [string]$SoftwareStatus
     [string]$WebRemoteUrl
     [bool]$NetworkProbe
@@ -2118,8 +1667,8 @@ class DRMMDevice : DRMMObject {
         $Device.OnboardedViaNetworkMonitor = $Response.onboardedViaNetworkMonitor
         $Device.DeviceType = [DRMMDeviceType]::FromAPIMethod($Response.deviceType)
         $Device.Udfs = [DRMMUdfs]::FromAPIMethod($Response.udf)
-        $Device.Antivirus = [DRMMAntivirusInfo]::FromAPIMethod($Response.antivirus)
-        $Device.PatchManagement = [DRMMPatchManagement]::FromAPIMethod($Response.patchManagement)
+        $Device.Antivirus = [DRMMDeviceAntivirusInfo]::FromAPIMethod($Response.antivirus)
+        $Device.PatchManagement = [DRMMDevicePatchManagement]::FromAPIMethod($Response.patchManagement)
         $Device.LastSeen = ([DRMMObject]::ParseApiDate($Response.lastSeen)).DateTime
         $Device.LastReboot = ([DRMMObject]::ParseApiDate($Response.lastReboot)).DateTime
         $Device.LastAuditDate = ([DRMMObject]::ParseApiDate($Response.lastAuditDate)).DateTime
@@ -2296,248 +1845,16 @@ class DRMMDevice : DRMMObject {
     }
 }
 
-class DRMMComponentVariable : DRMMObject {
+class DRMMDeviceAntivirusInfo : DRMMObject {
 
-    [string]$Name
-    [string]$DefaultValue
-    [string]$Type
-    [bool]$Direction
-    [string]$Description
-    [int]$Index
+    [string]$AntivirusProduct
+    [string]$AntivirusStatus
 
-    DRMMComponentVariable() : base() {
+    DRMMDeviceAntivirusInfo() : base() {
 
     }
 
-    static [DRMMComponentVariable] FromAPIMethod([pscustomobject]$Response) {
-
-        $Variable = [DRMMComponentVariable]::new()
-
-        $Variable.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Variable.DefaultValue = [DRMMObject]::GetValue($Response, 'defaultVal')
-        $Variable.Type = [DRMMObject]::GetValue($Response, 'type')
-        $Variable.Direction = [DRMMObject]::GetValue($Response, 'direction')
-        $Variable.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Variable.Index = [DRMMObject]::GetValue($Response, 'variablesIdx')
-
-        return $Variable
-
-    }
-
-    [string] GetSummary() {
-
-        $DirectionText = if ($this.Direction) { 'Input' } else { 'Output' }
-        return "[$DirectionText] $($this.Name) ($($this.Type))"
-
-    }
-}
-
-class DRMMComponent : DRMMObject {
-
-    [int]$Id
-    [string]$Uid
-    [string]$Name
-    [string]$Description
-    [string]$CategoryCode
-    [bool]$CredentialsRequired
-    [DRMMComponentVariable[]]$Variables
-
-    DRMMComponent() : base() {
-
-    }
-
-    static [DRMMComponent] FromAPIMethod([pscustomobject]$Response) {
-
-        $Component = [DRMMComponent]::new()
-
-        $Component.Id = [DRMMObject]::GetValue($Response, 'id')
-        $Component.Uid = [DRMMObject]::GetValue($Response, 'uid')
-        $Component.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Component.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Component.CategoryCode = [DRMMObject]::GetValue($Response, 'categoryCode')
-        $Component.CredentialsRequired = [DRMMObject]::GetValue($Response, 'credentialsRequired')
-
-        # Parse variables array
-        $Component.Variables = @()
-        $VariablesArray = [DRMMObject]::GetValue($Response, 'variables')
-        if ($null -ne $VariablesArray -and $VariablesArray.Count -gt 0) {
-
-            foreach ($VarItem in $VariablesArray) {
-
-                $Component.Variables += [DRMMComponentVariable]::FromAPIMethod($VarItem)
-
-            }
-        }
-
-        return $Component
-
-    }
-
-    [DRMMComponentVariable] GetVariable([string]$Name) {
-
-        return $this.Variables | Where-Object {$_.Name -eq $Name} | Select-Object -First 1
-
-    }
-
-    [DRMMComponentVariable[]] GetInputVariables() {
-
-        return $this.Variables | Where-Object {$_.Direction -eq $true}
-
-    }
-
-    [DRMMComponentVariable[]] GetOutputVariables() {
-
-        return $this.Variables | Where-Object {$_.Direction -eq $false}
-
-    }
-
-    [string] GetSummary() {
-
-        $VarCount = if ($this.Variables) {$this.Variables.Count} else {0}
-        $CredText = if ($this.CredentialsRequired) {' [Credentials Required]'} else {''}
-        return "$($this.Name)$CredText - $VarCount variable(s) - $($this.CategoryCode)"
-
-    }
-}
-
-class DRMMAccountDescriptor : DRMMObject {
-
-    [string]$BillingEmail
-    [int]$DeviceLimit
-    [string]$TimeZone
-
-    DRMMAccountDescriptor() : base() {
-
-    }
-
-    static [DRMMAccountDescriptor] FromAPIMethod([pscustomobject]$Response) {
-
-        $Descriptor = [DRMMAccountDescriptor]::new()
-
-        $Descriptor.BillingEmail = [DRMMObject]::GetValue($Response, 'bilingEmail')
-        $Descriptor.DeviceLimit = [DRMMObject]::GetValue($Response, 'deviceLimit')
-        $Descriptor.TimeZone = [DRMMObject]::GetValue($Response, 'timeZone')
-
-        return $Descriptor
-
-    }
-}
-
-class DRMMAccountDevicesStatus : DRMMObject {
-
-    [int]$NumberOfDevices
-    [int]$NumberOfOnlineDevices
-    [int]$NumberOfOfflineDevices
-    [int]$NumberOfOnDemandDevices
-    [int]$NumberOfManagedDevices
-
-    DRMMAccountDevicesStatus() : base() {
-
-    }
-
-    static [DRMMAccountDevicesStatus] FromAPIMethod([pscustomobject]$Response) {
-
-        $Status = [DRMMAccountDevicesStatus]::new()
-
-        $Status.NumberOfDevices = [DRMMObject]::GetValue($Response, 'numberOfDevices')
-        $Status.NumberOfOnlineDevices = [DRMMObject]::GetValue($Response, 'numberOfOnlineDevices')
-        $Status.NumberOfOfflineDevices = [DRMMObject]::GetValue($Response, 'numberOfOfflineDevices')
-        $Status.NumberOfOnDemandDevices = [DRMMObject]::GetValue($Response, 'numberOfOnDemandDevices')
-        $Status.NumberOfManagedDevices = [DRMMObject]::GetValue($Response, 'numberOfManagedDevices')
-
-        return $Status
-
-    }
-
-    [double] GetOnlinePercentage() {
-
-        if ($this.NumberOfDevices -eq 0) {
-
-            return 0
-
-        }
-
-        return [Math]::Round(($this.NumberOfOnlineDevices / $this.NumberOfDevices) * 100, 2)
-
-    }
-
-    [string] GetSummary() {
-
-        return "$($this.NumberOfOnlineDevices)/$($this.NumberOfDevices) online ($($this.GetOnlinePercentage())%)"
-
-    }
-}
-
-class DRMMAccount : DRMMObject {
-
-    [int]$Id
-    [string]$Uid
-    [string]$Name
-    [string]$Currency
-    [DRMMAccountDescriptor]$Descriptor
-    [DRMMAccountDevicesStatus]$DevicesStatus
-
-    DRMMAccount() : base() {
-
-    }
-
-    static [DRMMAccount] FromAPIMethod([pscustomobject]$Response) {
-
-        $Account = [DRMMAccount]::new()
-
-        $Account.Id = [DRMMObject]::GetValue($Response, 'id')
-        $Account.Uid = [DRMMObject]::GetValue($Response, 'uid')
-        $Account.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Account.Currency = [DRMMObject]::GetValue($Response, 'currency')
-
-        # Parse descriptor
-        $DescriptorData = [DRMMObject]::GetValue($Response, 'descriptor')
-
-        if ($null -ne $DescriptorData) {
-
-            $Account.Descriptor = [DRMMAccountDescriptor]::FromAPIMethod($DescriptorData)
-
-        }
-
-        # Parse devices status
-        $DevicesStatusData = [DRMMObject]::GetValue($Response, 'devicesStatus')
-
-        if ($null -ne $DevicesStatusData) {
-
-            $Account.DevicesStatus = [DRMMAccountDevicesStatus]::FromAPIMethod($DevicesStatusData)
-
-        }
-
-        return $Account
-
-    }
-
-    [string] GetSummary() {
-
-        $DeviceInfo = if ($this.DevicesStatus) { $this.DevicesStatus.GetSummary() } else { 'No device status' }
-
-        return "$($this.Name) - $DeviceInfo"
-
-    }
-}
-
-class DRMMNetMapping : DRMMObject {
-
-    [long]$Id
-    [guid]$Uid
-    [string]$AccountUid
-    [string]$Name
-    [string]$Description
-    [long[]]$DatatoNetworkingNetworkIds
-    [string]$PortalUrl
-
-    DRMMNetMapping() : base() {
-
-        $this.DatatoNetworkingNetworkIds = @()
-
-    }
-
-    static [DRMMNetMapping] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMDeviceAntivirusInfo] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -2545,47 +1862,746 @@ class DRMMNetMapping : DRMMObject {
 
         }
 
-        $NetMapping = [DRMMNetMapping]::new()
-        $NetMapping.Id = $Response.id
-        $NetMapping.Uid = $Response.uid
-        $NetMapping.AccountUid = $Response.accountUid
-        $NetMapping.Name = $Response.name
-        $NetMapping.Description = $Response.description
-        $NetMapping.PortalUrl = $Response.portalUrl
-        
-        if ($Response.dattoNetworkingNetworkIds) {
+        $AntivirusInfo = [DRMMDeviceAntivirusInfo]::new()
+        $AntivirusInfo.AntivirusProduct = $Response.antivirusProduct
+        $AntivirusInfo.AntivirusStatus = $Response.antivirusStatus
 
-            $NetMapping.DatatoNetworkingNetworkIds = $Response.dattoNetworkingNetworkIds
-
-        }
-
-        return $NetMapping
+        return $AntivirusInfo
 
     }
 
-    [void] OpenPortal() {
+    [bool] IsRunning() {
 
-        if ($this.PortalUrl) {
+        return ($this.AntivirusStatus -match '^Running')
 
-            Start-Process $this.PortalUrl
+    }
 
-        } else {
+    [bool] IsUpToDate() {
 
-            Write-Warning "Portal URL is not available for site $($this.Name)"
+        return ($this.AntivirusStatus -eq 'RunningAndUpToDate')
 
-        }
+    }
+
+    [string] GetSummary() {
+
+        return "$($this.AntivirusProduct) - $($this.AntivirusStatus)"
+
     }
 }
-class DRMMJobComponentVariable : DRMMObject {
 
-    [string]$Name
-    [string]$Value
+class DRMMDeviceAudit : DRMMObject {
 
-    DRMMJobComponentVariable() : base() {
+    [guid]$DeviceUid
+    [string]$PortalUrl
+    [string]$WebRemoteUrl
+    [DRMMDeviceAuditSystemInfo]$SystemInfo
+    [DRMMNetworkInterface[]]$Nics
+    [DRMMDeviceAuditBios]$Bios
+    [DRMMDeviceAuditBaseBoard]$BaseBoard
+    [DRMMDeviceAuditDisplay[]]$Displays
+    [DRMMDeviceAuditLogicalDisk[]]$LogicalDisks
+    [DRMMDeviceAuditMobileInfo[]]$MobileInfo
+    [DRMMDeviceAuditProcessor[]]$Processors
+    [DRMMDeviceAuditVideoBoard[]]$VideoBoards
+    [DRMMDeviceAuditAttachedDevice[]]$AttachedDevices
+    [DRMMDeviceAuditSnmpInfo]$SnmpInfo
+    [DRMMDeviceAuditPhysicalMemory[]]$PhysicalMemory
+    [DRMMDeviceAuditSoftware[]]$Software
+
+    DRMMDeviceAudit() : base() {
 
     }
 
-    static [DRMMJobComponentVariable] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMDeviceAudit] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Audit = [DRMMDeviceAudit]::new()
+        $Audit.PortalUrl = [DRMMObject]::GetValue($Response, 'portalUrl')
+        $Audit.WebRemoteUrl = [DRMMObject]::GetValue($Response, 'webRemoteUrl')
+        
+        # System info
+        $SystemInfoData = [DRMMObject]::GetValue($Response, 'systemInfo')
+        if ($null -ne $SystemInfoData) {
+
+            $Audit.SystemInfo = [DRMMDeviceAuditSystemInfo]::FromAPIMethod($SystemInfoData)
+
+        }
+
+        # BIOS
+        $BiosData = [DRMMObject]::GetValue($Response, 'bios')
+        if ($null -ne $BiosData) {
+
+            $Audit.Bios = [DRMMDeviceAuditBios]::FromAPIMethod($BiosData)
+
+        }
+
+        # Base board
+        $BaseBoardData = [DRMMObject]::GetValue($Response, 'baseBoard')
+        if ($null -ne $BaseBoardData) {
+
+            $Audit.BaseBoard = [DRMMDeviceAuditBaseBoard]::FromAPIMethod($BaseBoardData)
+
+        }
+
+        # SNMP info
+        $SnmpData = [DRMMObject]::GetValue($Response, 'snmpInfo')
+        if ($null -ne $SnmpData) {
+
+            $Audit.SnmpInfo = [DRMMDeviceAuditSnmpInfo]::FromAPIMethod($SnmpData)
+
+        }
+
+        # Network interfaces
+        $NicsData = [DRMMObject]::GetValue($Response, 'nics')
+        if ($null -ne $NicsData -and $NicsData.Count -gt 0) {
+
+            $Audit.Nics = @($NicsData | ForEach-Object { [DRMMNetworkInterface]::FromAPIMethod($_) })
+
+        }
+
+        # Displays
+        $DisplaysData = [DRMMObject]::GetValue($Response, 'displays')
+        if ($null -ne $DisplaysData -and $DisplaysData.Count -gt 0) {
+
+            $Audit.Displays = @($DisplaysData | ForEach-Object { [DRMMDeviceAuditDisplay]::FromAPIMethod($_) })
+
+        }
+
+        # Logical disks
+        $DisksData = [DRMMObject]::GetValue($Response, 'logicalDisks')
+        if ($null -ne $DisksData -and $DisksData.Count -gt 0) {
+
+            $Audit.LogicalDisks = @($DisksData | ForEach-Object { [DRMMDeviceAuditLogicalDisk]::FromAPIMethod($_) })
+
+        }
+
+        # Mobile info
+        $MobileData = [DRMMObject]::GetValue($Response, 'mobileInfo')
+        if ($null -ne $MobileData -and $MobileData.Count -gt 0) {
+
+            $Audit.MobileInfo = @($MobileData | ForEach-Object { [DRMMDeviceAuditMobileInfo]::FromAPIMethod($_) })
+
+        }
+
+        # Processors
+        $ProcessorsData = [DRMMObject]::GetValue($Response, 'processors')
+        if ($null -ne $ProcessorsData -and $ProcessorsData.Count -gt 0) {
+
+            $Audit.Processors = @($ProcessorsData | ForEach-Object { [DRMMDeviceAuditProcessor]::FromAPIMethod($_) })
+
+        }
+
+        # Video boards
+        $VideoData = [DRMMObject]::GetValue($Response, 'videoBoards')
+        if ($null -ne $VideoData -and $VideoData.Count -gt 0) {
+
+            $Audit.VideoBoards = @($VideoData | ForEach-Object { [DRMMDeviceAuditVideoBoard]::FromAPIMethod($_) })
+
+        }
+
+        # Attached devices
+        $AttachedData = [DRMMObject]::GetValue($Response, 'attachedDevices')
+        if ($null -ne $AttachedData -and $AttachedData.Count -gt 0) {
+
+            $Audit.AttachedDevices = @($AttachedData | ForEach-Object { [DRMMDeviceAuditAttachedDevice]::FromAPIMethod($_) })
+
+        }
+
+        # Physical memory
+        $MemoryData = [DRMMObject]::GetValue($Response, 'physicalMemory')
+        if ($null -ne $MemoryData -and $MemoryData.Count -gt 0) {
+
+            $Audit.PhysicalMemory = @($MemoryData | ForEach-Object { [DRMMDeviceAuditPhysicalMemory]::FromAPIMethod($_) })
+
+        }
+
+        return $Audit
+
+    }
+}
+
+class DRMMDeviceAuditAttachedDevice : DRMMObject {
+
+    [string]$Description
+    [string]$Instance
+
+    DRMMDeviceAuditAttachedDevice() : base() {
+
+    }
+
+    static [DRMMDeviceAuditAttachedDevice] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Device = [DRMMDeviceAuditAttachedDevice]::new()
+        $Device.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Device.Instance = [DRMMObject]::GetValue($Response, 'instance')
+
+        return $Device
+
+    }
+}
+
+class DRMMDeviceAuditBaseBoard : DRMMObject {
+
+    [string]$Manufacturer
+    [string]$Product
+    [string]$SerialNumber
+
+    DRMMDeviceAuditBaseBoard() : base() {
+
+    }
+
+    static [DRMMDeviceAuditBaseBoard] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $BaseBoard = [DRMMDeviceAuditBaseBoard]::new()
+        $BaseBoard.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
+        $BaseBoard.Product = [DRMMObject]::GetValue($Response, 'product')
+        $BaseBoard.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
+
+        return $BaseBoard
+
+    }
+}
+
+class DRMMDeviceAuditBios : DRMMObject {
+
+    [string]$Manufacturer
+    [string]$Name
+    [string]$SerialNumber
+    [string]$SmbiosBiosVersion
+
+    DRMMDeviceAuditBios() : base() {
+
+    }
+
+    static [DRMMDeviceAuditBios] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Bios = [DRMMDeviceAuditBios]::new()
+        $Bios.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
+        $Bios.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Bios.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
+        $Bios.SmbiosBiosVersion = [DRMMObject]::GetValue($Response, 'smbiosBiosVersion')
+
+        return $Bios
+
+    }
+}
+
+class DRMMDeviceAuditDisplay : DRMMObject {
+
+    [string]$Instance
+    [int]$ScreenHeight
+    [int]$ScreenWidth
+
+    DRMMDeviceAuditDisplay() : base() {
+
+    }
+
+    static [DRMMDeviceAuditDisplay] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Display = [DRMMDeviceAuditDisplay]::new()
+        $Display.Instance = [DRMMObject]::GetValue($Response, 'instance')
+        $Display.ScreenHeight = [DRMMObject]::GetValue($Response, 'screenHeight')
+        $Display.ScreenWidth = [DRMMObject]::GetValue($Response, 'screenWidth')
+
+        return $Display
+
+    }
+}
+
+class DRMMDeviceAuditLogicalDisk : DRMMObject {
+
+    [string]$Description
+    [string]$DiskIdentifier
+    [long]$Freespace
+    [long]$Size
+
+    DRMMDeviceAuditLogicalDisk() : base() {
+
+    }
+
+    static [DRMMDeviceAuditLogicalDisk] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Disk = [DRMMDeviceAuditLogicalDisk]::new()
+        $Disk.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Disk.DiskIdentifier = [DRMMObject]::GetValue($Response, 'diskIdentifier')
+        $Disk.Freespace = [DRMMObject]::GetValue($Response, 'freespace')
+        $Disk.Size = [DRMMObject]::GetValue($Response, 'size')
+
+        return $Disk
+
+    }
+}
+
+class DRMMDeviceAuditMobileInfo : DRMMObject {
+
+    [string]$Iccid
+    [string]$Imei
+    [string]$Number
+    [string]$Operator
+
+    DRMMDeviceAuditMobileInfo() : base() {
+
+    }
+
+    static [DRMMDeviceAuditMobileInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Mobile = [DRMMDeviceAuditMobileInfo]::new()
+        $Mobile.Iccid = [DRMMObject]::GetValue($Response, 'iccid')
+        $Mobile.Imei = [DRMMObject]::GetValue($Response, 'imei')
+        $Mobile.Number = [DRMMObject]::GetValue($Response, 'number')
+        $Mobile.Operator = [DRMMObject]::GetValue($Response, 'operator')
+
+        return $Mobile
+
+    }
+}
+
+class DRMMDeviceAuditPhysicalMemory : DRMMObject {
+
+    [string]$BankLabel
+    [long]$Capacity
+    [string]$Manufacturer
+    [string]$PartNumber
+    [string]$SerialNumber
+    [int]$Speed
+
+    DRMMDeviceAuditPhysicalMemory() : base() {
+
+    }
+
+    static [DRMMDeviceAuditPhysicalMemory] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Memory = [DRMMDeviceAuditPhysicalMemory]::new()
+        $Memory.BankLabel = [DRMMObject]::GetValue($Response, 'bankLabel')
+        $Memory.Capacity = [DRMMObject]::GetValue($Response, 'capacity')
+        $Memory.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
+        $Memory.PartNumber = [DRMMObject]::GetValue($Response, 'partNumber')
+        $Memory.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
+        $Memory.Speed = [DRMMObject]::GetValue($Response, 'speed')
+
+        return $Memory
+
+    }
+}
+
+class DRMMDeviceAuditProcessor : DRMMObject {
+
+    [string]$Name
+
+    DRMMDeviceAuditProcessor() : base() {
+
+    }
+
+    static [DRMMDeviceAuditProcessor] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Processor = [DRMMDeviceAuditProcessor]::new()
+        $Processor.Name = [DRMMObject]::GetValue($Response, 'name')
+
+        return $Processor
+
+    }
+}
+
+class DRMMDeviceAuditSnmpInfo : DRMMObject {
+
+    [string]$Contact
+    [string]$Description
+    [string]$Location
+    [string]$Name
+
+    DRMMDeviceAuditSnmpInfo() : base() {
+
+    }
+
+    static [DRMMDeviceAuditSnmpInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Snmp = [DRMMDeviceAuditSnmpInfo]::new()
+        $Snmp.Contact = [DRMMObject]::GetValue($Response, 'contact')
+        $Snmp.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Snmp.Location = [DRMMObject]::GetValue($Response, 'location')
+        $Snmp.Name = [DRMMObject]::GetValue($Response, 'name')
+
+        return $Snmp
+
+    }
+}
+
+class DRMMDeviceAuditSoftware : DRMMObject {
+
+    [string]$Name
+    [string]$Version
+
+    DRMMDeviceAuditSoftware() : base() {
+
+    }
+
+    static [DRMMDeviceAuditSoftware] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Software = [DRMMDeviceAuditSoftware]::new()
+        $Software.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Software.Version = [DRMMObject]::GetValue($Response, 'version')
+
+        return $Software
+
+    }
+}
+
+class DRMMDeviceAuditSystemInfo : DRMMObject {
+
+    [string]$Manufacturer
+    [string]$Model
+    [long]$TotalPhysicalMemory
+    [string]$Username
+    [string]$DotNetVersion
+    [int]$TotalCpuCores
+
+    DRMMDeviceAuditSystemInfo() : base() {
+
+    }
+
+    static [DRMMDeviceAuditSystemInfo] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $SystemInfo = [DRMMDeviceAuditSystemInfo]::new()
+        $SystemInfo.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
+        $SystemInfo.Model = [DRMMObject]::GetValue($Response, 'model')
+        $SystemInfo.TotalPhysicalMemory = [DRMMObject]::GetValue($Response, 'totalPhysicalMemory')
+        $SystemInfo.Username = [DRMMObject]::GetValue($Response, 'username')
+        $SystemInfo.DotNetVersion = [DRMMObject]::GetValue($Response, 'dotNetVersion')
+        $SystemInfo.TotalCpuCores = [DRMMObject]::GetValue($Response, 'totalCpuCores')
+
+        return $SystemInfo
+
+    }
+}
+
+class DRMMDeviceAuditVideoBoard : DRMMObject {
+
+    [string]$DisplayAdapter
+
+    DRMMDeviceAuditVideoBoard() : base() {
+
+    }
+
+    static [DRMMDeviceAuditVideoBoard] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $VideoBoard = [DRMMDeviceAuditVideoBoard]::new()
+        $VideoBoard.DisplayAdapter = [DRMMObject]::GetValue($Response, 'displayAdapter')
+
+        return $VideoBoard
+
+    }
+}
+
+class DRMMDeviceNetworkInterface : DRMMObject {
+
+    [long]$Id
+    [guid]$Uid
+    [long]$SiteId
+    [guid]$SiteUid
+    [string]$SiteName
+    [DRMMDeviceType]$DeviceType
+    [string]$Hostname
+    [string]$IntIpAddress
+    [string]$ExtIpAddress
+    [DRMMNetworkInterface[]]$Nics
+
+    DRMMDeviceNetworkInterface() : base() {
+
+        $this.Nics = @()
+
+    }
+
+    static [DRMMDeviceNetworkInterface] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Device = [DRMMDeviceNetworkInterface]::new()
+        $Device.Id = $Response.id
+        $Device.Uid = $Response.uid
+        $Device.SiteId = $Response.siteId
+        $Device.SiteUid = $Response.siteUid
+        $Device.SiteName = $Response.siteName
+        $Device.DeviceType = [DRMMDeviceType]::FromAPIMethod($Response.deviceType)
+        $Device.Hostname = $Response.hostname
+        $Device.IntIpAddress = $Response.intIpAddress
+        $Device.ExtIpAddress = $Response.extIpAddress
+
+        if ($Response.nics) {
+
+            $Device.Nics = $Response.nics | ForEach-Object {
+
+                [DRMMNetworkInterface]::FromAPIMethod($_)
+
+            }
+        }
+
+        return $Device
+
+    }
+}
+
+class DRMMDevicePatchManagement : DRMMObject {
+
+    [string]$PatchStatus
+    [Nullable[long]]$PatchesApprovedPending
+    [Nullable[long]]$PatchesNotApproved
+    [Nullable[long]]$PatchesInstalled
+
+    DRMMDevicePatchManagement() : base() {
+
+    }
+
+    static [DRMMDevicePatchManagement] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $PatchMgmt = [DRMMDevicePatchManagement]::new()
+        $PatchMgmt.PatchStatus = $Response.patchStatus
+        $PatchMgmt.PatchesApprovedPending = $Response.patchesApprovedPending
+        $PatchMgmt.PatchesNotApproved = $Response.patchesNotApproved
+        $PatchMgmt.PatchesInstalled = $Response.patchesInstalled
+
+        return $PatchMgmt
+
+    }
+}
+
+class DRMMDevicesStatus : DRMMObject {
+
+    [long]$NumberOfDevices
+    [long]$NumberOfOnlineDevices
+    [long]$NumberOfOfflineDevices
+
+    DRMMDevicesStatus() : base() {
+
+    }
+
+    static [DRMMDevicesStatus] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+            $DevicesStatus = [DRMMDevicesStatus]::new()
+            $DevicesStatus.NumberOfDevices = $Response.numberOfDevices
+            $DevicesStatus.NumberOfOnlineDevices = $Response.numberOfOnlineDevices
+            $DevicesStatus.NumberOfOfflineDevices = $Response.numberOfOfflineDevices
+
+            return $DevicesStatus
+
+    }
+
+    [string] GetSummary() {
+
+        return "Devices: $($this.NumberOfDevices), Online: $($this.NumberOfOnlineDevices), Offline: $($this.NumberOfOfflineDevices)"
+
+    }
+}
+
+class DRMMDeviceType : DRMMObject {
+
+    [string]$Category
+    [string]$Type
+
+    DRMMDeviceType() : base() {
+
+    }
+
+    static [DRMMDeviceType] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $DeviceType = [DRMMDeviceType]::new()
+        $DeviceType.Category = $Response.category
+        $DeviceType.Type = $Response.type
+
+        return $DeviceType
+
+    }
+}
+
+class DRMMFilter : DRMMObject {
+
+    [long]$Id
+    [string]$Name
+    [string]$Description
+    [string]$Type
+    [string]$Scope
+    [Nullable[guid]]$SiteUid
+    [Nullable[datetime]]$DateCreate
+    [Nullable[datetime]]$LastUpdated
+
+    DRMMFilter() : base() {
+
+    }
+
+    static [DRMMFilter] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
+
+        if ($null -eq $Response) { return $null }
+
+        $Filter = [DRMMFilter]::new()
+        $Filter.Id = $Response.id
+        $Filter.Name = $Response.name
+        $Filter.Description = $Response.description
+        $Filter.Type = $Response.type
+        $Filter.Scope = $Scope
+        $Filter.SiteUid = $SiteUid
+
+        $CreateDate = [DRMMObject]::ParseApiDate($Response.dateCreate)
+        $Filter.DateCreate = $CreateDate.DateTime
+
+        $UpdatedDate = [DRMMObject]::ParseApiDate($Response.lastUpdated)
+        $Filter.LastUpdated = $UpdatedDate.DateTime
+
+        return $Filter
+
+    }
+
+    [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
+    [bool] IsSite()   { return ($this.Scope -eq 'Site') }
+    [bool] IsDefault() { return ($this.Type -eq 'rmm_default') }
+    [bool] IsCustom()  { return ($this.Type -eq 'custom') }
+
+    [string] GetSummary() {
+
+        $ScopeValue = if ($this.Scope) { $this.Scope } else { 'Global' }
+        $TypeValue = if ($this.Type) { " ($($this.Type))" } else { '' }
+
+        return "$($this.Name) [$ScopeValue]$TypeValue"
+
+    }
+}
+
+class DRMMGeneralSettings : DRMMObject {
+
+    [string]$Name
+    [string]$Uid
+    [string]$Description
+    [bool]$OnDemand
+
+    DRMMGeneralSettings() : base() {}
+
+    static [DRMMGeneralSettings] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {return $null}
+
+        $Settings = [DRMMGeneralSettings]::new()
+        $Settings.Name = $Response.name
+        $Settings.Uid = $Response.uid
+        $Settings.Description = $Response.description
+        $Settings.OnDemand = $Response.onDemand
+
+        return $Settings
+
+    }
+
+    [string] GetSummary() {
+
+        return "OnDemand: $($this.OnDemand)"
+
+    }
+}
+
+class DRMMJob : DRMMObject {
+
+    [long]$Id
+    [guid]$Uid
+    [string]$Name
+    [Nullable[datetime]]$DateCreated
+    [string]$Status
+
+    DRMMJob() : base() {
+
+    }
+
+    static [DRMMJob] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
             
@@ -2593,11 +2609,28 @@ class DRMMJobComponentVariable : DRMMObject {
         
         }
 
-        $Variable = [DRMMJobComponentVariable]::new()
-        $Variable.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Variable.Value = [DRMMObject]::GetValue($Response, 'value')
+        $Job = [DRMMJob]::new()
+        $Job.Id = [DRMMObject]::GetValue($Response, 'id')
+        $Job.Uid = [DRMMObject]::GetValue($Response, 'uid')
+        $Job.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Job.Status = [DRMMObject]::GetValue($Response, 'status')
 
-        return $Variable
+        $DateCreatedValue = [DRMMObject]::GetValue($Response, 'dateCreated')
+
+        if ($null -ne $DateCreatedValue) {
+
+            try {
+
+                $Job.DateCreated = [datetime]::Parse($DateCreatedValue)
+
+            } catch {
+
+                $Job.DateCreated = $null
+
+            }
+        }
+
+        return $Job
 
     }
 }
@@ -2668,6 +2701,32 @@ class DRMMJobComponentResult : DRMMObject {
         $Result.HasStdErr = [DRMMObject]::GetValue($Response, 'hasStdErr')
 
         return $Result
+
+    }
+}
+
+class DRMMJobComponentVariable : DRMMObject {
+
+    [string]$Name
+    [string]$Value
+
+    DRMMJobComponentVariable() : base() {
+
+    }
+
+    static [DRMMJobComponentVariable] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
+
+        $Variable = [DRMMJobComponentVariable]::new()
+        $Variable.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Variable.Value = [DRMMObject]::GetValue($Response, 'value')
+
+        return $Variable
 
     }
 }
@@ -2754,420 +2813,45 @@ class DRMMJobStdData : DRMMObject {
     }
 }
 
-class DRMMJob : DRMMObject {
+class DRMMMailRecipient : DRMMObject {
+
+    [string]$Name
+    [string]$Email
+    [string]$Type
+
+    DRMMMailRecipient() : base() {}
+
+    static [DRMMMailRecipient] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {return $null}
+
+        $Recipient = [DRMMMailRecipient]::new()
+        $Recipient.Name = $Response.name
+        $Recipient.Email = $Response.email
+        $Recipient.Type = $Response.type
+
+        return $Recipient
+
+    }
+}
+
+class DRMMNetMapping : DRMMObject {
 
     [long]$Id
     [guid]$Uid
+    [string]$AccountUid
     [string]$Name
-    [Nullable[datetime]]$DateCreated
-    [string]$Status
-
-    DRMMJob() : base() {
-
-    }
-
-    static [DRMMJob] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-            
-            return $null
-        
-        }
-
-        $Job = [DRMMJob]::new()
-        $Job.Id = [DRMMObject]::GetValue($Response, 'id')
-        $Job.Uid = [DRMMObject]::GetValue($Response, 'uid')
-        $Job.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Job.Status = [DRMMObject]::GetValue($Response, 'status')
-
-        $DateCreatedValue = [DRMMObject]::GetValue($Response, 'dateCreated')
-
-        if ($null -ne $DateCreatedValue) {
-
-            try {
-
-                $Job.DateCreated = [datetime]::Parse($DateCreatedValue)
-
-            } catch {
-
-                $Job.DateCreated = $null
-
-            }
-        }
-
-        return $Job
-
-    }
-}
-
-class DRMMSoftware : DRMMObject {
-
-    [string]$Name
-    [string]$Version
-
-    DRMMSoftware() : base() {
-
-    }
-
-    static [DRMMSoftware] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Software = [DRMMSoftware]::new()
-        $Software.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Software.Version = [DRMMObject]::GetValue($Response, 'version')
-
-        return $Software
-
-    }
-}
-
-class DRMMSystemInfo : DRMMObject {
-
-    [string]$Manufacturer
-    [string]$Model
-    [long]$TotalPhysicalMemory
-    [string]$Username
-    [string]$DotNetVersion
-    [int]$TotalCpuCores
-
-    DRMMSystemInfo() : base() {
-
-    }
-
-    static [DRMMSystemInfo] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $SystemInfo = [DRMMSystemInfo]::new()
-        $SystemInfo.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
-        $SystemInfo.Model = [DRMMObject]::GetValue($Response, 'model')
-        $SystemInfo.TotalPhysicalMemory = [DRMMObject]::GetValue($Response, 'totalPhysicalMemory')
-        $SystemInfo.Username = [DRMMObject]::GetValue($Response, 'username')
-        $SystemInfo.DotNetVersion = [DRMMObject]::GetValue($Response, 'dotNetVersion')
-        $SystemInfo.TotalCpuCores = [DRMMObject]::GetValue($Response, 'totalCpuCores')
-
-        return $SystemInfo
-
-    }
-}
-
-class DRMMBios : DRMMObject {
-
-    [string]$Manufacturer
-    [string]$Name
-    [string]$SerialNumber
-    [string]$SmbiosBiosVersion
-
-    DRMMBios() : base() {
-
-    }
-
-    static [DRMMBios] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Bios = [DRMMBios]::new()
-        $Bios.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
-        $Bios.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Bios.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
-        $Bios.SmbiosBiosVersion = [DRMMObject]::GetValue($Response, 'smbiosBiosVersion')
-
-        return $Bios
-
-    }
-}
-
-class DRMMBaseBoard : DRMMObject {
-
-    [string]$Manufacturer
-    [string]$Product
-    [string]$SerialNumber
-
-    DRMMBaseBoard() : base() {
-
-    }
-
-    static [DRMMBaseBoard] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $BaseBoard = [DRMMBaseBoard]::new()
-        $BaseBoard.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
-        $BaseBoard.Product = [DRMMObject]::GetValue($Response, 'product')
-        $BaseBoard.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
-
-        return $BaseBoard
-
-    }
-}
-
-class DRMMDisplay : DRMMObject {
-
-    [string]$Instance
-    [int]$ScreenHeight
-    [int]$ScreenWidth
-
-    DRMMDisplay() : base() {
-
-    }
-
-    static [DRMMDisplay] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Display = [DRMMDisplay]::new()
-        $Display.Instance = [DRMMObject]::GetValue($Response, 'instance')
-        $Display.ScreenHeight = [DRMMObject]::GetValue($Response, 'screenHeight')
-        $Display.ScreenWidth = [DRMMObject]::GetValue($Response, 'screenWidth')
-
-        return $Display
-
-    }
-}
-
-class DRMMLogicalDisk : DRMMObject {
-
     [string]$Description
-    [string]$DiskIdentifier
-    [long]$Freespace
-    [long]$Size
-
-    DRMMLogicalDisk() : base() {
-
-    }
-
-    static [DRMMLogicalDisk] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Disk = [DRMMLogicalDisk]::new()
-        $Disk.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Disk.DiskIdentifier = [DRMMObject]::GetValue($Response, 'diskIdentifier')
-        $Disk.Freespace = [DRMMObject]::GetValue($Response, 'freespace')
-        $Disk.Size = [DRMMObject]::GetValue($Response, 'size')
-
-        return $Disk
-
-    }
-}
-
-class DRMMMobileInfo : DRMMObject {
-
-    [string]$Iccid
-    [string]$Imei
-    [string]$Number
-    [string]$Operator
-
-    DRMMMobileInfo() : base() {
-
-    }
-
-    static [DRMMMobileInfo] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Mobile = [DRMMMobileInfo]::new()
-        $Mobile.Iccid = [DRMMObject]::GetValue($Response, 'iccid')
-        $Mobile.Imei = [DRMMObject]::GetValue($Response, 'imei')
-        $Mobile.Number = [DRMMObject]::GetValue($Response, 'number')
-        $Mobile.Operator = [DRMMObject]::GetValue($Response, 'operator')
-
-        return $Mobile
-
-    }
-}
-
-class DRMMProcessor : DRMMObject {
-
-    [string]$Name
-
-    DRMMProcessor() : base() {
-
-    }
-
-    static [DRMMProcessor] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Processor = [DRMMProcessor]::new()
-        $Processor.Name = [DRMMObject]::GetValue($Response, 'name')
-
-        return $Processor
-
-    }
-}
-
-class DRMMVideoBoard : DRMMObject {
-
-    [string]$DisplayAdapter
-
-    DRMMVideoBoard() : base() {
-
-    }
-
-    static [DRMMVideoBoard] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $VideoBoard = [DRMMVideoBoard]::new()
-        $VideoBoard.DisplayAdapter = [DRMMObject]::GetValue($Response, 'displayAdapter')
-
-        return $VideoBoard
-
-    }
-}
-
-class DRMMAttachedDevice : DRMMObject {
-
-    [string]$Description
-    [string]$Instance
-
-    DRMMAttachedDevice() : base() {
-
-    }
-
-    static [DRMMAttachedDevice] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Device = [DRMMAttachedDevice]::new()
-        $Device.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Device.Instance = [DRMMObject]::GetValue($Response, 'instance')
-
-        return $Device
-
-    }
-}
-
-class DRMMSnmpInfo : DRMMObject {
-
-    [string]$Contact
-    [string]$Description
-    [string]$Location
-    [string]$Name
-
-    DRMMSnmpInfo() : base() {
-
-    }
-
-    static [DRMMSnmpInfo] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Snmp = [DRMMSnmpInfo]::new()
-        $Snmp.Contact = [DRMMObject]::GetValue($Response, 'contact')
-        $Snmp.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Snmp.Location = [DRMMObject]::GetValue($Response, 'location')
-        $Snmp.Name = [DRMMObject]::GetValue($Response, 'name')
-
-        return $Snmp
-
-    }
-}
-
-class DRMMPhysicalMemory : DRMMObject {
-
-    [string]$BankLabel
-    [long]$Capacity
-    [string]$Manufacturer
-    [string]$PartNumber
-    [string]$SerialNumber
-    [int]$Speed
-
-    DRMMPhysicalMemory() : base() {
-
-    }
-
-    static [DRMMPhysicalMemory] FromAPIMethod([pscustomobject]$Response) {
-
-        if ($null -eq $Response) {
-
-            return $null
-
-        }
-
-        $Memory = [DRMMPhysicalMemory]::new()
-        $Memory.BankLabel = [DRMMObject]::GetValue($Response, 'bankLabel')
-        $Memory.Capacity = [DRMMObject]::GetValue($Response, 'capacity')
-        $Memory.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
-        $Memory.PartNumber = [DRMMObject]::GetValue($Response, 'partNumber')
-        $Memory.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
-        $Memory.Speed = [DRMMObject]::GetValue($Response, 'speed')
-
-        return $Memory
-
-    }
-}
-
-class DRMMDeviceAudit : DRMMObject {
-
-    [guid]$DeviceUid
+    [long[]]$DatatoNetworkingNetworkIds
     [string]$PortalUrl
-    [string]$WebRemoteUrl
-    [DRMMSystemInfo]$SystemInfo
-    [DRMMNetworkInterface[]]$Nics
-    [DRMMBios]$Bios
-    [DRMMBaseBoard]$BaseBoard
-    [DRMMDisplay[]]$Displays
-    [DRMMLogicalDisk[]]$LogicalDisks
-    [DRMMMobileInfo[]]$MobileInfo
-    [DRMMProcessor[]]$Processors
-    [DRMMVideoBoard[]]$VideoBoards
-    [DRMMAttachedDevice[]]$AttachedDevices
-    [DRMMSnmpInfo]$SnmpInfo
-    [DRMMPhysicalMemory[]]$PhysicalMemory
-    [DRMMSoftware[]]$Software
 
-    DRMMDeviceAudit() : base() {
+    DRMMNetMapping() : base() {
+
+        $this.DatatoNetworkingNetworkIds = @()
 
     }
 
-    static [DRMMDeviceAudit] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMNetMapping] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -3175,149 +2859,443 @@ class DRMMDeviceAudit : DRMMObject {
 
         }
 
-        $Audit = [DRMMDeviceAudit]::new()
-        $Audit.PortalUrl = [DRMMObject]::GetValue($Response, 'portalUrl')
-        $Audit.WebRemoteUrl = [DRMMObject]::GetValue($Response, 'webRemoteUrl')
+        $NetMapping = [DRMMNetMapping]::new()
+        $NetMapping.Id = $Response.id
+        $NetMapping.Uid = $Response.uid
+        $NetMapping.AccountUid = $Response.accountUid
+        $NetMapping.Name = $Response.name
+        $NetMapping.Description = $Response.description
+        $NetMapping.PortalUrl = $Response.portalUrl
         
-        # System info
-        $SystemInfoData = [DRMMObject]::GetValue($Response, 'systemInfo')
-        if ($null -ne $SystemInfoData) {
+        if ($Response.dattoNetworkingNetworkIds) {
 
-            $Audit.SystemInfo = [DRMMSystemInfo]::FromAPIMethod($SystemInfoData)
+            $NetMapping.DatatoNetworkingNetworkIds = $Response.dattoNetworkingNetworkIds
 
         }
 
-        # BIOS
-        $BiosData = [DRMMObject]::GetValue($Response, 'bios')
-        if ($null -ne $BiosData) {
+        return $NetMapping
 
-            $Audit.Bios = [DRMMBios]::FromAPIMethod($BiosData)
+    }
+
+    [void] OpenPortal() {
+
+        if ($this.PortalUrl) {
+
+            Start-Process $this.PortalUrl
+
+        } else {
+
+            Write-Warning "Portal URL is not available for site $($this.Name)"
+
+        }
+    }
+}
+
+class DRMMNetworkInterface : DRMMObject {
+
+    [string]$Instance
+    [string]$Ipv4
+    [string]$Ipv6
+    [string]$MacAddress
+    [string]$Type
+
+    DRMMNetworkInterface() : base() {
+
+    }
+
+    static [DRMMNetworkInterface] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
 
         }
 
-        # Base board
-        $BaseBoardData = [DRMMObject]::GetValue($Response, 'baseBoard')
-        if ($null -ne $BaseBoardData) {
+        $Nic = [DRMMNetworkInterface]::new()
+        $Nic.Instance = $Response.instance
+        $Nic.Ipv4 = $Response.ipv4
+        $Nic.Ipv6 = $Response.ipv6
+        $Nic.MacAddress = $Response.macAddress
+        $Nic.Type = $Response.type
 
-            $Audit.BaseBoard = [DRMMBaseBoard]::FromAPIMethod($BaseBoardData)
-
-        }
-
-        # SNMP info
-        $SnmpData = [DRMMObject]::GetValue($Response, 'snmpInfo')
-        if ($null -ne $SnmpData) {
-
-            $Audit.SnmpInfo = [DRMMSnmpInfo]::FromAPIMethod($SnmpData)
-
-        }
-
-        # Network interfaces
-        $NicsData = [DRMMObject]::GetValue($Response, 'nics')
-        if ($null -ne $NicsData -and $NicsData.Count -gt 0) {
-
-            $Audit.Nics = @($NicsData | ForEach-Object { [DRMMNetworkInterface]::FromAPIMethod($_) })
-
-        }
-
-        # Displays
-        $DisplaysData = [DRMMObject]::GetValue($Response, 'displays')
-        if ($null -ne $DisplaysData -and $DisplaysData.Count -gt 0) {
-
-            $Audit.Displays = @($DisplaysData | ForEach-Object { [DRMMDisplay]::FromAPIMethod($_) })
-
-        }
-
-        # Logical disks
-        $DisksData = [DRMMObject]::GetValue($Response, 'logicalDisks')
-        if ($null -ne $DisksData -and $DisksData.Count -gt 0) {
-
-            $Audit.LogicalDisks = @($DisksData | ForEach-Object { [DRMMLogicalDisk]::FromAPIMethod($_) })
-
-        }
-
-        # Mobile info
-        $MobileData = [DRMMObject]::GetValue($Response, 'mobileInfo')
-        if ($null -ne $MobileData -and $MobileData.Count -gt 0) {
-
-            $Audit.MobileInfo = @($MobileData | ForEach-Object { [DRMMMobileInfo]::FromAPIMethod($_) })
-
-        }
-
-        # Processors
-        $ProcessorsData = [DRMMObject]::GetValue($Response, 'processors')
-        if ($null -ne $ProcessorsData -and $ProcessorsData.Count -gt 0) {
-
-            $Audit.Processors = @($ProcessorsData | ForEach-Object { [DRMMProcessor]::FromAPIMethod($_) })
-
-        }
-
-        # Video boards
-        $VideoData = [DRMMObject]::GetValue($Response, 'videoBoards')
-        if ($null -ne $VideoData -and $VideoData.Count -gt 0) {
-
-            $Audit.VideoBoards = @($VideoData | ForEach-Object { [DRMMVideoBoard]::FromAPIMethod($_) })
-
-        }
-
-        # Attached devices
-        $AttachedData = [DRMMObject]::GetValue($Response, 'attachedDevices')
-        if ($null -ne $AttachedData -and $AttachedData.Count -gt 0) {
-
-            $Audit.AttachedDevices = @($AttachedData | ForEach-Object { [DRMMAttachedDevice]::FromAPIMethod($_) })
-
-        }
-
-        # Physical memory
-        $MemoryData = [DRMMObject]::GetValue($Response, 'physicalMemory')
-        if ($null -ne $MemoryData -and $MemoryData.Count -gt 0) {
-
-            $Audit.PhysicalMemory = @($MemoryData | ForEach-Object { [DRMMPhysicalMemory]::FromAPIMethod($_) })
-
-        }
-
-        return $Audit
+        return $Nic
 
     }
 }
 
-class DRMMSiteBasic : DRMMObject {
+class DRMMProxySettings : DRMMObject {
+
+    [string]$Host
+    [string]$Username
+    [securestring]$Password
+    [int]$Port
+    [string]$Type
+
+    DRMMProxySettings() : base() {
+
+    }
+
+    static [DRMMProxySettings] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+            $ProxySettings = [DRMMProxySettings]::new()
+            $ProxySettings.Host = $Response.host
+            $ProxySettings.Username = $Response.username
+            $RawPassword = $Response.password
+
+        if ($RawPassword -is [securestring]) {
+
+            $ProxySettings.Password = $RawPassword
+
+        } elseif ($RawPassword -is [string] -and $RawPassword.Length -gt 0) {
+
+            $ProxySettings.Password = ConvertTo-SecureString -String $RawPassword -AsPlainText -Force
+
+        } else {
+
+            $ProxySettings.Password = $null
+
+        }
+
+        $ProxySettings.Port = $Response.port
+        $ProxySettings.Type = $Response.type
+
+        return $ProxySettings
+
+    }
+
+    [string] GetSummary() {
+
+        $ProxyInfo = if ($this.Host) {"$($this.Type)://$($this.Host)$(if ($this.Port) {":$($this.Port)"})"} else {$null}
+        return $ProxyInfo
+
+    }
+}
+
+class DRMMResponseAction : DRMMObject {
+
+    [Nullable[datetime]]$ActionTime
+    [string]$ActionType
+    [string]$Description
+    [string]$ActionReference
+    [string]$ActionReferenceInt
+
+    DRMMResponseAction() : base() {
+
+    }
+
+    static [DRMMResponseAction] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $ResponseAction = [DRMMResponseAction]::new()
+
+        $ActionDate = [DRMMObject]::ParseApiDate($Response.actionTime)
+        $ResponseAction.ActionTime = $ActionDate.DateTime
+        $ResponseAction.ActionType = $Response.actionType
+        $ResponseAction.Description = $Response.description
+        $ResponseAction.ActionReference = $Response.actionReference
+        $ResponseAction.ActionReferenceInt = $Response.actionReferenceInt
+
+        return $ResponseAction
+
+    }
+
+    [string] GetSummary() {
+
+        $Type = if ($this.ActionType) { $this.ActionType } else { 'Unknown' }
+        $Desc = if ($this.Description) { $this.Description } else { '' }
+
+        return "${Type}: ${Desc}"
+
+    }
+}
+
+class DRMMSite : DRMMObject {
 
     [long]$Id
+    [string]$Uid
+    [string]$AccountUid
     [string]$Name
+    [string]$Description
+    [string]$Notes
+    [bool]$OnDemand
+    [bool]$SplashtopAutoInstall
+    [DRMMProxySettings]$ProxySettings
+    [DRMMDevicesStatus]$DevicesStatus
+    [DRMMSiteSettings]$SiteSettings
+    [DRMMVariable[]]$Variables
+    [object]$Filters  # Placeholder for filters data
+    [string]$AutotaskCompanyName
+    [string]$AutotaskCompanyId
+    [string]$PortalUrl
 
-    DRMMSiteBasic() : base() {
+    DRMMSite() : base() {
 
     }
 
-    static [DRMMSiteBasic] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMSite] FromAPIMethod([pscustomobject]$Response) {
 
-        if ($null -eq $Response) {
+        if ($null -eq $Response) { return $null }
 
-            return $null
+        $Site = [DRMMSite]::new()
+        $Site.Id = $Response.id
+        $Site.Uid = $Response.uid
+        $Site.AccountUid = $Response.accountUid
+        $Site.Name = $Response.name
+        $Site.Description = $Response.description
+        $Site.Notes = $Response.notes
+        $Site.OnDemand = $Response.onDemand
+        $Site.SplashtopAutoInstall = $Response.splashtopAutoInstall
+        $Site.AutotaskCompanyName = $Response.autotaskCompanyName
+        $Site.AutotaskCompanyId = $Response.autotaskCompanyId
+        $Site.PortalUrl = $Response.portalUrl
+
+        $ProxySettingsResponse = $Response.proxySettings
+
+        if ($ProxySettingsResponse) {
+
+            $Site.ProxySettings = [DRMMProxySettings]::FromAPIMethod($ProxySettingsResponse)
 
         }
 
-        $Site = [DRMMSiteBasic]::new()
-        $Site.Id = $Response.id
-        $Site.Name = $Response.name
+        $DevicesStatusResponse = $Response.devicesStatus
+
+        if ($DevicesStatusResponse) {
+
+            $Site.DevicesStatus = [DRMMDevicesStatus]::FromAPIMethod($DevicesStatusResponse)
+
+        }
+
+        $SiteSettingsResponse = $Response.siteSettings
+
+        if ($SiteSettingsResponse) {
+
+            $Site.SiteSettings = [DRMMSiteSettings]::FromAPIMethod($SiteSettingsResponse)
+
+        }
 
         return $Site
 
     }
-}
 
-class DRMMActivityLogUser : DRMMObject {
+    [string] GetSummary() {
 
-    [long]$Id
-    [string]$UserName
-    [string]$FirstName
-    [string]$LastName
+        $DeviceCount = if ($this.DevicesStatus -and $null -ne $this.DevicesStatus.NumberOfDevices) {"$($this.DevicesStatus.NumberOfDevices)"} else {'0'}
 
-    DRMMActivityLogUser() : base() {
+        return "$($this.Name) ($($this.Uid)) - Devices: $DeviceCount"
 
     }
 
-    static [DRMMActivityLogUser] FromAPIMethod([pscustomobject]$Response) {
+    [DRMMSite] Update([pscustomobject]$UpdatePayload) {
+
+        if (-not (Get-Command -Name Invoke-APIMethod -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        $Path = "site/$($this.Uid)"
+        Write-Debug "Updating site $($this.Name) ($($this.Uid)) in Datto RMM: $Path"
+        $ResponseObject = $null #Invoke-APIMethod -Method 'POST' -Path $Path -Body $UpdatePayload
+
+        if ($null -eq $ResponseObject) {
+
+            return $null
+
+        }
+
+        return [DRMMSite]::FromAPIMethod($ResponseObject)
+
+    }
+
+    [void] Delete() {
+
+        if (-not (Get-Command -Name Invoke-APIMethod -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        $Path = "site/$($this.Uid)"
+        Write-Debug "Deleting site $($this.Name) ($($this.Uid)) from Datto RMM: $Path"
+        #Invoke-APIMethod -Method 'DELETE' -Path $Path | Out-Null
+
+    }
+
+    [DRMMAlert[]] GetAlerts() {
+
+        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMAlert -SiteUid $this.Uid -Status 'All'
+
+    }
+
+    [DRMMAlert[]] GetAlerts([string]$Status) {
+
+        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMAlert -SiteUid $this.Uid -Status $Status
+
+    }
+
+    [void] OpenPortal() {
+
+        if ($this.PortalUrl) {
+
+            Start-Process $this.PortalUrl
+
+        } else {
+
+            Write-Warning "Portal URL is not available for site $($this.Name)"
+
+        }
+    }
+}
+
+class DRMMSiteSettings : DRMMObject {
+
+    [DRMMGeneralSettings]$GeneralSettings
+    [DRMMProxySettings]$ProxySettings  # Reuse existing class
+    [DRMMMailRecipient[]]$MailRecipients
+    [guid]$SiteUid
+
+    DRMMSiteSettings() : base() {
+
+    }
+
+    static [DRMMSiteSettings] FromAPIMethod([pscustomobject]$Response, $SiteUid) {
+
+        if ($null -eq $Response) {return $null}
+
+        $Settings = [DRMMSiteSettings]::new()
+
+        if ($Response.generalSettings) {
+
+            $Settings.GeneralSettings = [DRMMGeneralSettings]::FromAPIMethod($Response.generalSettings)
+
+        } else {
+
+            $Settings.GeneralSettings = $null
+
+        }
+
+        if ($Response.proxySettings) {
+
+            $Settings.ProxySettings = [DRMMProxySettings]::FromAPIMethod($Response.proxySettings)
+            
+        } else {
+
+            $Settings.ProxySettings = $null
+
+        }
+
+        $Settings.MailRecipients = $Response.mailRecipients | ForEach-Object {[DRMMMailRecipient]::FromAPIMethod($_)}
+        $Settings.SiteUid = $SiteUid
+        
+        return $Settings
+    }
+
+    [string] GetSummary() {
+
+        $GeneralInfo = if ($this.GeneralSettings) { "OnDemand: $($this.GeneralSettings.OnDemand)" } else { "OnDemand: -" }
+        $ProxyInfo = if ($this.ProxySettings) { " | Proxy: $($this.ProxySettings.GetSummary())" } else { " | Proxy: -" }
+        $MailCount = if ($this.MailRecipients) { " | Mail Recipients: $($this.MailRecipients.Count)" } else { " | Mail Recipients: 0" }
+
+        return "$GeneralInfo$ProxyInfo$MailCount"
+
+    }    
+}
+
+class DRMMStatus : DRMMObject {
+
+    [string]$Version
+    [string]$Status
+    [Nullable[datetime]]$Started
+
+    DRMMStatus() : base() {
+
+    }
+
+    static [DRMMStatus] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) { return $null }
+
+        $Result = [DRMMStatus]::new()
+        $Result.Version = [DRMMObject]::GetValue($Response, 'version')
+        $Result.Status = [DRMMObject]::GetValue($Response, 'status')
+        
+        $StartedValue = [DRMMObject]::GetValue($Response, 'started')
+
+        if ($null -ne $StartedValue) {
+            
+            try {
+
+                $Result.Started = [datetime]::Parse($StartedValue)
+
+            } catch {
+
+                $Result.Started = $null
+
+            }
+        }
+
+        return $Result
+
+    }
+}
+
+class DRMMUdfs : DRMMObject {
+
+    [string]$Udf1
+    [string]$Udf2
+    [string]$Udf3
+    [string]$Udf4
+    [string]$Udf5
+    [string]$Udf6
+    [string]$Udf7
+    [string]$Udf8
+    [string]$Udf9
+    [string]$Udf10
+    [string]$Udf11
+    [string]$Udf12
+    [string]$Udf13
+    [string]$Udf14
+    [string]$Udf15
+    [string]$Udf16
+    [string]$Udf17
+    [string]$Udf18
+    [string]$Udf19
+    [string]$Udf20
+    [string]$Udf21
+    [string]$Udf22
+    [string]$Udf23
+    [string]$Udf24
+    [string]$Udf25
+    [string]$Udf26
+    [string]$Udf27
+    [string]$Udf28
+    [string]$Udf29
+    [string]$Udf30
+
+    DRMMUdfs() : base() {
+
+    }
+
+    static [DRMMUdfs] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -3325,101 +3303,124 @@ class DRMMActivityLogUser : DRMMObject {
 
         }
 
-        $User = [DRMMActivityLogUser]::new()
-        $User.Id = $Response.id
-        $User.UserName = $Response.userName
+        $UdfEntries = [DRMMUdfs]::new()
+
+        for ($i = 1; $i -le 30; $i++) {
+
+            $PropName = "udf$i"
+            $UdfPropName = "Udf$i"
+
+            if ($Response.PSObject.Properties.Name -contains $PropName) {
+
+                $Value = $Response.$PropName
+
+                if ($null -ne $Value -and $Value -ne '') {
+
+                    $UdfEntries.$UdfPropName = $Value
+
+                }
+            }
+        }
+
+        return $UdfEntries
+
+    }
+}
+
+class DRMMUser : DRMMObject {
+
+    [string]$FirstName
+    [string]$LastName
+    [string]$Username
+    [string]$Email
+    [string]$Telephone
+    [string]$Status
+    [Nullable[datetime]]$Created
+    [Nullable[datetime]]$LastAccess
+    [bool]$Disabled
+
+    DRMMUser() : base() {
+
+    }
+
+    static [DRMMUser] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $User = [DRMMUser]::new()
         $User.FirstName = $Response.firstName
         $User.LastName = $Response.lastName
+        $User.Username = $Response.username
+        $User.Email = $Response.email
+        $User.Telephone = $Response.telephone
+        $User.Status = $Response.status
+        $User.Disabled = $Response.disabled
+
+        $User.Created = ([DRMMObject]::ParseApiDate($Response.created)).DateTime
+        $User.LastAccess = ([DRMMObject]::ParseApiDate($Response.lastAccess)).DateTime
 
         return $User
 
     }
 
+    [string] GetFullName() {
+
+        return "$($this.FirstName) $($this.LastName)".Trim()
+
+    }
+
     [string] GetSummary() {
 
-        if ($this.FirstName -and $this.LastName) {
+        $FullName = $this.GetFullName()
+        $StatusText = if ($this.Disabled) { " (Disabled)" } else { "" }
 
-            return "$($this.FirstName) $($this.LastName) ($($this.UserName))"
+        return "$FullName ($($this.Username))$StatusText"
 
-        } elseif ($this.UserName) {
-
-            return $this.UserName
-
-        } else {
-
-            return "User $($this.Id)"
-
-        }
     }
 }
 
-class DRMMActivityLog : DRMMObject {
+class DRMMVariable : DRMMObject {
 
-    [string]$Id
-    [string]$Entity
-    [string]$Category
-    [string]$Action
-    [Nullable[datetime]]$Date
-    [DRMMSiteBasic]$Site
-    [Nullable[long]]$DeviceId
-    [string]$Hostname
-    [DRMMActivityLogUser]$User
-    [string]$Details
-    [bool]$HasStdOut
-    [bool]$HasStdErr
+    [long]$Id
+    [string]$Name
+    [object]$Value
+    [string]$Scope
+    [Nullable[guid]]$SiteUid
+    [bool]$IsSecret
 
-    DRMMActivityLog() : base() {
+    DRMMVariable() : base() {
 
     }
 
-    static [DRMMActivityLog] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMVariable] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
 
-        if ($null -eq $Response) {
+        if ($null -eq $Response) { return $null }
 
-            return $null
+        $Variable = [DRMMVariable]::new()
+        $Variable.Id = $Response.id
+        $Variable.Name = $Response.name
+        $Variable.Value = $Response.value
+        $Variable.IsSecret = $Response.masked
+        $Variable.Scope = $Scope
+        $Variable.SiteUid = $SiteUid
 
-        }
-
-        $Log = [DRMMActivityLog]::new()
-        $Log.Id = $Response.id
-        $Log.Entity = $Response.entity
-        $Log.Category = $Response.category
-        $Log.Action = $Response.action
-        $Log.DeviceId = $Response.deviceId
-        $Log.Hostname = $Response.hostname
-        $Log.Details = $Response.details
-        $Log.HasStdOut = $Response.hasStdOut
-        $Log.HasStdErr = $Response.hasStdErr
-
-        # Parse the date
-        $DateValue = [DRMMObject]::ParseApiDate($Response.date)
-        $Log.Date = $DateValue.DateTime
-
-        # Parse nested objects
-        if ($null -ne $Response.site) {
-
-            $Log.Site = [DRMMSiteBasic]::FromAPIMethod($Response.site)
-
-        }
-
-        if ($null -ne $Response.user) {
-
-            $Log.User = [DRMMActivityLogUser]::FromAPIMethod($Response.user)
-
-        }
-
-        return $Log
+        return $Variable
 
     }
+
+    [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
+    [bool] IsSite()   { return ($this.Scope -eq 'Site') }
 
     [string] GetSummary() {
 
-        $EntityStr = if ($this.Entity) { $this.Entity } else { 'Unknown' }
-        $CategoryStr = if ($this.Category) { $this.Category } else { 'Unknown' }
-        $ActionStr = if ($this.Action) { $this.Action } else { 'Unknown' }
-        $TargetStr = if ($this.Hostname) { $this.Hostname } elseif ($this.User) { $this.User.UserName } else { '' }
+        # API already returns masked values for secret variables
+        $ScopeValue = if ($this.Scope) { $this.Scope } else { 'Global' }
 
-        return "[$EntityStr] ${CategoryStr}: ${ActionStr} - $TargetStr"
+        return "$($this.Name) [$ScopeValue] = $($this.Value)"
 
     }
 }
