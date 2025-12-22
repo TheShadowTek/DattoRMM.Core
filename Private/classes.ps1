@@ -548,32 +548,32 @@ class DRMMAlertContext : DRMMObject {
         # Map @class values to specific context classes
         $Result = switch -Regex ($ClassValue) {
 
-            '^online_offline_status_ctx$' { [DRMMAlertOnlineOfflineStatusContext]::FromAPIMethod($Response) }
-            '^ransomware_ctx$' { [DRMMAlertRansomWareContext]::FromAPIMethod($Response) }
-            '^eventlog_ctx$' { [DRMMAlertEventLogContext]::FromAPIMethod($Response) }
-            '^comp_script_ctx' { [DRMMAlertScriptContext]::FromAPIMethod($Response) }
-            '^antivirus_ctx$' { [DRMMAlertAntivirusContext]::FromAPIMethod($Response) }
-            '^backup_management_ctx$' { [DRMMAlertBackupManagementContext]::FromAPIMethod($Response) }
-            '^custom_snmp_ctx$' { [DRMMAlertCustomSNMPContext]::FromAPIMethod($Response) }
-            '^disk_health_ctx$' { [DRMMAlertDiskHealthContext]::FromAPIMethod($Response) }
-            '^disk_usage_ctx$' { [DRMMAlertDiskUsageContext]::FromAPIMethod($Response) }
-            '^endpoint_security_threat_ctx$' { [DRMMAlertEndpointSecurityThreatContext]::FromAPIMethod($Response) }
-            '^endpoint_security_windows_defender_ctx$' { [DRMMAlertEndpointSecurityWindowsDefenderContext]::FromAPIMethod($Response) }
-            '^fan_ctx$' { [DRMMAlertFanContext]::FromAPIMethod($Response) }
-            '^filesystem_ctx$' { [DRMMAlertFileSystemContext]::FromAPIMethod($Response) }
-            '^network_monitor_ctx$' { [DRMMAlertNetworkMonitorContext]::FromAPIMethod($Response) }
-            '^patch_ctx$' { [DRMMAlertPatchContext]::FromAPIMethod($Response) }
-            '^ping_ctx$' { [DRMMAlertPingContext]::FromAPIMethod($Response) }
-            '^printer_ctx$' { [DRMMAlertPrinterContext]::FromAPIMethod($Response) }
-            '^psu_ctx$' { [DRMMAlertPsuContext]::FromAPIMethod($Response) }
-            '^resource_usage_ctx$' { [DRMMAlertResourceUsageContext]::FromAPIMethod($Response) }
-            '^snmp_probe_ctx$' { [DRMMAlertSNMPProbeContext]::FromAPIMethod($Response) }
-            '^seccenter_ctx$' { [DRMMAlertSecCenterContext]::FromAPIMethod($Response) }
-            '^security_management_ctx$' { [DRMMAlertSecurityManagementContext]::FromAPIMethod($Response) }
-            '^status_ctx$' { [DRMMAlertStatusContext]::FromAPIMethod($Response) }
-            '^temperature_ctx$' { [DRMMAlertTemperatureContext]::FromAPIMethod($Response) }
-            '^windows_performance_ctx$' { [DRMMAlertWindowsPerformanceContext]::FromAPIMethod($Response) }
-            '^wmi_ctx$' { [DRMMAlertWmiContext]::FromAPIMethod($Response) }
+            '^online_offline_status_ctx$' { [DRMMAlertContextOnlineOfflineStatus]::FromAPIMethod($Response) }
+            '^ransomware_ctx$' { [DRMMAlertContextRansomWare]::FromAPIMethod($Response) }
+            '^eventlog_ctx$' { [DRMMAlertContextEventLog]::FromAPIMethod($Response) }
+            '^comp_script_ctx' { [DRMMAlertContextScript]::FromAPIMethod($Response) }
+            '^antivirus_ctx$' { [DRMMAlertContextAntivirus]::FromAPIMethod($Response) }
+            '^backup_management_ctx$' { [DRMMAlertContextBackupManagement]::FromAPIMethod($Response) }
+            '^custom_snmp_ctx$' { [DRMMAlertContextCustomSNMP]::FromAPIMethod($Response) }
+            '^disk_health_ctx$' { [DRMMAlertContextDiskHealth]::FromAPIMethod($Response) }
+            '^disk_usage_ctx$' { [DRMMAlertContextDiskUsage]::FromAPIMethod($Response) }
+            '^endpoint_security_threat_ctx$' { [DRMMAlertContextEndpointSecurityThreat]::FromAPIMethod($Response) }
+            '^endpoint_security_windows_defender_ctx$' { [DRMMAlertContextEndpointSecurityWindowsDefender]::FromAPIMethod($Response) }
+            '^fan_ctx$' { [DRMMAlertContextFan]::FromAPIMethod($Response) }
+            '^filesystem_ctx$' { [DRMMAlertContextFileSystem]::FromAPIMethod($Response) }
+            '^network_monitor_ctx$' { [DRMMAlertContextNetworkMonitor]::FromAPIMethod($Response) }
+            '^patch_ctx$' { [DRMMAlertContextPatch]::FromAPIMethod($Response) }
+            '^ping_ctx$' { [DRMMAlertContextPing]::FromAPIMethod($Response) }
+            '^printer_ctx$' { [DRMMAlertContextPrinter]::FromAPIMethod($Response) }
+            '^psu_ctx$' { [DRMMAlertContextPsu]::FromAPIMethod($Response) }
+            '^resource_usage_ctx$' { [DRMMAlertContextResourceUsage]::FromAPIMethod($Response) }
+            '^snmp_probe_ctx$' { [DRMMAlertContextSNMPProbe]::FromAPIMethod($Response) }
+            '^seccenter_ctx$' { [DRMMAlertContextSecCenter]::FromAPIMethod($Response) }
+            '^security_management_ctx$' { [DRMMAlertContextSecurityManagement]::FromAPIMethod($Response) }
+            '^status_ctx$' { [DRMMAlertContextStatus]::FromAPIMethod($Response) }
+            '^temperature_ctx$' { [DRMMAlertContextTemperature]::FromAPIMethod($Response) }
+            '^windows_performance_ctx$' { [DRMMAlertContextWindowsPerformance]::FromAPIMethod($Response) }
+            '^wmi_ctx$' { [DRMMAlertContextWmi]::FromAPIMethod($Response) }
             default { [DRMMAlertContextGeneric]::FromAPIMethod($Response) }
 
         }
@@ -583,16 +583,16 @@ class DRMMAlertContext : DRMMObject {
     }
 }
 
-class DRMMAlertAntivirusContext : DRMMAlertContext {
+class DRMMAlertContextAntivirus : DRMMAlertContext {
 
     [string]$Status
     [string]$ProductName
 
-    DRMMAlertAntivirusContext() : base() {
+    DRMMAlertContextAntivirus() : base() {
 
     }
 
-    static [DRMMAlertAntivirusContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextAntivirus] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -600,7 +600,7 @@ class DRMMAlertAntivirusContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertAntivirusContext]::new()
+        $Context = [DRMMAlertContextAntivirus]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Status = [DRMMObject]::GetValue($Response, 'status')
         $Context.ProductName = [DRMMObject]::GetValue($Response, 'productName')
@@ -610,16 +610,16 @@ class DRMMAlertAntivirusContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertBackupManagementContext : DRMMAlertContext {
+class DRMMAlertContextBackupManagement : DRMMAlertContext {
 
     [string]$ErrorMessage
     [int]$Timeout
 
-    DRMMAlertBackupManagementContext() : base() {
+    DRMMAlertContextBackupManagement() : base() {
 
     }
 
-    static [DRMMAlertBackupManagementContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextBackupManagement] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -627,7 +627,7 @@ class DRMMAlertBackupManagementContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertBackupManagementContext]::new()
+        $Context = [DRMMAlertContextBackupManagement]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.ErrorMessage = [DRMMObject]::GetValue($Response, 'errorMessage')
         $Context.Timeout = [DRMMObject]::GetValue($Response, 'timeout')
@@ -672,17 +672,17 @@ class DRMMAlertContextGeneric : DRMMAlertContext {
     }
 }
 
-class DRMMAlertCustomSNMPContext : DRMMAlertContext {
+class DRMMAlertContextCustomSNMP : DRMMAlertContext {
 
     [string]$DisplayName
     [string]$CurrentValue
     [string]$MonitorInstance
 
-    DRMMAlertCustomSNMPContext() : base() {
+    DRMMAlertContextCustomSNMP() : base() {
 
     }
 
-    static [DRMMAlertCustomSNMPContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextCustomSNMP] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -690,7 +690,7 @@ class DRMMAlertCustomSNMPContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertCustomSNMPContext]::new()
+        $Context = [DRMMAlertContextCustomSNMP]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.DisplayName = [DRMMObject]::GetValue($Response, 'displayName')
         $Context.CurrentValue = [DRMMObject]::GetValue($Response, 'currentValue')
@@ -701,16 +701,16 @@ class DRMMAlertCustomSNMPContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertDiskHealthContext : DRMMAlertContext {
+class DRMMAlertContextDiskHealth : DRMMAlertContext {
 
     [string]$Reason
     [string]$Type
 
-    DRMMAlertDiskHealthContext() : base() {
+    DRMMAlertContextDiskHealth() : base() {
 
     }
 
-    static [DRMMAlertDiskHealthContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextDiskHealth] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -718,7 +718,7 @@ class DRMMAlertDiskHealthContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertDiskHealthContext]::new()
+        $Context = [DRMMAlertContextDiskHealth]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Reason = [DRMMObject]::GetValue($Response, 'reason')
         $Context.Type = [DRMMObject]::GetValue($Response, 'type')
@@ -728,7 +728,7 @@ class DRMMAlertDiskHealthContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertDiskUsageContext : DRMMAlertContext {
+class DRMMAlertContextDiskUsage : DRMMAlertContext {
 
     [string]$DiskName
     [float]$TotalVolume
@@ -736,11 +736,11 @@ class DRMMAlertDiskUsageContext : DRMMAlertContext {
     [string]$UnitOfMeasure
     [string]$DiskNameDesignation
 
-    DRMMAlertDiskUsageContext() : base() {
+    DRMMAlertContextDiskUsage() : base() {
 
     }
 
-    static [DRMMAlertDiskUsageContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextDiskUsage] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -748,7 +748,7 @@ class DRMMAlertDiskUsageContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertDiskUsageContext]::new()
+        $Context = [DRMMAlertContextDiskUsage]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.DiskName = [DRMMObject]::GetValue($Response, 'diskName')
         $Context.TotalVolume = [DRMMObject]::GetValue($Response, 'totalVolume')
@@ -761,16 +761,16 @@ class DRMMAlertDiskUsageContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertEndpointSecurityThreatContext : DRMMAlertContext {
+class DRMMAlertContextEndpointSecurityThreat : DRMMAlertContext {
 
     [string]$EsAlertId
     [string]$Description
 
-    DRMMAlertEndpointSecurityThreatContext() : base() {
+    DRMMAlertContextEndpointSecurityThreat() : base() {
 
     }
 
-    static [DRMMAlertEndpointSecurityThreatContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextEndpointSecurityThreat] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -778,7 +778,7 @@ class DRMMAlertEndpointSecurityThreatContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertEndpointSecurityThreatContext]::new()
+        $Context = [DRMMAlertContextEndpointSecurityThreat]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.EsAlertId = [DRMMObject]::GetValue($Response, 'esAlertId')
         $Context.Description = [DRMMObject]::GetValue($Response, 'description')
@@ -788,16 +788,16 @@ class DRMMAlertEndpointSecurityThreatContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertEndpointSecurityWindowsDefenderContext : DRMMAlertContext {
+class DRMMAlertContextEndpointSecurityWindowsDefender : DRMMAlertContext {
 
     [string]$EsAlertId
     [string]$Description
 
-    DRMMAlertEndpointSecurityWindowsDefenderContext() : base() {
+    DRMMAlertContextEndpointSecurityWindowsDefender() : base() {
 
     }
 
-    static [DRMMAlertEndpointSecurityWindowsDefenderContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextEndpointSecurityWindowsDefender] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -805,7 +805,7 @@ class DRMMAlertEndpointSecurityWindowsDefenderContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertEndpointSecurityWindowsDefenderContext]::new()
+        $Context = [DRMMAlertContextEndpointSecurityWindowsDefender]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.EsAlertId = [DRMMObject]::GetValue($Response, 'esAlertId')
         $Context.Description = [DRMMObject]::GetValue($Response, 'description')
@@ -815,7 +815,7 @@ class DRMMAlertEndpointSecurityWindowsDefenderContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertEventLogContext : DRMMAlertContext {
+class DRMMAlertContextEventLog : DRMMAlertContext {
 
     [string]$LogName
     [string]$Code
@@ -826,11 +826,11 @@ class DRMMAlertEventLogContext : DRMMAlertContext {
     [Nullable[datetime]]$LastTriggered
     [bool]$CausedSuspension
 
-    DRMMAlertEventLogContext() : base() {
+    DRMMAlertContextEventLog() : base() {
 
     }
 
-    static [DRMMAlertEventLogContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextEventLog] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -838,7 +838,7 @@ class DRMMAlertEventLogContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertEventLogContext]::new()
+        $Context = [DRMMAlertContextEventLog]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.LogName = [DRMMObject]::GetValue($Response, 'logName')
         $Context.Code = [DRMMObject]::GetValue($Response, 'code')
@@ -854,16 +854,16 @@ class DRMMAlertEventLogContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertFanContext : DRMMAlertContext {
+class DRMMAlertContextFan : DRMMAlertContext {
 
     [string]$Reason
     [string]$Type
 
-    DRMMAlertFanContext() : base() {
+    DRMMAlertContextFan() : base() {
 
     }
 
-    static [DRMMAlertFanContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextFan] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -871,7 +871,7 @@ class DRMMAlertFanContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertFanContext]::new()
+        $Context = [DRMMAlertContextFan]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Reason = [DRMMObject]::GetValue($Response, 'reason')
         $Context.Type = [DRMMObject]::GetValue($Response, 'type')
@@ -881,7 +881,7 @@ class DRMMAlertFanContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertFileSystemContext : DRMMAlertContext {
+class DRMMAlertContextFileSystem : DRMMAlertContext {
 
     [float]$Sample
     [float]$Threshold
@@ -889,11 +889,11 @@ class DRMMAlertFileSystemContext : DRMMAlertContext {
     [string]$ObjectType
     [string]$Condition
 
-    DRMMAlertFileSystemContext() : base() {
+    DRMMAlertContextFileSystem() : base() {
 
     }
 
-    static [DRMMAlertFileSystemContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextFileSystem] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -901,7 +901,7 @@ class DRMMAlertFileSystemContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertFileSystemContext]::new()
+        $Context = [DRMMAlertContextFileSystem]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Sample = [DRMMObject]::GetValue($Response, 'sample')
         $Context.Threshold = [DRMMObject]::GetValue($Response, 'threshold')
@@ -949,15 +949,15 @@ class DRMMAlertMonitorInfo : DRMMObject {
     }
 }
 
-class DRMMAlertNetworkMonitorContext : DRMMAlertContext {
+class DRMMAlertContextNetworkMonitor : DRMMAlertContext {
 
     [string]$Description
 
-    DRMMAlertNetworkMonitorContext() : base() {
+    DRMMAlertContextNetworkMonitor() : base() {
 
     }
 
-    static [DRMMAlertNetworkMonitorContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextNetworkMonitor] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -965,7 +965,7 @@ class DRMMAlertNetworkMonitorContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertNetworkMonitorContext]::new()
+        $Context = [DRMMAlertContextNetworkMonitor]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Description = [DRMMObject]::GetValue($Response, 'description')
 
@@ -974,15 +974,15 @@ class DRMMAlertNetworkMonitorContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertOnlineOfflineStatusContext : DRMMAlertContext {
+class DRMMAlertContextOnlineOfflineStatus : DRMMAlertContext {
 
     [string]$Status
 
-    DRMMAlertOnlineOfflineStatusContext() : base() {
+    DRMMAlertContextOnlineOfflineStatus() : base() {
 
     }
 
-    static [DRMMAlertOnlineOfflineStatusContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextOnlineOfflineStatus] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -990,7 +990,7 @@ class DRMMAlertOnlineOfflineStatusContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertOnlineOfflineStatusContext]::new()
+        $Context = [DRMMAlertContextOnlineOfflineStatus]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Status = [DRMMObject]::GetValue($Response, 'status')
 
@@ -999,18 +999,18 @@ class DRMMAlertOnlineOfflineStatusContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertPatchContext : DRMMAlertContext {
+class DRMMAlertContextPatch : DRMMAlertContext {
 
     [string]$PatchUid
     [string]$PolicyUid
     [string]$Result
     [string]$Info
 
-    DRMMAlertPatchContext() : base() {
+    DRMMAlertContextPatch() : base() {
 
     }
 
-    static [DRMMAlertPatchContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextPatch] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1018,7 +1018,7 @@ class DRMMAlertPatchContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertPatchContext]::new()
+        $Context = [DRMMAlertContextPatch]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.PatchUid = [DRMMObject]::GetValue($Response, 'patchUid')
         $Context.PolicyUid = [DRMMObject]::GetValue($Response, 'policyUid')
@@ -1030,17 +1030,17 @@ class DRMMAlertPatchContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertPingContext : DRMMAlertContext {
+class DRMMAlertContextPing : DRMMAlertContext {
 
     [string]$InstanceName
     [int]$RoundtripTime
     [string[]]$Reasons
 
-    DRMMAlertPingContext() : base() {
+    DRMMAlertContextPing() : base() {
 
     }
 
-    static [DRMMAlertPingContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextPing] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1048,7 +1048,7 @@ class DRMMAlertPingContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertPingContext]::new()
+        $Context = [DRMMAlertContextPing]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.InstanceName = [DRMMObject]::GetValue($Response, 'instanceName')
         $Context.RoundtripTime = [DRMMObject]::GetValue($Response, 'roundtripTime')
@@ -1059,18 +1059,18 @@ class DRMMAlertPingContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertPrinterContext : DRMMAlertContext {
+class DRMMAlertContextPrinter : DRMMAlertContext {
 
     [string]$IpAddress
     [string]$MacAddress
     [int]$MarkerSupplyIndex
     [int]$CurrentLevel
 
-    DRMMAlertPrinterContext() : base() {
+    DRMMAlertContextPrinter() : base() {
 
     }
 
-    static [DRMMAlertPrinterContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextPrinter] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1078,7 +1078,7 @@ class DRMMAlertPrinterContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertPrinterContext]::new()
+        $Context = [DRMMAlertContextPrinter]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.IpAddress = [DRMMObject]::GetValue($Response, 'ipAddress')
         $Context.MacAddress = [DRMMObject]::GetValue($Response, 'macAddress')
@@ -1090,16 +1090,16 @@ class DRMMAlertPrinterContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertPsuContext : DRMMAlertContext {
+class DRMMAlertContextPsu : DRMMAlertContext {
 
     [string]$Reason
     [string]$Type
 
-    DRMMAlertPsuContext() : base() {
+    DRMMAlertContextPsu() : base() {
 
     }
 
-    static [DRMMAlertPsuContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextPsu] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1107,7 +1107,7 @@ class DRMMAlertPsuContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertPsuContext]::new()
+        $Context = [DRMMAlertContextPsu]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Reason = [DRMMObject]::GetValue($Response, 'reason')
         $Context.Type = [DRMMObject]::GetValue($Response, 'type')
@@ -1117,7 +1117,7 @@ class DRMMAlertPsuContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertRansomWareContext : DRMMAlertContext {
+class DRMMAlertContextRansomWare : DRMMAlertContext {
 
     [int]$State
     [int]$ConfidenceFactor
@@ -1127,11 +1127,11 @@ class DRMMAlertRansomWareContext : DRMMAlertContext {
     [Nullable[datetime]]$MetaAlertTime
     [Nullable[datetime]]$AlertTime
 
-    DRMMAlertRansomWareContext() : base() {
+    DRMMAlertContextRansomWare() : base() {
 
     }
 
-    static [DRMMAlertRansomWareContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextRansomWare] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1139,7 +1139,7 @@ class DRMMAlertRansomWareContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertRansomWareContext]::new()
+        $Context = [DRMMAlertContextRansomWare]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.State = [DRMMObject]::GetValue($Response, 'state')
         $Context.ConfidenceFactor = [DRMMObject]::GetValue($Response, 'confidenceFactor')
@@ -1154,17 +1154,17 @@ class DRMMAlertRansomWareContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertResourceUsageContext : DRMMAlertContext {
+class DRMMAlertContextResourceUsage : DRMMAlertContext {
 
     [string]$ProcessName
     [float]$Sample
     [string]$Type
 
-    DRMMAlertResourceUsageContext() : base() {
+    DRMMAlertContextResourceUsage() : base() {
 
     }
 
-    static [DRMMAlertResourceUsageContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextResourceUsage] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1172,7 +1172,7 @@ class DRMMAlertResourceUsageContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertResourceUsageContext]::new()
+        $Context = [DRMMAlertContextResourceUsage]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.ProcessName = [DRMMObject]::GetValue($Response, 'processName')
         $Context.Sample = [DRMMObject]::GetValue($Response, 'sample')
@@ -1183,15 +1183,15 @@ class DRMMAlertResourceUsageContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertScriptContext : DRMMAlertContext {
+class DRMMAlertContextScript : DRMMAlertContext {
 
     [hashtable]$Samples
 
-    DRMMAlertScriptContext() : base() {
+    DRMMAlertContextScript() : base() {
 
     }
 
-    static [DRMMAlertScriptContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextScript] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1199,7 +1199,7 @@ class DRMMAlertScriptContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertScriptContext]::new()
+        $Context = [DRMMAlertContextScript]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         
         $SamplesData = [DRMMObject]::GetValue($Response, 'samples')
@@ -1218,16 +1218,16 @@ class DRMMAlertScriptContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertSecCenterContext : DRMMAlertContext {
+class DRMMAlertContextSecCenter : DRMMAlertContext {
 
     [string]$ProductName
     [string]$AlertType
 
-    DRMMAlertSecCenterContext() : base() {
+    DRMMAlertContextSecCenter() : base() {
 
     }
 
-    static [DRMMAlertSecCenterContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextSecCenter] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1235,7 +1235,7 @@ class DRMMAlertSecCenterContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertSecCenterContext]::new()
+        $Context = [DRMMAlertContextSecCenter]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.ProductName = [DRMMObject]::GetValue($Response, 'productName')
         $Context.AlertType = [DRMMObject]::GetValue($Response, 'alertType')
@@ -1245,7 +1245,7 @@ class DRMMAlertSecCenterContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertSecurityManagementContext : DRMMAlertContext {
+class DRMMAlertContextSecurityManagement : DRMMAlertContext {
 
     [int]$Status
     [string]$ProductName
@@ -1256,11 +1256,11 @@ class DRMMAlertSecurityManagementContext : DRMMAlertContext {
     [int]$SystemRemainsInfectedForHours
     [int]$ExpiryLicenseForDays
 
-    DRMMAlertSecurityManagementContext() : base() {
+    DRMMAlertContextSecurityManagement() : base() {
 
     }
 
-    static [DRMMAlertSecurityManagementContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextSecurityManagement] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1268,7 +1268,7 @@ class DRMMAlertSecurityManagementContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertSecurityManagementContext]::new()
+        $Context = [DRMMAlertContextSecurityManagement]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Status = [DRMMObject]::GetValue($Response, 'status')
         $Context.ProductName = [DRMMObject]::GetValue($Response, 'productName')
@@ -1284,7 +1284,7 @@ class DRMMAlertSecurityManagementContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertSNMPProbeContext : DRMMAlertContext {
+class DRMMAlertContextSNMPProbe : DRMMAlertContext {
 
     [string]$IpAddress
     [string]$Oid
@@ -1293,11 +1293,11 @@ class DRMMAlertSNMPProbeContext : DRMMAlertContext {
     [string]$DeviceName
     [string]$MonitorName
 
-    DRMMAlertSNMPProbeContext() : base() {
+    DRMMAlertContextSNMPProbe() : base() {
 
     }
 
-    static [DRMMAlertSNMPProbeContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextSNMPProbe] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1305,7 +1305,7 @@ class DRMMAlertSNMPProbeContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertSNMPProbeContext]::new()
+        $Context = [DRMMAlertContextSNMPProbe]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.IpAddress = [DRMMObject]::GetValue($Response, 'ipAddress')
         $Context.OID = [DRMMObject]::GetValue($Response, 'OID')
@@ -1359,16 +1359,16 @@ class DRMMAlertSourceInfo : DRMMObject {
     }
 }
 
-class DRMMAlertStatusContext : DRMMAlertContext {
+class DRMMAlertContextStatus : DRMMAlertContext {
 
     [string]$ProcessName
     [string]$Status
 
-    DRMMAlertStatusContext() : base() {
+    DRMMAlertContextStatus() : base() {
 
     }
 
-    static [DRMMAlertStatusContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextStatus] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1376,7 +1376,7 @@ class DRMMAlertStatusContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertStatusContext]::new()
+        $Context = [DRMMAlertContextStatus]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.ProcessName = [DRMMObject]::GetValue($Response, 'processName')
         $Context.Status = [DRMMObject]::GetValue($Response, 'status')
@@ -1386,16 +1386,16 @@ class DRMMAlertStatusContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertTemperatureContext : DRMMAlertContext {
+class DRMMAlertContextTemperature : DRMMAlertContext {
 
     [float]$Degree
     [string]$Type
 
-    DRMMAlertTemperatureContext() : base() {
+    DRMMAlertContextTemperature() : base() {
 
     }
 
-    static [DRMMAlertTemperatureContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextTemperature] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1403,7 +1403,7 @@ class DRMMAlertTemperatureContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertTemperatureContext]::new()
+        $Context = [DRMMAlertContextTemperature]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Degree = [DRMMObject]::GetValue($Response, 'degree')
         $Context.Type = [DRMMObject]::GetValue($Response, 'type')
@@ -1413,15 +1413,15 @@ class DRMMAlertTemperatureContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertWindowsPerformanceContext : DRMMAlertContext {
+class DRMMAlertContextWindowsPerformance : DRMMAlertContext {
 
     [float]$Value
 
-    DRMMAlertWindowsPerformanceContext() : base() {
+    DRMMAlertContextWindowsPerformance() : base() {
 
     }
 
-    static [DRMMAlertWindowsPerformanceContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextWindowsPerformance] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1429,7 +1429,7 @@ class DRMMAlertWindowsPerformanceContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertWindowsPerformanceContext]::new()
+        $Context = [DRMMAlertContextWindowsPerformance]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Value = [DRMMObject]::GetValue($Response, 'value')
 
@@ -1438,15 +1438,15 @@ class DRMMAlertWindowsPerformanceContext : DRMMAlertContext {
     }
 }
 
-class DRMMAlertWmiContext : DRMMAlertContext {
+class DRMMAlertContextWmi : DRMMAlertContext {
 
     [string]$Value
 
-    DRMMAlertWmiContext() : base() {
+    DRMMAlertContextWmi() : base() {
 
     }
 
-    static [DRMMAlertWmiContext] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertContextWmi] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -1454,7 +1454,7 @@ class DRMMAlertWmiContext : DRMMAlertContext {
 
         }
 
-        $Context = [DRMMAlertWmiContext]::new()
+        $Context = [DRMMAlertContextWmi]::new()
         $Context.Class = [DRMMObject]::GetValue($Response, '@class')
         $Context.Value = [DRMMObject]::GetValue($Response, 'value')
 
