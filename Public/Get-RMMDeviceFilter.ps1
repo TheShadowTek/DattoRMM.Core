@@ -1,4 +1,93 @@
 function Get-RMMDeviceFilter {
+    <#
+    .SYNOPSIS
+        Retrieves device filters from the Datto RMM API.
+
+    .DESCRIPTION
+        The Get-RMMDeviceFilter function retrieves device filters at different scopes: global
+        (account-level) or site-level. Filters can be retrieved by ID, name, or all filters
+        at a given scope.
+
+        Device filters in Datto RMM are used to group devices based on criteria and can be
+        applied when retrieving devices with Get-RMMDevice.
+
+        Filters are categorized as either "Default" (built-in system filters) or "Custom"
+        (user-created filters).
+
+    .PARAMETER Site
+        A DRMMSite object to retrieve filters for. Accepts pipeline input from Get-RMMSite.
+
+    .PARAMETER SiteUid
+        The unique identifier (GUID) of a site to retrieve filters for.
+
+    .PARAMETER Id
+        Retrieve a specific filter by its numeric ID.
+
+    .PARAMETER Name
+        Retrieve a filter by its name (exact match).
+
+    .PARAMETER FilterType
+        Filter the results by type. Valid values: 'All', 'Default', 'Custom'. Default is 'All'.
+        Only applicable for global scope queries.
+
+    .EXAMPLE
+        Get-RMMDeviceFilter
+
+        Retrieves all device filters at the account level.
+
+    .EXAMPLE
+        Get-RMMDeviceFilter -FilterType Custom
+
+        Retrieves only custom (user-created) device filters.
+
+    .EXAMPLE
+        Get-RMMDeviceFilter -Id 12345
+
+        Retrieves a specific filter by its ID.
+
+    .EXAMPLE
+        Get-RMMDeviceFilter -Name "Windows Servers"
+
+        Retrieves a filter by exact name match.
+
+    .EXAMPLE
+        Get-RMMSite -Name "Main Office" | Get-RMMDeviceFilter
+
+        Gets all device filters for the "Main Office" site.
+
+    .EXAMPLE
+        $Filter = Get-RMMDeviceFilter -Name "Production Servers"
+        Get-RMMDevice -FilterId $Filter.Id
+
+        Retrieves a filter and uses it to get matching devices.
+
+    .EXAMPLE
+        Get-RMMSite | Get-RMMDeviceFilter | Where-Object {$_.Type -eq 'custom'}
+
+        Gets custom filters for all sites.
+
+    .INPUTS
+        DRMMSite. You can pipe site objects from Get-RMMSite.
+        You can also pipe objects with SiteUid properties.
+
+    .OUTPUTS
+        DRMMFilter. Returns filter objects with the following properties:
+        - Id: Numeric identifier
+        - Name: Filter name
+        - Description: Filter description
+        - Type: 'rmm_default' or 'custom'
+        - Scope: 'Global' or 'Site'
+        - SiteUid: Site identifier (for site-scoped filters)
+        - DateCreate: Creation date
+        - LastUpdated: Last modification date
+
+    .NOTES
+        This function requires an active connection to the Datto RMM API.
+        Use Connect-DattoRMM to authenticate before calling this function.
+
+        Filter IDs can be used with Get-RMMDevice -FilterId to retrieve devices matching
+        specific criteria.
+    #>
     [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]
     param (
         [Parameter(
