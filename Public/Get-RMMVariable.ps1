@@ -1,4 +1,93 @@
 function Get-RMMVariable {
+    <#
+    .SYNOPSIS
+        Retrieves variables from the Datto RMM API.
+
+    .DESCRIPTION
+        The Get-RMMVariable function retrieves variables at different scopes: global
+        (account-level) or site-level. Variables can be retrieved by ID, name, or all
+        variables at a given scope.
+
+        Variables in Datto RMM are used by components (scripts/monitors) to store and
+        retrieve configuration values and data. They can be defined globally for the
+        entire account or at the site level.
+
+    .PARAMETER Site
+        A DRMMSite object to retrieve variables for. Accepts pipeline input from Get-RMMSite.
+
+    .PARAMETER SiteUid
+        The unique identifier (GUID) of a site to retrieve variables for.
+
+    .PARAMETER Id
+        Retrieve a specific variable by its numeric ID.
+
+    .PARAMETER Name
+        Retrieve a variable by its name (exact match).
+
+    .EXAMPLE
+        Get-RMMVariable
+
+        Retrieves all global (account-level) variables.
+
+    .EXAMPLE
+        Get-RMMVariable -Id 12345
+
+        Retrieves a specific global variable by its ID.
+
+    .EXAMPLE
+        Get-RMMVariable -Name "CompanyAPIKey"
+
+        Retrieves a global variable by exact name match.
+
+    .EXAMPLE
+        Get-RMMSite -Name "Contoso" | Get-RMMVariable
+
+        Gets all variables for the "Contoso" site.
+
+    .EXAMPLE
+        Get-RMMVariable -SiteUid $SiteUid -Name "ServerPassword"
+
+        Retrieves a specific site variable by name.
+
+    .EXAMPLE
+        $Variables = Get-RMMSite | Get-RMMVariable
+        PS > $Variables | Group-Object SiteUid | Select-Object Name, Count
+
+        Retrieves variables for all sites and groups by site.
+
+    .EXAMPLE
+        Get-RMMVariable | Where-Object {$_.Name -like "*Password*"}
+
+        Retrieves all global variables with "Password" in the name.
+
+    .EXAMPLE
+        $Var = Get-RMMVariable -Name "ConfigSetting"
+        PS > $Var.Value
+
+        Retrieves a variable and displays its value.
+
+    .INPUTS
+        DRMMSite. You can pipe site objects from Get-RMMSite.
+        System.Guid. You can pipe SiteUid values.
+
+    .OUTPUTS
+        DRMMVariable. Returns variable objects with the following properties:
+        - Id: Variable numeric ID
+        - Name: Variable name
+        - Value: Variable value
+        - Scope: 'Global' or 'Site'
+        - SiteUid: Site identifier (for site-scoped variables)
+        - Type: Variable data type
+        - Masked: Whether value is masked/hidden
+        - Description: Variable description
+
+    .NOTES
+        This function requires an active connection to the Datto RMM API.
+        Use Connect-DattoRMM to authenticate before calling this function.
+
+        Variables can be referenced in components using the variable name.
+        Site-level variables override global variables with the same name.
+    #>
     [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]
     param (
         [Parameter(
