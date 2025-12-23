@@ -23,10 +23,7 @@ function Get-RMMPrinterAudit {
 
         if ($Response) {
 
-            $Audit = [DRMMPrinterAudit]::FromAPIMethod($Response)
-            $Audit.DeviceUid = $DeviceUid
-            
-            return $Audit
+            [DRMMPrinterAudit]::FromAPIMethod($Response, $DeviceUid)
 
         }
     }

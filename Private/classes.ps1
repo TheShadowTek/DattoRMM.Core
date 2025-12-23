@@ -2664,7 +2664,7 @@ class DRMMEsxiHostAudit : DRMMObject {
 
     }
 
-    static [DRMMEsxiHostAudit] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMEsxiHostAudit] FromAPIMethod([pscustomobject]$Response, [guid]$DeviceUid) {
 
         if ($null -eq $Response) {
             
@@ -2673,6 +2673,7 @@ class DRMMEsxiHostAudit : DRMMObject {
         }
 
         $Audit = [DRMMEsxiHostAudit]::new()
+        $Audit.DeviceUid = $DeviceUid
         $Audit.PortalUrl = [DRMMObject]::GetValue($Response, 'portalUrl')
 
         # System info
@@ -3264,7 +3265,7 @@ class DRMMPrinterAudit : DRMMObject {
 
     }
 
-    static [DRMMPrinterAudit] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMPrinterAudit] FromAPIMethod([pscustomobject]$Response, [guid]$DeviceUid) {
 
         if ($null -eq $Response) {
             
@@ -3273,6 +3274,7 @@ class DRMMPrinterAudit : DRMMObject {
         }
 
         $Audit = [DRMMPrinterAudit]::new()
+        $Audit.DeviceUid = $DeviceUid
         $Audit.PortalUrl = [DRMMObject]::GetValue($Response, 'portalUrl')
 
         # SNMP info

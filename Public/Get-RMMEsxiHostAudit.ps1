@@ -23,10 +23,7 @@ function Get-RMMEsxiHostAudit {
 
         if ($Response) {
 
-            $Audit = [DRMMEsxiHostAudit]::FromAPIMethod($Response)
-            $Audit.DeviceUid = $DeviceUid
-            
-            return $Audit
+            [DRMMEsxiHostAudit]::FromAPIMethod($Response, $DeviceUid)
 
         }
     }
