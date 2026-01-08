@@ -91,19 +91,22 @@ class DRMMObject {
 
         }
 
-        if ($Value -is [int] -or $Value -is [long] -or ($Value -is [string] -and $Value -match '^\d+$')) {
+        # Handle numeric epoch timestamps (int, long, double, or numeric strings)
+        if ($Value -is [int] -or $Value -is [long] -or $Value -is [double] -or ($Value -is [string] -and $Value -match '^\d+(\.\d+)?$')) {
 
-            $Num = [long]$Value
+            $Num = [double]$Value
 
             if ($Num -gt 9999999999) {
 
-                $Dto = [DateTimeOffset]::FromUnixTimeMilliseconds($Num)
+                # Milliseconds
+                $Dto = [DateTimeOffset]::FromUnixTimeMilliseconds([long]$Num)
                 $EpochSeconds = [long]$Dto.ToUnixTimeSeconds()
 
             } else {
 
+                # Seconds (possibly with decimal milliseconds)
                 $Dto = [DateTimeOffset]::FromUnixTimeSeconds($Num)
-                $EpochSeconds = $Num
+                $EpochSeconds = [long]$Num
 
             }
 
@@ -3127,6 +3130,8 @@ class DRMMJobResults : DRMMObject {
 
 class DRMMJobStdData : DRMMObject {
 
+    [guid]$JobUid
+    [guid]$DeviceUid
     [guid]$ComponentUid
     [string]$ComponentName
     [string]$StdData
@@ -3135,7 +3140,7 @@ class DRMMJobStdData : DRMMObject {
 
     }
 
-    static [DRMMJobStdData] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMJobStdData] FromAPIMethod([pscustomobject]$Response, [guid]$JobUid, [guid]$DeviceUid) {
 
         if ($null -eq $Response) {
             
@@ -3144,6 +3149,8 @@ class DRMMJobStdData : DRMMObject {
         }
 
         $Result = [DRMMJobStdData]::new()
+        $Result.JobUid = $JobUid
+        $Result.DeviceUid = $DeviceUid
         $Result.ComponentUid = [DRMMObject]::GetValue($Response, 'componentUid')
         $Result.ComponentName = [DRMMObject]::GetValue($Response, 'componentName')
         $Result.StdData = [DRMMObject]::GetValue($Response, 'stdData')

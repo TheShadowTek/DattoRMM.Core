@@ -217,7 +217,7 @@ function Get-RMMJob {
 
                     $Response | ForEach-Object {
 
-                        [DRMMJobStdData]::FromAPIMethod($_)
+                        [DRMMJobStdData]::FromAPIMethod($_, $JobUid, $DeviceUid)
 
                     }
 
@@ -239,7 +239,7 @@ function Get-RMMJob {
 
                     $Response | ForEach-Object {
 
-                        [DRMMJobStdData]::FromAPIMethod($_)
+                        [DRMMJobStdData]::FromAPIMethod($_, $JobUid, $DeviceUid)
 
                     }
 

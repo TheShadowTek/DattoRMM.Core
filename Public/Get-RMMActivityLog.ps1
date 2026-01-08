@@ -128,8 +128,8 @@ function Get-RMMActivityLog {
             'From' {$Parameters.Add('from', $From.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))}
             'Until' {$Parameters.Add('until', $Until.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))}
             'Entity' {$Parameters.Add('entities', ($Entity | ForEach-Object { $_.ToLower() }) -join ',')}
-            'Category' {$Parameters.Add('categories', $Category -join ',')}
-            'Action' {$Parameters.Add('actions', $Action -join ',')}
+            'Category' {$Parameters.Add('categories', ($Category | ForEach-Object { $_.ToLower() }) -join ',')}
+            'Action' {$Parameters.Add('actions', ($Action | ForEach-Object { $_.ToLower() }) -join ',')}
             'UserId' {$Parameters.Add('userIds', $UserId -join ',')}
             'Order' {$Parameters.Add('order', $Order)}
 
