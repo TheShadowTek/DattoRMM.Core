@@ -300,7 +300,7 @@ class DRMMActivityLog : DRMMObject {
     [Nullable[long]]$DeviceId
     [string]$Hostname
     [DRMMActivityLogUser]$User
-    [string]$Details
+    [PSCustomObject[]]$Details
     [bool]$HasStdOut
     [bool]$HasStdErr
 
@@ -323,9 +323,34 @@ class DRMMActivityLog : DRMMObject {
         $Log.Action = $Response.action
         $Log.DeviceId = $Response.deviceId
         $Log.Hostname = $Response.hostname
-        $Log.Details = $Response.details
         $Log.HasStdOut = $Response.hasStdOut
         $Log.HasStdErr = $Response.hasStdErr
+
+        # Parse details from JSON
+        if ($null -ne $Response.details -and $Response.details.Count -gt 0) {
+
+            $ParsedDetails = @()
+
+            foreach ($Detail in $Response.details) {
+
+                if ($null -ne $Detail -and $Detail -ne '') {
+
+                    try {
+
+                        $ParsedDetails += $Detail | ConvertFrom-Json
+
+                    } catch {
+
+                        # If JSON parsing fails, store as a PSCustomObject with the raw string
+                        $ParsedDetails += [PSCustomObject]@{ RawDetails = $Detail }
+
+                    }
+                }
+            }
+
+            $Log.Details = $ParsedDetails
+
+        }
 
         # Parse the date
         $DateValue = [DRMMObject]::ParseApiDate($Response.date)
