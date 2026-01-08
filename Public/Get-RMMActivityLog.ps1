@@ -88,10 +88,10 @@ function Get-RMMActivityLog {
         [long[]]$SiteId,
 
         [Parameter()]
-        [string]$From,
+        [datetime]$From,
 
         [Parameter()]
-        [string]$Until,
+        [datetime]$Until,
 
         [Parameter()]
         [ValidateSet('Device', 'User')]
@@ -125,13 +125,13 @@ function Get-RMMActivityLog {
 
         switch ($PSBoundParameters.Keys) {
 
-            'From' {$Parameters['from'] = $From}
-            'Until' {$Parameters['until'] = $Until}
-            'Entity' {$Parameters['entities'] = ($Entity | ForEach-Object { $_.ToLower() }) -join ','}
-            'Category' {$Parameters['categories'] = $Category -join ','}
-            'Action' {$Parameters['actions'] = $Action -join ','}
-            'UserId' {$Parameters['userIds'] = $UserId -join ','}
-            'Order' {$Parameters['order'] = $Order}
+            'From' {$Parameters.Add('from', $From.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))}
+            'Until' {$Parameters.Add('until', $Until.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))}
+            'Entity' {$Parameters.Add('entities', ($Entity | ForEach-Object { $_.ToLower() }) -join ',')}
+            'Category' {$Parameters.Add('categories', $Category -join ',')}
+            'Action' {$Parameters.Add('actions', $Action -join ',')}
+            'UserId' {$Parameters.Add('userIds', $UserId -join ',')}
+            'Order' {$Parameters.Add('order', $Order)}
 
         }
 

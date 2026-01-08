@@ -99,7 +99,9 @@ function Invoke-APIMethod {
 
     if ($Parameters) {
 
-        $RequestParams.Uri += '?' + ($Parameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join '&'
+        Write-Debug "parameters: $($Parameters | Out-String)"
+        $QueryParams = @($Parameters.GetEnumerator() | ForEach-Object {"$($_.Key)=$($_.Value)"})
+        $RequestParams.Uri += '?' + ($QueryParams -join '&')
 
     }
 
@@ -159,6 +161,7 @@ function Invoke-APIMethod {
 
             while ($Result.pageDetails.nextPageUrl) {
 
+                Write-Debug "Next Page URL: $($Result.pageDetails.nextPageUrl)"
                 $NextUrl = $Result.pageDetails.nextPageUrl
 
                 # If we have original parameters, check which ones are missing from nextPageUrl
