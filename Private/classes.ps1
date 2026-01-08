@@ -92,13 +92,26 @@ class DRMMObject {
         }
 
         # Handle numeric epoch timestamps (int, long, double, or numeric strings)
-        if ($Value -is [int] -or $Value -is [long] -or $Value -is [double] -or ($Value -is [string] -and $Value -match '^\d+(\.\d+)?$')) {
+        if ($Value -is [int] -or $Value -is [long] -or $Value -is [double] -or ($Value -is [string] -and $Value -match '^\-?\d+(\.\d+)?$')) {
 
             $Num = [double]$Value
+
+            # Treat DateTime.MinValue sentinel as null (-62135596800000 ms or -62135596800 seconds)
+            if ($Num -eq -62135596800000 -or $Num -eq -62135596800) {
+
+                return @{ DateTime = $null; Epoch = $null; Raw = $Value }
+
+            }
 
             if ($Num -gt 9999999999) {
 
                 # Milliseconds
+                $Dto = [DateTimeOffset]::FromUnixTimeMilliseconds([long]$Num)
+                $EpochSeconds = [long]$Dto.ToUnixTimeSeconds()
+
+            } elseif ($Num -lt -9999999999) {
+
+                # Negative milliseconds
                 $Dto = [DateTimeOffset]::FromUnixTimeMilliseconds([long]$Num)
                 $EpochSeconds = [long]$Dto.ToUnixTimeSeconds()
 
@@ -303,7 +316,7 @@ class DRMMActivityLog : DRMMObject {
     [Nullable[long]]$DeviceId
     [string]$Hostname
     [DRMMActivityLogUser]$User
-    [PSCustomObject[]]$Details
+    [PSCustomObject]$Details
     [bool]$HasStdOut
     [bool]$HasStdErr
 
@@ -330,28 +343,39 @@ class DRMMActivityLog : DRMMObject {
         $Log.HasStdErr = $Response.hasStdErr
 
         # Parse details from JSON
-        if ($null -ne $Response.details -and $Response.details.Count -gt 0) {
+        if ($null -ne $Response.details -and $Response.details -ne '') {
 
-            $ParsedDetails = @()
+            try {
 
-            foreach ($Detail in $Response.details) {
+                $ParsedDetail = $Response.details | ConvertFrom-Json
 
-                if ($null -ne $Detail -and $Detail -ne '') {
+                # Check for date properties and parse them
+                foreach ($Property in $ParsedDetail.PSObject.Properties) {
 
-                    try {
+                    if ($Property.Name -match 'date' -and $null -ne $Property.Value) {
 
-                        $ParsedDetails += $Detail | ConvertFrom-Json
+                        try {
 
-                    } catch {
+                            $DateResult = [DRMMObject]::ParseApiDate($Property.Value)
+                            $ParsedDetail.$($Property.Name) = $DateResult.DateTime
 
-                        # If JSON parsing fails, store as a PSCustomObject with the raw string
-                        $ParsedDetails += [PSCustomObject]@{ RawDetails = $Detail }
+                        } catch {
 
+                            # Leave the original value if date parsing fails
+                            Write-Debug "Failed to parse date property '$($Property.Name)' with value '$($Property.Value)'"
+
+                        }
                     }
                 }
-            }
 
-            $Log.Details = $ParsedDetails
+                $Log.Details = @($ParsedDetail)
+
+            } catch {
+
+                # If JSON parsing fails, store as a PSCustomObject with the raw string
+                $Log.Details = @([PSCustomObject]@{ RawDetails = $Response.details })
+
+            }
 
         }
 
