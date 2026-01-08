@@ -140,19 +140,31 @@ function Get-RMMJob {
         [guid]
         $DeviceUid,
 
-        [Parameter(ParameterSetName = 'JobResults', Mandatory = $true)]
+        [Parameter(
+            ParameterSetName = 'JobResults',
+            Mandatory = $true
+        )]
         [switch]
         $Results,
 
-        [Parameter(ParameterSetName = 'JobStdOut', Mandatory = $true)]
+        [Parameter(
+            ParameterSetName = 'JobStdOut',
+            Mandatory = $true
+        )]
         [switch]
         $StdOut,
 
-        [Parameter(ParameterSetName = 'JobStdErr', Mandatory = $true)]
+        [Parameter(
+            ParameterSetName = 'JobStdErr',
+            Mandatory = $true
+        )]
         [switch]
         $StdErr,
 
-        [Parameter(ParameterSetName = 'JobComponents', Mandatory = $true)]
+        [Parameter(
+            ParameterSetName = 'JobComponents',
+            Mandatory = $true
+        )]
         [switch]
         $Components
     )

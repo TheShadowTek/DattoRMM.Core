@@ -3108,18 +3108,7 @@ class DRMMJobResults : DRMMObject {
         $Results.JobDeploymentStatus = [DRMMObject]::GetValue($Response, 'jobDeploymentStatus')
 
         $RanOnValue = [DRMMObject]::GetValue($Response, 'ranOn')
-        if ($null -ne $RanOnValue) {
-
-            try {
-
-                $Results.RanOn = [datetime]::Parse($RanOnValue)
-
-            } catch {
-
-                $Results.RanOn = $null
-
-            }
-        }
+        $Results.RanOn = ([DRMMObject]::ParseApiDate($RanOnValue)).DateTime
 
         if ($Response.componentResults) {
 
