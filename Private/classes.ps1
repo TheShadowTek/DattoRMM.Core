@@ -2922,6 +2922,7 @@ class DRMMEsxiSystemInfo : DRMMObject {
 class DRMMFilter : DRMMObject {
 
     [long]$Id
+    [long]$FilterId
     [string]$Name
     [string]$Description
     [string]$Type
@@ -2944,6 +2945,7 @@ class DRMMFilter : DRMMObject {
 
         $Filter = [DRMMFilter]::new()
         $Filter.Id = $Response.id
+        $Filter.FilterId = $Response.id
         $Filter.Name = $Response.name
         $Filter.Description = $Response.description
         $Filter.Type = $Response.type

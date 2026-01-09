@@ -163,7 +163,6 @@ function Get-RMMDevice {
             Mandatory = $true,
             ValueFromPipelineByPropertyName = $true
         )]
-        [Alias('Uid')]
         [guid]
         $SiteUid,
 
@@ -192,9 +191,9 @@ function Get-RMMDevice {
         [string]
         $Hostname,
 
-        [Parameter(ParameterSetName = 'GlobalAll')]
-        [Parameter(ParameterSetName = 'SiteAll')]
-        [Parameter(ParameterSetName = 'SiteAllUid')]
+        [Parameter(ParameterSetName = 'GlobalAll', ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'SiteAll', ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'SiteAllUid', ValueFromPipelineByPropertyName = $true)]
         [long]
         $FilterId,
 

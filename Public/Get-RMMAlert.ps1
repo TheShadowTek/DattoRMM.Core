@@ -113,8 +113,7 @@ function Get-RMMAlert {
 
         [Parameter(
             ParameterSetName = 'SiteAllUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [guid]
         $SiteUid,
