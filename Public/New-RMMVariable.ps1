@@ -51,7 +51,7 @@ function New-RMMVariable {
         You can also pipe objects with SiteUid or Uid properties.
 
     .OUTPUTS
-        DRMMVariable. Returns the newly created variable object.
+        DRMMVariable. Returns the newly created variable object (fetched via Get-RMMVariable).
 
     .NOTES
         This function requires an active connection to the Datto RMM API.
@@ -59,6 +59,9 @@ function New-RMMVariable {
 
         Variable names must be unique within their scope (account or site).
         The Masked property can only be set during creation and cannot be changed later.
+
+        API Behavior: The Datto API does not return the created variable object, so this
+        function fetches it using Get-RMMVariable by name.
     #>
     [CmdletBinding(DefaultParameterSetName = 'Global', SupportsShouldProcess, ConfirmImpact = 'Low')]
     param (
@@ -79,7 +82,7 @@ function New-RMMVariable {
         [guid]
         $SiteUid,
 
-        [Parameter()]
+        [Parameter(Mandatory = $true)]
         [string]
         $Name,
 
@@ -95,14 +98,18 @@ function New-RMMVariable {
     process {
 
         if ($Site) {
+
             $SiteUid = $Site.Uid
+
         }
 
-        $Scope = if ($PSCmdlet.ParameterSetName -match 'Site') { 'Site' } else { 'Global' }
-        $Target = if ($Scope -eq 'Site') { "site $SiteUid" } else { "account" }
+        $Scope = if ($PSCmdlet.ParameterSetName -match 'Site') {'Site'} else {'Global'}
+        $Target = if ($Scope -eq 'Site') {"site $SiteUid"} else {"account"}
 
-        if (-not $PSCmdlet.ShouldProcess("Create variable '$Name' in $Target", "Create variable", "Creating variable")) {
+        if (-not $PSCmdlet.ShouldProcess($Target, "Create variable '$Name'")) {
+
             return
+
         }
 
         Write-Debug "Creating new RMM variable '$Name' at $Scope scope"
@@ -110,23 +117,23 @@ function New-RMMVariable {
         # Build request body
         $Body = @{}
 
-        if ($PSBoundParameters.ContainsKey('Name')) {
-            $Body.name = $Name
-        }
+        switch ($PSBoundParameters.Keys) {
 
-        if ($PSBoundParameters.ContainsKey('Value')) {
-            $Body.value = $Value
-        }
+            'Name' { $Body.name = $Name }
+            'Value' { $Body.value = $Value }
+            'Masked' { $Body.masked = $true }
 
-        if ($Masked.IsPresent) {
-            $Body.masked = $true
         }
 
         # Determine API path based on scope
         $Path = if ($Scope -eq 'Site') {
+
             "site/$SiteUid/variable"
+
         } else {
+
             'account/variable'
+
         }
 
         $APIMethod = @{
@@ -136,7 +143,20 @@ function New-RMMVariable {
         }
 
         $Response = Invoke-APIMethod @APIMethod
+        $Response | Out-String | Write-Debug
 
-        [DRMMVariable]::FromAPIMethod($Response, $Scope, $SiteUid)
+        # API doesn't return the created variable, so fetch it by name
+        $GetParams = @{
+            Name = $Name
+        }
+        
+        if ($Scope -eq 'Site') {
+
+            $GetParams.SiteUid = $SiteUid
+
+        }
+
+        Get-RMMVariable @GetParams
+
     }
 }
