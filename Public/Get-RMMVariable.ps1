@@ -217,7 +217,6 @@ function Get-RMMVariable {
 
                     }
                 }
-
             }
 
         } else {
@@ -269,7 +268,6 @@ function Get-RMMVariable {
 
                     }
                 }
-
             }
         }
     }

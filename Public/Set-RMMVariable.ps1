@@ -28,6 +28,9 @@ function Set-RMMVariable {
     .PARAMETER Value
         The new value for the variable.
 
+    .PARAMETER Force
+        Bypasses the confirmation prompt.
+
     .EXAMPLE
         Get-RMMVariable -Name "CompanyName" | Set-RMMVariable -Value "Contoso Corporation"
 
@@ -87,59 +90,100 @@ function Set-RMMVariable {
         [guid]
         $SiteUid,
 
-        [Parameter()]
+        [Parameter(
+            ParameterSetName = 'ByVariableId',
+            Mandatory = $true
+        )]
+        [Parameter(ParameterSetName = 'ByVariableObject')]
         [string]
         $Name,
 
-        [Parameter()]
+        [Parameter(
+            ParameterSetName = 'ByVariableId',
+            Mandatory = $true
+        )]
+        [Parameter(ParameterSetName = 'ByVariableObject')]
         [string]
-        $Value
+        $Value,
+
+        [Parameter()]
+        [switch]
+        $Force
     )
 
     process {
 
         # Determine scope and set working values
         if ($Variable) {
+
             $VariableId = $Variable.Id
             $Scope = $Variable.Scope
             
             if ($Scope -eq 'Site') {
+
                 $SiteUid = $Variable.SiteUid
+
             }
 
-            # Default Name to existing value if not specified
+            # Default Name and Value to existing values if not specified
             if (-not $PSBoundParameters.ContainsKey('Name')) {
+
                 $Name = $Variable.Name
+
             }
+
+            if (-not $PSBoundParameters.ContainsKey('Value')) {
+
+                $Value = $Variable.Value
+
+            }
+
         } else {
+
             # When using VariableId parameter, determine scope by presence of SiteUid
-            $Scope = if ($PSBoundParameters.ContainsKey('SiteUid')) { 'Site' } else { 'Global' }
+            if ($PSBoundParameters.ContainsKey('SiteUid')) {
+
+                $Scope = 'Site'
+
+            } else {
+
+                $Scope = 'Global'
+
+            }
         }
 
-        $Target = if ($Scope -eq 'Site') { "site variable $VariableId in site $SiteUid" } else { "account variable $VariableId" }
+        if ($Scope -eq 'Site') {
 
-        if (-not $PSCmdlet.ShouldProcess("Update $Target", "Update variable", "Updating variable")) {
+            $Target = "site variable $VariableId in site $SiteUid"
+
+        } else {
+
+            $Target = "account variable $VariableId"
+
+        }
+
+        if (-not $PSCmdlet.ShouldProcess($Target, "Update variable '$Name'")) {
+
             return
+
         }
 
         Write-Debug "Updating RMM variable $VariableId at $Scope scope"
 
         # Build request body
-        $Body = @{}
-
-        if ($PSBoundParameters.ContainsKey('Name')) {
-            $Body.name = $Name
-        }
-
-        if ($PSBoundParameters.ContainsKey('Value')) {
-            $Body.value = $Value
+        $Body = @{
+            name = $Name
+            value = $Value
         }
 
         # Determine API path based on scope
-        $Path = if ($Scope -eq 'Site') {
-            "site/$SiteUid/variable/$VariableId"
+        if ($Scope -eq 'Site') {
+
+            $Path = "site/$SiteUid/variable/$VariableId"
+
         } else {
-            "account/variable/$VariableId"
+
+            $Path = "account/variable/$VariableId"
         }
 
         $APIMethod = @{
@@ -150,6 +194,18 @@ function Set-RMMVariable {
 
         $Response = Invoke-APIMethod @APIMethod
 
-        [DRMMVariable]::FromAPIMethod($Response, $Scope, $SiteUid)
+        # Fetch the updated variable since API doesn't return it
+        $GetParams = @{
+            Id = $VariableId
+        }
+
+        if ($Scope -eq 'Site') {
+
+            $GetParams.SiteUid = $SiteUid
+
+        }
+
+        Get-RMMVariable @GetParams
+
     }
 }
