@@ -4,7 +4,7 @@
 RootModule = 'Datto-RMM.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.2.16'
+ModuleVersion = '0.2.17'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -92,6 +92,7 @@ FunctionsToExport = @(
     'Reset-RMMConfig',
     'Resolve-RMMAlert',
     'Set-RMMConfig',
+    'Set-RMMDeviceUDF',
     'Set-RMMPageSize',
     'Set-RMMSite',
     'Set-RMMSiteProxy',
