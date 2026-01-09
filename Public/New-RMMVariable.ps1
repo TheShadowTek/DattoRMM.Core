@@ -26,6 +26,9 @@ function New-RMMVariable {
         Whether the variable value should be masked (hidden) in the Datto RMM UI. Use this for
         sensitive values like passwords or API keys.
 
+    .PARAMETER Force
+        Bypasses the confirmation prompt.
+
     .EXAMPLE
         New-RMMVariable -Name "CompanyName" -Value "Contoso Ltd"
 
@@ -92,7 +95,11 @@ function New-RMMVariable {
 
         [Parameter()]
         [switch]
-        $Masked
+        $Masked,
+
+        [Parameter()]
+        [switch]
+        $Force
     )
 
     process {
