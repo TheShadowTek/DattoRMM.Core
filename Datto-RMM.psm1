@@ -4,6 +4,12 @@
 # Initialize script-scoped auth object
 $Script:RMMAuth = $null
 
+# Default configuration values (fallback if config file doesn't exist or fails to load)
+$Script:ConfigDefaultPlatform = $null
+$Script:ConfigDefaultPageSize = $null
+$Script:ConfigLowUtilCheckInterval = 50
+$Script:TokenExpireHours = 100
+
 # Throttling state
 $Script:RMMThrottle = @{
     CheckInterval = 1
@@ -14,9 +20,6 @@ $Script:RMMThrottle = @{
     Pause = $false
     Throttle = $false
 }
-
-# Token refresh interval (hours)
-$Script:TokenExpireHours = 100
 
 # Dot-source all .ps1 files in Private folder
 Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 -Recurse | ForEach-Object {
@@ -32,6 +35,38 @@ if (Test-Path $PSScriptRoot\Public) {
         . $_.FullName
 
     }
+}
+
+# Load configuration from file if it exists
+try {
+    $LoadedConfig = Read-ConfigFile
+
+    if ($null -ne $LoadedConfig) {
+        Write-Verbose "Loading configuration from file..."
+
+        if ($LoadedConfig.PSObject.Properties.Name -contains 'DefaultPlatform') {
+            $Script:ConfigDefaultPlatform = [RMMPlatform]$LoadedConfig.DefaultPlatform
+            Write-Verbose "  DefaultPlatform: $($Script:ConfigDefaultPlatform)"
+        }
+
+        if ($LoadedConfig.PSObject.Properties.Name -contains 'DefaultPageSize') {
+            $Script:ConfigDefaultPageSize = $LoadedConfig.DefaultPageSize
+            Write-Verbose "  DefaultPageSize: $($Script:ConfigDefaultPageSize)"
+        }
+
+        if ($LoadedConfig.PSObject.Properties.Name -contains 'LowUtilCheckInterval') {
+            $Script:ConfigLowUtilCheckInterval = $LoadedConfig.LowUtilCheckInterval
+            $Script:RMMThrottle.LowUtilCheckInterval = $LoadedConfig.LowUtilCheckInterval
+            Write-Verbose "  LowUtilCheckInterval: $($Script:ConfigLowUtilCheckInterval)"
+        }
+
+        if ($LoadedConfig.PSObject.Properties.Name -contains 'TokenExpireHours') {
+            $Script:TokenExpireHours = $LoadedConfig.TokenExpireHours
+            Write-Verbose "  TokenExpireHours: $($Script:TokenExpireHours)"
+        }
+    }
+} catch {
+    Write-Verbose "Configuration file not loaded: $_"
 }
 
 # Export functions from Public folder (if any)

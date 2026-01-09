@@ -27,8 +27,13 @@ function Connect-DattoRMM {
         when it expires during subsequent API calls.
 
     .PARAMETER Platform
-        Specifies the Datto RMM platform region to connect to. Default is 'Pinotage'.
+        Specifies the Datto RMM platform region to connect to.
         Valid values: Pinotage, Concord, Vidal, Merlot, Zinfandel, Syrah
+        
+        If not specified, uses the default platform configured via Set-RMMConfig.
+        If no default is configured, falls back to 'Pinotage'.
+        
+        To set a persistent default platform: Set-RMMConfig -DefaultPlatform Merlot
 
     .EXAMPLE
         $Secret = Read-Host -Prompt "Enter API Secret" -AsSecureString
@@ -75,8 +80,17 @@ function Connect-DattoRMM {
 
         On module removal, the authentication information is cleared from memory.
 
+        Default Platform and Page Size:
+        You can configure persistent defaults using Set-RMMConfig to avoid specifying them each time:
+        - Set-RMMConfig -DefaultPlatform Merlot
+        - Set-RMMConfig -DefaultPageSize 100
+        
+        The configured default page size will be used if it's within your account's maximum limit.
+        You can still override these defaults by explicitly specifying the -Platform parameter.
+
     .LINK
         Disconnect-DattoRMM
+        Set-RMMConfig
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'Key')]
@@ -110,8 +124,26 @@ function Connect-DattoRMM {
             Mandatory = $false
         )]
         [RMMPlatform]
-        $Platform = [RMMPlatform]::Pinotage
+        $Platform
     )
+
+    # Determine platform to use
+    if (-not $PSBoundParameters.ContainsKey('Platform')) {
+
+        # User didn't specify platform, check for configured default
+        if ($Script:ConfigDefaultPlatform) {
+
+            $Platform = $Script:ConfigDefaultPlatform
+            Write-Verbose "Using configured default platform: $Platform"
+
+        } else {
+
+            # Fall back to Pinotage
+            $Platform = [RMMPlatform]::Pinotage
+            Write-Verbose "Using default platform: $Platform"
+
+        }
+    }
 
     # Build the request body
     $APIServer = "$($Platform.ToString().ToLower())-api"
@@ -184,9 +216,15 @@ function Connect-DattoRMM {
             $AccountMaxPageSize = (Invoke-APIMethod @PageSizeMethod).max
             $Script:MaxPageSize = $AccountMaxPageSize
 
-            # If PageSize was previously set and is within limits, keep it
-            if ($Script:PageSize -and $Script:PageSize -le $AccountMaxPageSize) {
+            # Check if there's a configured default page size
+            if ($Script:ConfigDefaultPageSize -and $Script:ConfigDefaultPageSize -le $AccountMaxPageSize) {
 
+                $Script:PageSize = $Script:ConfigDefaultPageSize
+                Write-Verbose "Set page size to configured default: $($Script:PageSize)."
+
+            } elseif ($Script:PageSize -and $Script:PageSize -le $AccountMaxPageSize) {
+
+                # If PageSize was previously set in this session and is within limits, keep it
                 Write-Verbose "Retaining previously set page size: $($Script:PageSize)."
 
             } else {
