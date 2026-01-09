@@ -43,6 +43,11 @@ function Get-RMMAlert {
         Gets all devices matching filter 12345 and retrieves their open alerts.
 
     .EXAMPLE
+        Get-RMMDevice -Name 'Servers' | Get-RMMDevice | Get-RMMAlert -Status Open
+
+        Gets all devices matching filter 'Servers' and retrieves their open alerts.
+
+    .EXAMPLE
         Get-RMMSite -Name "Contoso" | Get-RMMAlert -Status Resolved
 
         Gets the site named "Contoso" and retrieves all resolved alerts for that site.
