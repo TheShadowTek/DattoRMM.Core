@@ -84,32 +84,61 @@ function Remove-RMMVariable {
 
         # Determine scope and set working values
         if ($Variable) {
+
             $VariableId = $Variable.Id
             $Scope = $Variable.Scope
             $VariableName = $Variable.Name
             
             if ($Scope -eq 'Site') {
+
                 $SiteUid = $Variable.SiteUid
+
             }
+
         } else {
+
             # When using VariableId parameter, determine scope by presence of SiteUid
-            $Scope = if ($PSBoundParameters.ContainsKey('SiteUid')) { 'Site' } else { 'Global' }
-            $VariableName = "variable $VariableId"
+            if ($PSBoundParameters.ContainsKey('SiteUid')) {
+
+                $Scope = 'Site'
+
+            } else {
+
+                $Scope = 'Global'
+
+            }
+
+            $VariableName = "{$VariableId}"
+
         }
 
-        $Target = if ($Scope -eq 'Site') { "site variable '$VariableName' (ID: $VariableId) from site $SiteUid" } else { "account variable '$VariableName' (ID: $VariableId)" }
+        if ($Scope -eq 'Site') {
 
-        if (-not $PSCmdlet.ShouldProcess("Delete $Target", "Delete variable", "Deleting variable")) {
+            $Target = "site variable '$VariableName' (ID: $VariableId) from site $SiteUid"
+
+        } else {
+
+            $Target = "account variable '$VariableName' (ID: $VariableId)"
+
+        }
+
+        if (-not $PSCmdlet.ShouldProcess($Target, "Delete variable permanently")) {
+
             return
+
         }
 
         Write-Debug "Deleting RMM variable $VariableId at $Scope scope"
 
         # Determine API path based on scope
-        $Path = if ($Scope -eq 'Site') {
-            "site/$SiteUid/variable/$VariableId"
+        if ($Scope -eq 'Site') {
+
+            $Path = "site/$SiteUid/variable/$VariableId"
+
         } else {
-            "account/variable/$VariableId"
+
+            $Path = "account/variable/$VariableId"
+
         }
 
         $APIMethod = @{
@@ -118,5 +147,6 @@ function Remove-RMMVariable {
         }
 
         Invoke-APIMethod @APIMethod | Out-Null
+
     }
 }
