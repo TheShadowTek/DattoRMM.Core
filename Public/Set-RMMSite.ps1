@@ -89,7 +89,13 @@ function Set-RMMSite {
         [guid]
         $SiteUid,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(
+            ParameterSetName = 'ByUid',
+            Mandatory = $true
+        )]
+        [Parameter(
+            ParameterSetName = 'BySiteObject'
+        )]
         [string]
         $Name,
 
@@ -120,6 +126,27 @@ function Set-RMMSite {
 
             $SiteUid = $Site.Uid
 
+            # Use existing values if not specified to prevent wiping them
+            $ParamsToCheck = @('Name', 'Description', 'Notes', 'OnDemand', 'SplashtopAutoInstall')
+
+            foreach ($ParamName in $ParamsToCheck) {
+
+                if ($PSBoundParameters.ContainsKey($ParamName)) {
+
+                    continue
+
+                }
+
+                switch ($ParamName) {
+
+                    'Name' {$Name = $Site.Name}
+                    'Description' {$Description = $Site.Description}
+                    'Notes' {$Notes = $Site.Notes}
+                    'OnDemand' {$OnDemand = $Site.OnDemand}
+                    'SplashtopAutoInstall' {$SplashtopAutoInstall = $Site.SplashtopAutoInstall}
+                    
+                }
+            }
         }
 
         if (-not $Force -and -not $PSCmdlet.ShouldProcess("Site $SiteUid", "Update site properties")) {
@@ -130,32 +157,43 @@ function Set-RMMSite {
 
         Write-Debug "Updating RMM site: $SiteUid"
 
-        # Build request body
+        # Build request body - always include name
         $Body = @{
             name = $Name
         }
 
-        if ($PSBoundParameters.ContainsKey('Description')) {
+        # Add description if it has a value
+        if ($PSBoundParameters.ContainsKey('Description') -or ($Site -and $Description)) {
 
             $Body.description = $Description
 
         }
 
-        if ($PSBoundParameters.ContainsKey('Notes')) {
+        # Add notes if it has a value
+        if ($PSBoundParameters.ContainsKey('Notes') -or ($Site -and $Notes)) {
 
             $Body.notes = $Notes
 
         }
 
-        if ($OnDemand.IsPresent) {
+        # Handle boolean fields - use .IsPresent for explicit params, direct value for piped site
+        if ($PSBoundParameters.ContainsKey('OnDemand')) {
 
-            $Body.onDemand = $true
+            $Body.onDemand = $OnDemand.IsPresent
+
+        } elseif ($Site -and $null -ne $OnDemand) {
+
+            $Body.onDemand = [bool]$OnDemand
 
         }
 
-        if ($SplashtopAutoInstall.IsPresent) {
+        if ($PSBoundParameters.ContainsKey('SplashtopAutoInstall')) {
 
-            $Body.splashtopAutoInstall = $true
+            $Body.splashtopAutoInstall = $SplashtopAutoInstall.IsPresent
+
+        } elseif ($Site -and $null -ne $SplashtopAutoInstall) {
+
+            $Body.splashtopAutoInstall = [bool]$SplashtopAutoInstall
 
         }
 
