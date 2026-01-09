@@ -182,19 +182,22 @@ function Get-RMMVariable {
                 {$_ -in 'SiteAll','SiteAllUid'} {
 
                     Write-Debug "Getting all variables for site UID: $SiteUid"
-                    Invoke-APIMethod @APIMethod | ForEach-Object {
+                    Invoke-APIMethod @APIMethod | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)}
 
-                        [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
-
-                    }
                 }
 
                 {$_ -in 'SiteById','SiteUidById'} {
 
                     Write-Debug "Getting site variable by ID: $Id for site UID: $SiteUid"
-                    Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
+                    $Results = Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id}
+                    
+                    if ($Results) {
 
-                        [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
+                        $Results | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)}
+
+                    } else {
+
+                        Write-Debug "No site variable found with ID: $Id for site UID: $SiteUid"
 
                     }
                 }
@@ -202,12 +205,19 @@ function Get-RMMVariable {
                 {$_ -in 'SiteByName','SiteUidByName'} {
 
                     Write-Debug "Getting site variable by Name: $Name for site UID: $SiteUid"
-                    Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
+                    $Results = Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name}
+                    
+                    if ($Results) {
 
-                        [DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
+                        $Results | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)}
+
+                    } else {
+
+                        Write-Debug "No site variable found with Name: $Name for site UID: $SiteUid"
 
                     }
                 }
+
             }
 
         } else {
@@ -223,33 +233,43 @@ function Get-RMMVariable {
 
                 'GlobalAll' {
 
-                    Invoke-APIMethod @APIMethod | ForEach-Object {
+                    Write-Debug "Getting all global variables"
+                    Invoke-APIMethod @APIMethod | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Global', $null)}
 
-                        Write-Debug "Getting all global variables"
-                        [DRMMVariable]::FromAPIMethod($_, 'Global', $null)
-
-                    }
                 }
 
                 'GlobalById' {
 
-                    Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
+                    Write-Debug "Getting global variable by ID: $Id"
+                    $Results = Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id}
+                    
+                    if ($Results) {
 
-                        Write-Debug "Getting global variable by ID: $Id"
-                        [DRMMVariable]::FromAPIMethod($_, 'Global', $null)
+                        $Results | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Global', $null)}
+
+                    } else {
+
+                        Write-Debug "No global variable found with ID: $Id"
 
                     }
                 }
 
                 'GlobalByName' {
 
-                    Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
+                    Write-Debug "Getting global variable by Name: $Name"
+                    $Results = Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name}
+                    
+                    if ($Results) {
 
-                        Write-Debug "Getting global variable by Name: $Name"
-                        [DRMMVariable]::FromAPIMethod($_, 'Global', $null)
+                        $Results | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Global', $null)}
+
+                    } else {
+
+                        Write-Debug "No global variable found with Name: $Name"
 
                     }
                 }
+
             }
         }
     }
