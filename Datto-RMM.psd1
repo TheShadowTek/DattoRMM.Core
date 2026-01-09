@@ -4,7 +4,7 @@
 RootModule = 'Datto-RMM.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.2.8'
+ModuleVersion = '0.2.9'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -92,7 +92,8 @@ FunctionsToExport = @(
     'Set-RMMConfig',
     'Set-RMMPageSize',
     'Set-RMMSite',
-    'Set-RMMSiteProxy'
+    'Set-RMMSiteProxy',
+    'Set-RMMVariable'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
