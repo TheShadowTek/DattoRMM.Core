@@ -198,7 +198,7 @@ function Get-RMMAlert {
                 Write-Debug "Getting device alerts from $($Method.Path)"
                 Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                    [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $null)
+                    [DRMMAlert]::FromAPIMethod($_, $null)
 
                 }
             }
@@ -257,7 +257,7 @@ function Get-RMMAlert {
                 Write-Debug "Getting site alerts from $($Method.Path)"
                 Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                    [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $SiteUid)
+                    [DRMMAlert]::FromAPIMethod($_, $SiteUid)
 
                 }
             }
@@ -314,7 +314,7 @@ function Get-RMMAlert {
                         Write-Debug "Getting global alerts from $($Method.Path)"
                         Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                            [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $null)
+                            [DRMMAlert]::FromAPIMethod($_, $null)
 
                         }
                     }
@@ -324,7 +324,7 @@ function Get-RMMAlert {
                         Write-Debug "Getting global alert by UID: $AlertUid from $($Method.Path)"
                         Invoke-APIMethod @APIMethod | Where-Object {$_.alertUid -eq $AlertUid} | ForEach-Object {
 
-                            [DRMMAlert]::FromAPIMethod($_, $Method.Scope, $null)
+                            [DRMMAlert]::FromAPIMethod($_, $null)
 
                         }
                     }

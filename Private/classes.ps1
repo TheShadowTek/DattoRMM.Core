@@ -501,14 +501,13 @@ class DRMMAlert : DRMMObject {
     [DRMMAlertSourceInfo]$AlertSourceInfo
     [DRMMResponseAction[]]$ResponseActions
     [Nullable[int]]$AutoresolveMins
-    [string]$Scope
     [Nullable[guid]]$SiteUid
 
     DRMMAlert() : base() {
 
     }
 
-    static [DRMMAlert] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
+    static [DRMMAlert] FromAPIMethod([pscustomobject]$Response, [Nullable[guid]]$SiteUid) {
 
         if ($null -eq $Response) {
 
@@ -525,7 +524,6 @@ class DRMMAlert : DRMMObject {
         $Alert.Muted = $Response.muted
         $Alert.TicketNumber = $Response.ticketNumber
         $Alert.AutoresolveMins = $Response.autoresolveMins
-        $Alert.Scope = $Scope
         $Alert.SiteUid = $SiteUid
 
         $Alert.AlertMonitorInfo = [DRMMAlertMonitorInfo]::FromAPIMethod($Response.alertMonitorInfo)
@@ -552,17 +550,27 @@ class DRMMAlert : DRMMObject {
 
     }
 
-    [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
-    [bool] IsSite()   { return ($this.Scope -eq 'Site') }
-    [bool] IsOpen()   { return (-not $this.Resolved) }
-    [bool] IsCritical() { return ($this.Priority -eq 'Critical') }
-    [bool] IsHigh()   { return ($this.Priority -eq 'High') }
+    [bool] IsOpen() {return (-not $this.Resolved)}
+    [bool] IsCritical() {return ($this.Priority -eq 'Critical')}
+    [bool] IsHigh() {return ($this.Priority -eq 'High')}
+
+    [void] Resolve() {
+        
+        if (-not $this.AlertUid) {
+
+            throw "Alert does not have a valid AlertUid"
+            
+        }
+
+        Resolve-RMMAlert -AlertUid $this.AlertUid
+
+    }
 
     [string] GetSummary() {
 
-        $StatusValue = if ($this.Resolved) { 'Resolved' } else { 'Open' }
-        $MutedValue = if ($this.Muted) { ' (Muted)' } else { '' }
-        $DeviceName = if ($this.AlertSourceInfo.DeviceName) { $this.AlertSourceInfo.DeviceName } else { 'Unknown' }
+        $StatusValue = if ($this.Resolved) {'Resolved'} else {'Open'}
+        $MutedValue = if ($this.Muted) {' (Muted)'} else {''}
+        $DeviceName = if ($this.AlertSourceInfo.DeviceName) {$this.AlertSourceInfo.DeviceName} else {'Unknown'}
 
         return "[$StatusValue$MutedValue] $($this.Priority) - $DeviceName"
 
