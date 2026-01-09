@@ -19,7 +19,7 @@ function Set-RMMConfig {
 
     .PARAMETER LowUtilCheckInterval
         Sets how often (in requests) to check the API rate limit when utilization is low (<=50%).
-        Valid range: 1-100. Default is 50.
+        Valid range: 10-100. Default is 50.
         Higher values reduce overhead but may be less responsive to rate limit changes.
         Lower values check more frequently for better rate limit awareness.
 
@@ -73,7 +73,7 @@ function Set-RMMConfig {
         $DefaultPageSize,
 
         [Parameter(Mandatory = $false)]
-        [ValidateRange(1, 100)]
+        [ValidateRange(10, 100)]
         [int]
         $LowUtilCheckInterval,
 
