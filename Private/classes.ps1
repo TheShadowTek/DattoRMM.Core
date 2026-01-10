@@ -3775,6 +3775,54 @@ class DRMMSite : DRMMObject {
         return Get-RMMDeviceFilter -SiteUid $this.Uid -Name $Name
 
     }
+
+    [DRMMSiteSettings] GetSettings() {
+
+        if (-not (Get-Command -Name Get-RMMSiteSettings -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMSiteSettings -SiteUid $this.Uid
+
+    }
+
+    [DRMMSiteSettings] SetProxy([string]$Host, [int]$Port, [string]$Type) {
+
+        if (-not (Get-Command -Name Set-RMMSiteProxy -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Set-RMMSiteProxy -SiteUid $this.Uid -Host $Host -Port $Port -Type $Type -Force
+
+    }
+
+    [DRMMSiteSettings] SetProxy([string]$Host, [int]$Port, [string]$Type, [string]$Username, [SecureString]$Password) {
+
+        if (-not (Get-Command -Name Set-RMMSiteProxy -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Set-RMMSiteProxy -SiteUid $this.Uid -Host $Host -Port $Port -Type $Type -Username $Username -Password $Password -Force
+
+    }
+
+    [DRMMSiteSettings] RemoveProxy() {
+
+        if (-not (Get-Command -Name Remove-RMMSiteProxy -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Remove-RMMSiteProxy -SiteUid $this.Uid -Force
+
+    }
 }
 
 class DRMMSiteGeneralSettings : DRMMObject {
