@@ -39,9 +39,11 @@ function Set-RMMDeviceWarranty {
         Clears the warranty date without confirmation.
 
     .EXAMPLE
-        Get-RMMDevice -FilterId 100 | Set-RMMDeviceWarranty -WarrantyDate (Get-Date "2026-06-30")
+        $Site = Get-RMMSite -Name "Chicago Office"
+        PS > $Filter = Get-RMMDeviceFilter -SiteUid $Site.Uid | Where-Object {$_.Name -eq "Dell Latitude 7490"}
+        PS > Get-RMMDevice -FilterId $Filter.FilterId | Set-RMMDeviceWarranty -WarrantyDate (Get-Date "2026-06-30")
 
-        Sets the warranty date for all devices in a filter.
+        Sets the warranty date for all Dell Latitude 7490 laptops at the Chicago Office site.
 
     .EXAMPLE
         # Bulk update warranties from a CSV file
@@ -56,16 +58,23 @@ function Set-RMMDeviceWarranty {
         Imports warranty dates from a CSV and updates devices in bulk.
 
     .EXAMPLE
-        # Set warranty dates based on purchase date
-        $Devices = Get-RMMDevice -FilterId 200
-        $Devices | ForEach-Object {
-            if ($_.PurchaseDate) {
-                $WarrantyExpiry = $_.PurchaseDate.AddYears(3)
-                $_ | Set-RMMDeviceWarranty -WarrantyDate $WarrantyExpiry
+        # Set warranty dates from CSV using serial number matching
+        $Warranties = Import-Csv -Path "warranty_imports.csv"
+        # CSV format: SerialNumber,WarrantyDate
+        # Example row: ABC123456,2028-03-15
+
+        $Site = Get-RMMSite -Name "Boston Office"
+        $Devices = Get-RMMDevice -SiteUid $Site.Uid
+
+        foreach ($Item in $Warranties) {
+            $Device = $Devices | Where-Object {$_.SerialNumber -eq $Item.SerialNumber}
+            if ($Device) {
+                $Device | Set-RMMDeviceWarranty -WarrantyDate ([datetime]$Item.WarrantyDate) -Force
+                Write-Host "Updated warranty for $($Device.Hostname) (SN: $($Item.SerialNumber))"
             }
         }
 
-        Calculates 3-year warranty dates based on device purchase dates.
+        Imports warranties from a CSV and matches devices by serial number at a specific site.
 
     .INPUTS
         DRMMDevice. You can pipe device objects from Get-RMMDevice.
@@ -120,8 +129,8 @@ function Set-RMMDeviceWarranty {
 
             $DeviceUid = $Device.Uid
             $DeviceName = $Device.Hostname
-        }
-        else {
+
+        } else {
 
             $DeviceName = "device $DeviceUid"
         }
@@ -131,8 +140,8 @@ function Set-RMMDeviceWarranty {
         if ($null -eq $WarrantyDate) {
 
             $Action = "Clear warranty date"
-        }
-        else {
+
+        } else {
 
             $Action = "Set warranty date to $($WarrantyDate.ToString('yyyy-MM-dd'))"
         }
@@ -140,6 +149,7 @@ function Set-RMMDeviceWarranty {
         if (-not $PSCmdlet.ShouldProcess($Target, $Action)) {
 
             return
+
         }
 
         Write-Debug "Setting warranty date for device $DeviceUid"
@@ -150,11 +160,12 @@ function Set-RMMDeviceWarranty {
         if ($null -eq $WarrantyDate) {
 
             $Body.warrantyDate = $null
-        }
-        else {
+
+        } else {
 
             # Format as ISO 8601 date (yyyy-MM-dd)
             $Body.warrantyDate = $WarrantyDate.ToString('yyyy-MM-dd')
+
         }
 
         $APIMethod = @{
@@ -164,5 +175,6 @@ function Set-RMMDeviceWarranty {
         }
 
         Invoke-APIMethod @APIMethod | Out-Null
+        
     }
 }
