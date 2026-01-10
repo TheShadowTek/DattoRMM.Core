@@ -4008,7 +4008,7 @@ class DRMMSite : DRMMObject {
 
     }
 
-    [DRMMSiteSettings] SetProxy([string]$Host, [int]$Port, [string]$Type) {
+    [DRMMSiteSettings] SetProxy([string]$ProxyHost, [int]$Port, [string]$Type) {
 
         if (-not (Get-Command -Name Set-RMMSiteProxy -ErrorAction SilentlyContinue)) {
 
@@ -4016,11 +4016,11 @@ class DRMMSite : DRMMObject {
 
         }
 
-        return Set-RMMSiteProxy -SiteUid $this.Uid -Host $Host -Port $Port -Type $Type -Force
+        return Set-RMMSiteProxy -SiteUid $this.Uid -Host $ProxyHost -Port $Port -Type $Type -Force
 
     }
 
-    [DRMMSiteSettings] SetProxy([string]$Host, [int]$Port, [string]$Type, [string]$Username, [SecureString]$Password) {
+    [DRMMSiteSettings] SetProxy([string]$ProxyHost, [int]$Port, [string]$Type, [string]$Username, [SecureString]$Password) {
 
         if (-not (Get-Command -Name Set-RMMSiteProxy -ErrorAction SilentlyContinue)) {
 
@@ -4028,7 +4028,7 @@ class DRMMSite : DRMMObject {
 
         }
 
-        return Set-RMMSiteProxy -SiteUid $this.Uid -Host $Host -Port $Port -Type $Type -Username $Username -Password $Password -Force
+        return Set-RMMSiteProxy -SiteUid $this.Uid -Host $ProxyHost -Port $Port -Type $Type -Username $Username -Password $Password -Force
 
     }
 
