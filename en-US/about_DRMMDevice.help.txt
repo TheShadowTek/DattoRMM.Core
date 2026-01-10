@@ -124,19 +124,40 @@ METHODS
             $config = $device.GetUdfAsJson(5)
             Write-Host "Backup server: $($config.BackupServer)"
 
-    GetUdfAsCsv([int]$UdfNumber, [string]$Delimiter, [string[]]$ColumnHeaders)
-        Parses a delimited UDF as CSV and returns a PSCustomObject.
+    GetUdfAsCsv([int]$UdfNumber, [string[]]$Headers)
+        Parses a UDF containing delimited data (single row, max 255 chars).
+        Uses comma as the default delimiter.
         
         Parameters:
-            $UdfNumber     - UDF number (1-30)
-            $Delimiter     - Delimiter character
-            $ColumnHeaders - Array of column names
+            $UdfNumber - UDF number (1-30)
+            $Headers   - Column names for the delimited values
         
         Returns: [pscustomobject]
         
         Example:
+            # Parse comma-delimited UDF
             $device = Get-RMMDevice -Hostname "SERVER01"
-            $data = $device.GetUdfAsCsv(10, '|', @('Name', 'Value', 'Status'))
+            $headers = @('Name', 'Value', 'Status')
+            $data = $device.GetUdfAsCsv(10, $headers)
+            Write-Host "$($data.Name): $($data.Value)"
+
+    GetUdfAsCsv([int]$UdfNumber, [string]$Delimiter, [string[]]$Headers)
+        Parses a UDF containing delimited data (single row, max 255 chars)
+        with a custom delimiter.
+        
+        Parameters:
+            $UdfNumber - UDF number (1-30)
+            $Delimiter - Delimiter character (e.g., ',', '|', ';')
+            $Headers   - Column names for the delimited values
+        
+        Returns: [pscustomobject]
+        
+        Example:
+            # Parse pipe-delimited UDF
+            $device = Get-RMMDevice -Hostname "SERVER01"
+            $headers = @('Hostname', 'IPAddress', 'Status')
+            $data = $device.GetUdfAsCsv(10, '|', $headers)
+            Write-Host "$($data.Hostname) at $($data.IPAddress)"
 
     SetUDF([hashtable]$UDFFields)
         Updates one or more UDF fields for the device.

@@ -1589,12 +1589,12 @@ class DRMMComponent : DRMMObject {
 
     [string] GetSummary() {
 
-        $Name = if ($this.Name) {$this.Name} else {'Unknown Component'}
+        $ComponentName = if ($this.Name) {$this.Name} else {'Unknown Component'}
         $VarCount = if ($this.Variables) {$this.Variables.Count} else {0}
         $CredText = if ($this.CredentialsRequired) {' [Credentials Required]'} else {''}
         $Category = if ($this.CategoryCode) {" - $($this.CategoryCode)"} else {''}
         
-        return "$Name$CredText - $VarCount variable(s)$Category"
+        return "$ComponentName$CredText - $VarCount variable(s)$Category"
 
     }
 }
@@ -1824,7 +1824,14 @@ class DRMMDevice : DRMMObject {
         }
     }
 
-    [pscustomobject] GetUdfAsCsv([int]$UdfNumber, [string]$Delimiter, [string[]]$ColumnHeaders) {
+    [pscustomobject] GetUdfAsCsv([int]$UdfNumber, [string[]]$Headers) {
+
+        # Default delimiter: comma
+        return $this.GetUdfAsCsv($UdfNumber, ',', $Headers)
+
+    }
+
+    [pscustomobject] GetUdfAsCsv([int]$UdfNumber, [string]$Delimiter, [string[]]$Headers) {
 
         if ($UdfNumber -lt 1 -or $UdfNumber -gt 30) {
 
@@ -1838,9 +1845,9 @@ class DRMMDevice : DRMMObject {
 
         }
 
-        if ($null -eq $ColumnHeaders -or $ColumnHeaders.Count -eq 0) {
+        if ($null -eq $Headers -or $Headers.Count -eq 0) {
 
-            throw "ColumnHeaders must contain at least one column name"
+            throw "Headers must contain at least one column name"
 
         }
 
@@ -1853,55 +1860,18 @@ class DRMMDevice : DRMMObject {
 
         }
 
-        $Values = $UdfValue -split [regex]::Escape($Delimiter)
-        $Result = [ordered]@{}
+        try {
 
-        for ($i = 0; $i -lt $ColumnHeaders.Count; $i++) {
+            # Parse single row of delimited data with custom headers
+            $CsvText = $UdfValue
+            return (ConvertFrom-Csv -InputObject $CsvText -Delimiter $Delimiter -Header $Headers)
 
-            if ($i -lt $Values.Count) {
+        } catch {
 
-                $Value = $Values[$i]
-                
-                # Attempt automatic type conversion
-                $TypedValue = $Value
+            Write-Error "Failed to parse UDF $UdfNumber as delimited data: $_"
+            return $null
 
-                if (-not [string]::IsNullOrWhiteSpace($Value)) {
-
-                    # Try converting to number
-                    if ($Value -match '^\-?\d+$') {
-
-                        try {
-
-                            $TypedValue = [int]$Value
-
-                        } catch {
-
-                            # If too large for int, use long
-                            $TypedValue = [long]$Value
-
-                        }
-
-                    } elseif ($Value -match '^\-?\d+\.\d+$') {
-
-                        $TypedValue = [double]$Value
-
-                    } elseif ($Value -eq 'true' -or $Value -eq 'false') {
-
-                        $TypedValue = [bool]::Parse($Value)
-
-                    }
-                }
-
-                $Result[$ColumnHeaders[$i]] = $TypedValue
-
-            } else {
-
-                $Result[$ColumnHeaders[$i]] = $null
-
-            }
         }
-
-        return [pscustomobject]$Result
 
     }
 
@@ -3333,9 +3303,9 @@ class DRMMJob : DRMMObject {
 
         }
 
-        $Name = if ($this.Name) {$this.Name} else {'Unknown Job'}
+        $JobName = if ($this.Name) {$this.Name} else {'Unknown Job'}
 
-        return "$Name - $($this.Status)$Age"
+        return "$JobName - $($this.Status)$Age"
 
     }
 

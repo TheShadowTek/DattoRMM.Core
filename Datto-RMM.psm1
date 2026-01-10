@@ -21,12 +21,17 @@ $Script:RMMThrottle = @{
     Throttle = $false
 }
 
-# Dot-source all .ps1 files in Private folder
-Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 -Recurse | ForEach-Object {
+# Dot-source classes.ps1 first (enums and classes must be loaded before other files)
+. $PSScriptRoot\Private\classes.ps1
 
-    . $_.FullName
+# Dot-source remaining .ps1 files in Private folder
+Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 -Recurse | 
+    Where-Object { $_.Name -ne 'classes.ps1' } |
+    ForEach-Object {
 
-}
+        . $_.FullName
+
+    }
 
 # Dot-source all .ps1 files in Public folder (if exists)
 if (Test-Path $PSScriptRoot\Public) {
@@ -45,7 +50,7 @@ try {
         Write-Verbose "Loading configuration from file..."
 
         if ($LoadedConfig.PSObject.Properties.Name -contains 'DefaultPlatform') {
-            $Script:ConfigDefaultPlatform = [RMMPlatform]$LoadedConfig.DefaultPlatform
+            $Script:ConfigDefaultPlatform = $LoadedConfig.DefaultPlatform
             Write-Verbose "  DefaultPlatform: $($Script:ConfigDefaultPlatform)"
         }
 
