@@ -57,6 +57,15 @@ function Get-RMMComponent {
     .NOTES
         This function requires an active connection to the Datto RMM API.
         Use Connect-DattoRMM to authenticate before calling this function.
+
+    .LINK
+        about_DRMMComponent
+
+    .LINK
+        New-RMMQuickJob
+
+    .LINK
+        Get-RMMJob
     #>
     [CmdletBinding()]
     param ()

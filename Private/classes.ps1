@@ -1589,9 +1589,12 @@ class DRMMComponent : DRMMObject {
 
     [string] GetSummary() {
 
+        $Name = if ($this.Name) {$this.Name} else {'Unknown Component'}
         $VarCount = if ($this.Variables) {$this.Variables.Count} else {0}
         $CredText = if ($this.CredentialsRequired) {' [Credentials Required]'} else {''}
-        return "$($this.Name)$CredText - $VarCount variable(s) - $($this.CategoryCode)"
+        $Category = if ($this.CategoryCode) {" - $($this.CategoryCode)"} else {''}
+        
+        return "$Name$CredText - $VarCount variable(s)$Category"
 
     }
 }
