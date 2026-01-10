@@ -3701,6 +3701,55 @@ class DRMMSite : DRMMObject {
         return 0
 
     }
+
+    # Variable Management Methods
+    [DRMMVariable[]] GetVariables() {
+
+        if (-not (Get-Command -Name Get-RMMVariable -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMVariable -SiteUid $this.Uid
+
+    }
+
+    [DRMMVariable] GetVariable([string]$Name) {
+
+        if (-not (Get-Command -Name Get-RMMVariable -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMVariable -SiteUid $this.Uid -Name $Name
+
+    }
+
+    [DRMMVariable] NewVariable([string]$Name, [string]$Value) {
+
+        if (-not (Get-Command -Name New-RMMVariable -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return New-RMMVariable -SiteUid $this.Uid -Name $Name -Value $Value -Force
+
+    }
+
+    [DRMMVariable] NewVariable([string]$Name, [string]$Value, [bool]$Masked) {
+
+        if (-not (Get-Command -Name New-RMMVariable -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return New-RMMVariable -SiteUid $this.Uid -Name $Name -Value $Value -Masked:$Masked -Force
+
+    }
 }
 
 class DRMMSiteGeneralSettings : DRMMObject {
