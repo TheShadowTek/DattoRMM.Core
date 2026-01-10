@@ -150,7 +150,6 @@ function New-RMMVariable {
         }
 
         $Response = Invoke-APIMethod @APIMethod
-        $Response | Out-String | Write-Debug
 
         # API doesn't return the created variable, so fetch it by name
         $GetParams = @{

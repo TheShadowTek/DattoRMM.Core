@@ -41,7 +41,7 @@ function Set-RMMSiteProxy {
         Configures an HTTP proxy without authentication for the specified site.
 
     .EXAMPLE
-        $ProxyPass = ConvertTo-SecureString "password123" -AsPlainText -Force
+        $ProxyPass = Read-Host -Prompt "Enter proxy password" -AsSecureString
         Get-RMMSite -Name "Branch Office" | Set-RMMSiteProxy -ProxyHost "proxy.branch.com" -Port 3128 -Type http -Username "proxyuser" -Password $ProxyPass
 
         Configures an HTTP proxy with authentication via pipeline.

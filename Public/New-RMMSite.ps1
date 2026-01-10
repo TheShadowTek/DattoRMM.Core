@@ -51,7 +51,7 @@ function New-RMMSite {
         Creates an on-demand site with a description.
 
     .EXAMPLE
-        $ProxyPass = ConvertTo-SecureString "password123" -AsPlainText -Force
+        $ProxyPass = Read-Host -Prompt "Enter proxy password" -AsSecureString
         New-RMMSite -Name "Remote Site" -ProxyHost "proxy.contoso.com" -ProxyPort 8080 -ProxyType http -ProxyUsername "proxyuser" -ProxyPassword $ProxyPass
 
         Creates a site with HTTP proxy settings configured.
