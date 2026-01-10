@@ -71,6 +71,51 @@ function New-RMMQuickJob {
 
         Gets a component, checks its required input variables, then creates jobs on multiple devices.
 
+    .EXAMPLE
+        # Security incident response: Disable compromised administrator account across all domain controllers
+        # This example demonstrates creating and monitoring mission-critical jobs with continuous status tracking
+
+        # Get the device filter and component
+        $Filter = Get-RMMDeviceFilter | Where-Object {$_.Name -eq 'All Site PDCs'}
+        $Component = Get-RMMComponent | Where-Object {$_.Name -eq 'Disable AD User'}
+
+        # Define the compromised account to disable
+        $CompromisedUser = 'CONTOSO\admin.compromised'
+
+        # Create quick jobs on all domain controllers
+        Write-Host "Creating disable account jobs on all domain controllers..." -ForegroundColor Yellow
+        $Jobs = Get-RMMDevice -FilterId $Filter.FilterId | New-RMMQuickJob `
+            -JobName "SECURITY: Disable $CompromisedUser" `
+            -Component $Component `
+            -Variables @{username = $CompromisedUser} `
+            -Force
+
+        Write-Host "Started $($Jobs.Count) job(s). Monitoring progress..." -ForegroundColor Yellow
+
+        # Monitor jobs until all complete
+        do {
+            Start-Sleep -Seconds 30
+
+            # Refresh job status
+            $JobStatus = $Jobs | ForEach-Object {Get-RMMJob -JobUid $_.Uid}
+
+            # Group by status and display counts
+            $StatusGroups = $JobStatus | Group-Object -Property Status
+            $StatusSummary = $StatusGroups | ForEach-Object {"$($_.Name): $($_.Count)"}
+            Write-Host "Job Status - $($StatusSummary -join ' | ')" -ForegroundColor Cyan
+
+        } while ($JobStatus | Where-Object {$_.Status -eq 'active'})
+
+        Write-Host "All jobs completed!" -ForegroundColor Green
+
+        # Display final summary
+        $StatusGroups | ForEach-Object {
+            Write-Host "$($_.Name): $($_.Count) job(s)" -ForegroundColor $(if ($_.Name -eq 'completed') {'Green'} else {'Red'})
+        }
+
+        Jobs can have status values of 'active' (still running) or 'completed' (finished).
+        This pattern ensures all domain controllers have processed the account disable before proceeding.
+
     .INPUTS
         DRMMDevice. You can pipe device objects from Get-RMMDevice.
         You can also pipe objects with DeviceUid or Uid properties.
@@ -159,8 +204,8 @@ function New-RMMQuickJob {
 
             $DeviceUid = $Device.Uid
             $DeviceName = $Device.Hostname
-        }
-        else {
+
+        } else {
 
             $DeviceName = "device $DeviceUid"
         }
@@ -169,8 +214,8 @@ function New-RMMQuickJob {
 
             $ComponentUid = $Component.Uid
             $ComponentName = $Component.Name
-        }
-        else {
+
+        } else {
 
             $ComponentName = "component $ComponentUid"
         }
@@ -201,8 +246,6 @@ function New-RMMQuickJob {
                     value = $Variables[$key]
                 }
             }
-
-            Write-Debug "Job has $($Variables.Count) variable(s): $($Variables.Keys -join ', ')"
         }
 
         # Build request body
@@ -223,10 +266,11 @@ function New-RMMQuickJob {
         if ($Response -and $Response.job) {
 
             [DRMMJob]::FromAPIMethod($Response.job)
-        }
-        else {
+
+        } else {
 
             Write-Warning "Quick job created but no job details returned from API"
+
         }
     }
 }
