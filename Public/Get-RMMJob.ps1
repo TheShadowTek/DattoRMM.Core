@@ -91,6 +91,24 @@ function Get-RMMJob {
         Use Connect-DattoRMM to authenticate before calling this function.
 
         Job output (stdout/stderr) is typically used for troubleshooting component execution issues.
+
+    .LINK
+        about_DRMMJob
+
+    .LINK
+        New-RMMQuickJob
+
+    .LINK
+        Get-RMMComponent
+
+    .LINK
+        about_DRMMJob
+
+    .LINK
+        New-RMMQuickJob
+
+    .LINK
+        Get-RMMComponent
     #>
     [CmdletBinding(DefaultParameterSetName = 'JobByUid')]
     param (

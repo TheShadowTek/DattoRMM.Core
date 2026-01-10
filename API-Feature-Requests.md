@@ -57,3 +57,55 @@ Additionally, update `GET /v2/account/jobs/{jobUid}` response to include targete
 This enhancement would align Datto RMM with industry best practices from AWS, Azure, and other enterprise platforms that support programmatic credential rotation.
 
 ---
+
+## Job Control Operations (Stop, Cancel, Rerun)
+**API Endpoint:** N/A - Missing endpoints
+
+**Issue:** The API provides read-only access to job information (`GET /v2/job/{jobUid}`) but lacks any job control operations. Once a job is created and executing, there is no programmatic way to:
+- Stop or cancel a running job
+- Rerun a failed or completed job
+- Modify job execution
+
+This creates operational challenges when jobs hang, run longer than expected, or need to be restarted after failures.
+
+**Requested Enhancement:** Add job control endpoints:
+- `DELETE /v2/job/{jobUid}` or `POST /v2/job/{jobUid}/cancel` - Cancel/stop an active job
+- `POST /v2/job/{jobUid}/rerun` - Rerun a job with the same configuration and variables
+- Optional: `POST /v2/job/{jobUid}/timeout` - Set or update job timeout
+
+**Business Justification:**
+
+**Platform Load Management at Scale:**
+- **Resource Protection**: Jobs that hang or run for extended periods consume agent resources, API connections, and platform capacity. At scale across thousands of devices, stuck jobs create cumulative platform load that degrades performance for all customers. The ability to programmatically identify and stop long-running jobs would significantly reduce unnecessary platform resource consumption.
+
+- **Cost Efficiency**: Extended job execution times increase infrastructure costs for both customers and Datto. Automated job timeout enforcement and cancellation capabilities would improve overall platform efficiency and reduce operational costs at scale.
+
+- **Cascading Failure Prevention**: Hung jobs on one device can trigger monitoring alerts and compound into wider operational issues. Programmatic job control enables automated remediation before issues cascade across the environment.
+
+**Operational Efficiency:**
+- **Automated Incident Response**: When monitoring systems detect jobs running beyond expected thresholds, automated workflows should be able to stop them without manual web portal intervention. This reduces mean time to resolution (MTTR) and prevents resource exhaustion.
+
+- **Bulk Job Management**: Organizations deploying components to hundreds of devices need ability to programmatically stop jobs on a subset if issues are detected, rather than waiting for all executions to timeout naturally.
+
+- **Retry Without Reconfiguration**: Failed jobs should be retryable without recreating the entire job definition and variable payload. A rerun endpoint maintains job history while enabling quick recovery.
+
+**Current Workarounds and Limitations:**
+- Jobs must be manually cancelled through the web UI, requiring human intervention even during automated workflows
+- Failed jobs require complete recreation via new API calls, losing historical context and requiring duplicate variable preparation
+- Long-running jobs must timeout naturally, consuming platform resources until completion
+- No programmatic way to implement job timeout policies across the estate
+
+**Suggested API Design:**
+```http
+DELETE /v2/job/{jobUid}
+POST /v2/job/{jobUid}/cancel
+Response: 204 No Content or job status confirmation
+
+POST /v2/job/{jobUid}/rerun
+Request Body: { "deviceUids": ["guid1", "guid2"] } (optional - rerun on subset)
+Response: New job object(s)
+```
+
+This enhancement would reduce platform load at scale, improve operational automation capabilities, and align with standard job management patterns in enterprise automation platforms.
+
+---

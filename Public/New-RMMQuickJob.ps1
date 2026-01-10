@@ -135,6 +135,15 @@ function New-RMMQuickJob {
     .LINK
         Get-RMMJob
 
+    .LINK
+        about_DRMMJob
+
+    .LINK
+        Get-RMMComponent
+
+    .LINK
+        about_DRMMComponent
+
     .NOTES
         This function requires an active connection to the Datto RMM API.
         Use Connect-DattoRMM to authenticate before calling this function.
