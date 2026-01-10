@@ -3628,20 +3628,6 @@ class DRMMSite : DRMMObject {
 
     }
 
-    [void] Delete() {
-
-        if (-not (Get-Command -Name Invoke-APIMethod -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
-        $Path = "site/$($this.Uid)"
-        Write-Debug "Deleting site $($this.Name) ($($this.Uid)) from Datto RMM: $Path"
-        #Invoke-APIMethod -Method 'DELETE' -Path $Path | Out-Null
-
-    }
-
     [DRMMAlert[]] GetAlerts() {
 
         if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
@@ -3677,6 +3663,43 @@ class DRMMSite : DRMMObject {
             Write-Warning "Portal URL is not available for site $($this.Name)"
 
         }
+    }
+
+    # Device Management Methods
+    [DRMMDevice[]] GetDevices() {
+
+        if (-not (Get-Command -Name Get-RMMDevice -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMDevice -SiteUid $this.Uid
+
+    }
+
+    [DRMMDevice[]] GetDevices([long]$FilterId) {
+
+        if (-not (Get-Command -Name Get-RMMDevice -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMDevice -SiteUid $this.Uid -FilterId $FilterId
+
+    }
+
+    [int] GetDeviceCount() {
+
+        if ($this.DevicesStatus -and $null -ne $this.DevicesStatus.NumberOfDevices) {
+
+            return $this.DevicesStatus.NumberOfDevices
+
+        }
+
+        return 0
+
     }
 }
 
