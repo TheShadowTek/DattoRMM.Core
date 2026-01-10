@@ -2975,6 +2975,20 @@ class DRMMFilter : DRMMObject {
         return "$($this.Name) [$ScopeValue]$TypeValue"
 
     }
+
+    # API Methods
+    [DRMMDevice[]] GetDevices() {
+
+        if ($this.SiteUid) {
+
+            return Get-RMMDevice -SiteUid $this.SiteUid -FilterId $this.FilterId
+
+        } else {
+
+            return Get-RMMDevice -FilterId $this.FilterId
+
+        }
+    }
 }
 
 class DRMMJob : DRMMObject {
