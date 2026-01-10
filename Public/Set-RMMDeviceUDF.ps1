@@ -79,6 +79,12 @@ function Set-RMMDeviceUDF {
         - Document which UDFs are used for what purpose
         - Use UDFs for data that doesn't fit standard device properties
         - Consider using UDFs for: location, department, owner, cost center, project codes, etc.
+
+    .LINK
+        about_DRMMDevice
+
+    .LINK
+        Get-RMMDevice
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByDeviceUidIndividual', SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param (

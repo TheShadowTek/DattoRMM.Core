@@ -123,6 +123,18 @@ function New-RMMQuickJob {
     .OUTPUTS
         DRMMJob. Returns the created job object with its status and unique identifier.
 
+    .LINK
+        about_DRMMDevice
+
+    .LINK
+        Get-RMMDevice
+
+    .LINK
+        Get-RMMComponent
+
+    .LINK
+        Get-RMMJob
+
     .NOTES
         This function requires an active connection to the Datto RMM API.
         Use Connect-DattoRMM to authenticate before calling this function.

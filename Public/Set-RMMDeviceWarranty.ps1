@@ -93,6 +93,12 @@ function Set-RMMDeviceWarranty {
         - Track warranty dates to plan device refresh cycles
         - Set reminders to review warranties quarterly
         - Clear warranty dates for devices that are no longer under warranty
+
+    .LINK
+        about_DRMMDevice
+
+    .LINK
+        Get-RMMDevice
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByDeviceUid', SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param (

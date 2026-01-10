@@ -63,6 +63,15 @@ function Get-RMMDeviceSoftware {
 
         The software inventory is collected by the Datto RMM agent during regular audit cycles.
         Results may not be real-time if the device is offline or hasn't reported recently.
+
+    .LINK
+        about_DRMMDevice
+
+    .LINK
+        Get-RMMDevice
+
+    .LINK
+        Get-RMMDeviceAudit
     #>
     [CmdletBinding()]
     param (

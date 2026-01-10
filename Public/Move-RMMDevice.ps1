@@ -63,6 +63,15 @@ function Move-RMMDevice {
         - Site-level variables
 
         The device must exist and the target site must exist in your account.
+
+    .LINK
+        about_DRMMDevice
+
+    .LINK
+        Get-RMMDevice
+
+    .LINK
+        Get-RMMSite
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByDeviceObjectSiteUid', SupportsShouldProcess, ConfirmImpact = 'High')]
     param (

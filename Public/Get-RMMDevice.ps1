@@ -122,6 +122,9 @@ function Get-RMMDevice {
         implications. Use -Force to bypass the confirmation prompt.
 
     .LINK
+        about_DRMMDevice
+
+    .LINK
         about_DRMMFilter
 
     .LINK

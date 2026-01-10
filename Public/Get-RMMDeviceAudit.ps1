@@ -80,6 +80,15 @@ function Get-RMMDeviceAudit {
 
         The -Software switch can significantly increase response time and data size for devices
         with many installed applications. Use Get-RMMDeviceSoftware if you only need software inventory.
+
+    .LINK
+        about_DRMMDevice
+
+    .LINK
+        Get-RMMDevice
+
+    .LINK
+        Get-RMMDeviceSoftware
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByDeviceUid')]
     param (
