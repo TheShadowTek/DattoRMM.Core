@@ -155,14 +155,18 @@ function Connect-DattoRMM {
         'Cred' {
 
             $AuthKey = $Credential.UserName
-            $AuthSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password))
+            $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password)
+            $AuthSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+            [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
 
         }
 
         'Key' {
 
             $AuthKey = $Key.ToString()
-            $AuthSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Secret))
+            $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Secret)
+            $AuthSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+            [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
 
         }
     }
@@ -186,6 +190,12 @@ function Connect-DattoRMM {
 
         throw $_
 
+    } finally {
+
+        # Clear plaintext credentials from memory
+        $AuthKey = $null
+        $AuthSecret = $null
+
     }
 
     # Build the auth hashtable
@@ -199,8 +209,8 @@ function Connect-DattoRMM {
 
     if ($AutoRefresh) {
 
-        $Script:RMMAuth.Key = $AuthKey
-        $Script:RMMAuth.Secret = $AuthSecret | ConvertTo-SecureString -AsPlainText -Force
+        $Script:RMMAuth.Key = $Credential.UserName ?? $Key.ToString()
+        $Script:RMMAuth.Secret = $Credential.Password ?? $Secret
 
     }
 
