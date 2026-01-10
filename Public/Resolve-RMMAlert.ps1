@@ -50,6 +50,9 @@ function Resolve-RMMAlert {
         - Alert doesn't exist
 
     .LINK
+        about_DRMMAlert
+
+    .LINK
         Get-RMMAlert
     #>
 

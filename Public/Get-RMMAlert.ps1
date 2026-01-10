@@ -89,6 +89,9 @@ function Get-RMMAlert {
         The function retrieves alerts in batches and automatically handles pagination.
 
     .LINK
+        about_DRMMAlert
+
+    .LINK
         Connect-DattoRMM
 
     .LINK
@@ -96,6 +99,9 @@ function Get-RMMAlert {
 
     .LINK
         Get-RMMSite
+
+    .LINK
+        Resolve-RMMAlert
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]

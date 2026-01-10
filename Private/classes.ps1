@@ -571,8 +571,10 @@ class DRMMAlert : DRMMObject {
         $StatusValue = if ($this.Resolved) {'Resolved'} else {'Open'}
         $MutedValue = if ($this.Muted) {' (Muted)'} else {''}
         $DeviceName = if ($this.AlertSourceInfo.DeviceName) {$this.AlertSourceInfo.DeviceName} else {'Unknown'}
+        $MonitorCategory = if ($this.AlertMonitorInfo.Category) {$this.AlertMonitorInfo.Category} else {'Unknown'}
+        $MonitorDesc = if ($this.AlertMonitorInfo.Description) {$this.AlertMonitorInfo.Description} else {'No description'}
 
-        return "[$StatusValue$MutedValue] $($this.Priority) - $DeviceName"
+        return "[$StatusValue$MutedValue] $($this.Priority) - $DeviceName - $MonitorCategory`: $MonitorDesc"
 
     }
 }
