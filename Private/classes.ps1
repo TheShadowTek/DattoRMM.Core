@@ -1906,6 +1906,138 @@ class DRMMDevice : DRMMObject {
         return "$($this.Hostname)|$DeviceTypeStr"
 
     }
+
+    # Alert Management Methods
+    [void] ResolveAllAlerts() {
+
+        if (-not (Get-Command -Name Resolve-RMMAlert -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        $alerts = $this.GetAlerts('Open')
+
+        foreach ($alert in $alerts) {
+
+            Resolve-RMMAlert -AlertUid $alert.Uid -Force
+
+        }
+    }
+
+    # Data Retrieval Methods
+    [DRMMDeviceAudit] GetAudit() {
+
+        if (-not (Get-Command -Name Get-RMMDeviceAudit -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMDeviceAudit -DeviceUid $this.Uid
+
+    }
+
+    [DRMMDeviceAuditSoftware[]] GetSoftware() {
+
+        if (-not (Get-Command -Name Get-RMMDeviceSoftware -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMDeviceSoftware -DeviceUid $this.Uid
+
+    }
+
+    # Device Management Methods
+    [DRMMDevice] SetUDF([hashtable]$UDFFields) {
+
+        if (-not (Get-Command -Name Set-RMMDeviceUDF -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Set-RMMDeviceUDF -DeviceUid $this.Uid @UDFFields -Force
+
+    }
+
+    [DRMMDevice] ClearUDF([int]$UdfNumber) {
+
+        if (-not (Get-Command -Name Set-RMMDeviceUDF -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        if ($UdfNumber -lt 1 -or $UdfNumber -gt 30) {
+
+            throw "UDF number must be between 1 and 30"
+
+        }
+
+        $udfParam = @{"UDF$UdfNumber" = ''}
+
+        return Set-RMMDeviceUDF -DeviceUid $this.Uid @udfParam -Force
+
+    }
+
+    [DRMMDevice] ClearUDFs() {
+
+        if (-not (Get-Command -Name Set-RMMDeviceUDF -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        $udfParams = @{}
+
+        for ($i = 1; $i -le 30; $i++) {
+
+            $udfParams["UDF$i"] = ''
+
+        }
+
+        return Set-RMMDeviceUDF -DeviceUid $this.Uid @udfParams -Force
+
+    }
+
+    [DRMMDevice] SetWarranty([datetime]$WarrantyDate) {
+
+        if (-not (Get-Command -Name Set-RMMDeviceWarranty -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Set-RMMDeviceWarranty -DeviceUid $this.Uid -WarrantyDate $WarrantyDate -Force
+
+    }
+
+    [DRMMJob] RunQuickJob([guid]$ComponentUid, [hashtable]$Variables) {
+
+        if (-not (Get-Command -Name New-RMMQuickJob -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return New-RMMQuickJob -DeviceUid $this.Uid -ComponentUid $ComponentUid -Variables $Variables -Force
+
+    }
+
+    [DRMMDevice] Move([guid]$TargetSiteUid) {
+
+        if (-not (Get-Command -Name Move-RMMDevice -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Move-RMMDevice -DeviceUid $this.Uid -TargetSiteUid $TargetSiteUid -Force
+
+    }
 }
 
 class DRMMDeviceAntivirusInfo : DRMMObject {
