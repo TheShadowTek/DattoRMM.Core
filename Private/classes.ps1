@@ -3606,25 +3606,26 @@ class DRMMSite : DRMMObject {
 
     }
 
-    [DRMMSite] Update([pscustomobject]$UpdatePayload) {
+    [DRMMSite] Set([hashtable]$Properties) {
 
-        if (-not (Get-Command -Name Invoke-APIMethod -ErrorAction SilentlyContinue)) {
+        if (-not (Get-Command -Name Set-RMMSite -ErrorAction SilentlyContinue)) {
 
             [DRMMObject]::ThrowMissingHelperError()
 
         }
 
-        $Path = "site/$($this.Uid)"
-        Write-Debug "Updating site $($this.Name) ($($this.Uid)) in Datto RMM: $Path"
-        $ResponseObject = $null #Invoke-APIMethod -Method 'POST' -Path $Path -Body $UpdatePayload
+        $params = @{
+            Site = $this
+            Force = $true
+        }
 
-        if ($null -eq $ResponseObject) {
+        foreach ($key in $Properties.Keys) {
 
-            return $null
+            $params[$key] = $Properties[$key]
 
         }
 
-        return [DRMMSite]::FromAPIMethod($ResponseObject)
+        return Set-RMMSite @params
 
     }
 
