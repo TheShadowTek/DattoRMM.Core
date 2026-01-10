@@ -3750,6 +3750,31 @@ class DRMMSite : DRMMObject {
         return New-RMMVariable -SiteUid $this.Uid -Name $Name -Value $Value -Masked:$Masked -Force
 
     }
+
+    # Filter Management Methods
+    [DRMMFilter[]] GetFilters() {
+
+        if (-not (Get-Command -Name Get-RMMDeviceFilter -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMDeviceFilter -SiteUid $this.Uid
+
+    }
+
+    [DRMMFilter] GetFilter([string]$Name) {
+
+        if (-not (Get-Command -Name Get-RMMDeviceFilter -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        return Get-RMMDeviceFilter -SiteUid $this.Uid -Name $Name
+
+    }
 }
 
 class DRMMSiteGeneralSettings : DRMMObject {
