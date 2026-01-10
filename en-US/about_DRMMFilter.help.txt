@@ -1,0 +1,316 @@
+TOPIC
+    about_DRMMFilter
+
+SHORT DESCRIPTION
+    Describes the DRMMFilter class and its methods for working with device filters
+    in Datto RMM.
+
+LONG DESCRIPTION
+    The DRMMFilter class represents a device filter within Datto RMM. Filters are
+    used to create dynamic groups of devices based on criteria such as operating
+    system, device type, status, or custom properties.
+    
+    Filters can be scoped at two levels:
+    - Global: Available across all sites in the account
+    - Site: Specific to a single site
+    
+    DRMMFilter objects are returned by Get-RMMDeviceFilter and provide methods for
+    retrieving devices that match the filter criteria.
+
+PROPERTIES
+    The DRMMFilter class exposes the following properties:
+
+    Id           [long]               - Numeric filter identifier
+    FilterId     [long]               - Filter ID (same as Id, for compatibility)
+    Name         [string]             - Filter name
+    Description  [string]             - Filter description
+    Type         [string]             - Filter type: 'rmm_default' or 'custom'
+    Scope        [string]             - Filter scope: 'Global' or 'Site'
+    SiteUid      [Nullable[guid]]     - Site GUID (null for global filters)
+    DateCreate   [Nullable[datetime]] - Filter creation date
+    LastUpdated  [Nullable[datetime]] - Last modification date
+
+METHODS
+    Device Retrieval
+    ----------------
+    GetDevices()
+        Retrieves all devices that match this filter's criteria.
+        Automatically handles both global and site-scoped filters.
+        
+        Returns: [DRMMDevice[]]
+        
+        Example:
+            $filter = Get-RMMDeviceFilter -Name "Windows Servers"
+            $devices = $filter.GetDevices()
+            Write-Host "Found $($devices.Count) Windows servers"
+
+    GetDeviceCount()
+        Returns the number of devices that match this filter's criteria.
+        
+        Returns: [int]
+        
+        Example:
+            $filter = Get-RMMDeviceFilter -Name "Offline Devices"
+            $count = $filter.GetDeviceCount()
+            Write-Host "There are $count offline devices"
+
+    Alert Management
+    ----------------
+    GetAlerts()
+        Retrieves all alerts for devices matching this filter.
+        Aggregates alerts from all devices that match the filter criteria.
+        
+        Returns: [DRMMAlert[]]
+        
+        Example:
+            $filter = Get-RMMDeviceFilter -Name "Production Servers"
+            $alerts = $filter.GetAlerts()
+            Write-Host "Production servers have $($alerts.Count) total alerts"
+
+    GetAlerts([string]$Status)
+        Retrieves alerts with specific status for devices matching this filter.
+        
+        Parameters:
+            $Status - Alert status: 'Open', 'Resolved', or 'All'
+        
+        Returns: [DRMMAlert[]]
+        
+        Example:
+            $filter = Get-RMMDeviceFilter -Name "Critical Infrastructure"
+            $openAlerts = $filter.GetAlerts('Open')
+            Write-Host "Critical infrastructure has $($openAlerts.Count) open alerts"
+
+    Filter Type Checks
+    ------------------
+    IsGlobal()
+        Returns true if the filter is globally scoped (available to all sites).
+        
+        Returns: [bool]
+        
+        Example:
+            $filter = Get-RMMDeviceFilter -Name "All Windows"
+            if ($filter.IsGlobal()) {
+                Write-Host "This filter is available to all sites"
+            }
+
+    IsSite()
+        Returns true if the filter is site-scoped (specific to one site).
+        
+        Returns: [bool]
+        
+        Example:
+            $filter = Get-RMMDeviceFilter -SiteUid $siteUid -Name "Branch Servers"
+            if ($filter.IsSite()) {
+                Write-Host "This filter is specific to site: $($filter.SiteUid)"
+            }
+
+    IsDefault()
+        Returns true if the filter is a default RMM filter (Type = 'rmm_default').
+        Default filters are provided by Datto and cannot be modified.
+        
+        Returns: [bool]
+        
+        Example:
+            $filter = Get-RMMDeviceFilter -Name "Online Devices"
+            if ($filter.IsDefault()) {
+                Write-Host "This is a built-in Datto RMM filter"
+            }
+
+    IsCustom()
+        Returns true if the filter is a custom user-created filter (Type = 'custom').
+        
+        Returns: [bool]
+        
+        Example:
+            $filter = Get-RMMDeviceFilter -Name "Production Servers"
+            if ($filter.IsCustom()) {
+                Write-Host "This is a custom filter"
+            }
+
+    Utility Methods
+    ---------------
+    GetSummary()
+        Returns a formatted summary string of the filter.
+        
+        Returns: [string]
+        
+        Example:
+            $filter = Get-RMMDeviceFilter -Name "Windows Servers"
+            Write-Host $filter.GetSummary()
+            # Output: Windows Servers [Site] (custom)
+
+FILTER TYPES
+    RMM Default Filters
+        Built-in filters provided by Datto RMM:
+        - Type property is 'rmm_default'
+        - Cannot be modified or deleted
+        - Examples: "Online Devices", "Offline Devices", "All Devices"
+        - Identified using IsDefault() method
+
+    Custom Filters
+        User-created filters with custom criteria:
+        - Type property is 'custom'
+        - Can be modified through the RMM portal
+        - Created via the Datto RMM web interface
+        - Identified using IsCustom() method
+
+FILTER SCOPE
+    Global Filters
+        Available across all sites in the account:
+        - Scope property is 'Global'
+        - SiteUid property is null
+        - Retrieved without specifying a site
+        - Identified using IsGlobal() method
+        
+        Example:
+            $globalFilters = Get-RMMDeviceFilter
+            $globalFilters | Where-Object {$_.IsGlobal()}
+
+    Site Filters
+        Specific to a single site:
+        - Scope property is 'Site'
+        - SiteUid property contains the site's GUID
+        - Retrieved by specifying a SiteUid parameter
+        - Identified using IsSite() method
+        
+        Example:
+            $site = Get-RMMSite -Name "Contoso Ltd"
+            $siteFilters = Get-RMMDeviceFilter -SiteUid $site.Uid
+            $siteFilters | Where-Object {$_.IsSite()}
+
+METHOD CHAINING
+    DRMMFilter methods return typed objects that support method chaining, enabling
+    fluent API patterns with DRMMSite:
+
+    Example: Get filter by name, then get matching devices
+        $site = Get-RMMSite -Name "Contoso Ltd"
+        $devices = $site.GetFilter("Windows Servers").GetDevices()
+
+    Example: Chain filter operations
+        $filter = Get-RMMDeviceFilter -Name "Critical Infrastructure"
+        $devices = $filter.GetDevices()
+        foreach ($device in $devices) {
+            $alerts = $device.GetAlerts('Open')
+            if ($alerts.Count -gt 0) {
+                Write-Host "$($device.Hostname): $($alerts.Count) open alerts"
+            }
+        }
+
+EXAMPLES
+    Example 1: Get devices from a global filter
+        $filter = Get-RMMDeviceFilter -Name "Windows Workstations"
+        $devices = $filter.GetDevices()
+        Write-Host "Found $($devices.Count) Windows workstations"
+
+    Example 2: Get device count without fetching full device objects
+        $filter = Get-RMMDeviceFilter -Name "Offline Devices"
+        $count = $filter.GetDeviceCount()
+        Write-Host "There are $count offline devices"
+
+    Example 3: Get alerts for all devices in a filter
+        $filter = Get-RMMDeviceFilter -Name "Production Servers"
+        $openAlerts = $filter.GetAlerts('Open')
+        
+        Write-Host "Production servers have $($openAlerts.Count) open alerts"
+        $openAlerts | Group-Object AlertSourceInfo | ForEach-Object {
+            Write-Host "  $($_.Name): $($_.Count) alerts"
+        }
+
+    Example 4: Get devices from a site-specific filter
+        $site = Get-RMMSite -Name "Contoso Ltd"
+        $filter = Get-RMMDeviceFilter -SiteUid $site.Uid -Name "Servers"
+        $servers = $filter.GetDevices()
+
+    Example 5: Check filter type and scope
+        $filter = Get-RMMDeviceFilter -Name "Production Devices"
+        
+        $type = if ($filter.IsDefault()) {"Default"} else {"Custom"}
+        $scope = if ($filter.IsGlobal()) {"Global"} else {"Site"}
+        
+        Write-Host "$($filter.Name) is a $type $scope filter"
+
+    Example 5: Process devices from multiple filters
+        $filters = Get-RMMDeviceFilter | Where-Object {$_.IsCustom()}
+        
+        foreach ($filter in $filters) {
+            $devices = $filter.GetDevices()
+            [PSCustomObject]@{
+                FilterName   = $filter.Name
+                DeviceCount  = $devices.Count
+                FilterScope  = $filter.Scope
+            }
+        }
+
+    Example 6: Fluent API with site and filter
+        $site = Get-RMMSite -Name "Contoso Ltd"
+        $criticalDevices = $site.GetFilter("Critical Infrastructure").GetDevices()
+        
+        foreach ($device in $criticalDevices) {
+            $openAlerts = ($device.GetAlerts('Open')).Count
+            if ($openAlerts -gt 5) {
+                Write-Warning "$($device.Hostname) has $openAlerts open alerts"
+            }
+        }
+
+    Example 7: Compare global vs site filters
+        # Global filters
+        $globalFilters = Get-RMMDeviceFilter
+        Write-Host "Global filters: $($globalFilters.Count)"
+        
+        # Site filters
+        $site = Get-RMMSite -Name "Contoso Ltd"
+        $siteFilters = Get-RMMDeviceFilter -SiteUid $site.Uid
+        Write-Host "Site filters: $($siteFilters.Count)"
+
+BEST PRACTICES
+    1. Use GetDevices() method instead of calling Get-RMMDevice with filter
+       parameters manually - the method handles global vs site scope automatically.
+
+    2. Use GetDeviceCount() when you only need the count, though note it still
+       fetches device objects internally (unlike DRMMSite.GetDeviceCount() which
+       uses cached metadata).
+
+    3. Use GetAlerts() methods to aggregate alerts across all filtered devices
+       for monitoring and reporting purposes.
+
+    4. Check filter scope before operations:
+           if ($filter.IsGlobal()) {
+               # Global filter can be used across all sites
+           }
+
+    5. Cache filter objects when processing multiple operations to avoid repeated
+       API calls:
+           $filter = Get-RMMDeviceFilter -Name "Servers"
+           $devices = $filter.GetDevices()
+           # Use $devices multiple times without re-querying
+
+    6. Use method chaining for cleaner code when working with sites:
+           $devices = $site.GetFilter("name").GetDevices()
+
+    7. Leverage filter type checks to handle default vs custom filters differently:
+           if ($filter.IsDefault()) {
+               # Cannot modify, read-only
+           } elseif ($filter.IsCustom()) {
+               # Can be modified via portal
+           }
+
+NOTES
+    - Filters are created and modified through the Datto RMM web portal, not
+      through the API. The API provides read-only access to filter definitions
+      but allows filtering device queries.
+
+    - The GetDevices() method automatically determines whether to query globally
+      or per-site based on the filter's SiteUid property.
+
+    - Default RMM filters (like "Online Devices", "Offline Devices") are available
+      in every account and cannot be deleted or modified.
+
+    - The DRMMFilter class inherits from DRMMObject, providing common functionality
+      across all Datto RMM object types.
+
+SEE ALSO
+    Get-RMMDeviceFilter
+    Get-RMMDevice
+    Get-RMMSite
+    about_DRMMSite
+    about_DRMMDevice

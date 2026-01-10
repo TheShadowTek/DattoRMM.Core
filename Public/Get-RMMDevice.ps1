@@ -120,6 +120,15 @@ function Get-RMMDevice {
 
         The -IncludeLastLoggedInUser parameter requires explicit confirmation due to privacy
         implications. Use -Force to bypass the confirmation prompt.
+
+    .LINK
+        about_DRMMFilter
+
+    .LINK
+        Get-RMMDeviceFilter
+
+    .LINK
+        Get-RMMSite
     #>
     [CmdletBinding(DefaultParameterSetName = 'GlobalAll', SupportsShouldProcess, ConfirmImpact = 'High')]
     param (

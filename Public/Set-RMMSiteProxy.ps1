@@ -66,6 +66,15 @@ function Set-RMMSiteProxy {
         specifying only the parameters you want to change.
 
         Use Remove-RMMSiteProxy to delete proxy settings entirely.
+
+    .LINK
+        about_DRMMSite
+
+    .LINK
+        Get-RMMSite
+
+    .LINK
+        Remove-RMMSiteProxy
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param (

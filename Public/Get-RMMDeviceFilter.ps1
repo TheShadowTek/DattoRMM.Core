@@ -87,6 +87,15 @@ function Get-RMMDeviceFilter {
 
         Filter IDs can be used with Get-RMMDevice -FilterId to retrieve devices matching
         specific criteria.
+
+    .LINK
+        about_DRMMFilter
+
+    .LINK
+        Get-RMMDevice
+
+    .LINK
+        Get-RMMSite
     #>
     [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]
     param (

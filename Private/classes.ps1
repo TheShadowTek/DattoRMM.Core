@@ -2979,15 +2979,84 @@ class DRMMFilter : DRMMObject {
     # API Methods
     [DRMMDevice[]] GetDevices() {
 
-        if ($this.SiteUid) {
+        $result = if ($this.SiteUid) {
 
-            return Get-RMMDevice -SiteUid $this.SiteUid -FilterId $this.FilterId
+            Get-RMMDevice -SiteUid $this.SiteUid -FilterId $this.FilterId
 
         } else {
 
-            return Get-RMMDevice -FilterId $this.FilterId
+            Get-RMMDevice -FilterId $this.FilterId
 
         }
+
+        if ($null -eq $result) {
+
+            return @()
+
+        }
+
+        return $result
+
+    }
+
+    [int] GetDeviceCount() {
+
+        $devices = $this.GetDevices()
+
+        return $devices.Count
+
+    }
+
+    [DRMMAlert[]] GetAlerts() {
+
+        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        $devices = $this.GetDevices()
+        $allAlerts = @()
+
+        foreach ($device in $devices) {
+
+            $alerts = Get-RMMAlert -DeviceUid $device.Uid -Status 'All'
+
+            if ($alerts) {
+
+                $allAlerts += $alerts
+
+            }
+        }
+
+        return $allAlerts
+
+    }
+
+    [DRMMAlert[]] GetAlerts([string]$Status) {
+
+        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+
+            [DRMMObject]::ThrowMissingHelperError()
+
+        }
+
+        $devices = $this.GetDevices()
+        $allAlerts = @()
+
+        foreach ($device in $devices) {
+
+            $alerts = Get-RMMAlert -DeviceUid $device.Uid -Status $Status
+
+            if ($alerts) {
+
+                $allAlerts += $alerts
+
+            }
+        }
+
+        return $allAlerts
+
     }
 }
 
@@ -3675,7 +3744,15 @@ class DRMMSite : DRMMObject {
 
         }
 
-        return Get-RMMDevice -SiteUid $this.Uid
+        $result = Get-RMMDevice -SiteUid $this.Uid
+
+        if ($null -eq $result) {
+
+            return @()
+
+        }
+
+        return $result
 
     }
 
@@ -3761,7 +3838,15 @@ class DRMMSite : DRMMObject {
 
         }
 
-        return Get-RMMDeviceFilter -SiteUid $this.Uid
+        $result = Get-RMMDeviceFilter -SiteUid $this.Uid
+
+        if ($null -eq $result) {
+
+            return @()
+
+        }
+
+        return $result
 
     }
 

@@ -49,6 +49,15 @@ function Remove-RMMSiteProxy {
         After removing proxy settings, devices will need to be able to connect directly
         to the Datto RMM service. Ensure network connectivity is available before removing
         proxy configuration.
+
+    .LINK
+        about_DRMMSite
+
+    .LINK
+        Get-RMMSite
+
+    .LINK
+        Set-RMMSiteProxy
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (

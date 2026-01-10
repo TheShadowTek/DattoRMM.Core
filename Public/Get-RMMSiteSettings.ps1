@@ -59,6 +59,15 @@ function Get-RMMSiteSettings {
         Use Connect-DattoRMM to authenticate before calling this function.
 
         Site settings control how the Datto RMM agent behaves for devices in that site.
+
+    .LINK
+        about_DRMMSite
+
+    .LINK
+        Get-RMMSite
+
+    .LINK
+        Set-RMMSiteProxy
     #>
     [CmdletBinding(DefaultParameterSetName = 'Site')]
     

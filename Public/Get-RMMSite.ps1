@@ -106,6 +106,15 @@ function Get-RMMSite {
 
         Using ExtendedProperties can significantly increase response time and API calls.
         Only request extended properties when needed.
+
+    .LINK
+        about_DRMMSite
+
+    .LINK
+        Get-RMMDevice
+
+    .LINK
+        Get-RMMDeviceFilter
     #>
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (

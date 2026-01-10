@@ -69,6 +69,15 @@ function Set-RMMSite {
 
         This function does not support updating proxy settings. Use Set-RMMSiteProxy or
         Remove-RMMSiteProxy for proxy configuration changes.
+
+    .LINK
+        about_DRMMSite
+
+    .LINK
+        Get-RMMSite
+
+    .LINK
+        Set-RMMSiteProxy
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param (
