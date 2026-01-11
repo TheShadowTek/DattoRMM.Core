@@ -13,7 +13,6 @@
 
 param(
     [string]$AboutFolder = "docs",
-    [string]$ClassesFile = "Private/classes.ps1",
     [string]$OutputFolder = "en-US"
 )
 
@@ -24,53 +23,75 @@ $DocsBaseUrl = $manifest.DocsBaseUrl
 
 # Parse class names, properties, and methods from classes.ps1
 $classDefs = @{}
-if (Test-Path $ClassesFile) {
-    $classText = Get-Content $ClassesFile -Raw
-    $classDecls = [regex]::Matches($classText, 'class (\w+)[^{]*{', 'IgnoreCase')
-    $classInfos = @()
-    foreach ($decl in $classDecls) {
-        $className = $decl.Groups[1].Value
-        $startIdx = $decl.Index + $decl.Length
-        $classInfos += [PSCustomObject]@{ Name = $className; Start = $startIdx; DeclIdx = $decl.Index }
+    # Hardcoded file order: enums, object, other split files (excluding using lines), then legacy classes.ps1
+    $classTextParts = @()
+    if (Test-Path 'Private/Classes/DRMMEnums.ps1') {
+        $classTextParts += Get-Content 'Private/Classes/DRMMEnums.ps1' -Raw
     }
-    for ($i = 0; $i -lt $classInfos.Count; $i++) {
-        $className = $classInfos[$i].Name
-        $bodyStart = $classInfos[$i].Start
-        $bodyEnd = if ($i -lt $classInfos.Count - 1) { $classInfos[$i+1].DeclIdx } else { $classText.Length }
-        $classBlock = $classText.Substring($bodyStart, $bodyEnd - $bodyStart)
-        # Now extract the full class body using brace counting
-        $braceCount = 1
-        $body = ''
-        for ($j = 0; $j -lt $classBlock.Length; $j++) {
-            $c = $classBlock[$j]
-            if ($c -eq '{') { $braceCount++ }
-            elseif ($c -eq '}') { $braceCount-- }
-            if ($braceCount -eq 0) { $body = $classBlock.Substring(0, $j); break }
-        }
-        # Properties: [Type]$Name
-        $propMatches = [regex]::Matches($body, '^[ \t]*\[([^\]]+)\]\s*\$(\w+)', 'Multiline')
-        $props = @()
-        foreach ($p in $propMatches) {
-            $ptype = $p.Groups[1].Value
-            $pname = $p.Groups[2].Value
-            $props += "$pname [$ptype]"
-        }
-        # Methods: static/instance
-        $methodMatches = [regex]::Matches($body, '^[ \t]*(static\s+)?\[([^\]]+)\]\s+(\w+)\s*\(([^)]*)\)\s*\{', 'Multiline')
-        $methods = @()
-        foreach ($m in $methodMatches) {
-            $isStatic = $m.Groups[1].Value
-            $retType = $m.Groups[2].Value
-            $methName = $m.Groups[3].Value
-            $params = $m.Groups[4].Value
-            # Exclude static FromAPIMethod methods
-            if ($isStatic -and $methName -eq 'FromAPIMethod') { continue }
-            # PowerShell style: static MethodName(params) Type
-            $sig = ("$isStatic$methName($params) $retType").Trim()
-            $methods += $sig
-        }
-        $classDefs[$className] = @{ Properties = $props; Methods = $methods }
+    if (Test-Path 'Private/Classes/DRMMObject.psm1') {
+        $classTextParts += Get-Content 'Private/Classes/DRMMObject.psm1' -Raw
     }
+    if (Test-Path 'Private/Classes') {
+        $otherFiles = Get-ChildItem 'Private/Classes' -Filter '*.ps*' -File | Where-Object {
+            $_.Name -notin @('DRMMEnums.ps1','DRMMObject.psm1')
+        } | Sort-Object Name
+        foreach ($file in $otherFiles) {
+            $content = Get-Content $file.FullName -Raw
+            # Exclude 'using' lines
+            $content = ($content -split "`n") | Where-Object { $_ -notmatch '^\s*using\s' } | Out-String
+            $classTextParts += $content
+        }
+    }
+    if (Test-Path 'Private/classes.ps1') {
+        $classTextParts += Get-Content 'Private/classes.ps1' -Raw
+    }
+    $classText = $classTextParts -join "`n"
+
+# Parse class names, properties, and methods from the concatenated class text
+$classDecls = [regex]::Matches($classText, 'class (\w+)[^{]*{', 'IgnoreCase')
+$classInfos = @()
+foreach ($decl in $classDecls) {
+    $className = $decl.Groups[1].Value
+    $startIdx = $decl.Index + $decl.Length
+    $classInfos += [PSCustomObject]@{ Name = $className; Start = $startIdx; DeclIdx = $decl.Index }
+}
+for ($i = 0; $i -lt $classInfos.Count; $i++) {
+    $className = $classInfos[$i].Name
+    $bodyStart = $classInfos[$i].Start
+    $bodyEnd = if ($i -lt $classInfos.Count - 1) { $classInfos[$i+1].DeclIdx } else { $classText.Length }
+    $classBlock = $classText.Substring($bodyStart, $bodyEnd - $bodyStart)
+    # Now extract the full class body using brace counting
+    $braceCount = 1
+    $body = ''
+    for ($j = 0; $j -lt $classBlock.Length; $j++) {
+        $c = $classBlock[$j]
+        if ($c -eq '{') { $braceCount++ }
+        elseif ($c -eq '}') { $braceCount-- }
+        if ($braceCount -eq 0) { $body = $classBlock.Substring(0, $j); break }
+    }
+    # Properties: [Type]$Name
+    $propMatches = [regex]::Matches($body, '^[ \t]*\[([^\]]+)\]\s*\$(\w+)', 'Multiline')
+    $props = @()
+    foreach ($p in $propMatches) {
+        $ptype = $p.Groups[1].Value
+        $pname = $p.Groups[2].Value
+        $props += "$pname [$ptype]"
+    }
+    # Methods: static/instance
+    $methodMatches = [regex]::Matches($body, '^[ \t]*(static\s+)?\[([^\]]+)\]\s+(\w+)\s*\(([^)]*)\)\s*\{', 'Multiline')
+    $methods = @()
+    foreach ($m in $methodMatches) {
+        $isStatic = $m.Groups[1].Value
+        $retType = $m.Groups[2].Value
+        $methName = $m.Groups[3].Value
+        $params = $m.Groups[4].Value
+        # Exclude static FromAPIMethod methods
+        if ($isStatic -and $methName -eq 'FromAPIMethod') { continue }
+        # PowerShell style: static MethodName(params) Type
+        $sig = ("$isStatic$methName($params) $retType").Trim()
+        $methods += $sig
+    }
+    $classDefs[$className] = @{ Properties = $props; Methods = $methods }
 }
 
 # Get all about_*.md files

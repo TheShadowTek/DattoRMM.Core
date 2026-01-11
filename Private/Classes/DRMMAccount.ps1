@@ -1,4 +1,5 @@
-# PSScriptAnalyzerSuppressMessage('PSUseDeclaredTypeInAttribute', 'TypeNotFound')
+using module '.\DRMMObject.psm1'
+
 class DRMMAccount : DRMMObject {
 
     [int]$Id
