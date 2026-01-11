@@ -1,3 +1,4 @@
+# PSScriptAnalyzerSuppressMessage('PSUseDeclaredTypeInAttribute', 'TypeNotFound')
 <#
 # enum types
 enum RMMSiteExtendedProperty {
@@ -22,7 +23,7 @@ enum RMMPlatform {
 #>
 
 # classes
-<#
+<# Object base class
 class DRMMObject {
 
     DRMMObject() {}
@@ -184,6 +185,7 @@ class DRMMObject {
 }
 #>
 
+<# Account classes
 class DRMMAccount : DRMMObject {
 
     [int]$Id
@@ -304,6 +306,7 @@ class DRMMAccountDevicesStatus : DRMMObject {
 
     }
 }
+#>
 
 class DRMMActivityLog : DRMMObject {
 
