@@ -308,6 +308,7 @@ class DRMMAccountDevicesStatus : DRMMObject {
 }
 #>
 
+<# Activity Log classes
 class DRMMActivityLog : DRMMObject {
 
     [string]$Id
@@ -487,6 +488,7 @@ class DRMMActivityLogUser : DRMMObject {
         }
     }
 }
+#>
 
 class DRMMAlert : DRMMObject {
 
