@@ -60,4 +60,12 @@ METHODS (from class)
     Move([guid]$TargetSiteUid) DRMMDevice
 
 SEE ALSO
-    https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMDevice.md
+    Get-RMMDevice
+    Get-RMMDeviceAudit
+    Get-RMMDeviceSoftware
+    Set-RMMDeviceUDF
+    Set-RMMDeviceWarranty
+    Move-RMMDevice
+    New-RMMQuickJob
+    Resolve-RMMAlert
+

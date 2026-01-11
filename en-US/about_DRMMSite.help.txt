@@ -41,4 +41,16 @@ METHODS (from class)
     RemoveProxy() DRMMSiteSettings
 
 SEE ALSO
-    https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMSite.md
+    Get-RMMSite
+    Get-RMMSiteSettings
+    Set-RMMSiteProxy
+    Remove-RMMSiteProxy
+    Get-RMMDevice
+    Get-RMMDeviceFilter
+    Get-RMMVariable
+    New-RMMVariable
+    Get-RMMAlert
+    about_DRMMDevice
+    about_DRMMFilter
+    about_DRMMAlert
+

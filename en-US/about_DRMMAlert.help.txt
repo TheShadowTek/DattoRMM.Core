@@ -29,4 +29,8 @@ METHODS (from class)
     GetSummary() string
 
 SEE ALSO
-    https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMAlert.md
+    Get-RMMAlert
+    Resolve-RMMAlert
+    about_DRMMDevice
+    about_DRMMSite
+

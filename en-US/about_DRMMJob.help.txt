@@ -24,4 +24,8 @@ METHODS (from class)
     GetSummary() string
 
 SEE ALSO
-    https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMJob.md
+    Get-RMMJob
+    New-RMMQuickJob
+    about_DRMMComponent
+    about_DRMMDevice
+

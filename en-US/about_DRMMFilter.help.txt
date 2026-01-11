@@ -30,4 +30,9 @@ METHODS (from class)
     GetDeviceCount() int
 
 SEE ALSO
-    https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMFilter.md
+    Get-RMMDeviceFilter
+    Get-RMMDevice
+    Get-RMMSite
+    about_DRMMSite
+    about_DRMMDevice
+

@@ -88,7 +88,8 @@ foreach ($file in $aboutFiles) {
     $inPropTable = $false
     $methodSections = @()
     $currentMethodCat = $null
-    $currentSection = ""
+    $seeAlsoItems = @()
+    $inSeeAlso = $false
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $line = $lines[$i]
         # Section detection
@@ -96,13 +97,9 @@ foreach ($file in $aboutFiles) {
         elseif ($line -match "^##? LONG DESCRIPTION") { $currentSection = "long"; continue }
         elseif ($line -match "^##? PROPERTIES") { $currentSection = "properties"; $inPropTable = $false; continue }
         elseif ($line -match "^##? METHODS") { $currentSection = "methods"; $currentMethodCat = $null; continue }
-        elseif ($line -match "^##? (.+)") {
-            # Method category (e.g., ### Status Checking)
-            if ($currentSection -eq "methods") {
-                $currentMethodCat = $matches[1].Trim()
-                $methodSections += @{ Category = $currentMethodCat; Methods = @() }
-            }
-            $currentSection = "other"; continue
+        elseif ($line -match "^## SEE ALSO") {
+            $inSeeAlso = $true
+            continue
         }
         # Properties table parsing
         if ($currentSection -eq "properties") {
@@ -124,6 +121,21 @@ foreach ($file in $aboutFiles) {
                 continue
             }
         }
+        # SEE ALSO parsing (plain text, ignore markdown links)
+        if ($inSeeAlso) {
+            # End SEE ALSO section if next heading or blank line after section found
+            if ($line -match '^##? ' -and $seeAlsoSectionFound) { Write-Host ("    Exiting SEE ALSO section at heading line {0}: {1}" -f $i, $line); $inSeeAlso = $false; continue }
+            if ($line.Trim() -eq "" -and $seeAlsoSectionFound) { Write-Host ("    Exiting SEE ALSO section at blank line {0}" -f $i); $inSeeAlso = $false; continue }
+            if ($line -match '^\s*-\s*(.+)') {
+                $item = $matches[1].Trim()
+
+                # Remove markdown link if present
+                if ($item -match '\[(.+?)\]\([^)]*\)') { $item = $matches[1] }
+                Write-Host ("      Captured SEE ALSO item: {0}" -f $item)
+                $seeAlsoItems += $item
+                continue
+            }
+        }
         # Standard short/long
         if ($currentSection -eq "short") { $short += $line + " `n" }
         elseif ($currentSection -eq "long") { $long += $line + " `n" }
@@ -132,12 +144,20 @@ foreach ($file in $aboutFiles) {
     $long = $long.Trim()
     # If class, add parsed properties and methods
     if ($isClass) {
+        Write-Host "  SEE ALSO items parsed: $($seeAlsoItems -join ', ')"
         $classProps = $classDefs[$className].Properties
         $classMethods = $classDefs[$className].Methods
         $long += "`n`n"
         $long += "PROPERTIES (from class)" + "`n" + ($classProps | ForEach-Object { "    $_" } | Out-String)
         $long += "`nMETHODS (from class)" + "`n" + ($classMethods | ForEach-Object { "    $_" } | Out-String)
-        $long += "`nSEE ALSO`n    $DocsBaseUrl$aboutName.md"
+        $long += "`nSEE ALSO"
+        if ($seeAlsoItems.Count -gt 0) {
+            Write-Host ("  Outputting SEE ALSO items for {0}: {1}" -f $aboutName, ($seeAlsoItems -join ', '))
+            $long += "`n" + ($seeAlsoItems | ForEach-Object { "    $_" } | Out-String)
+        } else {
+            Write-Host ("  No SEE ALSO items found for {0}, using manifest URL" -f $aboutName)
+            $long += "`n    $DocsBaseUrl$aboutName.md"
+        }
     }
     # Output plain text about help file
     $txt = @()
