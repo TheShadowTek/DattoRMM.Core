@@ -75,8 +75,8 @@ string showing online/total devices and percentage.
 
 ## RELATED LINKS
 
-[Connect-DattoRMM]()
+[Connect-DattoRMM](https://github.com/boabf/Datto-RMM/blob/main/docs/Connect-DattoRMM.md)
 
-[Get-RMMDevice]()
+[Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
 
 

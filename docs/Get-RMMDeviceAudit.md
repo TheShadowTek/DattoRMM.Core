@@ -154,10 +154,10 @@ Use Get-RMMDeviceSoftware if you only need software inventory.
 
 ## RELATED LINKS
 
-[about_DRMMDevice]()
+[about_DRMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMDevice.md)
 
-[Get-RMMDevice]()
+[Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
 
-[Get-RMMDeviceSoftware]()
+[Get-RMMDeviceSoftware](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDeviceSoftware.md)
 
 

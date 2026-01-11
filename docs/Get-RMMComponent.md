@@ -80,10 +80,10 @@ Use Connect-DattoRMM to authenticate before calling this function.
 
 ## RELATED LINKS
 
-[about_DRMMComponent]()
+[about_DRMMComponent](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMComponent.md)
 
-[New-RMMQuickJob]()
+[New-RMMQuickJob](https://github.com/boabf/Datto-RMM/blob/main/docs/New-RMMQuickJob.md)
 
-[Get-RMMJob]()
+[Get-RMMJob](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMJob.md)
 
 

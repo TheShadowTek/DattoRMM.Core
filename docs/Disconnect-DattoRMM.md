@@ -51,6 +51,6 @@ from the session.
 
 ## RELATED LINKS
 
-[Connect-DattoRMM]()
+[Connect-DattoRMM](https://github.com/boabf/Datto-RMM/blob/main/docs/Connect-DattoRMM.md)
 
 

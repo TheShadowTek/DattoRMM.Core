@@ -59,6 +59,14 @@ try {
     # Import module
     Write-Host "  Importing module..."
     Import-Module .\Datto-RMM.psd1 -Force
+
+    # Read DocsBaseUrl from manifest
+    $Manifest = Import-PowerShellDataFile -Path .\Datto-RMM.psd1
+    $DocsBaseUrl = $Manifest.PrivateData.PSData.DocsBaseUrl
+    if (-not $DocsBaseUrl) {
+        Write-Warning "DocsBaseUrl not found in manifest. Using './docs/' as fallback."
+        $DocsBaseUrl = './docs/'
+    }
     
     # Import PlatyPS
     if (-not (Get-Module -ListAvailable -Name PlatyPS)) {
@@ -136,14 +144,27 @@ try {
             # Remove ProgressAction parameter (PowerShell 7.4+ common parameter noise)
             $Content = $Content -replace '(?ms)### -ProgressAction.*?(?=###|^##|\z)', ''
 
-            # --- New: Ensure all code blocks are closed ---
 
+            # --- New: Ensure all code blocks are closed ---
             $openCodeBlocks = [regex]::Matches($Content, '```')
             $openCodeBlockCount = if ($openCodeBlocks) { $openCodeBlocks.Count } else { 0 }
             if ($openCodeBlockCount % 2 -ne 0) {
                 Write-Host "    DEBUG: Unclosed code block detected in $FunctionName.md, auto-closing..." -ForegroundColor Yellow
                 $Content = $Content + "`n$('```')"
             }
+
+
+            # --- Improved: Convert RELATED LINKS to markdown links with doc path ---
+            # Replace lines like [Get-RMMDevice]() or Get-RMMDevice with [Get-RMMDevice]({docpath}/Get-RMMDevice.md)
+            $Content = [regex]::Replace($Content, '(?m)^\[([A-Za-z0-9\-_]+)\]\(\)|^([A-Za-z0-9\-_]+)$', {
+                param($match)
+                $name = if ($match.Groups[1].Success) { $match.Groups[1].Value } else { $match.Groups[2].Value }
+                if ($null -eq $name -or $name -eq '') { return $match.Value }
+                return "[$name]({docpath}/$name.md)"
+            })
+
+            # Replace {docpath} with DocsBaseUrl
+            $Content = $Content -replace '\{docpath\}', $DocsBaseUrl.TrimEnd('/')
 
             # Write back (markdown expects newlines)
             Set-Content -Path $MarkdownFile -Value $Content

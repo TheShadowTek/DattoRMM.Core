@@ -204,14 +204,14 @@ The function retrieves alerts in batches and automatically handles pagination.
 
 ## RELATED LINKS
 
-[about_DRMMAlert]()
+[about_DRMMAlert](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMAlert.md)
 
-[Connect-DattoRMM]()
+[Connect-DattoRMM](https://github.com/boabf/Datto-RMM/blob/main/docs/Connect-DattoRMM.md)
 
-[Get-RMMDevice]()
+[Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
 
-[Get-RMMSite]()
+[Get-RMMSite](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMSite.md)
 
-[Resolve-RMMAlert]()
+[Resolve-RMMAlert](https://github.com/boabf/Datto-RMM/blob/main/docs/Resolve-RMMAlert.md)
 
 
