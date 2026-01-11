@@ -120,25 +120,34 @@ try {
             }
             
             # Post-process: Clean up formatting
+
             $Content = Get-Content $MarkdownFile -Raw
-            
+            if ($null -eq $Content) {
+                $Content = ''
+            }
+
             # Remove "PS > " and ">> " from code blocks for cleaner examples
             $Content = $Content -replace '(?m)^PS > ', ''
             $Content = $Content -replace '(?m)^>> ', ''
-            
+
             # Fix OUTPUTS and INPUTS sections: Remove ### from descriptive text lines
-            # PlatyPS incorrectly converts multi-line OUTPUTS/INPUTS into level-3 headers
-            # We want to keep parameter headers (### -ParameterName) but remove ### from description lines
-            # Match lines that start with "### " followed by text that isn't a parameter (doesn't have a hyphen before non-whitespace)
             $Content = $Content -replace '(?m)^### (?!-\S)', ''
-            
+
             # Remove ProgressAction parameter (PowerShell 7.4+ common parameter noise)
-            # Stop at next parameter (###) or section header (##) or end of file
             $Content = $Content -replace '(?ms)### -ProgressAction.*?(?=###|^##|\z)', ''
-            
-            # Write back
-            Set-Content -Path $MarkdownFile -Value $Content -NoNewline
-            
+
+            # --- New: Ensure all code blocks are closed ---
+
+            $openCodeBlocks = [regex]::Matches($Content, '```')
+            $openCodeBlockCount = if ($openCodeBlocks) { $openCodeBlocks.Count } else { 0 }
+            if ($openCodeBlockCount % 2 -ne 0) {
+                Write-Host "    DEBUG: Unclosed code block detected in $FunctionName.md, auto-closing..." -ForegroundColor Yellow
+                $Content = $Content + "`n$('```')"
+            }
+
+            # Write back (markdown expects newlines)
+            Set-Content -Path $MarkdownFile -Value $Content
+
             $Generated++
 
         } else {
