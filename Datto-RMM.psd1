@@ -4,7 +4,7 @@
 RootModule = 'Datto-RMM.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.3.18'
+ModuleVersion = '0.3.19'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -132,7 +132,10 @@ PrivateData = @{
         # LicenseUri = ''
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/boabf/Datto-RMM'
+
+        # Base URL for the documentation
+        DocsBaseUrl = 'https://github.com/boabf/Datto-RMM/blob/main/docs/'
 
         # A URL to an icon representing this module.
         # IconUri = ''
@@ -159,10 +162,5 @@ PrivateData = @{
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''
 
-# Project URI for the module
-ProjectUri = 'https://github.com/boabf/Datto-RMM'
-
-# Base URL for the documentation
-DocsBaseUrl = 'https://github.com/boabf/Datto-RMM/blob/main/docs/'
 
 }
