@@ -37,6 +37,8 @@ function Get-RMMConfig {
     .LINK
         Set-RMMConfig
         Reset-RMMConfig
+        Set-RMMPageSize
+        Get-RMMPageSize
     #>
 
     [CmdletBinding()]

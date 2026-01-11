@@ -103,6 +103,8 @@ Default values after reset:
 ## RELATED LINKS
 
 [Set-RMMConfig
-Get-RMMConfig]()
+Get-RMMConfig
+Set-RMMPageSize
+Get-RMMPageSize]()
 
 

@@ -51,6 +51,8 @@ The output shows:
 ## RELATED LINKS
 
 [Set-RMMConfig
-Reset-RMMConfig]()
+Reset-RMMConfig
+Set-RMMPageSize
+Get-RMMPageSize]()
 
 

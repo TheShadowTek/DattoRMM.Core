@@ -59,6 +59,10 @@ function Set-RMMConfig {
     .LINK
         Connect-DattoRMM
         Set-RMMPageSize
+        Get-RMMPageSize
+        Get-RMMConfig
+        Reset-RMMConfig
+        Set-RMMPageSize
     #>
 
     [CmdletBinding()]

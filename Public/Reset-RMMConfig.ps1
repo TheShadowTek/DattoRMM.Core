@@ -44,6 +44,8 @@ function Reset-RMMConfig {
     .LINK
         Set-RMMConfig
         Get-RMMConfig
+        Set-RMMPageSize
+        Get-RMMPageSize
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]

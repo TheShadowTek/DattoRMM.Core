@@ -131,6 +131,10 @@ Settings take effect immediately and persist across sessions.
 ## RELATED LINKS
 
 [Connect-DattoRMM
+Set-RMMPageSize
+Get-RMMPageSize
+Get-RMMConfig
+Reset-RMMConfig
 Set-RMMPageSize]()
 
 
