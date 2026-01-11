@@ -22,6 +22,8 @@ $Script:RMMThrottle = @{
 }
 
 # Dot-source classes.ps1 first (enums and classes must be loaded before other files)
+. $PSScriptRoot\Private\Classes\DRMMEnums.ps1
+. $PSScriptRoot\Private\Classes\DRMMObject.ps1
 . $PSScriptRoot\Private\classes.ps1
 
 # Dot-source remaining .ps1 files in Private folder

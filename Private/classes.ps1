@@ -1,3 +1,4 @@
+<#
 # enum types
 enum RMMSiteExtendedProperty {
     Settings
@@ -18,8 +19,10 @@ enum RMMPlatform {
     Zinfandel
     Syrah
 }
+#>
 
 # classes
+<#
 class DRMMObject {
 
     DRMMObject() {}
@@ -179,10 +182,7 @@ class DRMMObject {
 
     }
 }
-
-
-
-
+#>
 
 class DRMMAccount : DRMMObject {
 
