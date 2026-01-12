@@ -219,16 +219,11 @@ Job output (stdout/stderr) is typically used for troubleshooting component execu
 
 ## RELATED LINKS
 
-[about_DRMMJob](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMJob.md)
-
-[New-RMMQuickJob](https://github.com/boabf/Datto-RMM/blob/main/docs/New-RMMQuickJob.md)
-
-[Get-RMMComponent](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMComponent.md)
 
 [about_DRMMJob](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMJob.md)
-
 [New-RMMQuickJob](https://github.com/boabf/Datto-RMM/blob/main/docs/New-RMMQuickJob.md)
-
 [Get-RMMComponent](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMComponent.md)
-
+[about_DRMMJob](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMJob.md)
+[New-RMMQuickJob](https://github.com/boabf/Datto-RMM/blob/main/docs/New-RMMQuickJob.md)
+[Get-RMMComponent](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMComponent.md)
 

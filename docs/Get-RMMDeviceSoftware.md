@@ -100,10 +100,8 @@ Results may not be real-time if the device is offline or hasn't reported recentl
 
 ## RELATED LINKS
 
+
 [about_DRMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMDevice.md)
-
 [Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
-
 [Get-RMMDeviceAudit](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDeviceAudit.md)
-
 

@@ -1,14 +1,22 @@
 <#
 .SYNOPSIS
-    Generate MAML about topics for module, with class-aware processing.
+    Converts Markdown about_*.md files to PowerShell about help text, with class-aware enhancements.
+
 .DESCRIPTION
-    - Reads all about_*.md files in docs/about.
-    - Reads Private/classes.ps1 to get class names, properties, and methods.
-    - If about file matches a class, includes property/method lists and a link to online docs in longDescription.
-    - Otherwise, processes as a standard about_ topic.
-    - Outputs MAML XML to en-US/.
+    ConvertFrom-MdAboutDocs.ps1 reads all about_*.md files in the docs folder and generates PowerShell about help .txt files in en-US/.
+    If an about topic matches a class, it includes class properties and methods in the output, and links to online documentation if available.
+    Otherwise, it processes the file as a standard about_ topic.
+    This script is intended to be used as part of the build process for the Datto-RMM module.
+
+.PARAMETER AboutFolder
+    The folder containing about_*.md files. Defaults to 'docs'.
+
+.PARAMETER OutputFolder
+    The folder to output .help.txt files. Defaults to 'en-US'.
+
 .NOTES
-    Online doc links are placeholders for now.
+    Script: ConvertFrom-MdAboutDocs.ps1
+    Online doc links are constructed from DocsBaseUrl in the module manifest.
 #>
 
 param(

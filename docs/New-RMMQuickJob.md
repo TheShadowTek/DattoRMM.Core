@@ -255,18 +255,12 @@ Best practices:
 
 ## RELATED LINKS
 
+
 [about_DRMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMDevice.md)
-
 [Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
-
 [Get-RMMComponent](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMComponent.md)
-
 [Get-RMMJob](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMJob.md)
-
 [about_DRMMJob](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMJob.md)
-
 [Get-RMMComponent](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMComponent.md)
-
 [about_DRMMComponent](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMComponent.md)
-
 

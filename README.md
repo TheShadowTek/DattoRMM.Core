@@ -27,6 +27,9 @@ This PowerShell module provides a comprehensive, object-oriented interface for m
 - Throttling logic is built-in to prevent exceeding allowed request rates, with automatic backoff and retry where appropriate.
 - This ensures reliable operation in scripts and automation, even under heavy load or in large environments.
 
+> [!NOTE]
+> With this built-in throttling, it is safe to run large parallel workloads (such as data extraction or bulk operations) without risking API lockouts or service disruption.
+
 ## Getting Started
 
 ### Installation
@@ -88,7 +91,8 @@ $Cred = Get-AutomationPSCredential -Name "DattoRMM-API"
 Connect-DattoRMM -Credential $Cred
 ```
 
-> Note: The credential asset must be created in the Automation Account before use.
+> [!NOTE]
+> The credential asset must be created in the Automation Account before use.
 
 
 
@@ -109,7 +113,8 @@ $Secret = ConvertTo-SecureString $SecretValue.SecretValueText -AsPlainText -Forc
 Connect-DattoRMM -Key "your-api-key" -Secret $Secret
 ```
 
-> Note: The Key Vault and secret must be created and accessible to the automation context.
+> [!NOTE]
+> The Key Vault and secret must be created and accessible to the automation context.
 
 
 > [!NOTE]

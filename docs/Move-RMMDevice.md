@@ -197,10 +197,8 @@ The device must exist and the target site must exist in your account.
 
 ## RELATED LINKS
 
+
 [about_DRMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMDevice.md)
-
 [Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
-
 [Get-RMMSite](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMSite.md)
-
 

@@ -226,10 +226,8 @@ Use Remove-RMMSiteProxy to delete proxy settings entirely.
 
 ## RELATED LINKS
 
+
 [about_DRMMSite](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMSite.md)
-
 [Get-RMMSite](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMSite.md)
-
 [Remove-RMMSiteProxy](https://github.com/boabf/Datto-RMM/blob/main/docs/Remove-RMMSiteProxy.md)
-
 

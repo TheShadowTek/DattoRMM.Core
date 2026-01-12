@@ -1,30 +1,29 @@
 <#
 .SYNOPSIS
-    Generates markdown help files for module functions using PlatyPS.
+    Converts PowerShell function help to Markdown documentation for all public module functions.
 
 .DESCRIPTION
-    This script generates markdown documentation for all public functions in the module.
-    It handles the enum loading issue with PlatyPS and post-processes the output to
-    clean up formatting (removes PS > prompts for cleaner examples).
-    
-    Only regenerates help files if the source function has been modified more recently
-    than the existing markdown file.
+    ConvertTo-MdFunctionDocs.ps1 generates Markdown documentation for all public functions in the Datto-RMM module.
+    It uses PlatyPS to extract help, handles enum loading issues, and post-processes the output to clean up formatting (such as removing 'PS >' prompts from examples).
+    Only regenerates help files if the source function has been modified more recently than the existing Markdown file, unless -Force is specified.
 
 .PARAMETER Force
-    Force regeneration of all help files regardless of modification time.
+    If specified, regenerates all function help files regardless of modification time.
 
 .PARAMETER OutputFolder
-    The folder to output markdown files to. Defaults to .\docs
+    The folder to output Markdown files to. Defaults to .\docs
 
 .EXAMPLE
-    .\Build\Generate-FunctionHelp.ps1
-    
-    Generates markdown help for any functions that have been modified.
+    .\Build\ConvertTo-MdFunctionDocs.ps1
+    Generates Markdown help for any functions that have been modified.
 
 .EXAMPLE
-    .\Build\Generate-FunctionHelp.ps1 -Force
-    
-    Regenerates all markdown help files.
+    .\Build\ConvertTo-MdFunctionDocs.ps1 -Force
+    Regenerates all Markdown help files.
+
+.NOTES
+    Script: ConvertTo-MdFunctionDocs.ps1
+    Uses PlatyPS for help extraction and custom post-processing for formatting consistency.
 #>
 [CmdletBinding()]
 param(
@@ -154,15 +153,24 @@ try {
             }
 
 
-            # --- Improved: Convert RELATED LINKS to markdown links with doc path ---
-            # Replace lines like [Get-RMMDevice]() or Get-RMMDevice with [Get-RMMDevice]({docpath}/Get-RMMDevice.md)
-            $Content = [regex]::Replace($Content, '(?m)^\[([A-Za-z0-9\-_]+)\]\(\)|^([A-Za-z0-9\-_]+)$', {
-                param($match)
-                $name = if ($match.Groups[1].Success) { $match.Groups[1].Value } else { $match.Groups[2].Value }
-                if ($null -eq $name -or $name -eq '') { return $match.Value }
-                return "[$name]({docpath}/$name.md)"
-            })
 
+            # --- Improved: Convert RELATED LINKS to markdown links with doc path (handles multi-line and .LINK tags) ---
+            $Content = [regex]::Replace($Content, '(?ms)(^## RELATED LINKS\s*)([\s\S]*?)(?=^## |\z)', {
+                param($match)
+                $header = $match.Groups[1].Value
+                $block = $match.Groups[2].Value
+                # Extract all possible link names from the block
+                $names = @()
+                foreach ($line in $block -split "`n") {
+                    $line = $line.Trim()
+                    if ($line -match '^[\-\*]\s*\[([^\]]+)\]') { $names += $matches[1] }
+                    elseif ($line -match '^\[([^\]]+)\]') { $names += $matches[1] }
+                    elseif ($line -match '^([A-Za-z0-9\-_]+)$') { $names += $matches[1] }
+                }
+                if ($names.Count -eq 0) { return $match.Value }
+                $links = $names | ForEach-Object { "[$_]({docpath}/$_.md)" }
+                return "$header`n$($links -join "`n")`n"
+            })
             # Replace {docpath} with DocsBaseUrl
             $Content = $Content -replace '\{docpath\}', $DocsBaseUrl.TrimEnd('/')
 

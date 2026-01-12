@@ -102,9 +102,7 @@ Default values after reset:
 
 ## RELATED LINKS
 
-[Set-RMMConfig
-Get-RMMConfig
-Set-RMMPageSize
-Get-RMMPageSize]()
 
+[Get-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMConfig.md)
+[Set-RMMPageSize](https://github.com/boabf/Datto-RMM/blob/main/docs/Set-RMMPageSize.md)
 

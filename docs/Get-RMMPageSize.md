@@ -39,9 +39,7 @@ as soon as it is received.
 
 ## RELATED LINKS
 
-[Set-RMMPageSize
-Set-RMMConfig
-Get-RMMConfig
-Reset-RMMConfig]()
 
+[Set-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Set-RMMConfig.md)
+[Get-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMConfig.md)
 

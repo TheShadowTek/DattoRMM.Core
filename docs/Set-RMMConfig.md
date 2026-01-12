@@ -130,11 +130,9 @@ Settings take effect immediately and persist across sessions.
 
 ## RELATED LINKS
 
-[Connect-DattoRMM
-Set-RMMPageSize
-Get-RMMPageSize
-Get-RMMConfig
-Reset-RMMConfig
-Set-RMMPageSize]()
 
+[Set-RMMPageSize](https://github.com/boabf/Datto-RMM/blob/main/docs/Set-RMMPageSize.md)
+[Get-RMMPageSize](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMPageSize.md)
+[Get-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMConfig.md)
+[Reset-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Reset-RMMConfig.md)
 
