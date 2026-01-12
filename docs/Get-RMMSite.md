@@ -203,7 +203,7 @@ Only request extended properties when needed.
 ## RELATED LINKS
 
 
-[about_DRMMSite](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMSite.md)
-[Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
-[Get-RMMDeviceFilter](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDeviceFilter.md)
+- [about_DRMMSite](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMSite.md)
+- [Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
+- [Get-RMMDeviceFilter](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDeviceFilter.md)
 

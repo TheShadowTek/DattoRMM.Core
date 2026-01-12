@@ -1,0 +1,28 @@
+TOPIC
+    about_DRMMUser
+
+SHORT DESCRIPTION
+    Describes the DRMMUser class and its methods for working with users in Datto RMM.
+
+LONG DESCRIPTION
+    The DRMMUser class represents a user account within Datto RMM. User objects contain information about account holders, including contact details, status, and access times. 
+ 
+DRMMUser objects are returned by Get-RMMUser and provide methods for inspecting user details and generating summaries.
+
+PROPERTIES (from class)
+    FirstName [string]
+    LastName [string]
+    Username [string]
+    Email [string]
+    Telephone [string]
+    Status [string]
+    Created [Nullable[datetime]]
+    LastAccess [Nullable[datetime]]
+    Disabled [bool]
+
+METHODS (from class)
+    GetFullName() string
+    GetSummary() string
+
+SEE ALSO
+    about_DRMMUser.md

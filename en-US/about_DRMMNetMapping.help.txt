@@ -1,0 +1,27 @@
+TOPIC
+    about_DRMMNetMapping
+
+SHORT DESCRIPTION
+    Describes the DRMMNetMapping class for representing Datto RMM network mapping objects.
+
+LONG DESCRIPTION
+    The DRMMNetMapping class models a network mapping within Datto RMM, including identifiers, descriptive fields, and portal access. 
+ 
+DRMMNetMapping objects are returned by Get-RMMNetMapping, which retrieves Datto Networking site mappings for the account. The function may return one or more DRMMNetMapping objects depending on the query and account configuration. 
+ 
+Use Get-RMMNetMapping to correlate RMM sites with their Datto Networking infrastructure and manage network mappings programmatically.
+
+PROPERTIES (from class)
+    Id [long]
+    Uid [guid]
+    AccountUid [string]
+    Name [string]
+    Description [string]
+    DatatoNetworkingNetworkIds [long[]]
+    PortalUrl [string]
+
+METHODS (from class)
+    OpenPortal() void
+
+SEE ALSO
+    about_DRMMNetMapping.md

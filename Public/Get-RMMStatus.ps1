@@ -43,6 +43,10 @@ function Get-RMMStatus {
         Use Connect-DattoRMM to authenticate before calling this function.
 
         Consider checking system status before running bulk operations or automated tasks.
+
+    .LINK
+        about_DRMMStatus
+
     #>
     [CmdletBinding()]
     param ()

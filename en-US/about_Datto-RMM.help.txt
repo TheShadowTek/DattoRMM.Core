@@ -30,4 +30,4 @@ $Component = Get-RMMComponent | Where-Object Name -eq "Patch WebServer - URGENT"
 Get-RMMDevice -FilterId $Filter.Id | New-RMMQuickJob -JobName "Patch WebServer - URGENT" -Component $Component -Force 
 ``` 
  
-[Project README](https://github.com/boabf/Datto-RMM)
+Project README

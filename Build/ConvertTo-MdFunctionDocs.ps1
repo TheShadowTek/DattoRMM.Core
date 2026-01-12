@@ -51,9 +51,39 @@ try {
     }
     
     # Load types into session (required for PlatyPS to resolve types)
-    # Classes and enums must be loaded in the current scope, not just imported via module
-    Write-Host "  Loading types into session..."
-    . .\Private\classes.ps1
+    # Load DRMMObject.psm1 first
+    $objectModule = Join-Path $ModuleRoot "Private/Classes/DRMMObject.psm1"
+    if (Test-Path $objectModule) {
+        . $objectModule
+        Write-Host "  Loaded DRMMObject.psm1"
+    } else {
+        Write-Warning "DRMMObject.psm1 not found: $objectModule"
+    }
+    # Load classes in module order
+    $ClassFiles = @(
+        'DRMMEnums.ps1',
+        'DRMMAccount.ps1',
+        'DRMMActivityLog.ps1',
+        'DRMMAlert.ps1',
+        'DRMMComponent.ps1',
+        'DRMMDeviceAudit.ps1',
+        'DRMMJob.ps1',
+        'DRMMDevice.ps1',
+        'DRMMVariable.ps1',
+        'DRMMFilter.ps1',
+        'DRMMSite.ps1',
+        'DRMMNetMapping.ps1',
+        'DRMMStatus.ps1',
+        'DRMMUser.ps1'
+    )
+    foreach ($file in $ClassFiles) {
+        $path = Join-Path $ModuleRoot "Private/Classes/$file"
+        if (Test-Path $path) {
+            . $path
+        } else {
+            Write-Warning "Class file not found: $path"
+        }
+    }
     
     # Import module
     Write-Host "  Importing module..."
@@ -168,7 +198,7 @@ try {
                     elseif ($line -match '^([A-Za-z0-9\-_]+)$') { $names += $matches[1] }
                 }
                 if ($names.Count -eq 0) { return $match.Value }
-                $links = $names | ForEach-Object { "[$_]({docpath}/$_.md)" }
+                $links = $names | ForEach-Object { "- [$_]({docpath}/$_.md)" }
                 return "$header`n$($links -join "`n")`n"
             })
             # Replace {docpath} with DocsBaseUrl

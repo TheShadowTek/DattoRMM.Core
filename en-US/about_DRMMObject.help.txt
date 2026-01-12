@@ -1,0 +1,22 @@
+TOPIC
+    about_DRMMObject
+
+SHORT DESCRIPTION
+    
+
+LONG DESCRIPTION
+    
+
+PROPERTIES (from class)
+
+METHODS (from class)
+    static GetValue([pscustomobject]$InputObject, [string]$Key) object
+    static ValidateShape([pscustomobject]$Sample, [string[]]$RequiredProperties) bool
+    static ConvertEpochToDateTime([long]$Epoch) datetime
+    static ParseApiDate([object]$Value) hashtable
+    static MaskString([string]$Value, [int]$VisibleChars = 1, [string]$MaskChar = '*') string
+    static GetMissingHelperErrorMessage() string
+    static ThrowMissingHelperError() void
+
+SEE ALSO
+    about_DRMMObject.md

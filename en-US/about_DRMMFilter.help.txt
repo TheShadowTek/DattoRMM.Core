@@ -11,7 +11,7 @@ Filters can be scoped at two levels:
 - **Global:** Available across all sites in the account 
 - **Site:** Specific to a single site 
  
-DRMMFilter objects are returned by [Get-RMMDeviceFilter](Get-RMMDeviceFilter.md) and provide methods for retrieving devices that match the filter criteria.
+DRMMFilter objects are returned by Get-RMMDeviceFilter and provide methods for retrieving devices that match the filter criteria.
 
 PROPERTIES (from class)
     Id [long]
@@ -20,6 +20,9 @@ PROPERTIES (from class)
     Description [string]
     Type [string]
     Scope [string]
+    SiteUid [Nullable[guid]]
+    DateCreate [Nullable[datetime]]
+    LastUpdated [Nullable[datetime]]
 
 METHODS (from class)
     IsGlobal() bool

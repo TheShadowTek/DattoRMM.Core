@@ -1,0 +1,27 @@
+TOPIC
+    about_DRMMPrinterAudit
+
+SHORT DESCRIPTION
+    Describes the DRMMPrinterAudit class and its methods for accessing printer audit data in Datto RMM.
+
+LONG DESCRIPTION
+    Datto RMM provides detailed audit snapshots for network printers. Use Get-RMMPrinterAudit to retrieve a DRMMPrinterAudit object for a printer device. For standard device audits, see DRMMDeviceAudit. 
+ 
+# Printer Audit (DRMMPrinterAudit)
+
+PROPERTIES (from class)
+    DeviceUid [guid]
+    PortalUrl [string]
+    SnmpInfo [DRMMPrinterSnmpInfo]
+    PrinterMarkerSupplies [DRMMPrinterMarkerSupply[]]
+    Printer [DRMMPrinter]
+    SystemInfo [DRMMPrinterSystemInfo]
+    Nics [DRMMNetworkInterface[]]
+
+METHODS (from class)
+
+SEE ALSO
+    Get-RMMDevice
+    DRMMDevice
+    DRMMDeviceAudit
+

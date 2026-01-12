@@ -7,7 +7,7 @@ SHORT DESCRIPTION
 LONG DESCRIPTION
     The DRMMDevice class represents a managed device within Datto RMM. Devices are endpoints (servers, workstations, network devices, etc.) monitored and managed through the Datto RMM platform. 
  
-DRMMDevice objects are returned by [Get-RMMDevice](Get-RMMDevice.md) and provide a comprehensive object-oriented interface for device management, monitoring, and automation.
+DRMMDevice objects are returned by Get-RMMDevice and provide a comprehensive object-oriented interface for device management, monitoring, and automation.
 
 PROPERTIES (from class)
     Id [long]
@@ -30,6 +30,10 @@ PROPERTIES (from class)
     Online [bool]
     Suspended [bool]
     Deleted [bool]
+    LastSeen [Nullable[datetime]]
+    LastReboot [Nullable[datetime]]
+    LastAuditDate [Nullable[datetime]]
+    CreationDate [Nullable[datetime]]
     Udfs [DRMMDeviceUdfs]
     SnmpEnabled [bool]
     DeviceClass [string]

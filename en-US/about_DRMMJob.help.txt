@@ -7,12 +7,13 @@ SHORT DESCRIPTION
 LONG DESCRIPTION
     The DRMMJob class represents a job (component execution) in Datto RMM. Jobs are created when components are executed on devices through quick jobs or scheduled tasks. The DRMMJob class provides basic job information including status, creation time, and unique identifiers. 
  
-DRMMJob objects are returned by [Get-RMMJob](Get-RMMJob.md) and New-RMMQuickJob. Use Get-RMMJob with additional parameters to retrieve detailed execution results, output logs, and component information.
+DRMMJob objects are returned by Get-RMMJob and New-RMMQuickJob. Use Get-RMMJob with additional parameters to retrieve detailed execution results, output logs, and component information.
 
 PROPERTIES (from class)
     Id [long]
     Uid [guid]
     Name [string]
+    DateCreated [Nullable[datetime]]
     Status [string]
 
 METHODS (from class)

@@ -1,0 +1,20 @@
+TOPIC
+    about_DRMMStatus
+
+SHORT DESCRIPTION
+    Describes the DRMMStatus class for representing Datto RMM service status information.
+
+LONG DESCRIPTION
+    The DRMMStatus class models the status of the Datto RMM service, including version, current status, and the time the service was started. 
+ 
+DRMMStatus objects are returned by Get-RMMStatus, which retrieves service status and health information. Use Get-RMMStatus to inspect service version, status, and uptime programmatically.
+
+PROPERTIES (from class)
+    Version [string]
+    Status [string]
+    Started [Nullable[datetime]]
+
+METHODS (from class)
+
+SEE ALSO
+    about_DRMMStatus.md

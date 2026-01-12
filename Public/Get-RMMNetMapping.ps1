@@ -45,10 +45,14 @@ function Get-RMMNetMapping {
         - Status: Mapping status
 
     .NOTES
+
         This function requires an active connection to the Datto RMM API.
         Use Connect-DattoRMM to authenticate before calling this function.
 
         This function is only relevant if your account uses Datto Networking.
+
+    .LINK
+        about_DRMMNetMapping
     #>
     [CmdletBinding()]
     param ()

@@ -126,6 +126,6 @@ The function will throw an error if:
 ## RELATED LINKS
 
 
-[about_DRMMAlert](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMAlert.md)
-[Get-RMMAlert](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMAlert.md)
+- [about_DRMMAlert](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMAlert.md)
+- [Get-RMMAlert](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMAlert.md)
 

@@ -1,0 +1,26 @@
+TOPIC
+    about_DRMMAccount
+
+SHORT DESCRIPTION
+    Describes the DRMMAccount class and its related types for representing account-level information in Datto RMM.
+
+LONG DESCRIPTION
+    The DRMMAccount class models a Datto RMM account, including identifiers, name, currency, account descriptor, and device status summary. 
+ 
+DRMMAccount objects are returned by Get-RMMAccount, which retrieves account objects for configuration and statistics. Use Get-RMMAccount to inspect account details and device status programmatically.
+
+PROPERTIES (from class)
+    Id [int]
+    Uid [string]
+    Name [string]
+    Currency [string]
+    Descriptor [DRMMAccountDescriptor]
+    DevicesStatus [DRMMAccountDevicesStatus]
+
+METHODS (from class)
+    GetSummary() string
+
+SEE ALSO
+    Get-RMMAccount
+    about_Datto-RMM
+

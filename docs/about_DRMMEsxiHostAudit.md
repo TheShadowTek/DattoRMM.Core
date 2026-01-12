@@ -1,0 +1,101 @@
+# about_DRMMEsxiHostAudit
+
+## SHORT DESCRIPTION
+
+Describes the DRMMEsxiHostAudit class and its methods for accessing ESXi host audit data in Datto RMM.
+
+## LONG DESCRIPTION
+
+Datto RMM provides detailed audit snapshots for VMware ESXi hosts. Use [Get-RMMEsxiHostAudit](Get-RMMEsxiHostAudit.md) to retrieve a DRMMEsxiHostAudit object for an ESXi device. For standard device audits, see [DRMMDeviceAudit](about_DRMMDeviceAudit.md).
+
+# ESXi Host Audit (DRMMEsxiHostAudit)
+
+## Properties
+| Property         | Type                              | Description                                 |
+|------------------|-----------------------------------|---------------------------------------------|
+| DeviceUid        | guid                              | Device GUID                                 |
+| PortalUrl        | string                            | Device portal URL                           |
+| SystemInfo       | DRMMEsxiSystemInfo                | ESXi system information                     |
+| Guests           | DRMMEsxiGuest[]                   | Virtual guests                              |
+| Processors       | DRMMEsxiProcessor[]               | Processor information                       |
+| Nics             | DRMMEsxiNic[]                     | Network interfaces                          |
+| PhysicalMemory   | DRMMEsxiPhysicalMemory[]          | Physical memory modules                     |
+| Datastores       | DRMMEsxiDatastore[]               | Datastore information                       |
+
+## Methods
+DRMMEsxiHostAudit does not expose instance methods. All data is accessed via properties and related sub-classes.
+
+## Related Classes
+### DRMMEsxiSystemInfo
+- Hostname `[string]`
+- Manufacturer `[string]`
+- Model `[string]`
+- Version `[string]`
+- CpuCores `[int]`
+- MemoryGB `[int]`
+
+### DRMMEsxiGuest
+- Name `[string]`
+- PowerState `[string]`
+- GuestOS `[string]`
+- CpuCount `[int]`
+- MemoryMB `[int]`
+
+### DRMMEsxiProcessor
+- Name `[string]`
+- SpeedMHz `[int]`
+
+### DRMMEsxiNic
+- Name `[string]`
+- MacAddress `[string]`
+- IpAddress `[string]`
+
+### DRMMEsxiPhysicalMemory
+- BankLabel `[string]`
+- CapacityMB `[int]`
+- Manufacturer `[string]`
+
+### DRMMEsxiDatastore
+- Name `[string]`
+- CapacityGB `[int]`
+- FreeGB `[int]`
+
+## METHOD CHAINING
+
+Audit objects support method chaining and integration with related classes. The returned object type depends on the device:
+
+```powershell
+# ESXi host
+$esxiAudit = Get-RMMEsxiHostAudit -DeviceUid $esxiDevice.Uid
+$guestCount = $esxiAudit.Guests.Count
+$datastore = $esxiAudit.Datastores[0].Name
+```
+
+## EXAMPLES
+
+### Example 5: List ESXi guests
+```powershell
+$esxiAudit = Get-RMMEsxiHostAudit -DeviceUid $esxiDevice.Uid
+foreach ($guest in $esxiAudit.Guests) {
+	Write-Host "$($guest.Name) ($($guest.PowerState))"
+}
+```
+
+## BEST PRACTICES
+
+1. Cache audit objects when performing multiple queries to avoid repeated API calls.
+2. Validate audit data before processing, as some properties may be null depending on device type.
+3. Use method chaining to access nested properties efficiently.
+
+## NOTES
+
+- DRMMEsxiHostAudit is returned by GetAudit() on DRMMDevice objects and by Get-RMMEsxiHostAudit for ESXi hosts.
+- All sub-classes (SystemInfo, Guests, Nics, etc.) are typed and support property access.
+- Some properties may be null or empty depending on device type and audit scope.
+- DRMMEsxiHostAudit inherits from DRMMObject, providing common functionality.
+
+## SEE ALSO
+
+- [Get-RMMDevice](Get-RMMDevice.md)
+- [DRMMDevice](about_DRMMDevice.md)
+- [DRMMDeviceAudit](about_DRMMDeviceAudit.md)

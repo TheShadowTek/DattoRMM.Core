@@ -29,31 +29,21 @@ $manifestPath = Join-Path $PSScriptRoot '..\Datto-RMM.psd1'
 $manifest = Import-PowerShellDataFile -Path $manifestPath
 $DocsBaseUrl = $manifest.DocsBaseUrl
 
-# Parse class names, properties, and methods from classes.ps1
+### Parse class names, properties, and methods from modular class files in Private/Classes
 $classDefs = @{}
-    # Hardcoded file order: enums, object, other split files (excluding using lines), then legacy classes.ps1
-    $classTextParts = @()
-    if (Test-Path 'Private/Classes/DRMMEnums.ps1') {
-        $classTextParts += Get-Content 'Private/Classes/DRMMEnums.ps1' -Raw
-    }
-    if (Test-Path 'Private/Classes/DRMMObject.psm1') {
-        $classTextParts += Get-Content 'Private/Classes/DRMMObject.psm1' -Raw
-    }
-    if (Test-Path 'Private/Classes') {
-        $otherFiles = Get-ChildItem 'Private/Classes' -Filter '*.ps*' -File | Where-Object {
-            $_.Name -notin @('DRMMEnums.ps1','DRMMObject.psm1')
-        } | Sort-Object Name
-        foreach ($file in $otherFiles) {
+$classTextParts = @()
+if (Test-Path 'Private/Classes') {
+    $classFiles = Get-ChildItem 'Private/Classes' -Filter '*.ps*' -File | Sort-Object Name
+    foreach ($file in $classFiles) {
+        if (Test-Path $file.FullName) {
             $content = Get-Content $file.FullName -Raw
             # Exclude 'using' lines
             $content = ($content -split "`n") | Where-Object { $_ -notmatch '^\s*using\s' } | Out-String
             $classTextParts += $content
         }
     }
-    if (Test-Path 'Private/classes.ps1') {
-        $classTextParts += Get-Content 'Private/classes.ps1' -Raw
-    }
-    $classText = $classTextParts -join "`n"
+}
+$classText = $classTextParts -join "`n"
 
 # Parse class names, properties, and methods from the concatenated class text
 $classDecls = [regex]::Matches($classText, 'class (\w+)[^{]*{', 'IgnoreCase')
@@ -78,13 +68,15 @@ for ($i = 0; $i -lt $classInfos.Count; $i++) {
         if ($braceCount -eq 0) { $body = $classBlock.Substring(0, $j); break }
     }
     # Properties: [Type]$Name
-    $propMatches = [regex]::Matches($body, '^[ \t]*\[([^\]]+)\]\s*\$(\w+)', 'Multiline')
+    # Improved regex: match nested brackets and array types
+    $propMatches = [regex]::Matches($body, '^[ \t]*\[([\w\[\]]+)\]\s*\$(\w+)', 'Multiline')
     $props = @()
     foreach ($p in $propMatches) {
         $ptype = $p.Groups[1].Value
         $pname = $p.Groups[2].Value
         $props += "$pname [$ptype]"
     }
+    Write-Host ("Class: {0} - Properties found: {1}" -f $className, ($props -join ', '))
     # Methods: static/instance
     $methodMatches = [regex]::Matches($body, '^[ \t]*(static\s+)?\[([^\]]+)\]\s+(\w+)\s*\(([^)]*)\)\s*\{', 'Multiline')
     $methods = @()
@@ -166,8 +158,16 @@ foreach ($file in $aboutFiles) {
             }
         }
         # Standard short/long
-        if ($currentSection -eq "short") { $short += $line + " `n" }
-        elseif ($currentSection -eq "long") { $long += $line + " `n" }
+        if ($currentSection -eq "short") {
+            # Strip markdown links in short description
+            if ($line -match '\[(.+?)\]\([^)]*\)') { $line = $line -replace '\[(.+?)\]\([^)]*\)', '$1' }
+            $short += $line + " `n"
+        }
+        elseif ($currentSection -eq "long") {
+            # Strip markdown links in long description
+            if ($line -match '\[(.+?)\]\([^)]*\)') { $line = $line -replace '\[(.+?)\]\([^)]*\)', '$1' }
+            $long += $line + " `n"
+        }
     }
     $short = $short.Trim()
     $long = $long.Trim()

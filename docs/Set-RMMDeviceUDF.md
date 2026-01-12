@@ -663,6 +663,6 @@ Best practices for UDF usage:
 ## RELATED LINKS
 
 
-[about_DRMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMDevice.md)
-[Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
+- [about_DRMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMDevice.md)
+- [Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
 

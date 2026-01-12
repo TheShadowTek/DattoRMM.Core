@@ -40,6 +40,6 @@ as soon as it is received.
 ## RELATED LINKS
 
 
-[Set-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Set-RMMConfig.md)
-[Get-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMConfig.md)
+- [Set-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Set-RMMConfig.md)
+- [Get-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMConfig.md)
 

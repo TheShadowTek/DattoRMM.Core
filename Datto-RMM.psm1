@@ -21,13 +21,16 @@ $Script:RMMThrottle = @{
     Throttle = $false
 }
 
-# Dot-source classes in Private/Classes folder
+# Dot-source classes in Private/Classes folder - dependency order
 . $PSScriptRoot\Private\Classes\DRMMEnums.ps1
 . $PSScriptRoot\Private\Classes\DRMMAccount.ps1
 . $PSScriptRoot\Private\Classes\DRMMActivityLog.ps1
 . $PSScriptRoot\Private\Classes\DRMMAlert.ps1
 . $PSScriptRoot\Private\Classes\DRMMComponent.ps1
+. $PSScriptRoot\Private\Classes\DRMMNetworkInterface.ps1
 . $PSScriptRoot\Private\Classes\DRMMDeviceAudit.ps1
+. $PSScriptRoot\Private\Classes\DRMMEsxiHostAudit.ps1
+. $PSScriptRoot\Private\Classes\DRMMPrinterAudit.ps1
 . $PSScriptRoot\Private\Classes\DRMMJob.ps1
 . $PSScriptRoot\Private\Classes\DRMMDevice.ps1
 . $PSScriptRoot\Private\Classes\DRMMVariable.ps1
@@ -36,13 +39,13 @@ $Script:RMMThrottle = @{
 . $PSScriptRoot\Private\Classes\DRMMNetMapping.ps1
 . $PSScriptRoot\Private\Classes\DRMMStatus.ps1
 . $PSScriptRoot\Private\Classes\DRMMUser.ps1
+
 # Dot-source remaining .ps1 files in Private folder
-Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 -Recurse | 
-    ForEach-Object {
+Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 | ForEach-Object {
 
-        . $_.FullName
+    . $_.FullName
 
-    }
+}
 
 # Dot-source all .ps1 files in Public folder (if exists)
 if (Test-Path $PSScriptRoot\Public) {
@@ -56,30 +59,39 @@ if (Test-Path $PSScriptRoot\Public) {
 
 # Load configuration from file if it exists
 try {
+
     $LoadedConfig = Read-ConfigFile
 
     if ($null -ne $LoadedConfig) {
         Write-Verbose "Loading configuration from file..."
 
         if ($LoadedConfig.PSObject.Properties.Name -contains 'DefaultPlatform') {
+
             $Script:ConfigDefaultPlatform = $LoadedConfig.DefaultPlatform
             Write-Verbose "  DefaultPlatform: $($Script:ConfigDefaultPlatform)"
+
         }
 
         if ($LoadedConfig.PSObject.Properties.Name -contains 'DefaultPageSize') {
+
             $Script:ConfigDefaultPageSize = $LoadedConfig.DefaultPageSize
             Write-Verbose "  DefaultPageSize: $($Script:ConfigDefaultPageSize)"
+
         }
 
         if ($LoadedConfig.PSObject.Properties.Name -contains 'LowUtilCheckInterval') {
+
             $Script:ConfigLowUtilCheckInterval = $LoadedConfig.LowUtilCheckInterval
             $Script:RMMThrottle.LowUtilCheckInterval = $LoadedConfig.LowUtilCheckInterval
             Write-Verbose "  LowUtilCheckInterval: $($Script:ConfigLowUtilCheckInterval)"
+
         }
 
         if ($LoadedConfig.PSObject.Properties.Name -contains 'TokenExpireHours') {
+            
             $Script:TokenExpireHours = $LoadedConfig.TokenExpireHours
             Write-Verbose "  TokenExpireHours: $($Script:TokenExpireHours)"
+
         }
     }
 
@@ -95,6 +107,7 @@ try {
 
 # Module removal handler - cleanup module variables
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
+
     # Remove authentication variable
     if ($Script:RMMAuth) {
 

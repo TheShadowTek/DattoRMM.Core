@@ -1,0 +1,44 @@
+TOPIC
+    about_DRMMDeviceAudit
+
+SHORT DESCRIPTION
+    Describes the DRMMDeviceAudit class and its methods for accessing device audit data in Datto RMM.
+
+LONG DESCRIPTION
+    Datto RMM provides detailed audit snapshots for managed devices. The DRMMDeviceAudit class is used for Windows, macOS, and Linux endpoints. 
+ 
+This class exposes properties and sub-objects relevant to its device type, including hardware, software, network, and system information. Use Get-RMMDeviceAudit to retrieve a DRMMDeviceAudit object for a device. 
+ 
+ 
+# Device Audit (DRMMDeviceAudit)
+
+PROPERTIES (from class)
+    DeviceUid [guid]
+    PortalUrl [string]
+    WebRemoteUrl [string]
+    SystemInfo [DRMMDeviceAuditSystemInfo]
+    Nics [DRMMNetworkInterface[]]
+    Bios [DRMMDeviceAuditBios]
+    BaseBoard [DRMMDeviceAuditBaseBoard]
+    Displays [DRMMDeviceAuditDisplay[]]
+    LogicalDisks [DRMMDeviceAuditLogicalDisk[]]
+    MobileInfo [DRMMDeviceAuditMobileInfo[]]
+    Processors [DRMMDeviceAuditProcessor[]]
+    VideoBoards [DRMMDeviceAuditVideoBoard[]]
+    AttachedDevices [DRMMDeviceAuditAttachedDevice[]]
+    SnmpInfo [DRMMDeviceAuditSnmpInfo]
+    PhysicalMemory [DRMMDeviceAuditPhysicalMemory[]]
+    Software [DRMMDeviceAuditSoftware[]]
+
+METHODS (from class)
+
+SEE ALSO
+    Get-RMMDeviceAudit
+    Get-RMMDevice
+    DRMMDevice
+    DRMMDeviceAuditSoftware
+    DRMMDeviceAuditSystemInfo
+    DRMMDeviceAuditLogicalDisk
+    DRMMEsxiHostAudit
+    DRMMPrinterAudit
+

@@ -1,4 +1,5 @@
 using module '.\DRMMObject.psm1'
+. $PSScriptRoot/DRMMNetworkInterface.ps1
 # using module '.\DRMMAlert.ps1'   # For PSScriptAnalyzer only
 # using module '.\DRMMDeviceAudit.ps1'   # For PSScriptAnalyzer only
 

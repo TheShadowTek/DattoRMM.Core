@@ -1,0 +1,28 @@
+TOPIC
+    about_DRMMEsxiHostAudit
+
+SHORT DESCRIPTION
+    Describes the DRMMEsxiHostAudit class and its methods for accessing ESXi host audit data in Datto RMM.
+
+LONG DESCRIPTION
+    Datto RMM provides detailed audit snapshots for VMware ESXi hosts. Use Get-RMMEsxiHostAudit to retrieve a DRMMEsxiHostAudit object for an ESXi device. For standard device audits, see DRMMDeviceAudit. 
+ 
+# ESXi Host Audit (DRMMEsxiHostAudit)
+
+PROPERTIES (from class)
+    DeviceUid [guid]
+    PortalUrl [string]
+    SystemInfo [DRMMEsxiSystemInfo]
+    Guests [DRMMEsxiGuest[]]
+    Processors [DRMMEsxiProcessor[]]
+    Nics [DRMMEsxiNic[]]
+    PhysicalMemory [DRMMEsxiPhysicalMemory[]]
+    Datastores [DRMMEsxiDatastore[]]
+
+METHODS (from class)
+
+SEE ALSO
+    Get-RMMDevice
+    DRMMDevice
+    DRMMDeviceAudit
+

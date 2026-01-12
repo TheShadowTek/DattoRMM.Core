@@ -7,7 +7,7 @@ SHORT DESCRIPTION
 LONG DESCRIPTION
     The DRMMSite class represents a site (customer) within Datto RMM. Sites are organisational containers that hold devices, filters, variables, and settings. 
  
-DRMMSite objects are returned by [Get-RMMSite](Get-RMMSite.md) and provide a rich object-oriented interface for interacting with site resources through instance methods.
+DRMMSite objects are returned by Get-RMMSite and provide a rich object-oriented interface for interacting with site resources through instance methods.
 
 PROPERTIES (from class)
     Id [long]
@@ -21,6 +21,7 @@ PROPERTIES (from class)
     ProxySettings [DRMMSiteProxySettings]
     DevicesStatus [DRMMDevicesStatus]
     SiteSettings [DRMMSiteSettings]
+    Variables [DRMMVariable[]]
     Filters [object]
     AutotaskCompanyName [string]
     AutotaskCompanyId [string]

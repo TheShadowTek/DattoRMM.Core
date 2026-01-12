@@ -51,6 +51,6 @@ The output shows:
 ## RELATED LINKS
 
 
-[Reset-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Reset-RMMConfig.md)
-[Set-RMMPageSize](https://github.com/boabf/Datto-RMM/blob/main/docs/Set-RMMPageSize.md)
+- [Reset-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Reset-RMMConfig.md)
+- [Set-RMMPageSize](https://github.com/boabf/Datto-RMM/blob/main/docs/Set-RMMPageSize.md)
 

@@ -74,11 +74,15 @@ function Get-RMMActivityLog {
         DRMMActivityLog. Returns activity log objects with details about the activity.
 
     .NOTES
+
         This function requires an active connection to the Datto RMM API.
         Use Connect-DattoRMM to authenticate before calling this function.
 
         The API uses integer IDs (not UIDs) for sites and users in this endpoint.
         Results are paginated automatically.
+
+    .LINK
+        about_DRMMActivityLog
     #>
 
     [CmdletBinding(DefaultParameterSetName='Default')]

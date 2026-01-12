@@ -205,3 +205,6 @@ Results are paginated automatically.
 
 ## RELATED LINKS
 
+
+- [about_DRMMActivityLog](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMActivityLog.md)
+

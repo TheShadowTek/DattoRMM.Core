@@ -6,9 +6,10 @@ Describes the DRMMComponent class for managing automation components in Datto RM
 
 ## LONG DESCRIPTION
 
+
 The DRMMComponent class represents an automation component (script or monitor) in Datto RMM. Components are reusable automation scripts that can be executed on devices through quick jobs or scheduled tasks.
 
-DRMMComponent objects are returned by Get-RMMComponent and provide methods to inspect component properties, variables, and execute components on devices.
+DRMMComponent objects are returned by [Get-RMMComponent](Get-RMMComponent.md), which retrieves component objects for inspection and execution. Use Get-RMMComponent to list, filter, and manage automation components programmatically.
 
 ## PROPERTIES
 

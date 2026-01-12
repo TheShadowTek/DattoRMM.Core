@@ -60,6 +60,9 @@ function Get-RMMAccount {
 
     .LINK
         Get-RMMDevice
+
+    .LINK
+        about_DRMMAccount
     #>
 
     [CmdletBinding()]
