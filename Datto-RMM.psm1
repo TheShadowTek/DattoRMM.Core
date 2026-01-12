@@ -23,14 +23,15 @@ $Script:RMMThrottle = @{
 
 # Dot-source classes.ps1 first (enums and classes must be loaded before other files)
 . $PSScriptRoot\Private\Classes\DRMMEnums.ps1
-#. $PSScriptRoot\Private\Classes\DRMMObject.psm1 # Moved to using module for dependency
+#. $PSScriptRoot\Private\Classes\DRMMObject.psm1 # Moved to using module for dependency resolution
 . $PSScriptRoot\Private\Classes\DRMMAccount.ps1
 . $PSScriptRoot\Private\Classes\DRMMActivityLog.ps1
+. $PSScriptRoot\Private\Classes\DRMMAlert.ps1
 . $PSScriptRoot\Private\classes.ps1
 
 # Dot-source remaining .ps1 files in Private folder
 Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 -Recurse | 
-    Where-Object { $_.Name -ne 'classes.ps1' } |
+    Where-Object {$_.Name -ne 'classes.ps1'} |
     ForEach-Object {
 
         . $_.FullName
@@ -39,6 +40,7 @@ Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 -Recurse |
 
 # Dot-source all .ps1 files in Public folder (if exists)
 if (Test-Path $PSScriptRoot\Public) {
+
     Get-ChildItem -Path $PSScriptRoot\Public -Filter *.ps1 -Recurse | ForEach-Object {
 
         . $_.FullName
@@ -74,8 +76,11 @@ try {
             Write-Verbose "  TokenExpireHours: $($Script:TokenExpireHours)"
         }
     }
+
 } catch {
+
     Write-Verbose "Configuration file not loaded: $_"
+
 }
 
 # Export functions from Public folder (if any)
