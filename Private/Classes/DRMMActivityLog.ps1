@@ -1,4 +1,5 @@
 using module '.\DRMMObject.psm1'
+
 class DRMMActivityLog : DRMMObject {
 
     [string]$Id

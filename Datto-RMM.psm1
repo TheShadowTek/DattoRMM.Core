@@ -21,18 +21,23 @@ $Script:RMMThrottle = @{
     Throttle = $false
 }
 
-# Dot-source classes.ps1 first (enums and classes must be loaded before other files)
+# Dot-source classes in Private/Classes folder
 . $PSScriptRoot\Private\Classes\DRMMEnums.ps1
-#. $PSScriptRoot\Private\Classes\DRMMObject.psm1 # Moved to using module for dependency resolution
 . $PSScriptRoot\Private\Classes\DRMMAccount.ps1
 . $PSScriptRoot\Private\Classes\DRMMActivityLog.ps1
 . $PSScriptRoot\Private\Classes\DRMMAlert.ps1
 . $PSScriptRoot\Private\Classes\DRMMComponent.ps1
-. $PSScriptRoot\Private\classes.ps1
-
+. $PSScriptRoot\Private\Classes\DRMMDeviceAudit.ps1
+. $PSScriptRoot\Private\Classes\DRMMJob.ps1
+. $PSScriptRoot\Private\Classes\DRMMDevice.ps1
+. $PSScriptRoot\Private\Classes\DRMMVariable.ps1
+. $PSScriptRoot\Private\Classes\DRMMFilter.ps1
+. $PSScriptRoot\Private\Classes\DRMMSite.ps1
+. $PSScriptRoot\Private\Classes\DRMMNetMapping.ps1
+. $PSScriptRoot\Private\Classes\DRMMStatus.ps1
+. $PSScriptRoot\Private\Classes\DRMMUser.ps1
 # Dot-source remaining .ps1 files in Private folder
 Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 -Recurse | 
-    Where-Object {$_.Name -ne 'classes.ps1'} |
     ForEach-Object {
 
         . $_.FullName
