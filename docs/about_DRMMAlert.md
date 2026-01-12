@@ -28,7 +28,7 @@ The DRMMAlert class exposes the following properties:
 | AlertMonitorInfo | [DRMMAlertMonitorInfo] | Information about the monitor that triggered the alert |
 | AlertContext | [DRMMAlertContext] | Type-specific context data (varies by alert type) |
 | AlertSourceInfo | [DRMMAlertSourceInfo] | Information about the alert source (device/site) |
-| ResponseActions | [DRMMResponseAction[]] | Automated response actions triggered |
+| ResponseActions | [DRMMAlertResponseAction[]] | Automated response actions triggered |
 | AutoresolveMins | [Nullable[int]] | Auto-resolution timeout in minutes |
 | SiteUid | [Nullable[guid]] | Site GUID (when queried at site scope) |
 
@@ -147,7 +147,7 @@ Contains information about the source of the alert.
 - SiteUid [string] - Site unique identifier
 - SiteName [string] - Site name
 
-### DRMMResponseAction
+### DRMMAlertResponseAction
 
 Represents an automated action taken in response to the alert.
 

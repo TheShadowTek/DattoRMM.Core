@@ -14,7 +14,7 @@ class DRMMAlert : DRMMObject {
     [DRMMAlertMonitorInfo]$AlertMonitorInfo
     [DRMMAlertContext]$AlertContext
     [DRMMAlertSourceInfo]$AlertSourceInfo
-    [DRMMResponseAction[]]$ResponseActions
+    [DRMMAlertResponseAction[]]$ResponseActions
     [Nullable[int]]$AutoresolveMins
     [Nullable[guid]]$SiteUid
 
@@ -49,7 +49,7 @@ class DRMMAlert : DRMMObject {
 
             $Alert.ResponseActions = $Response.responseActions | ForEach-Object {
 
-                [DRMMResponseAction]::FromAPIMethod($_)
+                [DRMMAlertResponseAction]::FromAPIMethod($_)
                 
             }
         }
@@ -3360,7 +3360,7 @@ class DRMMPrinterSystemInfo : DRMMObject {
     }
 }
 
-class DRMMResponseAction : DRMMObject {
+class DRMMAlertResponseAction : DRMMObject {
 
     [Nullable[datetime]]$ActionTime
     [string]$ActionType
@@ -3368,11 +3368,11 @@ class DRMMResponseAction : DRMMObject {
     [string]$ActionReference
     [string]$ActionReferenceInt
 
-    DRMMResponseAction() : base() {
+    DRMMAlertResponseAction() : base() {
 
     }
 
-    static [DRMMResponseAction] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMAlertResponseAction] FromAPIMethod([pscustomobject]$Response) {
 
         if ($null -eq $Response) {
 
@@ -3380,7 +3380,7 @@ class DRMMResponseAction : DRMMObject {
 
         }
 
-        $ResponseAction = [DRMMResponseAction]::new()
+        $ResponseAction = [DRMMAlertResponseAction]::new()
 
         $ActionDate = [DRMMObject]::ParseApiDate($Response.actionTime)
         $ResponseAction.ActionTime = $ActionDate.DateTime

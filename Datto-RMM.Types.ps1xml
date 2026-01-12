@@ -63,7 +63,7 @@
     </Members>
   </Type>
   <Type>
-    <Name>DRMMResponseAction</Name>
+    <Name>DRMMAlertResponseAction</Name>
     <Members>
       <ScriptMethod>
         <Name>ToString</Name>
