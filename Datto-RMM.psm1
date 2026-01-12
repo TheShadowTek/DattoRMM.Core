@@ -27,6 +27,7 @@ $Script:RMMThrottle = @{
 . $PSScriptRoot\Private\Classes\DRMMAccount.ps1
 . $PSScriptRoot\Private\Classes\DRMMActivityLog.ps1
 . $PSScriptRoot\Private\Classes\DRMMAlert.ps1
+. $PSScriptRoot\Private\Classes\DRMMComponent.ps1
 . $PSScriptRoot\Private\classes.ps1
 
 # Dot-source remaining .ps1 files in Private folder
