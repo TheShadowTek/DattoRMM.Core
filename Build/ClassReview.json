@@ -1,0 +1,152 @@
+[
+  {
+    "ClassName": "DRMMObject",
+    "BaseClass": null,
+    "Stages": {"TypesXml": true, "FormatXml": true, "Reviewed": true}
+  },
+  {
+    "ClassName": "DRMMJob",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMJobComponent",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMJobComponentResult",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMJobComponentVariable",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMJobResults",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMJobStdData",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMVariable",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMStatus",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMUser",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMSite",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": true, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMSiteGeneralSettings",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMSiteMailRecipient",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMSiteProxySettings",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMSiteSettings",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMDevicesStatus",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMPrinter",
+    "BaseClass": "DRMMObject",
+      "Stages": {"TypesXml": true, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMPrinterAudit",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMPrinterMarkerSupply",
+    "BaseClass": "DRMMObject",
+      "Stages": {"TypesXml": true, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMPrinterSnmpInfo",
+    "BaseClass": "DRMMObject",
+      "Stages": {"TypesXml": true, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMPrinterSystemInfo",
+    "BaseClass": "DRMMObject",
+      "Stages": {"TypesXml": true, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMNetworkInterface",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMNetMapping",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMEsxiDatastore",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMEsxiGuest",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMEsxiHostAudit",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMEsxiNic",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMEsxiPhysicalMemory",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMEsxiProcessor",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  },
+  {
+    "ClassName": "DRMMEsxiSystemInfo",
+    "BaseClass": "DRMMObject",
+    "Stages": {"TypesXml": false, "FormatXml": false, "Reviewed": false}
+  }
+]

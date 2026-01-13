@@ -1,6 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration>
-    <ViewDefinitions>
+    <ViewDefinitions>        
+        <View>
+            <Name>DRMMPrinterAudit.List</Name>
+            <ViewSelectedBy>
+                <TypeName>DRMMPrinterAudit</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <Label>DeviceUid</Label>
+                                <PropertyName>DeviceUid</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>PortalUrl</Label>
+                                <PropertyName>PortalUrl</PropertyName>
+                            </ListItem>
+                            <!-- Printer property removed: name does not match displayed value -->
+                            <ListItem>
+                                <Label>SystemInfo</Label>
+                                <ScriptBlock>if ($_.SystemInfo) { $_.SystemInfo.Manufacturer } else { '' }</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>SnmpInfo</Label>
+                                <ScriptBlock>if ($_.SnmpInfo) { $_.SnmpInfo.SnmpName } else { '' }</ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>PrinterMarkerSupplies</Label>
+                                <ScriptBlock>if ($_.PrinterMarkerSupplies) { $_.PrinterMarkerSupplies.Count } else { '0' }</ScriptBlock>
+                            </ListItem>
+                            <!-- Nics property removed -->
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+        <View>
+            <Name>DRMMPrinterAudit.Table</Name>
+            <ViewSelectedBy>
+                <TypeName>DRMMPrinterAudit</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>DeviceUid</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>PortalUrl</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>SystemInfo</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>SnmpInfo</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>PrinterMarkerSupplies</Label>
+                    </TableColumnHeader>
+                        <TableColumnHeader>
+                            <Label>Printer</Label>
+                        </TableColumnHeader>
+                        <TableColumnHeader>
+                            <Label>Nics</Label>
+                        </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>DeviceUid</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>PortalUrl</PropertyName>
+                            </TableColumnItem>
+                                <TableColumnItem>
+                                    <PropertyName>Printer</PropertyName>
+                                </TableColumnItem>
+                                <TableColumnItem>
+                                    <ScriptBlock>if ($_.SystemInfo) { $_.SystemInfo.Manufacturer } else { '' }</ScriptBlock>
+                                </TableColumnItem>
+                                <TableColumnItem>
+                                    <ScriptBlock>if ($_.SnmpInfo) { $_.SnmpInfo.SnmpName } else { '' }</ScriptBlock>
+                                </TableColumnItem>
+                                <TableColumnItem>
+                                    <ScriptBlock>if ($_.PrinterMarkerSupplies) { $_.PrinterMarkerSupplies.Count } else { '0' }</ScriptBlock>
+                                </TableColumnItem>
+                                <TableColumnItem>
+                                    <PropertyName>Nics</PropertyName>
+                                </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
         <View>
             <Name>DRMMSite.List</Name>
             <ViewSelectedBy>
@@ -115,7 +209,6 @@
                 </TableRowEntries>
             </TableControl>
         </View>
-
         <View>
             <Name>DRMMDevice.List</Name>
             <ViewSelectedBy>
@@ -239,7 +332,6 @@
                 </TableRowEntries>
             </TableControl>
         </View>
-
         <View>
             <Name>DRMMAlert.List</Name>
             <ViewSelectedBy>
@@ -463,6 +555,5 @@
                 </TableRowEntries>
             </TableControl>
         </View>
-
     </ViewDefinitions>
 </Configuration>

@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Types>
   <Type>
+    <Name>DRMMPrinterAudit</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.DeviceUid</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+  <Type>
+    <Name>DRMMPrinter</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Name) { $this.Name } elseif ($this.Id) { $this.Id } elseif
+          ($this.PrintedPageCount) { $this.PrintedPageCount } else { $this.ToString() }</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+  <Type>
+    <Name>DRMMPrinterSystemInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Manufacturer) { $this.Manufacturer } elseif ($this.Model) { $this.Model }
+          else { $this.ToString() }</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+  <Type>
+    <Name>DRMMPrinterSnmpInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.SnmpName) { $this.SnmpName } elseif ($this.ObjectId) { $this.ObjectId }
+          else { $this.ToString() }</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+  <Type>
+    <Name>DRMMPrinterMarkerSupply</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Description) { $this.Description } elseif ($this.MaxCapacity) {
+          $this.MaxCapacity } else { $this.ToString() }</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+
+  <Type>
     <Name>DRMMDevicesStatus</Name>
     <Members>
       <ScriptMethod>
@@ -45,7 +96,8 @@
       </ScriptMethod>
     </Members>
   </Type>
-  <Type>    <Name>DRMMAlertMonitorInfo</Name>
+  <Type>
+    <Name>DRMMAlertMonitorInfo</Name>
     <Members>
       <ScriptMethod>
         <Name>ToString</Name>
@@ -71,7 +123,8 @@
       </ScriptMethod>
     </Members>
   </Type>
-  <Type>    <Name>DRMMSite</Name>
+  <Type>
+    <Name>DRMMSite</Name>
     <Members>
       <AliasProperty>
         <Name>SiteUid</Name>
@@ -81,6 +134,10 @@
         <Name>SiteId</Name>
         <ReferencedMemberName>Id</ReferencedMemberName>
       </AliasProperty>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
     </Members>
   </Type>
   <Type>

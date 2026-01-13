@@ -98,7 +98,7 @@ class DRMMAlertContext : DRMMObject {
 
     [string]$Class
 
-    DRMMAlertContext() : base() {
+        DRMMAlertContext() : base() {
 
     }
 

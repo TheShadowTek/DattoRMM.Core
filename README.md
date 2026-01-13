@@ -149,6 +149,10 @@ Get-RMMDevice -FilterId $Filter.Id | New-RMMQuickJob -JobName "Patch WebServer -
 
 See the `docs/` folder and in-module help for detailed usage and advanced scenarios.
 
+## Known Issues
+
+- **Out-GridView crash when sorting AlertContext**: When piping `DRMMAlert` objects to `Out-GridView` and the `AlertContext` property contains mixed types, attempting to sort the `AlertContext` column will cause `Out-GridView` to crash. This is under review for a fix (potentially via custom `Types ToString()` or a Format Table View).
+
 ## Disclaimer
 
 This module is provided "as is" without warranty of any kind. Use at your own risk. This project is not affiliated with or endorsed by Datto, Inc. or its subsidiaries.

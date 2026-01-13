@@ -153,7 +153,7 @@ function Get-RMMAlert {
         )]
         [ValidateSet('All', 'Open', 'Resolved')]
         [string]
-        $Status = 'All'
+        $Status = 'Open'
     )
 
     process {
