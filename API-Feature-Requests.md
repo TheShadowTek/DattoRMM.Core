@@ -58,6 +58,31 @@ This enhancement would align Datto RMM with industry best practices from AWS, Az
 
 ---
 
+
+## "Deleted Devices"
+
+**Issue:** The API returns the "Deleted Devices" site when using the get site endpoint. This is not a normal customer site—it is used internally by Datto RMM to group devices that have been deleted. However, the "Deleted Devices" value is assigned a malformed GUID (not a valid UUID), which can break typed workflows, validation logic, and automation that expect all site GUIDs to be well-formed.
+
+**API Endpoint:** `GET /v2/site` (method: GET)
+
+**Impact:**
+- Typed PowerShell and API workflows may fail or require special handling to exclude this site.
+- Automation and reporting tools that iterate over all sites may encounter errors or unexpected behavior when processing the malformed GUID.
+- The presence of this system site in results can cause confusion for users and developers who expect only valid, customer-created sites.
+
+**Requested Enhancement:**
+- Add a parameter to the get site endpoint (e.g., `excludeSystemSites` or `excludeDeletedDevicesSite`) that allows callers to exclude the "Deleted Devices" system site from the response.
+- Alternatively, ensure the GUID for this site is well-formed and clearly documented as a system-reserved value.
+
+**Business Justification:**
+- Improves reliability and predictability of automation and reporting workflows.
+- Reduces the need for custom filtering logic in every client implementation.
+- Prevents errors and confusion for users and integrators.
+
+This change would maintain backwards compatibility while allowing integrators to opt out of receiving the special "Deleted Devices" site in their results.
+
+---
+
 ## Job Control Operations (Stop, Cancel, Rerun)
 **API Endpoint:** N/A - Missing endpoints
 

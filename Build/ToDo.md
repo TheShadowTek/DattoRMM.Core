@@ -20,3 +20,9 @@ Analyse alert context class, no reference, command builds class properties list 
 
 # Alert Times
 Alert date time parsing currently commented and returning raw
+
+# Deleted Device
+Possibly a switch on get site
+
+# Test wierd chars
+test with accent chars
