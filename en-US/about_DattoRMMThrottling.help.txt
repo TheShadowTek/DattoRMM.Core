@@ -1,0 +1,126 @@
+TOPIC
+    about_DattoRMMThrottling
+
+SHORT DESCRIPTION
+    Describes the throttling system in the Datto-RMM PowerShell module, including configuration, behavior, and best practices for single and concurrent API usage.
+
+LONG DESCRIPTION
+    The Datto-RMM module implements adaptive throttling to manage API request rates and avoid exceeding Datto RMM account limits. Throttling is configurable via the ThrottleAggressiveness setting, which determines how quickly delays are applied as API utilisation increases. The system dynamically adjusts request pacing based on current utilisation, with aggressive, medium, and cautious modes for different usage scenarios. 
+ 
+Throttling is essential for: 
+- Preventing API rate limit violations 
+- Ensuring reliable automation and reporting 
+- Supporting safe parallel and concurrent workloads 
+ 
+### How Throttling Works 
+- The module tracks API utilisation as a ratio of requests made to the account's rate limit (e.g., 600 or 2400 requests per 60 seconds). 
+- When utilisation exceeds the configured threshold (ThrottleUtilisationThreshold), delays are introduced before each request. 
+- The delay and rate check frequency are determined by the selected ThrottleAggressiveness mode: 
+  - **Aggressive:** Minimal delay, infrequent checks (fastest, riskier) 
+  - **Medium:** Balanced delay and check frequency 
+  - **Cautious:** Maximum delay, frequent checks (safest, slowest) 
+- Throttling adapts dynamically: as utilisation rises, delays and check intervals increase to prevent hitting the limit. 
+ 
+### Configuration 
+- Use `Set-RMMThrottle` to adjust throttling for the current session, or `Set-RMMConfig` to persist settings. 
+- By default, the module uses `Medium` ThrottleAggressiveness for a balance of safety and performance. 
+- Key parameters: 
+  - `ThrottleAggressiveness` (Aggressive, Medium, Cautious) 
+  - `ThrottleUtilisationThreshold` (when delays start) 
+  - `LowUtilCheckInterval` (base rate check frequency) 
+  - `DelayMultiplier` (base delay applied) 
+ 
+## CONCURRENT USE 
+ 
+When running multiple scripts, jobs, or sessions against the same Datto RMM account, concurrent API usage can quickly approach rate limits. Throttling should be set more conservatively to avoid cumulative violations. 
+ 
+- **Single use:** Aggressive mode is usually safe and fastest. 
+- **Concurrent use:** Medium mode is recommended to balance speed and safety. 
+- **Heavy use (many jobs, automation, or CI/CD):** Cautious mode is safest, especially for long-running or high-frequency tasks. 
+ 
+ 
+## RECOMMENDED THROTTLING USAGE 
+ 
+Datto RMM accounts may have different API rate limits. The following recommendations are based on typical usage patterns and are especially relevant for scenarios with 4 concurrent long-running tasks. Adjust as needed for your environment: 
+ 
+### 600 Requests/Hour 
+- **Single use:** Aggressive 
+- **Concurrent use:** Medium 
+- **Heavy use:** Cautious 
+ 
+### 2400 Requests/Hour 
+- **Single use:** Aggressive 
+- **Concurrent use:** Aggressive or Medium (choose Medium for long-running tasks) 
+- **Heavy use:** Medium 
+ 
+## DATTO RMM API RATE LIMIT DETAILS 
+ 
+Datto RMM enforces a rolling rate limit of 600 requests per 60 seconds, calculated across the entire account (not per user). If multiple users or scripts access the API, all requests count toward the same limit. 
+ 
+- When 90% of the quota (540 requests) is exceeded, Datto RMM introduces a one-second delay in the API response. 
+- If the limit is breached, further requests return HTTP 429 (Too Many Requests) until the count falls below 600 in the last 60 seconds. It is recommended to wait 60 seconds before retrying. 
+- Persistent requests after breaching the limit may trigger HTTP 403 (Forbidden), and the originating IP will be temporarily blocked. Wait at least 5 minutes before retrying. 
+ 
+**Example:** 
+If 100 requests are made in one second, and 500 more 59 seconds later, the request count at 61 seconds is 500 (the first 100 have dropped out of the rolling window). 
+ 
+**Important:** 
+- The request count is account-wide. All users and scripts share the same quota. 
+- For concurrent or automated use, set throttling more conservatively to avoid cumulative breaches. 
+ 
+## EXAMPLES 
+ 
+### Example 1: Set aggressive throttling for a single session 
+```powershell 
+Set-RMMThrottle -ThrottleAggressiveness Aggressive 
+``` 
+ 
+### Example 2: Set cautious throttling for heavy automation 
+```powershell 
+Set-RMMThrottle -ThrottleAggressiveness Cautious -Persist 
+``` 
+ 
+### Example 3: Monitor throttling status 
+```powershell 
+Get-RMMThrottle 
+``` 
+ 
+## BEST PRACTICES 
+ 
+1. Always set throttling to Medium or Cautious for concurrent or automated workloads. 
+2. Monitor API utilisation and adjust aggressiveness as needed. 
+3. Use Get-RMMThrottle to review current and configured settings. 
+4. Persist settings with Set-RMMConfig for consistent behavior across sessions. 
+5. For accounts with higher rate limits, you may use Aggressive mode for most tasks, but switch to Medium for long-running or parallel jobs. 
+ 
+## CUSTOM THROTTLING SETTINGS (USE AT YOUR OWN RISK) 
+ 
+Advanced users can override default throttling parameters for fine-tuned control. This is not generally recommended unless you fully understand the impact, as custom settings may increase the risk of hitting API rate limits or being temporarily blocked. 
+ 
+You can set custom values using: 
+- `Set-RMMConfig` (persistent, applies to all future sessions) 
+- `Set-RMMThrottle -Persist` (sets and saves for current and future sessions) 
+ 
+Customisable parameters include: 
+- `ThrottleAggressiveness` (Aggressive, Medium, Cautious) 
+- `ThrottleUtilisationThreshold` (utilisation ratio at which delays begin) 
+- `LowUtilCheckInterval` (base rate check frequency) 
+- `DelayMultiplier` (base delay applied) 
+ 
+### Manual Configuration 
+ 
+Settings are stored in a JSON file at: 
+`$HOME/.datto-rmm/config.json` 
+ 
+You may edit this file directly to set advanced or unsupported values. Changes take effect the next time the module is loaded or when you call `Set-RMMConfig`. 
+ 
+**Warning:** 
+- Invalid or overly aggressive settings may result in API errors, 429/403 responses, or temporary IP bans. 
+- Always back up your config file before making manual changes. 
+ 
+## NOTES 
+ 
+- Throttling adapts in real time; delays and check intervals increase as utilisation rises. 
+- The module automatically pauses requests if utilisation exceeds 85% to avoid hard rate limit violations. 
+- All throttling settings can be adjusted at runtime for flexibility. 
+- For best results, coordinate throttling settings across all scripts and jobs using the same API account.

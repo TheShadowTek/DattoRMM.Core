@@ -7,18 +7,20 @@ $Script:RMMAuth = $null
 # Default configuration values (fallback if config file doesn't exist or fails to load)
 $Script:ConfigDefaultPlatform = $null
 $Script:ConfigDefaultPageSize = $null
-$Script:ConfigLowUtilCheckInterval = 50
+$Script:ConfigLowUtilCheckInterval = 25
+$Script:ConfigDelayMultiplier = 750
 $Script:TokenExpireHours = 100
 
 # Throttling state
 $Script:RMMThrottle = @{
-    CheckInterval = 1
-    CheckCount = 1
-    Utilisation = 0
-    LowUtilCheckInterval = 50 # How often to check rate when utilisation is low (<=50%)
-    DelayMS = 0
-    Pause = $false
-    Throttle = $false
+    CheckInterval = 1           # How often to check rate limits (in seconds) - force initial check
+    CheckCount = 1              # Number of checks since last update - force initial delay
+    Utilisation = 0             # Current rate limit utilisation (0 to 1) - force initial update
+    LowUtilCheckInterval = 25   # How often to check rate when utilisation is low (<=50%)
+    DelayMultiplier = 750       # Multiplier for calculating delay when throttling
+    DelayMS = 0                 # Current delay in milliseconds
+    Pause = $false              # Whether to pause requests entirely
+    Throttle = $false           # Whether to throttle requests
 }
 
 # Dot-source classes in Private/Classes folder - dependency order
@@ -63,6 +65,7 @@ try {
     $LoadedConfig = Read-ConfigFile
 
     if ($null -ne $LoadedConfig) {
+
         Write-Verbose "Loading configuration from file..."
 
         if ($LoadedConfig.PSObject.Properties.Name -contains 'DefaultPlatform') {
@@ -79,20 +82,49 @@ try {
 
         }
 
-        if ($LoadedConfig.PSObject.Properties.Name -contains 'LowUtilCheckInterval') {
+        if ($LoadedConfig.PSObject.Properties.Name -contains 'ThrottleAggressiveness') {
 
-            $Script:ConfigLowUtilCheckInterval = $LoadedConfig.LowUtilCheckInterval
-            $Script:RMMThrottle.LowUtilCheckInterval = $LoadedConfig.LowUtilCheckInterval
-            Write-Verbose "  LowUtilCheckInterval: $($Script:ConfigLowUtilCheckInterval)"
 
+            switch ($LoadedConfig.ThrottleAggressiveness) {
+
+                'Cautious' {
+                    $DelayMultiplier = 1000
+                    $LowUtilCheckInterval = 10
+                }
+
+                'Medium' {
+                    $DelayMultiplier = 750
+                    $LowUtilCheckInterval = 25
+                }
+
+                'Aggressive' {
+                    $DelayMultiplier = 500
+                    $LowUtilCheckInterval = 50
+                }
+
+                default {
+                    $DelayMultiplier = 750
+                    $LowUtilCheckInterval = 25
+                }
+            }
+                
         }
 
-        if ($LoadedConfig.PSObject.Properties.Name -contains 'TokenExpireHours') {
-            
-            $Script:TokenExpireHours = $LoadedConfig.TokenExpireHours
-            Write-Verbose "  TokenExpireHours: $($Script:TokenExpireHours)"
+        $Script:ConfigLowUtilCheckInterval = $LowUtilCheckInterval
+        $Script:RMMThrottle.LowUtilCheckInterval = $LowUtilCheckInterval
+        Write-Verbose "  LowUtilCheckInterval: $($Script:RMMThrottle.LowUtilCheckInterval)"
 
-        }
+        $Script:ConfigDelayMultiplier = $DelayMultiplier
+        $Script:RMMThrottle.DelayMultiplier = $DelayMultiplier
+        Write-Verbose "  DelayMultiplier: $($Script:RMMThrottle.DelayMultiplier)"
+
+    }
+
+    if ($LoadedConfig.PSObject.Properties.Name -contains 'TokenExpireHours') {
+        
+        $Script:TokenExpireHours = $LoadedConfig.TokenExpireHours
+        Write-Verbose "  TokenExpireHours: $($Script:TokenExpireHours)"
+
     }
 
 } catch {

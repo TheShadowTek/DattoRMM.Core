@@ -17,11 +17,13 @@ function Set-RMMConfig {
         but will be capped at the account's maximum page size limit.
         Valid range: 1-250. The actual limit depends on your Datto RMM account settings.
 
-    .PARAMETER LowUtilCheckInterval
-        Sets how often (in requests) to check the API rate limit when utilization is low (<=50%).
-        Valid range: 10-100. Default is 50.
-        Higher values reduce overhead but may be less responsive to rate limit changes.
-        Lower values check more frequently for better rate limit awareness.
+
+    .PARAMETER ThrottleAggressiveness
+        Controls how aggressively the module throttles API requests when nearing rate limits.
+        Cautious: Maximum delay, checks rate limit frequently (safest, slowest).
+        Medium: Balanced delay and check frequency.
+        Aggressive: Minimal delay, checks rate limit less often (fastest, riskier).
+        Valid values: Cautious, Medium, Aggressive. Default is Medium.
 
     .PARAMETER TokenExpireHours
         Sets the token refresh interval in hours.
@@ -40,10 +42,11 @@ function Set-RMMConfig {
 
         Sets both the default platform and page size.
 
-    .EXAMPLE
-        Set-RMMConfig -LowUtilCheckInterval 100 -TokenExpireHours 50
 
-        Configures advanced throttling and token refresh settings.
+    .EXAMPLE
+        Set-RMMConfig -ThrottleAggressiveness Cautious -TokenExpireHours 50
+
+        Configures advanced throttling and token refresh settings for maximum safety.
 
     .INPUTS
         None. You cannot pipe objects to Set-RMMConfig.
@@ -76,10 +79,11 @@ function Set-RMMConfig {
         [int]
         $DefaultPageSize,
 
+
         [Parameter(Mandatory = $false)]
-        [ValidateRange(10, 100)]
-        [int]
-        $LowUtilCheckInterval,
+        [ValidateSet('Cautious', 'Medium', 'Aggressive')]
+        [string]
+        $ThrottleAggressiveness,
 
         [Parameter(Mandatory = $false)]
         [ValidateRange(1, 100)]
@@ -88,9 +92,10 @@ function Set-RMMConfig {
     )
 
     # Ensure at least one parameter is provided
+
     if (-not ($PSBoundParameters.ContainsKey('DefaultPlatform') -or 
               $PSBoundParameters.ContainsKey('DefaultPageSize') -or 
-              $PSBoundParameters.ContainsKey('LowUtilCheckInterval') -or 
+              $PSBoundParameters.ContainsKey('ThrottleAggressiveness') -or 
               $PSBoundParameters.ContainsKey('TokenExpireHours'))) {
 
         throw "At least one configuration parameter must be specified."
@@ -140,18 +145,36 @@ function Set-RMMConfig {
 
     }
 
-    if ($PSBoundParameters.ContainsKey('LowUtilCheckInterval')) {
 
+    if ($PSBoundParameters.ContainsKey('ThrottleAggressiveness')) {
+
+        $Config['ThrottleAggressiveness'] = $ThrottleAggressiveness
+        Write-Verbose "Set ThrottleAggressiveness to: $ThrottleAggressiveness"
+
+        switch ($ThrottleAggressiveness) {
+
+            'Cautious'   { $DelayMultiplier = 1000; $LowUtilCheckInterval = 10; $ThrottleUtilisationThreshold = 0.25 }
+            'Medium'     { $DelayMultiplier = 750;  $LowUtilCheckInterval = 25; $ThrottleUtilisationThreshold = 0.5 }
+            'Aggressive' { $DelayMultiplier = 500;  $LowUtilCheckInterval = 50; $ThrottleUtilisationThreshold = 0.85 }
+            default      { $DelayMultiplier = 750;  $LowUtilCheckInterval = 25; $ThrottleUtilisationThreshold = 0.5 }
+        }
+
+        $Config['DelayMultiplier'] = $DelayMultiplier
         $Config['LowUtilCheckInterval'] = $LowUtilCheckInterval
+        $Config['ThrottleUtilisationThreshold'] = $ThrottleUtilisationThreshold
+        Write-Verbose "Set DelayMultiplier to: $DelayMultiplier"
         Write-Verbose "Set LowUtilCheckInterval to: $LowUtilCheckInterval"
-        
-        # Update current session variable and active throttle setting
+        Write-Verbose "Set ThrottleUtilisationThreshold to: $ThrottleUtilisationThreshold"
+
+        # Update current session variables and active throttle settings
+        $Script:ConfigDelayMultiplier = $DelayMultiplier
         $Script:ConfigLowUtilCheckInterval = $LowUtilCheckInterval
+        $Script:ConfigThrottleUtilisationThreshold = $ThrottleUtilisationThreshold
 
         if ($Script:RMMThrottle) {
-
+            $Script:RMMThrottle.DelayMultiplier = $DelayMultiplier
             $Script:RMMThrottle.LowUtilCheckInterval = $LowUtilCheckInterval
-
+            $Script:RMMThrottle.ThrottleUtilisationThreshold = $ThrottleUtilisationThreshold
         }
     }
 
