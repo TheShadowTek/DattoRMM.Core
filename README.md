@@ -45,7 +45,35 @@ All default values are managed centrally and can be tuned in one place. For adva
 
 > With this built-in throttling, it is safe to run large parallel workloads (such as data extraction or bulk operations) without risking API lockouts or service disruption.
 
-## Getting Started
+
+## Platform Support
+
+Datto RMM operates multiple platform regions. The module supports connecting to any supported region using the `-Platform` parameter or by configuring a persistent default.
+
+**Supported Platforms:**
+
+- Pinotage (default)
+- Concord
+- Vidal
+- Merlot
+- Zinfandel
+- Syrah
+
+You can specify the platform region at connection time:
+
+```powershell
+$Secret = Read-Host -Prompt "Enter API Secret" -AsSecureString
+Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Platform Merlot
+```
+
+Or persist your preferred default platform for all sessions:
+
+```powershell
+Set-RMMConfig -DefaultPlatform Merlot
+```
+
+If you do not specify a platform, the module will use your configured default (if set), or fall back to Pinotage.
+
 
 ### Installation
 
@@ -70,21 +98,25 @@ Connect-DattoRMM -Key "your-api-key" -Secret $Secret
 Or with a PSCredential (shell):
 
 ```powershell
-$Cred = Get-Credential
+$Cred = Get-Credential -Message "Enter API key and secret"
 Connect-DattoRMM -Credential $Cred
 ```
 
-Or with PowerShell SecretStore (shell):
+Or with PowerShell SecretStore - securley presist between sessions (shell - interactive):
 
 ```powershell
 # Requires Microsoft.PowerShell.SecretManagement and Microsoft.PowerShell.SecretStore modules
 Import-Module Microsoft.PowerShell.SecretManagement
 
-# Retrieve a PSCredential from SecretStore
-$Cred = Get-Secret -Name "DattoRMM-API" -AsCredential
+# Store credential object in default vault
+$Cred = Get-Credential
+Set-Secret -Name "DattoRMM-API" -Secret $Cred
 
-Connect-DattoRMM -Credential $Cred
+# Retrieve a PSCredential from SecretStore (including future sessions)
+Connect-DattoRMM -Credential (Get-Secret -Name "DattoRMM-API")
 ```
+> [!NOTE]
+> If used in a script with a password protected vault, use a SecureString parameter to provide access to the vault 
 
 #### Using in Azure Automation Runbooks
 
@@ -101,14 +133,12 @@ Import-Module Datto-RMM
 # Retrieve credential asset by name
 $Cred = Get-AutomationPSCredential -Name "DattoRMM-API"
 
-
 # Connect using the credential
 Connect-DattoRMM -Credential $Cred
 ```
 
 > [!NOTE]
 > The credential asset must be created in the Automation Account before use.
-
 
 
 **Example: Using Azure Key Vault**
@@ -119,17 +149,16 @@ For Azure-based automation, you can retrieve credentials directly from Azure Key
 # Authenticate to Azure (Managed Identity or Service Principal recommended in Automation)
 Connect-AzAccount
 
-# Retrieve secret from Azure Key Vault
-$SecretValue = Get-AzKeyVaultSecret -VaultName "MyKeyVault" -Name "DattoRMM-API-Secret"
-$Secret = ConvertTo-SecureString $SecretValue.SecretValueText -AsPlainText -Force
+# Retrieve API key and secret from Azure Key Vault
+$ApiKey = Get-AzKeyVaultSecret -VaultName "MyKeyVault" -Name "DattoRMM-API-Key" -AsPlainText
+$Secret = Get-AzKeyVaultSecret -VaultName "MyKeyVault" -Name "DattoRMM-API-Secret"
 
-
-# Connect using the secret (with your API key)
-Connect-DattoRMM -Key "your-api-key" -Secret $Secret
+# Connect using the retrieved key and secret
+Connect-DattoRMM -Key $ApiKey -Secret $Secret
 ```
 
 > [!NOTE]
-> The Key Vault and secret must be created and accessible to the automation context.
+> The Key Vault and secrets must be created and accessible to the automation context.
 
 
 > [!NOTE]
