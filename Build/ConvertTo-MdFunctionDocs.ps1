@@ -61,6 +61,7 @@ try {
     }
     # Load classes in module order
     $ClassFiles = @(
+        'DRMMNetworkInterface.ps1',
         'DRMMEnums.ps1',
         'DRMMAccount.ps1',
         'DRMMActivityLog.ps1',

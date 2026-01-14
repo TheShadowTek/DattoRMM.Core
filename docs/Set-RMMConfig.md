@@ -6,8 +6,9 @@ Configures persistent settings for the Datto-RMM module.
 ## SYNTAX
 
 ```
-Set-RMMConfig [[-DefaultPlatform] <RMMPlatform>] [[-DefaultPageSize] <Int32>] [[-LowUtilCheckInterval] <Int32>]
- [[-TokenExpireHours] <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Set-RMMConfig [[-DefaultPlatform] <RMMPlatform>] [[-DefaultPageSize] <Int32>]
+ [[-ThrottleAggressiveness] <String>] [[-TokenExpireHours] <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,10 +37,10 @@ Sets both the default platform and page size.
 
 EXAMPLE 3
 ```
-Set-RMMConfig -LowUtilCheckInterval 100 -TokenExpireHours 50
+Set-RMMConfig -ThrottleAggressiveness Cautious -TokenExpireHours 50
 ```
 
-Configures advanced throttling and token refresh settings.
+Configures advanced throttling and token refresh settings for maximum safety.
 
 ## PARAMETERS
 
@@ -79,21 +80,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -LowUtilCheckInterval
-Sets how often (in requests) to check the API rate limit when utilization is low (\<=50%).
-Valid range: 10-100.
-Default is 50.
-Higher values reduce overhead but may be less responsive to rate limit changes.
-Lower values check more frequently for better rate limit awareness.
+### -ThrottleAggressiveness
+Controls how aggressively the module throttles API requests when nearing rate limits.
+Cautious: Maximum delay, checks rate limit frequently (safest, slowest).
+Medium: Balanced delay and check frequency.
+Aggressive: Minimal delay, checks rate limit less often (fastest, riskier).
+Valid values: Cautious, Medium, Aggressive.
+Default is Medium.
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 3
-Default value: 0
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

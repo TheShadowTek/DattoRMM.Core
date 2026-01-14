@@ -137,10 +137,6 @@ try {
 
 }
 
-# Export functions from Public folder (if any)
-# This will be updated as functions are added
-# Export-ModuleMember -Function *
-
 # Module removal handler - cleanup module variables
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 
