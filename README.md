@@ -23,11 +23,26 @@ This PowerShell module provides a comprehensive, object-oriented interface for m
 
 ## Rate Limiting & Throttling
 
-- The module automatically detects and respects Datto RMM API rate limits.
-- Throttling logic is built-in to prevent exceeding allowed request rates, with automatic backoff and retry where appropriate.
-- This ensures reliable operation in scripts and automation, even under heavy load or in large environments.
+The module automatically detects and respects Datto RMM API rate limits, using built-in throttling logic to prevent exceeding allowed request rates. Throttling is adaptive and configurable, with three preset aggressiveness levels:
 
-> [!NOTE]
+- **Cautious**: Maximum safety, checks rate limits frequently, slowest.
+- **Medium**: Balanced for most workloads (default).
+- **Aggressive**: Fastest, checks less often, higher risk of hitting limits.
+
+You can adjust throttling for the current session or persistently:
+
+```powershell
+# Set throttling to Cautious for this session
+Set-RMMThrottle -ThrottleAggressiveness Cautious
+
+# Set throttling to Aggressive and persist for future sessions
+Set-RMMThrottle -ThrottleAggressiveness Aggressive -Persist
+```
+
+All default values are managed centrally and can be tuned in one place. For advanced options, custom settings, and Datto's official API guidance, see:
+
+- [docs/about_DattoRMMThrottling.md](docs/about_DattoRMMThrottling.md)
+
 > With this built-in throttling, it is safe to run large parallel workloads (such as data extraction or bulk operations) without risking API lockouts or service disruption.
 
 ## Getting Started

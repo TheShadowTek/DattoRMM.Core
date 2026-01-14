@@ -7,9 +7,31 @@ $Script:RMMAuth = $null
 # Default configuration values (fallback if config file doesn't exist or fails to load)
 $Script:ConfigDefaultPlatform = $null
 $Script:ConfigDefaultPageSize = $null
-$Script:ConfigLowUtilCheckInterval = 25
-$Script:ConfigDelayMultiplier = 750
 $Script:TokenExpireHours = 100
+
+# Throttle defaults
+$Script:ThrottleAggressionDefaults = @{
+    'Cautious'   = @{
+        DelayMultiplier = 1000
+        LowUtilCheckInterval = 25
+        ThrottleUtilisationThreshold = 0.25
+    }
+    'Medium'     = @{
+        DelayMultiplier = 750
+        LowUtilCheckInterval = 25
+        ThrottleUtilisationThreshold = 0.5
+    }
+    'Aggressive' = @{
+        DelayMultiplier = 500
+        LowUtilCheckInterval = 50
+        ThrottleUtilisationThreshold = 0.75
+    }
+    'Default'    = @{
+        DelayMultiplier = 750
+        LowUtilCheckInterval = 25
+        ThrottleUtilisationThreshold = 0.5
+    }
+}
 
 # Throttling state
 $Script:RMMThrottle = @{
@@ -84,29 +106,11 @@ try {
 
         if ($LoadedConfig.PSObject.Properties.Name -contains 'ThrottleAggressiveness') {
 
+            $Aggresiveness = $LoadedConfig.ThrottleAggressiveness
+            Write-Verbose "  ThrottleAggressiveness: $($Aggresiveness)"
 
-            switch ($LoadedConfig.ThrottleAggressiveness) {
-
-                'Cautious' {
-                    $DelayMultiplier = 1000
-                    $LowUtilCheckInterval = 10
-                }
-
-                'Medium' {
-                    $DelayMultiplier = 750
-                    $LowUtilCheckInterval = 25
-                }
-
-                'Aggressive' {
-                    $DelayMultiplier = 500
-                    $LowUtilCheckInterval = 50
-                }
-
-                default {
-                    $DelayMultiplier = 750
-                    $LowUtilCheckInterval = 25
-                }
-            }
+            $DelayMultiplier = $Script:ThrottleAggressionDefaults[$Aggresiveness].DelayMultiplier
+            $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$Aggresiveness].LowUtilCheckInterval
                 
         }
 

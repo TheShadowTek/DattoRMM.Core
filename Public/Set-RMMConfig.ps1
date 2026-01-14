@@ -151,13 +151,37 @@ function Set-RMMConfig {
         $Config['ThrottleAggressiveness'] = $ThrottleAggressiveness
         Write-Verbose "Set ThrottleAggressiveness to: $ThrottleAggressiveness"
 
-        switch ($ThrottleAggressiveness) {
+    switch ($ThrottleAggressiveness) {
 
-            'Cautious'   { $DelayMultiplier = 1000; $LowUtilCheckInterval = 10; $ThrottleUtilisationThreshold = 0.25 }
-            'Medium'     { $DelayMultiplier = 750;  $LowUtilCheckInterval = 25; $ThrottleUtilisationThreshold = 0.5 }
-            'Aggressive' { $DelayMultiplier = 500;  $LowUtilCheckInterval = 50; $ThrottleUtilisationThreshold = 0.85 }
-            default      { $DelayMultiplier = 750;  $LowUtilCheckInterval = 25; $ThrottleUtilisationThreshold = 0.5 }
+        'Cautious'   {
+            
+            $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
+            $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
+            $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
         }
+
+        'Medium'     {
+            
+            $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
+            $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
+            $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
+        }
+
+        'Aggressive' {
+            
+            $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
+            $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
+            $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
+        }
+
+        default      {
+            
+            $DelayMultiplier = $Script:ThrottleAggressionDefaults['Default'].DelayMultiplier
+             $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults['Default'].LowUtilCheckInterval
+             $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults['Default'].ThrottleUtilisationThreshold
+             
+        }
+    }
 
         $Config['DelayMultiplier'] = $DelayMultiplier
         $Config['LowUtilCheckInterval'] = $LowUtilCheckInterval

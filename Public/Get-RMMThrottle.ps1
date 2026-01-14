@@ -23,7 +23,7 @@ function Get-RMMThrottle {
             [int]$LowUtilCheckInterval
         )
 
-        if ($DelayMultiplier -eq 1000 -and $LowUtilCheckInterval -eq 10) {
+        if ($DelayMultiplier -eq 1000 -and $LowUtilCheckInterval -eq 15) {
             
             return 'Cautious'
         
