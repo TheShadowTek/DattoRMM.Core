@@ -1,4 +1,4 @@
-# Datto-RMM PowerShell Module
+# DattoRMM.Core PowerShell Module
 
 ## Overview
 
@@ -80,7 +80,7 @@ If you do not specify a platform, the module will use your configured default (i
 Copy the module files to your PowerShell module path, or import directly from your working directory:
 
 ```powershell
-Import-Module ./Datto-RMM.psd1
+Import-Module ./DattoRMM.Core.psd1
 ```
 
 
@@ -128,7 +128,7 @@ This module can be used in Azure Automation Runbooks for secure, unattended auto
 
 ```powershell
 # Import the module (ensure it is uploaded to the Automation Account)
-Import-Module Datto-RMM
+Import-Module DattoRMM.Core
 
 # Retrieve credential asset by name
 $Cred = Get-AutomationPSCredential -Name "DattoRMM-API"

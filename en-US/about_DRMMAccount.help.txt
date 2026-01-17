@@ -22,5 +22,5 @@ METHODS (from class)
 
 SEE ALSO
     Get-RMMAccount
-    about_Datto-RMM
+    about_DattoRMM.Core
 

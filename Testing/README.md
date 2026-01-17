@@ -1,6 +1,6 @@
-# Datto-RMM Pester Tests
+# DattoRMM.Core Pester Tests
 
-This directory contains Pester tests for the Datto-RMM PowerShell module.
+This directory contains Pester tests for the DattoRMM.Core PowerShell module.
 
 ## Prerequisites
 

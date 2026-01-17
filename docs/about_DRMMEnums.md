@@ -51,5 +51,5 @@ if ($device.Platform -eq [RMMPlatform]::Merlot) {
 - You can reference enum values using `[EnumType]::Value` syntax in PowerShell.
 
 ## SEE ALSO
-- [about_Datto-RMM](about_Datto-RMM.md)
+- [about_DattoRMM.Core](about_DattoRMM.Core.md)
 - [about_DRMMSite](about_DRMMSite.md)

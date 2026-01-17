@@ -1,7 +1,7 @@
 # Get-RMMConfig
 
 ## SYNOPSIS
-Retrieves the current Datto-RMM module configuration.
+Retrieves the current DattoRMM.Core module configuration.
 
 ## SYNTAX
 
@@ -10,7 +10,7 @@ Get-RMMConfig [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-RMMConfig function displays the current configuration settings for the Datto-RMM module,
+The Get-RMMConfig function displays the current configuration settings for the DattoRMM.Core module,
 including both values loaded from the configuration file and their current in-memory values.
 
 This helps verify what defaults are configured and active in the current session.
@@ -41,7 +41,7 @@ None. You cannot pipe objects to Get-RMMConfig.
 
 PSCustomObject. Returns an object with configuration properties and their values.
 ## NOTES
-Configuration is stored at: $HOME/.datto-rmm/config.json
+Configuration is stored at: $HOME/.DattoRMM.Core/config.json
 
 The output shows:
 - Configured values from the config file
@@ -51,6 +51,6 @@ The output shows:
 ## RELATED LINKS
 
 
-- [Reset-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Reset-RMMConfig.md)
-- [Set-RMMPageSize](https://github.com/boabf/Datto-RMM/blob/main/docs/Set-RMMPageSize.md)
+- [Reset-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Reset-RMMConfig.md)
+- [Set-RMMPageSize](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Set-RMMPageSize.md)
 

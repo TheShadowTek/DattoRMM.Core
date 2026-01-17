@@ -1,7 +1,7 @@
 function Reset-RMMConfig {
     <#
     .SYNOPSIS
-        Resets Datto-RMM module configuration to defaults.
+        Resets DattoRMM.Core module configuration to defaults.
 
     .DESCRIPTION
         The Reset-RMMConfig function clears the persistent configuration file, resetting all
@@ -30,7 +30,7 @@ function Reset-RMMConfig {
         None. Displays a message indicating success or failure.
 
     .NOTES
-        Configuration file location: $HOME/.datto-rmm/config.json
+        Configuration file location: $HOME/.DattoRMM.Core/config.json
         
         This function only deletes the configuration file. Current session values remain unchanged
         until the module is reloaded.
@@ -63,7 +63,7 @@ function Reset-RMMConfig {
 
     }
 
-    if ($Force -or $PSCmdlet.ShouldProcess("Datto-RMM configuration", "Reset to defaults")) {
+    if ($Force -or $PSCmdlet.ShouldProcess("DattoRMM.Core configuration", "Reset to defaults")) {
         
         try {
             

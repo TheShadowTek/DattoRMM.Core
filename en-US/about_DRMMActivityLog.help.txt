@@ -28,5 +28,5 @@ METHODS (from class)
 
 SEE ALSO
     Get-RMMActivityLog
-    about_Datto-RMM
+    about_DattoRMM.Core
 

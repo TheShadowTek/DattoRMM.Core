@@ -3,7 +3,7 @@
     Converts PowerShell function help to Markdown documentation for all public module functions.
 
 .DESCRIPTION
-    ConvertTo-MdFunctionDocs.ps1 generates Markdown documentation for all public functions in the Datto-RMM module.
+    ConvertTo-MdFunctionDocs.ps1 generates Markdown documentation for all public functions in the DattoRMM.Core module.
     It uses PlatyPS to extract help, handles enum loading issues, and post-processes the output to clean up formatting (such as removing 'PS >' prompts from examples).
     Only regenerates help files if the source function has been modified more recently than the existing Markdown file, unless -Force is specified.
 
@@ -88,10 +88,10 @@ try {
     
     # Import module
     Write-Host "  Importing module..."
-    Import-Module .\Datto-RMM.psd1 -Force
+    Import-Module .\DattoRMM.Core.psd1 -Force
 
     # Read DocsBaseUrl from manifest
-    $Manifest = Import-PowerShellDataFile -Path .\Datto-RMM.psd1
+    $Manifest = Import-PowerShellDataFile -Path .\DattoRMM.Core.psd1
     $DocsBaseUrl = $Manifest.PrivateData.PSData.DocsBaseUrl
     if (-not $DocsBaseUrl) {
         Write-Warning "DocsBaseUrl not found in manifest. Using './docs/' as fallback."

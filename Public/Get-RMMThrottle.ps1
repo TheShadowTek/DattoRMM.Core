@@ -1,7 +1,7 @@
 function Get-RMMThrottle {
     <#
     .SYNOPSIS
-        Gets the current and configured throttling settings for Datto-RMM.
+        Gets the current and configured throttling settings for DattoRMM.Core.
 
     .DESCRIPTION
         Returns the current session's ThrottleAggressiveness (Cautious, Medium, Aggressive),

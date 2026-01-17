@@ -1,10 +1,10 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = 'Datto-RMM.psm1'
+RootModule = 'DattoRMM.Core.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.4.6'
+ModuleVersion = '0.5.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -13,13 +13,13 @@ CompatiblePSEditions = @('Core')
 GUID = '7dc3bd88-a8ca-4498-94bb-bf4d72416b6b'
 
 # Author of this module
-Author = 'BoabF'
+Author = 'TheShadowTek'
 
 # Company or vendor of this module
-CompanyName = 'BoabF'
+CompanyName = 'TheShadowTek'
 
 # Copyright statement for this module
-Copyright = '(c) 2025 BoabF. All rights reserved.'
+Copyright = '(c) 2025 TheShadowTek. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'PowerShell module for interfacing with Datto RMM API v2'
@@ -52,10 +52,10 @@ PowerShellVersion = '7.0'
 # ScriptsToProcess = @()
 
 # Type files (.ps1xml) to be loaded when importing this module
-TypesToProcess = @('Datto-RMM.Types.ps1xml')
+TypesToProcess = @('DattoRMM.Core.Types.ps1xml')
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = @('Datto-RMM.Format.ps1xml')
+FormatsToProcess = @('DattoRMM.Core.Format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @('Private\Classes\DRMMObject.psm1')
@@ -135,10 +135,10 @@ PrivateData = @{
         # LicenseUri = ''
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/boabf/Datto-RMM'
+        ProjectUri = 'https://github.com/TheShadowTek/DattoRMM.Core'
 
         # Base URL for the documentation
-        DocsBaseUrl = 'https://github.com/boabf/Datto-RMM/blob/main/docs/'
+        DocsBaseUrl = 'https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/'
 
         # A URL to an icon representing this module.
         # IconUri = ''

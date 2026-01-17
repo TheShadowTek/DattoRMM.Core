@@ -5,104 +5,147 @@ Retrieves activity logs from the Datto RMM API.
 
 ## SYNTAX
 
+Global (Default)
 ```
-Get-RMMActivityLog [[-SiteId] <Int64[]>] [[-From] <DateTime>] [[-Until] <DateTime>] [[-Entity] <String[]>]
- [[-Category] <String[]>] [[-Action] <String[]>] [[-UserId] <Int64[]>] [[-Order] <String>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMActivityLog -Start <DateTime> -End <DateTime> [-Entity <String[]>] [-Category <String[]>]
+ [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
+```
+
+Site
+```
+Get-RMMActivityLog [-Site <DRMMSite[]>] -Start <DateTime> -End <DateTime> [-Entity <String[]>]
+ [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+SiteId
+```
+Get-RMMActivityLog [-SiteId <Int64[]>] -Start <DateTime> -End <DateTime> [-Entity <String[]>]
+ [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-RMMActivityLog function retrieves activity logs with optional filtering by date range,
-entity type (device or user), categories, actions, sites, and users.
-By default, the API returns
-logs from the last 15 minutes if no date range is specified.
+Retrieves activity logs for one or more sites, with optional filtering by date range, entity type,
+categories, actions, and users.
+Supports global (all sites) or site-specific queries.
+Site IDs are
+batched for large environments to avoid API limits.
 
-Activity logs track various activities in the RMM platform including device changes, user actions,
-job executions, and more.
+You can specify sites by:
+- Piping DRMMSite objects (from Get-RMMSite)
+- Passing SiteId(s) directly
+- Omitting both for global (all sites) scope
+
+The function prompts for confirmation before retrieving logs for each site, including in global
+mode.
+Supports Yes/No/Yes to All/No to All responses for safe handling of PII.
 
 ## EXAMPLES
 
 EXAMPLE 1
 ```
-Get-RMMActivityLog
+Get-RMMActivityLog -Start "2024-01-01T00:00:00Z" -End "2024-01-02T00:00:00Z"
 ```
 
-Retrieves activity logs from the last 15 minutes (default behavior).
+Retrieves activity logs for all sites for January 1st, 2024.
+Prompts for each site.
 
 EXAMPLE 2
 ```
-Get-RMMActivityLog -From "2024-01-01T00:00:00Z" -Until "2024-01-02T00:00:00Z"
+$Start = Get-Date '2024-01-01T00:00:00Z'
+$End = Get-Date '2024-01-02T00:00:00Z'
+Get-RMMSite -SiteName "Main Office" | Get-RMMActivityLog -Start $Start -End $End
 ```
 
-Retrieves activity logs for January 1st, 2024.
+Retrieves activity logs for the "Main Office" site.
+Prompts for confirmation.
 
 EXAMPLE 3
 ```
-Get-RMMActivityLog -Entity Device -Category job
+Get-RMMActivityLog -SiteId 1234,5678 -Start (Get-Date '2024-01-01') -End (Get-Date '2024-01-02')
 ```
 
-Retrieves device-related activity logs in the 'job' category.
+Retrieves activity logs for sites with IDs 1234 and 5678.
+Prompts for each site.
 
 EXAMPLE 4
 ```
-Get-RMMActivityLog -From "2024-01-01T00:00:00Z" -Category job,device -Action deployment
+$Start = Get-Date '2024-01-01'
+$End = Get-Date '2024-01-02'
+Get-RMMActivityLog -SiteId 1234,5678 -Start $Start -End $End -Confirm:$false
 ```
 
-Retrieves activity logs for specific categories and action from a start date.
-
-EXAMPLE 5
-```
-Get-RMMSite -SiteName "Main Office" | Get-RMMActivityLog -From "2024-01-01T00:00:00Z"
-```
-
-Retrieves activity logs for a specific site from January 1st, 2024.
+Retrieves activity logs for sites with IDs 1234 and 5678 without confirmation prompts (for automation).
 
 ## PARAMETERS
 
-### -SiteId
-Filters activity logs by site ID (integer).
-Can specify multiple values as an array.
+### -Site
+One or more DRMMSite objects (from Get-RMMSite) to retrieve activity logs for.
+Accepts pipeline
+input.
 
 ```yaml
-Type: Int64[]
-Parameter Sets: (All)
-Aliases: Id
-
-Required: False
-Position: 1
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -From
-Defines the UTC start date for fetching data.
-Format: yyyy-MM-ddTHH:mm:ssZ
-By default, the API returns logs from the last 15 minutes.
-
-```yaml
-Type: DateTime
-Parameter Sets: (All)
+Type: DRMMSite[]
+Parameter Sets: Site
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -SiteId
+One or more site IDs (integer) to retrieve activity logs for.
+
+```yaml
+Type: Int64[]
+Parameter Sets: SiteId
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Until
-Defines the UTC end date for fetching data.
-Format: yyyy-MM-ddTHH:mm:ssZ
+### -Start
+Start date/time for fetching data.
+Accepts local or UTC; local times are automatically converted
+to UTC for the API.
+Format: yyyy-MM-ddTHH:mm:ssZ.
+Required.
 
 ```yaml
 Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: 3
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -End
+End date/time for fetching data.
+Accepts local or UTC; local times are automatically converted
+to UTC for the API.
+Format: yyyy-MM-ddTHH:mm:ssZ.
+Required.
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -111,7 +154,6 @@ Accept wildcard characters: False
 ### -Entity
 Filters activity logs by entity type.
 Valid values: 'Device', 'User'.
-Can specify multiple values as an array.
 
 ```yaml
 Type: String[]
@@ -119,7 +161,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -127,7 +169,6 @@ Accept wildcard characters: False
 
 ### -Category
 Filters activity logs by category (e.g., 'job', 'device').
-Can specify multiple values as an array.
 
 ```yaml
 Type: String[]
@@ -135,7 +176,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -143,7 +184,6 @@ Accept wildcard characters: False
 
 ### -Action
 Filters activity logs by action (e.g., 'deployment', 'note').
-Can specify multiple values as an array.
 
 ```yaml
 Type: String[]
@@ -151,7 +191,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -159,7 +199,6 @@ Accept wildcard characters: False
 
 ### -UserId
 Filters activity logs by user ID (integer).
-Can specify multiple values as an array.
 
 ```yaml
 Type: Int64[]
@@ -167,14 +206,14 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Order
-Specifies the order in which records should be returned based on their creation date.
+Specifies the order in which records are returned by creation date.
 Valid values: 'asc', 'desc'.
 Default is 'desc'.
 
@@ -184,8 +223,39 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: Named
 Default value: Desc
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -197,14 +267,14 @@ DRMMSite. You can pipe site objects from Get-RMMSite (uses the Id property).
 
 DRMMActivityLog. Returns activity log objects with details about the activity.
 ## NOTES
-This function requires an active connection to the Datto RMM API.
-Use Connect-DattoRMM to authenticate before calling this function.
-
-The API uses integer IDs (not UIDs) for sites and users in this endpoint.
-Results are paginated automatically.
+- Requires an active connection to the Datto RMM API (use Connect-DattoRMM first).
+- Site IDs are batched in groups of 100 to avoid API/query length limits.
+- Confirmation prompt appears for each site (Yes/No/Yes to All/No to All supported).
+- The API uses integer IDs (not UIDs) for sites and users in this endpoint.
+- Results are paginated automatically.
 
 ## RELATED LINKS
 
 
-- [about_DRMMActivityLog](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMActivityLog.md)
+- [about_DRMMActivityLog](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about_DRMMActivityLog.md)
 

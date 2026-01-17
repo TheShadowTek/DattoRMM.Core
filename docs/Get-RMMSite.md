@@ -7,8 +7,8 @@ Retrieves sites from the Datto RMM API.
 
 All (Default)
 ```
-Get-RMMSite [-All <Boolean>] [-ExtendedProperties <RMMSiteExtendedProperty[]>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMSite [-ExtendedProperties <RMMSiteExtendedProperty[]>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 Single
@@ -118,24 +118,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -All
-Retrieve all sites in the account.
-This is the default behavior.
-Set to $false to
-disable when using other parameters.
-
-```yaml
-Type: Boolean
-Parameter Sets: All
-Aliases:
-
-Required: False
-Position: Named
-Default value: True
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -SiteName
 Search for sites by name using partial matching (LIKE operator).
 Returns all sites
@@ -203,7 +185,7 @@ Only request extended properties when needed.
 ## RELATED LINKS
 
 
-- [about_DRMMSite](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMSite.md)
-- [Get-RMMDevice](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDevice.md)
-- [Get-RMMDeviceFilter](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMDeviceFilter.md)
+- [about_DRMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about_DRMMSite.md)
+- [Get-RMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMDevice.md)
+- [Get-RMMDeviceFilter](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMDeviceFilter.md)
 

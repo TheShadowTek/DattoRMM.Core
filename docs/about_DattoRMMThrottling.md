@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Describes the throttling system in the Datto-RMM PowerShell module, including configuration, behavior, and best practices for single and concurrent API usage.
+Describes the throttling system in the DattoRMM.Core PowerShell module, including configuration, behavior, and best practices for single and concurrent API usage.
 
 ## LONG DESCRIPTION
 
-The Datto-RMM module implements adaptive throttling to manage API request rates and avoid exceeding Datto RMM account limits. Throttling is configurable via the ThrottleAggressiveness setting, which determines how quickly delays are applied as API utilisation increases. The system dynamically adjusts request pacing based on current utilisation, with aggressive, medium, and cautious modes for different usage scenarios.
+The DattoRMM.Core module implements adaptive throttling to manage API request rates and avoid exceeding Datto RMM account limits. Throttling is configurable via the ThrottleAggressiveness setting, which determines how quickly delays are applied as API utilisation increases. The system dynamically adjusts request pacing based on current utilisation, with aggressive, medium, and cautious modes for different usage scenarios.
 
 Throttling is essential for:
 - Preventing API rate limit violations
@@ -111,7 +111,7 @@ Customisable parameters include:
 ### Manual Configuration
 
 Settings are stored in a JSON file at:
-`$HOME/.datto-rmm/config.json`
+`$HOME/.DattoRMM.Core/config.json`
 
 You may edit this file directly to set advanced or unsupported values. Changes take effect the next time the module is loaded or when you call `Set-RMMConfig`.
 

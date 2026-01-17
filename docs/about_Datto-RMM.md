@@ -1,10 +1,10 @@
-# about_Datto-RMM
+# about_DattoRMM.Core
 
 ## SHORT DESCRIPTION
 A comprehensive PowerShell module for managing and automating tasks with the Datto RMM API v2.
 
 ## LONG DESCRIPTION
-The Datto-RMM module provides an object-oriented interface for interacting with the Datto RMM API. It supports secure authentication, robust device and job management, advanced automation, and reporting scenarios. Key features include:
+The DattoRMM.Core module provides an object-oriented interface for interacting with the Datto RMM API. It supports secure authentication, robust device and job management, advanced automation, and reporting scenarios. Key features include:
 
 - Secure API authentication (API key/secret, PSCredential, SecretStore)
 - Comprehensive device, job, account, and site management
@@ -30,4 +30,4 @@ Get-RMMDevice -FilterId $Filter.Id | New-RMMQuickJob -JobName "Patch WebServer -
 ```
 
 ## SEE ALSO
-[Project README](https://github.com/boabf/Datto-RMM)
+[Project README](https://github.com/boabf/DattoRMM.Core)

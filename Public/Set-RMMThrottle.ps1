@@ -1,7 +1,7 @@
 function Set-RMMThrottle {
     <#
     .SYNOPSIS
-        Sets throttling behavior for the current Datto-RMM session.
+        Sets throttling behavior for the current DattoRMM.Core session.
 
     .DESCRIPTION
         Set-RMMThrottle allows you to adjust the throttling aggressiveness for the active session.

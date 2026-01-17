@@ -1,7 +1,7 @@
 # Set-RMMConfig
 
 ## SYNOPSIS
-Configures persistent settings for the Datto-RMM module.
+Configures persistent settings for the DattoRMM.Core module.
 
 ## SYNTAX
 
@@ -15,7 +15,7 @@ Set-RMMConfig [[-DefaultPlatform] <RMMPlatform>] [[-DefaultPageSize] <Int32>]
 The Set-RMMConfig function allows you to configure persistent settings that will be 
 preserved across PowerShell sessions.
 These settings are stored in a configuration file
-at $HOME/.datto-rmm/config.json.
+at $HOME/.DattoRMM.Core/config.json.
 
 ## EXAMPLES
 
@@ -126,15 +126,15 @@ None. You cannot pipe objects to Set-RMMConfig.
 
 None. This function updates the persistent configuration file.
 ## NOTES
-Configuration is stored at: $HOME/.datto-rmm/config.json
+Configuration is stored at: $HOME/.DattoRMM.Core/config.json
 At least one parameter must be specified.
 Settings take effect immediately and persist across sessions.
 
 ## RELATED LINKS
 
 
-- [Set-RMMPageSize](https://github.com/boabf/Datto-RMM/blob/main/docs/Set-RMMPageSize.md)
-- [Get-RMMPageSize](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMPageSize.md)
-- [Get-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMConfig.md)
-- [Reset-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Reset-RMMConfig.md)
+- [Set-RMMPageSize](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Set-RMMPageSize.md)
+- [Get-RMMPageSize](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMPageSize.md)
+- [Get-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMConfig.md)
+- [Reset-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Reset-RMMConfig.md)
 

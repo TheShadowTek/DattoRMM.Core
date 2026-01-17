@@ -81,4 +81,4 @@ Use GetSummary() for a quick overview of the log entry.
 
 ## SEE ALSO
 - [Get-RMMActivityLog](Get-RMMActivityLog.md)
-- [about_Datto-RMM](about_Datto-RMM.md)
+- [about_DattoRMM.Core](about_DattoRMM.Core.md)

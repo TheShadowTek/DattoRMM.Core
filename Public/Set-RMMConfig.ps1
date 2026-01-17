@@ -1,12 +1,12 @@
 function Set-RMMConfig {
     <#
     .SYNOPSIS
-        Configures persistent settings for the Datto-RMM module.
+        Configures persistent settings for the DattoRMM.Core module.
 
     .DESCRIPTION
         The Set-RMMConfig function allows you to configure persistent settings that will be 
         preserved across PowerShell sessions. These settings are stored in a configuration file
-        at $HOME/.datto-rmm/config.json.
+        at $HOME/.DattoRMM.Core/config.json.
 
     .PARAMETER DefaultPlatform
         Sets the default Datto RMM platform region for connections.
@@ -55,7 +55,7 @@ function Set-RMMConfig {
         None. This function updates the persistent configuration file.
 
     .NOTES
-        Configuration is stored at: $HOME/.datto-rmm/config.json
+        Configuration is stored at: $HOME/.DattoRMM.Core/config.json
         At least one parameter must be specified.
         Settings take effect immediately and persist across sessions.
 

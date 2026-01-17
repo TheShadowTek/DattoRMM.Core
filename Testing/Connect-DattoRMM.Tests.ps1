@@ -1,7 +1,7 @@
 BeforeAll {
     # Import the module
     $ModulePath = Split-Path -Parent $PSScriptRoot
-    Import-Module "$ModulePath\Datto-RMM.psd1" -Force
+    Import-Module "$ModulePath\DattoRMM.Core.psd1" -Force
 }
 
 Describe 'Connect-DattoRMM' {

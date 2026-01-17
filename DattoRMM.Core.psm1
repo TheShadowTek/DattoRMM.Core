@@ -1,4 +1,4 @@
-# Datto-RMM.psm1
+# DattoRMM.Core.psm1
 # Main module file for Datto RMM API v2 PowerShell module
 
 # Initialize script-scoped auth object

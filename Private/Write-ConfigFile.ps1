@@ -1,7 +1,7 @@
 function Write-ConfigFile {
     <#
     .SYNOPSIS
-        Writes the Datto-RMM configuration file.
+        Writes the DattoRMM.Core configuration file.
     #>
     [CmdletBinding()]
     param(

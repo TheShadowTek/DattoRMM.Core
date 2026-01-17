@@ -37,4 +37,4 @@ Write-Host "Service status: $($status.Status) (v$($status.Version))"
 
 ## SEE ALSO
 * [Get-RMMStatus](Get-RMMStatus.md)
-* [about_Datto-RMM](about_Datto-RMM.md)
+* [about_DattoRMM.Core](about_DattoRMM.Core.md)

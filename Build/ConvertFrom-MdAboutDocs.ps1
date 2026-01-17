@@ -6,7 +6,7 @@
     ConvertFrom-MdAboutDocs.ps1 reads all about_*.md files in the docs folder and generates PowerShell about help .txt files in en-US/.
     If an about topic matches a class, it includes class properties and methods in the output, and links to online documentation if available.
     Otherwise, it processes the file as a standard about_ topic.
-    This script is intended to be used as part of the build process for the Datto-RMM module.
+    This script is intended to be used as part of the build process for the DattoRMM.Core module.
 
 .PARAMETER AboutFolder
     The folder containing about_*.md files. Defaults to 'docs'.
@@ -25,7 +25,7 @@ param(
 )
 
 # Load DocsBaseUrl from manifest
-$manifestPath = Join-Path $PSScriptRoot '..\Datto-RMM.psd1'
+$manifestPath = Join-Path $PSScriptRoot '..\DattoRMM.Core.psd1'
 $manifest = Import-PowerShellDataFile -Path $manifestPath
 $DocsBaseUrl = $manifest.DocsBaseUrl
 

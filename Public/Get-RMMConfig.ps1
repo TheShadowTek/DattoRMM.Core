@@ -1,10 +1,10 @@
 function Get-RMMConfig {
     <#
     .SYNOPSIS
-        Retrieves the current Datto-RMM module configuration.
+        Retrieves the current DattoRMM.Core module configuration.
 
     .DESCRIPTION
-        The Get-RMMConfig function displays the current configuration settings for the Datto-RMM module,
+        The Get-RMMConfig function displays the current configuration settings for the DattoRMM.Core module,
         including both values loaded from the configuration file and their current in-memory values.
         
         This helps verify what defaults are configured and active in the current session.
@@ -27,7 +27,7 @@ function Get-RMMConfig {
         PSCustomObject. Returns an object with configuration properties and their values.
 
     .NOTES
-        Configuration is stored at: $HOME/.datto-rmm/config.json
+        Configuration is stored at: $HOME/.DattoRMM.Core/config.json
         
         The output shows:
         - Configured values from the config file

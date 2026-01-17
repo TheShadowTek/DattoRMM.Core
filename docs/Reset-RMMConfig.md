@@ -1,7 +1,7 @@
 # Reset-RMMConfig
 
 ## SYNOPSIS
-Resets Datto-RMM module configuration to defaults.
+Resets DattoRMM.Core module configuration to defaults.
 
 ## SYNTAX
 
@@ -88,7 +88,7 @@ None. You cannot pipe objects to Reset-RMMConfig.
 
 None. Displays a message indicating success or failure.
 ## NOTES
-Configuration file location: $HOME/.datto-rmm/config.json
+Configuration file location: $HOME/.DattoRMM.Core/config.json
 
 This function only deletes the configuration file.
 Current session values remain unchanged
@@ -103,6 +103,6 @@ Default values after reset:
 ## RELATED LINKS
 
 
-- [Get-RMMConfig](https://github.com/boabf/Datto-RMM/blob/main/docs/Get-RMMConfig.md)
-- [Set-RMMPageSize](https://github.com/boabf/Datto-RMM/blob/main/docs/Set-RMMPageSize.md)
+- [Get-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMConfig.md)
+- [Set-RMMPageSize](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Set-RMMPageSize.md)
 

@@ -72,5 +72,5 @@ This function is only relevant if your account uses Datto Networking.
 ## RELATED LINKS
 
 
-- [about_DRMMNetMapping](https://github.com/boabf/Datto-RMM/blob/main/docs/about_DRMMNetMapping.md)
+- [about_DRMMNetMapping](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about_DRMMNetMapping.md)
 

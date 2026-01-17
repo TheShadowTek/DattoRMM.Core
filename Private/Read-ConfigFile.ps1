@@ -1,7 +1,7 @@
 function Read-ConfigFile {
     <#
     .SYNOPSIS
-        Reads the Datto-RMM configuration file.
+        Reads the DattoRMM.Core configuration file.
     #>
     [CmdletBinding()]
     param()

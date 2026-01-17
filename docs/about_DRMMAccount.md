@@ -70,4 +70,4 @@ Write-Host $account.GetSummary()
 
 ## SEE ALSO
 - [Get-RMMAccount](Get-RMMAccount.md)
-- [about_Datto-RMM](about_Datto-RMM.md)
+- [about_DattoRMM.Core](about_DattoRMM.Core.md)
