@@ -54,12 +54,10 @@ class DRMMAlert : DRMMObject {
             }
         }
 
-        #$ResolvedDate = [DRMMObject]::ParseApiDate($Response.resolvedOn)
-        #$Alert.ResolvedOn = $ResolvedDate.DateTime
-        $Alert.ResolvedOn = $Response.resolvedOn
-        #$TimestampDate = [DRMMObject]::ParseApiDate($Response.timestamp)
-        #$Alert.Timestamp = $TimestampDate.DateTime
-        $Alert.Timestamp = $Response.timestamp
+        $ResolvedDate = [DRMMObject]::ParseApiDate($Response.resolvedOn)
+        $Alert.ResolvedOn = $ResolvedDate.DateTime
+        $TimestampDate = [DRMMObject]::ParseApiDate($Response.timestamp)
+        $Alert.Timestamp = $TimestampDate.DateTime
 
         return $Alert
 
