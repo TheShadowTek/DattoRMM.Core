@@ -4,68 +4,72 @@ function Get-RMMActivityLog {
         Retrieves activity logs from the Datto RMM API.
 
     .DESCRIPTION
-        The Get-RMMActivityLog function retrieves activity logs with optional filtering by date range,
-        entity type (device or user), categories, actions, sites, and users. By default, the API returns
-        logs from the last 15 minutes if no date range is specified.
+        Retrieves activity logs for one or more sites, with optional filtering by date range, entity type,
+        categories, actions, and users. Supports global (all sites) or site-specific queries. Site IDs are
+        batched for large environments to avoid API limits.
 
-        Activity logs track various activities in the RMM platform including device changes, user actions,
-        job executions, and more.
+        You can specify sites by:
+        - Piping DRMMSite objects (from Get-RMMSite)
+        - Passing SiteId(s) directly
+        - Omitting both for global (all sites) scope
 
-    .PARAMETER From
-        Defines the UTC start date for fetching data. Format: yyyy-MM-ddTHH:mm:ssZ
-        By default, the API returns logs from the last 15 minutes.
+        The function prompts for confirmation before retrieving logs for each site, including in global
+        mode. Supports Yes/No/Yes to All/No to All responses for safe handling of PII.
 
-    .PARAMETER Until
-        Defines the UTC end date for fetching data. Format: yyyy-MM-ddTHH:mm:ssZ
+    .PARAMETER Site
+        One or more DRMMSite objects (from Get-RMMSite) to retrieve activity logs for. Accepts pipeline
+        input.
+
+    .PARAMETER SiteId
+        One or more site IDs (integer) to retrieve activity logs for.
+
+    .PARAMETER Start
+        Start date/time for fetching data. Accepts local or UTC; local times are automatically converted
+        to UTC for the API. Format: yyyy-MM-ddTHH:mm:ssZ. Required.
+
+    .PARAMETER End
+        End date/time for fetching data. Accepts local or UTC; local times are automatically converted
+        to UTC for the API. Format: yyyy-MM-ddTHH:mm:ssZ. Required.
 
     .PARAMETER Entity
         Filters activity logs by entity type. Valid values: 'Device', 'User'.
-        Can specify multiple values as an array.
 
     .PARAMETER Category
         Filters activity logs by category (e.g., 'job', 'device').
-        Can specify multiple values as an array.
 
     .PARAMETER Action
         Filters activity logs by action (e.g., 'deployment', 'note').
-        Can specify multiple values as an array.
-
-    .PARAMETER SiteId
-        Filters activity logs by site ID (integer).
-        Can specify multiple values as an array.
 
     .PARAMETER UserId
         Filters activity logs by user ID (integer).
-        Can specify multiple values as an array.
 
     .PARAMETER Order
-        Specifies the order in which records should be returned based on their creation date.
-        Valid values: 'asc', 'desc'. Default is 'desc'.
+        Specifies the order in which records are returned by creation date. Valid values: 'asc', 'desc'.
+        Default is 'desc'.
 
     .EXAMPLE
-        Get-RMMActivityLog
+        Get-RMMActivityLog -Start "2024-01-01T00:00:00Z" -End "2024-01-02T00:00:00Z"
 
-        Retrieves activity logs from the last 15 minutes (default behavior).
-
-    .EXAMPLE
-        Get-RMMActivityLog -From "2024-01-01T00:00:00Z" -Until "2024-01-02T00:00:00Z"
-
-        Retrieves activity logs for January 1st, 2024.
+        Retrieves activity logs for all sites for January 1st, 2024. Prompts for each site.
 
     .EXAMPLE
-        Get-RMMActivityLog -Entity Device -Category job
+        $Start = Get-Date '2024-01-01T00:00:00Z'
+        PS > $End = Get-Date '2024-01-02T00:00:00Z'
+        PS > Get-RMMSite -SiteName "Main Office" | Get-RMMActivityLog -Start $Start -End $End
 
-        Retrieves device-related activity logs in the 'job' category.
-
-    .EXAMPLE
-        Get-RMMActivityLog -From "2024-01-01T00:00:00Z" -Category job,device -Action deployment
-
-        Retrieves activity logs for specific categories and action from a start date.
+        Retrieves activity logs for the "Main Office" site. Prompts for confirmation.
 
     .EXAMPLE
-        Get-RMMSite -SiteName "Main Office" | Get-RMMActivityLog -From "2024-01-01T00:00:00Z"
+        Get-RMMActivityLog -SiteId 1234,5678 -Start (Get-Date '2024-01-01') -End (Get-Date '2024-01-02')
 
-        Retrieves activity logs for a specific site from January 1st, 2024.
+        Retrieves activity logs for sites with IDs 1234 and 5678. Prompts for each site.
+
+    .EXAMPLE
+        $Start = Get-Date '2024-01-01'
+        PS > $End = Get-Date '2024-01-02'
+        PS > Get-RMMActivityLog -SiteId 1234,5678 -Start $Start -End $End -Confirm:$false
+
+        Retrieves activity logs for sites with IDs 1234 and 5678 without confirmation prompts (for automation).
 
     .INPUTS
         DRMMSite. You can pipe site objects from Get-RMMSite (uses the Id property).
@@ -74,28 +78,38 @@ function Get-RMMActivityLog {
         DRMMActivityLog. Returns activity log objects with details about the activity.
 
     .NOTES
-
-        This function requires an active connection to the Datto RMM API.
-        Use Connect-DattoRMM to authenticate before calling this function.
-
-        The API uses integer IDs (not UIDs) for sites and users in this endpoint.
-        Results are paginated automatically.
+        - Requires an active connection to the Datto RMM API (use Connect-DattoRMM first).
+        - Site IDs are batched in groups of 100 to avoid API/query length limits.
+        - Confirmation prompt appears for each site (Yes/No/Yes to All/No to All supported).
+        - The API uses integer IDs (not UIDs) for sites and users in this endpoint.
+        - Results are paginated automatically.
 
     .LINK
         about_DRMMActivityLog
     #>
 
-    [CmdletBinding(DefaultParameterSetName='Default')]
+    [CmdletBinding(DefaultParameterSetName='Global', SupportsShouldProcess = $true, ConfirmImpact='High')]
+
     param(
-        [Parameter(ValueFromPipelineByPropertyName)]
-        [Alias('Id')]
+        [Parameter(
+            ParameterSetName = 'Site',
+            ValueFromPipeline = $true
+        )]
+        [DRMMSite[]]
+        $Site,
+
+        [Parameter(ParameterSetName = 'SiteId')]
         [long[]]$SiteId,
 
-        [Parameter()]
-        [datetime]$From,
+        [Parameter(
+            Mandatory = $true
+        )]
+        [datetime]$Start,
 
-        [Parameter()]
-        [datetime]$Until,
+        [Parameter(
+            Mandatory = $true
+        )]
+        [datetime]$End,
 
         [Parameter()]
         [ValidateSet('Device', 'User')]
@@ -117,64 +131,107 @@ function Get-RMMActivityLog {
 
     begin {
 
-        # Check for authentication
-        if (-not $Script:RMMAuth) {
-
-            throw "Not authenticated. Please run Connect-DattoRMM first."
-
-        }
-
-        # Build query parameters
+        # Build query parameters (excluding siteIds)
         $Parameters = @{}
+        
+        if ($Start) {
 
-        switch ($PSBoundParameters.Keys) {
-
-            'From' {$Parameters.Add('from', $From.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))}
-            'Until' {$Parameters.Add('until', $Until.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))}
-            'Entity' {$Parameters.Add('entities', ($Entity | ForEach-Object { $_.ToLower() }) -join ',')}
-            'Category' {$Parameters.Add('categories', ($Category | ForEach-Object { $_.ToLower() }) -join ',')}
-            'Action' {$Parameters.Add('actions', ($Action | ForEach-Object { $_.ToLower() }) -join ',')}
-            'UserId' {$Parameters.Add('userIds', $UserId -join ',')}
-            'Order' {$Parameters.Add('order', $Order)}
+            $Parameters['from'] = $Start.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
 
         }
 
-        # Collect site IDs from pipeline
-        $CollectedSiteIds = [System.Collections.Generic.List[long]]::new()
+        if ($End) {
+
+            $Parameters['until'] = $End.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+
+        }
+
+        if ($Entity) {
+
+            $Parameters['entities'] = ($Entity | ForEach-Object { $_.ToLower() }) -join ','
+
+        }
+
+        if ($Category) {
+
+            $Parameters['categories'] = ($Category | ForEach-Object { $_.ToLower() }) -join ','
+
+        }
+
+        if ($Action) {
+
+            $Parameters['actions'] = ($Action | ForEach-Object { $_.ToLower() }) -join ','
+
+        }
+
+        if ($UserId) {
+
+            $Parameters['userIds'] = $UserId -join ','
+
+        }
+
+        if ($Order) {
+
+            $Parameters['order'] = $Order
+
+        }
+
+        $AllSites = @()
 
     }
 
     process {
 
-        if ($SiteId) {
+        if ($PSCmdlet.ParameterSetName -eq 'Site') {
 
-            foreach ($Id in $SiteId) {
+            $AllSites += $Site
 
-                if (-not $CollectedSiteIds.Contains($Id)) {
+        } elseif ($PSCmdlet.ParameterSetName -eq 'SiteId') {
+            
+            $AllSites = Get-RMMSite | Where-Object {$_.Id -in $SiteId}
 
-                    $CollectedSiteIds.Add($Id)
-
-                }
-            }
         }
     }
 
     end {
 
-        # Add collected site IDs to query params
-        if ($CollectedSiteIds.Count -gt 0) {
+        # If no site(s) specified, treat as global: get all sites
+        if ($PSCmdlet.ParameterSetName -eq 'Global') {
 
-            $Parameters['siteIds'] = $CollectedSiteIds -join ','
+            $AllSites = Get-RMMSite
 
         }
 
-        # Call API with pagination
-        $Path = 'activity-logs'
+        $ProcessSites = @()
 
-        Invoke-APIMethod -Method 'GET' -Path $Path -Parameters $Parameters -Paginate -PageElement 'activities' | ForEach-Object {
+        foreach ($SiteObject in $AllSites) {
 
-            [DRMMActivityLog]::FromAPIMethod($_)
+            if ($PSCmdlet.ShouldProcess("Activity logs for site: $($SiteObject.Name) may contain PII or sensitive information. Do you want to continue?", "Confirm Activity Log Retrieval for $($SiteObject.Name)")) {
 
+                $ProcessSites += $SiteObject
+
+            } else {
+                
+                Write-Warning 'Operation cancelled by user.'
+                return
+
+            }
+        }
+
+        # Batch sites (default 100 per batch)
+        $BatchSize = 100
+
+        for ($BatchIndex = 0; $BatchIndex -lt $ProcessSites.Count; $BatchIndex += $BatchSize) {
+
+            $BatchSites = $ProcessSites[$BatchIndex..([Math]::Min($BatchIndex+$BatchSize-1, $ProcessSites.Count-1))]
+            $Parameters['siteIds'] = ($BatchSites | ForEach-Object { $_.Id }) -join ','
+            $Path = 'activity-logs'
+
+            Invoke-APIMethod -Method 'GET' -Path $Path -Parameters $Parameters -Paginate -PageElement 'activities' | ForEach-Object {
+
+                [DRMMActivityLog]::FromAPIMethod($_)
+
+            }
         }
     }
 }

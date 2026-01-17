@@ -125,13 +125,6 @@ function Get-RMMSite {
         [guid]
         $SiteUid,
 
-        [Parameter(
-            ParameterSetName = 'All',
-            Mandatory = $false
-        )]
-        [bool]
-        $All = $true,
-
         # Parameter help description
         [Parameter(
             ParameterSetName = 'Search',
