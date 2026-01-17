@@ -38,4 +38,38 @@ Only include `nextPageUrl` if there are more results to fetch. If the current pa
 
 ---
 
-(Add additional issues below using the same format.)
+### Alert Context `srvc_resource_usage_ctx` Webhook Missing Title/Description
+
+**Type:** UI/Webhook Bug (not strictly API)
+
+**Issue:**
+Alerts with the context `srvc_resource_usage_ctx` (service resource usage) generated via webhook show empty `title` and `description` fields in the webhook payload:
+
+```
+WEBHOOK_EXECUTED: {
+    "title": "",
+    "description": "",
+    "priority": "SERVICE",
+    "category": "CPU",
+    ...
+}
+```
+
+This is also apparent in the Datto RMM UI, where the alert is missing a title and cannot be accessed via the alerts page. Direct URL navigation to the alert page using the `alertUid` works, but the alert remains visibly missing in the webhook response action.
+
+**Impact:**
+- Alerts with this context are not visible or accessible in the UI alerts page.
+- Webhook payloads lack key information (`title`, `description`), making automation and notification difficult.
+- Can only access the alert by direct URL walk with the `alertUid`.
+
+**Evidence:**
+- See screenshots:  
+  - `[path/to/screenshot1.png]`  
+  - `[path/to/screenshot2.png]`  
+  *(Replace with actual file paths after upload/rename)*
+
+**Requested Fix:**
+Ensure alerts with `srvc_resource_usage_ctx` context populate `title` and `description` fields in both webhook payloads and the UI, so they are visible and accessible like other alert types.
+
+---
+

@@ -26,13 +26,35 @@ Username exposed by activity log 'job' User, and details. Limited documentation 
 Review add confirm acceptable, or full PII masking on top for known entities?
 
 # ActivityLog Jog HasStdOut
-Job has standard out, object reports false, not verified StdErr
+Job has standard out, object reports false, not verified StdErr - possible omcponent issue not API, other test have been accurate
 
 # Review Activity Log Usage
-no parameters should return all activity
+no parameters should return all activity - done, end up full refactor for improvments
 
 # doc valudation
 - verify all links, especially feature request
 
 # Community issues
 Review Datto rMM commnuity for API issues and solutions and verify any known solutions are covered.
+
+# Alpha test plan
+Devices - ESXi, printers, switches, what about datto backup devices (do they appear) - am I missing any datto product integration stuff?
+Would it help workflow migraation to return raw object for users?
+
+# Beta test plan
+
+# Bug Review
+AlertContext srvc_resource_usage_ctx ResponseActions, the WEBHOOK_EXECUTED title and description impacts the UI too
+
+# Module Name
+Review module name given similarity with existing module
+
+# Document DRMMObject and helper methods
+like the heading says
+
+# Throttle Control Improvment
+Read account delay limit 0.9 default, from get account. Implment into throttle with variable overheadoverhead variable.
+Result allows control of buffer, do not util to get above 50% with pause (overhead would be 0.4 for default). This 
+allows control for concurrancy with other lighter workloads that are not throttled by backing off earlier. This should be a 
+value relative to the account back off limit.
+Mor ereliable than current hard 0.85.
