@@ -41,7 +41,7 @@ Set-RMMThrottle -ThrottleAggressiveness Aggressive -Persist
 
 All default values are managed centrally and can be tuned in one place. For advanced options, custom settings, and Datto's official API guidance, see:
 
-- [docs/about_DattoRMMThrottling.md](docs/about_DattoRMMThrottling.md)
+- [docs/about/about_DattoRMM.CoreThrottling.md](docs/about/about_DattoRMM.CoreThrottling.md)
 
 > With this built-in throttling, it is safe to run large parallel workloads (such as data extraction or bulk operations) without risking API lockouts or service disruption.
 

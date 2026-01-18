@@ -1,4 +1,4 @@
-# about_DattoRMMThrottling
+# about_DattoRMM.CoreThrottling
 
 ## SHORT DESCRIPTION
 

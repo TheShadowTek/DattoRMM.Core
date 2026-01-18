@@ -30,4 +30,4 @@ Get-RMMDevice -FilterId $Filter.Id | New-RMMQuickJob -JobName "Patch WebServer -
 ```
 
 ## SEE ALSO
-[Project README](https://github.com/boabf/DattoRMM.Core)
+[Project README](https://github.com/TheShadowTek/DattoRMM.Core/README.md)
