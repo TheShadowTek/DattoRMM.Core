@@ -1,3 +1,7 @@
+<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
 function Get-RMMDeviceSoftware {
     <#
     .SYNOPSIS
@@ -101,3 +105,4 @@ function Get-RMMDeviceSoftware {
         }
     }
 }
+

@@ -1,3 +1,7 @@
+<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
 function Set-RMMThrottle {
     <#
     .SYNOPSIS
@@ -122,3 +126,4 @@ function Set-RMMThrottle {
     Get-RMMThrottle
     
 }
+

@@ -1,3 +1,7 @@
+<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
 BeforeAll {
     # Import the module
     $ModulePath = Split-Path -Parent $PSScriptRoot
@@ -294,3 +298,4 @@ Describe 'Connect-DattoRMM' {
         }
     }
 }
+

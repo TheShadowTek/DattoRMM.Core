@@ -1,3 +1,7 @@
+<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
 @{
 
 # Script module or binary module file associated with this manifest.
@@ -13,10 +17,10 @@ CompatiblePSEditions = @('Core')
 GUID = '7dc3bd88-a8ca-4498-94bb-bf4d72416b6b'
 
 # Author of this module
-Author = 'TheShadowTek'
+Author = 'Robert Faddes'
 
 # Company or vendor of this module
-CompanyName = 'TheShadowTek'
+CompanyName = 'Robert Faddes'
 
 # Copyright statement for this module
 Copyright = '(c) 2025 TheShadowTek. All rights reserved.'
@@ -132,7 +136,7 @@ PrivateData = @{
         Tags = @('Datto', 'RMM', 'API', 'PowerShell')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://github.com/TheShadowTek/DattoRMM.Core/blob/main/LICENSE'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/TheShadowTek/DattoRMM.Core'

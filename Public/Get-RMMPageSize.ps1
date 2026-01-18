@@ -1,3 +1,7 @@
+<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
 function Get-RMMPageSize {
     <#
     .SYNOPSIS
@@ -45,3 +49,4 @@ function Get-RMMPageSize {
         MaximumPageSize = $Script:MaxPageSize
     }
 }
+

@@ -1,3 +1,7 @@
+<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
 using module '.\DRMMObject.psm1'
 
 class DRMMComponent : DRMMObject {
@@ -106,3 +110,4 @@ class DRMMComponentVariable : DRMMObject {
 
     }
 }
+

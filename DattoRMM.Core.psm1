@@ -1,3 +1,7 @@
+<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
 # DattoRMM.Core.psm1
 # Main module file for Datto RMM API v2 PowerShell module
 

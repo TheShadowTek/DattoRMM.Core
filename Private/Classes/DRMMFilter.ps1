@@ -1,3 +1,7 @@
+<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
 using module '.\DRMMObject.psm1'
 # using module '.\DRMMAlert.ps1'   # For PSScriptAnalyzer only
 # using module '.\DRMMDevice.ps1'   # For PSScriptAnalyzer only
@@ -142,4 +146,5 @@ class DRMMFilter : DRMMObject {
 
     }
 }
+
 

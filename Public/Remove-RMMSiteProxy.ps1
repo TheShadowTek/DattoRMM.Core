@@ -1,3 +1,7 @@
+<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
 function Remove-RMMSiteProxy {
     <#
     .SYNOPSIS
@@ -110,3 +114,4 @@ function Remove-RMMSiteProxy {
 
     }
 }
+

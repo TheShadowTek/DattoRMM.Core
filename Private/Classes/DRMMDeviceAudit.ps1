@@ -1,3 +1,7 @@
+<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
 using module '.\DRMMObject.psm1'
 . $PSScriptRoot/DRMMNetworkInterface.ps1
 class DRMMDeviceAudit : DRMMObject {
@@ -479,4 +483,5 @@ class DRMMDeviceAuditVideoBoard : DRMMObject {
 
     }
 }
+
 

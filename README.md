@@ -203,4 +203,11 @@ This module is provided "as is" without warranty of any kind. Use at your own ri
 
 ## License
 
-A license will be added in a future release.
+This project is licensed under the Mozilla Public License 2.0 (MPL-2.0).
+
+All source files include an SPDX license identifier for clarity and automated compliance:
+
+    SPDX-License-Identifier: MPL-2.0
+
+You can find the full license text in the [LICENSE](./LICENSE) file.
+
