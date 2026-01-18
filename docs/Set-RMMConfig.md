@@ -137,4 +137,5 @@ Settings take effect immediately and persist across sessions.
 - [Get-RMMPageSize](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMPageSize.md)
 - [Get-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMConfig.md)
 - [Reset-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Reset-RMMConfig.md)
+- [Set-RMMPageSize](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Set-RMMPageSize.md)
 

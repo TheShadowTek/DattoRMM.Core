@@ -33,3 +33,6 @@ Returns the current and configured throttling settings.
 
 ## RELATED LINKS
 
+
+- [Get-RMMThrottle](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMThrottle.md)
+

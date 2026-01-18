@@ -1,5 +1,5 @@
 TOPIC
-    about_Datto-RMM
+    about_DattoRMM.Core
 
 SHORT DESCRIPTION
     A comprehensive PowerShell module for managing and automating tasks with the Datto RMM API v2.

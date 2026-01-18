@@ -37,6 +37,9 @@ no parameters should return all activity - done, end up full refactor for improv
 # Community issues
 Review Datto rMM commnuity for API issues and solutions and verify any known solutions are covered.
 
+# ALPHA READY
+Test udf csv and json methods
+
 # Alpha test plan
 Devices - ESXi, printers, switches, what about datto backup devices (do they appear) - am I missing any datto product integration stuff?
 Would it help workflow migraation to return raw object for users?
@@ -58,3 +61,6 @@ Result allows control of buffer, do not util to get above 50% with pause (overhe
 allows control for concurrancy with other lighter workloads that are not throttled by backing off earlier. This should be a 
 value relative to the account back off limit.
 Mor ereliable than current hard 0.85.
+
+# Throttle Class
+Throttle could possibly get a class given it returns a psobject

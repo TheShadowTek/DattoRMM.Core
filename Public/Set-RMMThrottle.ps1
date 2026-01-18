@@ -12,9 +12,9 @@ function Set-RMMThrottle {
         Cautious: Maximum delay, checks rate limit frequently (safest, slowest).
         Medium: Balanced delay and check frequency.
         Aggressive: Minimal delay, checks rate limit less often (fastest, riskier).
-        Valid values: Cautious, Medium, Aggressive. Default is Medium.
+        Valid values: Cautious, Medium, Aggressive. Module default is Medium.
 
-    .PARAMETER Persist
+        .PARAMETER Persist
         If specified, also saves the setting to the persistent configuration (calls Set-RMMConfig).
 
     .EXAMPLE
@@ -35,6 +35,12 @@ function Set-RMMThrottle {
 
     .NOTES
         Use Set-RMMConfig to configure other persistent settings.
+    
+    .LINK
+        Set-RMMConfig
+        Get-RMMThrottle
+        about_DattoRMM.CoreThrottling
+
     #>
 
     [CmdletBinding()]
@@ -50,11 +56,8 @@ function Set-RMMThrottle {
         [string]
         $ThrottleAggressiveness,
 
-        [Parameter(
-            Mandatory = $false
-        )]
-        [switch]
-        $Persist
+        [Parameter(Mandatory = $false)]
+        [switch] $Persist
     )
 
     switch ($ThrottleAggressiveness) {
@@ -64,6 +67,7 @@ function Set-RMMThrottle {
             $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
             $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
             $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
+            $ThrottleOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleOverhead
         }
 
         'Medium'     {
@@ -71,6 +75,7 @@ function Set-RMMThrottle {
             $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
             $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
             $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
+            $ThrottleOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleOverhead
         }
 
         'Aggressive' {
@@ -78,33 +83,42 @@ function Set-RMMThrottle {
             $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
             $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
             $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
+            $ThrottleOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleOverhead
+
         }
 
         default      {
             
             $DelayMultiplier = $Script:ThrottleAggressionDefaults['Default'].DelayMultiplier
-             $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults['Default'].LowUtilCheckInterval
-             $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults['Default'].ThrottleUtilisationThreshold
-             
+            $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults['Default'].LowUtilCheckInterval
+            $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults['Default'].ThrottleUtilisationThreshold
+            $ThrottleOverhead = $Script:ThrottleAggressionDefaults['Default'].ThrottleOverhead
+
         }
     }
 
-    $Script:ConfigDelayMultiplier = $DelayMultiplier
-    $Script:ConfigLowUtilCheckInterval = $LowUtilCheckInterval
-    $Script:ConfigThrottleUtilisationThreshold = $ThrottleUtilisationThreshold
-
-    if ($Script:RMMThrottle) {
-        $Script:RMMThrottle.DelayMultiplier = $DelayMultiplier
-        $Script:RMMThrottle.LowUtilCheckInterval = $LowUtilCheckInterval
-        $Script:RMMThrottle.ThrottleUtilisationThreshold = $ThrottleUtilisationThreshold
-    }
+    # Update current session throttle settings
+    $Script:RMMThrottle.DelayMultiplier = $DelayMultiplier
+    $Script:RMMThrottle.LowUtilCheckInterval = $LowUtilCheckInterval
+    $Script:RMMThrottle.ThrottleUtilisationThreshold = $ThrottleUtilisationThreshold
+    $Script:RMMThrottle.ThrottleOverhead = $ThrottleOverhead
 
     if ($Persist) {
 
-        Set-RMMConfig -ThrottleAggressiveness $ThrottleAggressiveness
+        $SetRMMConfig = @{
+            ThrottleAggressiveness = $ThrottleAggressiveness
+        }
+
+        if ($PSBoundParameters.Keys -contains 'ThrottleOverhead') {
+
+            $SetRMMConfig['ThrottleOverhead'] = $ThrottleOverhead
+
+        }
+
+        Set-RMMConfig @SetRMMConfig
         
     }
 
-    Write-Host "ThrottleAggressiveness set to: $ThrottleAggressiveness (DelayMultiplier: $DelayMultiplier, LowUtilCheckInterval: $LowUtilCheckInterval, ThrottleUtilisationThreshold: $ThrottleUtilisationThreshold)" -ForegroundColor Green
+    Get-RMMThrottle
     
 }

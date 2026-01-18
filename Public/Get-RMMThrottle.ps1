@@ -12,6 +12,13 @@ function Get-RMMThrottle {
         Get-RMMThrottle
 
         Returns the current and configured throttling settings.
+
+    .LINK
+        Set-RMMConfig
+        Get-RMMThrottle
+        about_DattoRMM.CoreThrottling
+
+
     #>
 
     [CmdletBinding()]
@@ -27,42 +34,42 @@ function Get-RMMThrottle {
             
             return 'Cautious'
         
-        }
-
-        if ($DelayMultiplier -eq 750  -and $LowUtilCheckInterval -eq 25) {
+        } elseif ($DelayMultiplier -eq 750  -and $LowUtilCheckInterval -eq 25) {
             
             return 'Medium'
         
-        }
-
-        if ($DelayMultiplier -eq 500  -and $LowUtilCheckInterval -eq 50) {
+        } elseif ($DelayMultiplier -eq 500  -and $LowUtilCheckInterval -eq 50) {
             
             return 'Aggressive'
         
+        } else {
+
+            return 'Custom'
+
         }
-
-        return 'Custom'
-
     }
 
-    $sessionDelay = $Script:RMMThrottle.DelayMultiplier
-    $sessionCheck = $Script:RMMThrottle.LowUtilCheckInterval
-    $sessionLevel = Get-Level -DelayMultiplier $sessionDelay -LowUtilCheckInterval $sessionCheck
+    # Get current session throttle settings
+    $SessionDelay = $Script:RMMThrottle.DelayMultiplier
+    $SessionCheck = $Script:RMMThrottle.LowUtilCheckInterval
+    $SessionLevel = Get-Level -DelayMultiplier $SessionDelay -LowUtilCheckInterval $SessionCheck
 
-    $config      = $null
-    $configLevel = $null
-    $configDelay = $null
-    $configCheck = $null
+    # Get configured throttle settings from config
+    $Config = $null
+    $ConfigLevel = $null
+    $ConfigDelay = $null
+    $ConfigCheck = $null
 
+    # Attempt to get config values
     try {
 
-        $config = Get-RMMConfig
+        $Config = Get-RMMConfig
 
-        if ($config -and $config.ThrottleAggressiveness) {
+        if ($Config -and $Config.ThrottleAggressiveness) {
 
-            $configLevel = $config.ThrottleAggressiveness
-            $configDelay = $config.DelayMultiplier
-            $configCheck = $config.LowUtilCheckInterval
+            $ConfigLevel = $Config.ThrottleAggressiveness
+            $ConfigDelay = $Config.DelayMultiplier
+            $ConfigCheck = $Config.LowUtilCheckInterval
             
         }
 
@@ -70,25 +77,25 @@ function Get-RMMThrottle {
         # Ignore errors retrieving config
     }
 
-    $rateInfo = $null
-    $utilisation = $null
-    $accountCount = $null
-    $accountRateLimit = $null
-    $accountCutOffRatio = $null
+    $RateInfo = $null
+    $Utilisation = $null
+    $AccountCount = $null
+    $AccountRateLimit = $null
+    $AccountCutOffRatio = $null
 
     try {
 
-        $rateInfo = Get-RMMRequestRate
+        $RateInfo = Get-RMMRequestRate
 
-        if ($rateInfo) {
+        if ($RateInfo) {
 
-            $accountCount = $rateInfo.accountCount
-            $accountRateLimit = $rateInfo.accountRateLimit
-            $accountCutOffRatio = $rateInfo.accountCutOffRatio
+            $AccountCount = $RateInfo.AccountCount
+            $AccountRateLimit = $RateInfo.AccountRateLimit
+            $AccountCutOffRatio = $RateInfo.AccountCutOffRatio
 
-            if ($accountRateLimit -gt 0) {
+            if ($AccountRateLimit -gt 0) {
 
-                $utilisation = [math]::Round(($accountCount / $accountRateLimit) * 100, 2)
+                $Utilisation = [math]::Round(($AccountCount / $AccountRateLimit) * 100, 2)
 
             }
         }
@@ -98,15 +105,15 @@ function Get-RMMThrottle {
     }
 
     [PSCustomObject]@{
-        SessionThrottleAggressiveness = $sessionLevel
-        SessionDelayMultiplier        = $sessionDelay
-        SessionLowUtilCheckInterval   = $sessionCheck
-        ConfigThrottleAggressiveness  = $configLevel
-        ConfigDelayMultiplier         = $configDelay
-        ConfigLowUtilCheckInterval    = $configCheck
-        AccountCount                  = $accountCount
-        AccountRateLimit              = $accountRateLimit
-        AccountCutOffRatio            = $accountCutOffRatio
-        UtilisationPercent            = $utilisation
+        SessionThrottleAggressiveness = $SessionLevel
+        SessionDelayMultiplier = $SessionDelay
+        SessionLowUtilCheckInterval = $SessionCheck
+        ConfigThrottleAggressiveness = $ConfigLevel
+        ConfigDelayMultiplier = $ConfigDelay
+        ConfigLowUtilCheckInterval = $ConfigCheck
+        AccountCount = $AccountCount
+        AccountRateLimit = $AccountRateLimit
+        AccountCutOffRatio = $AccountCutOffRatio
+        UtilisationPercent = $Utilisation
     }
 }

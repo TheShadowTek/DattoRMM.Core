@@ -5,59 +5,51 @@ function Update-Throttle {
     $Script:RMMThrottle.Utilisation = $RateInfo.accountCount / [math]::Max($RateInfo.accountRateLimit, 1)
 
     # Ensure LowUtilCheckInterval, DelayMultiplier, and ThrottleUtilisationThreshold are set
-    if (-not $Script:RMMThrottle.LowUtilCheckInterval) {
+    if ($Script:RMMThrottle.Utilisation -le $Script:RMMThrottle.ThrottleUtilisationThreshold) {
 
-        $Script:RMMThrottle.LowUtilCheckInterval = if ($Script:ConfigLowUtilCheckInterval) {$Script:ConfigLowUtilCheckInterval} else {25}
-
-    }
-
-    if (-not $Script:RMMThrottle.DelayMultiplier) {
-
-        $Script:RMMThrottle.DelayMultiplier = if ($Script:ConfigDelayMultiplier) {$Script:ConfigDelayMultiplier} else {750}
-        
-    }
-
-    if (-not $Script:RMMThrottle.ThrottleUtilisationThreshold) {
-
-        $Script:RMMThrottle.ThrottleUtilisationThreshold = if ($Script:ConfigThrottleUtilisationThreshold) {$Script:ConfigThrottleUtilisationThreshold} else {0.5}
-
-    }
-
-    $script:RMMThrottle.CheckInterval = if ($Script:RMMThrottle.Utilisation -le $Script:RMMThrottle.ThrottleUtilisationThreshold) {
-
-        $script:RMMThrottle.LowUtilCheckInterval
+        $script:RMMThrottle.CheckInterval = $script:RMMThrottle.LowUtilCheckInterval
 
     } else {
 
-        [math]::Max(1, [int]($script:RMMThrottle.LowUtilCheckInterval * (1 - $Script:RMMThrottle.Utilisation)))
+        $script:RMMThrottle.CheckInterval = [math]::Max(1, [int]($script:RMMThrottle.LowUtilCheckInterval * (1 - $Script:RMMThrottle.Utilisation)))
 
     }
 
-    if ($Script:RMMThrottle.Utilisation -gt $Script:RMMThrottle.ThrottleUtilisationThreshold) {
+    if ($Script:RMMThrottle.Utilisation -ge $Script:RMMThrottle.ThrottleUtilisationThreshold) {
 
         $Script:RMMThrottle.Throttle = $true
         $Script:RMMThrottle.DelayMS = $Script:RMMThrottle.Utilisation * $Script:RMMThrottle.DelayMultiplier
 
         # Determine if we need to pause requests entirely to avoid throttling
-        if ($Script:RMMThrottle.Utilisation -gt 0.85) {
+        $PauseThreshold = $RateInfo.accountRateLimit - $script:Throttle.ThrottleOverhead
+
+        if ($Script:RMMThrottle.Utilisation -ge $PauseThreshold) {
 
             $Script:RMMThrottle.Pause = $true
 
-        }
-        else {
+        } else {
 
             $Script:RMMThrottle.Pause = $false
 
         }
 
-    }
-    else {
+    } else {
 
         $Script:RMMThrottle.Pause = $false
         $Script:RMMThrottle.Throttle = $false
 
     }
 
-    Write-Debug "Throttling:`n   Utilisation=$([math]::Round($Script:RMMThrottle.Utilisation * 100, 2))%`n   ThrottleUtilisationThreshold=$($Script:RMMThrottle.ThrottleUtilisationThreshold)`n   LowUtilCheckInterval=$($Script:RMMThrottle.LowUtilCheckInterval)`n   CheckInterval=$($script:RMMThrottle.CheckInterval)`n   RequestCount=$($RateInfo.accountCount)`n   Remaining=$($RateInfo.accountRateLimit - $RateInfo.accountCount)`n   DelayMS=$($Script:RMMThrottle.DelayMS)`n   Pause=$($Script:RMMThrottle.Pause)"
+    Write-Debug @"
+Throttling:
+`tUtilisation=$([math]::Round($Script:RMMThrottle.Utilisation * 100, 2))%
+`tThrottleUtilisationThreshold=$($Script:RMMThrottle.ThrottleUtilisationThreshold)
+`tLowUtilCheckInterval=$($Script:RMMThrottle.LowUtilCheckInterval)
+`tCheckInterval=$($script:RMMThrottle.CheckInterval)
+`tRequestCount=$($RateInfo.accountCount)
+`tRemaining=$($RateInfo.accountRateLimit - $RateInfo.accountCount)
+`tDelayMS=$($Script:RMMThrottle.DelayMS)
+`tPause=$($Script:RMMThrottle.Pause)
+"@
 
 }

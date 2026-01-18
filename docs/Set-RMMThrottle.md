@@ -38,7 +38,7 @@ Cautious: Maximum delay, checks rate limit frequently (safest, slowest).
 Medium: Balanced delay and check frequency.
 Aggressive: Minimal delay, checks rate limit less often (fastest, riskier).
 Valid values: Cautious, Medium, Aggressive.
-Default is Medium.
+Module default is Medium.
 
 ```yaml
 Type: String
@@ -77,4 +77,7 @@ None. This function updates session variables and optionally persistent config.
 Use Set-RMMConfig to configure other persistent settings.
 
 ## RELATED LINKS
+
+
+- [Get-RMMThrottle](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMThrottle.md)
 
