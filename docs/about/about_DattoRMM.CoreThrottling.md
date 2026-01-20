@@ -112,7 +112,7 @@ You can set custom values using:
 
 Customisable parameters include:
 - `ThrottleAggressiveness` (required: 'Custom')
-- `ThrottleOverhead` (fractional overhead for pause threshold)
+- `ThrottleCutOffOverhead` (fractional overhead for pause threshold)
 - `ThrottleUtilisationThreshold` (utilisation ratio at which delays begin)
 - `LowUtilCheckInterval` (base rate check frequency)
 - `DelayMultiplier` (base delay applied)

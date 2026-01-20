@@ -16,34 +16,34 @@ $Script:TokenExpireHours = 100
 # Throttle defaults
 $Script:ThrottleAggressionDefaults = @{
     'Cautious' = @{
-        DelayMultiplier = 1000
+        DelayMultiplier = 1250
         LowUtilCheckInterval = 25
-        ThrottleUtilisationThreshold = 0.25
-        ThrottleOverhead = 0.1
+        ThrottleUtilisationThreshold = 0.3
+        ThrottleCutOffOverhead = 0.1
     }
     'Medium' = @{
         DelayMultiplier = 750
         LowUtilCheckInterval = 25
         ThrottleUtilisationThreshold = 0.5
-        ThrottleOverhead = 0.05
+        ThrottleCutOffOverhead = 0.05
     }
     'Custom' = @{
         DelayMultiplier = 750
         LowUtilCheckInterval = 25
         ThrottleUtilisationThreshold = 0.5
-        ThrottleOverhead = 0.05
+        ThrottleCutOffOverhead = 0.05
     }
     'Aggressive' = @{
         DelayMultiplier = 500
         LowUtilCheckInterval = 50
-        ThrottleUtilisationThreshold = 0.75
-        ThrottleOverhead = 0.04
+        ThrottleUtilisationThreshold = 0.5
+        ThrottleCutOffOverhead = 0.04
     }
     'Default' = @{
         DelayMultiplier = 750
         LowUtilCheckInterval = 25
         ThrottleUtilisationThreshold = 0.5
-        ThrottleOverhead = 0.05
+        ThrottleCutOffOverhead = 0.05
     }
 }
 
@@ -57,7 +57,7 @@ $Script:RMMThrottle = @{
     DelayMS = 0                         # Current delay in milliseconds
     Pause = $false                      # Whether to pause requests entirely
     Throttle = $false                   # Whether to throttle requests
-    ThrottleOverhead = 0.05             # Fraction of rate limit to reserve as safety margin (default 5%)
+    ThrottleCutOffOverhead = 0.05             # Fraction of rate limit to reserve as safety margin (default 5%)
     ThrottleUtilisationThreshold = 0.5  # Utilisation threshold to start throttling
 }
 
@@ -146,11 +146,11 @@ try {
                 $Aggresiveness = $LoadedConfig.ThrottleAggressiveness
                 $Script:RMMThrottle.LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$Aggresiveness].DelayMultiplier
                 $Script:RMMThrottle.DelayMultiplier = $Script:ThrottleAggressionDefaults[$Aggresiveness].LowUtilCheckInterval
-                $Script:RMMThrottle.ThrottleOverhead = $Script:ThrottleAggressionDefaults[$Aggresiveness].ThrottleOverhead
+                $Script:RMMThrottle.ThrottleCutOffOverhead = $Script:ThrottleAggressionDefaults[$Aggresiveness].ThrottleCutOffOverhead
                 Write-Debug "  ThrottleAggressiveness: $($Aggresiveness)"
                 Write-Debug "  LowUtilCheckInterval: $($Script:RMMThrottle.LowUtilCheckInterval)"
                 Write-Debug "  DelayMultiplier: $($Script:RMMThrottle.DelayMultiplier)"
-                Write-Debug "  ThrottleOverhead: $($Script:RMMThrottle.ThrottleOverhead)"
+                Write-Debug "  ThrottleCutOffOverhead: $($Script:RMMThrottle.ThrottleCutOffOverhead)"
 
                 # Load cusotm throttle values if present
                 switch ($LoadedConfig.PSObject.Properties.Name) {
@@ -165,9 +165,9 @@ try {
                         Write-Debug "  CUSTOM: LowUtilCheckInterval: $($Script:RMMThrottle.LowUtilCheckInterval)"
                     }
 
-                    'ThrottleOverhead' {
-                        $Script:RMMThrottle.ThrottleOverhead = $LoadedConfig.ThrottleOverhead
-                        Write-Debug "  CUSTOM: ThrottleOverhead: $($Script:RMMThrottle.ThrottleOverhead)"
+                    'ThrottleCutOffOverhead' {
+                        $Script:RMMThrottle.ThrottleCutOffOverhead = $LoadedConfig.ThrottleCutOffOverhead
+                        Write-Debug "  CUSTOM: ThrottleCutOffOverhead: $($Script:RMMThrottle.ThrottleCutOffOverhead)"
                     }
 
                     'ThrottleUtilisationThreshold' {

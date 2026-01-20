@@ -27,9 +27,9 @@
 #>
 [CmdletBinding()]
 param(
-    [switch]$Force,
+    [bool]$Force  =$true,
     
-    [string]$OutputFolder = ".\docs"
+    [string]$OutputFolder = ".\docs\commands"
 )
 
 $ErrorActionPreference = 'Stop'
@@ -147,7 +147,7 @@ try {
             Write-Host "  Generating: $FunctionName" -ForegroundColor Green
             
             # Generate markdown (suppress Get-Help type resolution warnings)
-            $null = New-MarkdownHelp -Command $FunctionName -OutputFolder $OutputFolder -Force -NoMetadata -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+            New-MarkdownHelp -Command $FunctionName -OutputFolder $OutputFolder -Force -NoMetadata -ErrorAction SilentlyContinue -WarningAction SilentlyContinue | Out-Null
             
             # Check if file was created
             if (-not (Test-Path $MarkdownFile)) {
@@ -207,6 +207,7 @@ try {
 
             # Write back (markdown expects newlines)
             Set-Content -Path $MarkdownFile -Value $Content
+            write-host "Iut path: $MarkdownFile"
 
             $Generated++
 

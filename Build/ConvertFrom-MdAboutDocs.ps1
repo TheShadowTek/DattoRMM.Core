@@ -185,7 +185,7 @@ foreach ($file in $aboutFiles) {
             $long += "`n" + ($seeAlsoItems | ForEach-Object { "    $_" } | Out-String)
         } else {
             Write-Host ("  No SEE ALSO items found for {0}, using manifest URL" -f $aboutName)
-            $long += "`n    $DocsBaseUrl$aboutName.md"
+            $long += "`n    $DocsBaseUrl/about/$aboutName.md"
         }
     }
     # Output plain text about help file

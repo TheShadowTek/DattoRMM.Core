@@ -32,7 +32,7 @@ Manually set any of the following throttle values in your config JSON to overrid
     - ThrottleAggressiveness       : Set to "Custom" to enable custom values
     - LowUtilCheckInterval         : Number of requests between throttle recalculation when utilisation is low (default 25)
     - DelayMultiplier              : Multiplier for calculating delay when throttling (in ms) - default 750
-    - ThrottleOverhead             : Fraction of rate limit to reserve as safety margin (default 0.05)
+    - ThrottleCutOffOverhead             : Fraction of rate limit to reserve as safety margin (default 0.05)
     - ThrottleUtilisationThreshold : Utilisation threshold to start throttling (default 0.5)
 
  Any of these keys present in your config file will override the corresponding module preset at startup.
@@ -43,7 +43,7 @@ Manually set any of the following throttle values in your config JSON to overrid
      "ThrottleAggressiveness": "Custom",
      "DelayMultiplier": 600,
      "LowUtilCheckInterval": 30,
-     "ThrottleOverhead": 0.03,
+     "ThrottleCutOffOverhead": 0.03,
      "ThrottleUtilisationThreshold": 0.6
  }
 

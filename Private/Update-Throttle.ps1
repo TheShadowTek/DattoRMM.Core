@@ -6,6 +6,7 @@ function Update-Throttle {
     param ()
     
     $RateInfo = Get-RMMRequestRate
+    $PauseThreshold = $RateInfo.accountCutOffRatio - $Script:RMMThrottle.ThrottleCutOffOverhead
     $Script:RMMThrottle.Utilisation = $RateInfo.accountCount / [math]::Max($RateInfo.accountRateLimit, 1)
 
     # Ensure LowUtilCheckInterval, DelayMultiplier, and ThrottleUtilisationThreshold are set
@@ -25,8 +26,6 @@ function Update-Throttle {
         $Script:RMMThrottle.DelayMS = $Script:RMMThrottle.Utilisation * $Script:RMMThrottle.DelayMultiplier
 
         # Determine if we need to pause requests entirely to avoid throttling
-        $PauseThreshold = $RateInfo.accountRateLimit - $script:Throttle.ThrottleOverhead
-
         if ($Script:RMMThrottle.Utilisation -ge $PauseThreshold) {
 
             $Script:RMMThrottle.Pause = $true
@@ -46,14 +45,17 @@ function Update-Throttle {
 
     Write-Debug @"
 Throttling:
-`tUtilisation=$([math]::Round($Script:RMMThrottle.Utilisation * 100, 2))%
-`tThrottleUtilisationThreshold=$($Script:RMMThrottle.ThrottleUtilisationThreshold)
-`tLowUtilCheckInterval=$($Script:RMMThrottle.LowUtilCheckInterval)
-`tCheckInterval=$($script:RMMThrottle.CheckInterval)
-`tRequestCount=$($RateInfo.accountCount)
-`tRemaining=$($RateInfo.accountRateLimit - $RateInfo.accountCount)
-`tDelayMS=$($Script:RMMThrottle.DelayMS)
-`tPause=$($Script:RMMThrottle.Pause)
+`tUtilisation: $([math]::Round($Script:RMMThrottle.Utilisation * 100, 2))%
+`tThrottle Utilisation Threshold: $([math]::Round($Script:RMMThrottle.ThrottleUtilisationThreshold * 100, 2))%
+`tPause Utilisation Threshold: $([math]::Round($PauseThreshold * 100, 2))%
+`tAccount Cut Off: $([math]::Round($RateInfo.accountCutOffRatio * 100, 2))%
+`tThrottle Cut Off Overhead: $([math]::Round($Script:RMMThrottle.ThrottleCutOffOverhead * 100, 2))%
+`tLowUtilCheckInterval: $($Script:RMMThrottle.LowUtilCheckInterval)
+`tCheck Interval: $($script:RMMThrottle.CheckInterval)
+`tRequest Count: $($RateInfo.accountCount)
+`tRemaining: $($RateInfo.accountRateLimit - $RateInfo.accountCount)
+`tDelay MS: $([math]::Round($Script:RMMThrottle.DelayMS, 2))
+`tPause: $($Script:RMMThrottle.Pause)
 "@
 
 }

@@ -147,14 +147,14 @@ function Set-RMMConfig {
 
     }
 
-    if ($PSBoundParameters.ContainsKey('ThrottleOverhead')) {
+    if ($PSBoundParameters.ContainsKey('ThrottleCutOffOverhead')) {
 
-        $Config['ThrottleOverhead'] = $ThrottleOverhead
-        Write-Verbose "Set ThrottleOverhead to: $ThrottleOverhead"
+        $Config['ThrottleCutOffOverhead'] = $ThrottleCutOffOverhead
+        Write-Verbose "Set ThrottleCutOffOverhead to: $ThrottleCutOffOverhead"
 
         if ($Script:RMMThrottle) {
 
-            $Script:RMMThrottle.ThrottleOverhead = $ThrottleOverhead
+            $Script:RMMThrottle.ThrottleCutOffOverhead = $ThrottleCutOffOverhead
             
         }
     }
@@ -170,45 +170,45 @@ function Set-RMMConfig {
                 $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
                 $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
                 $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
-                $ThrottleOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleOverhead
+                $ThrottleCutOffOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleCutOffOverhead
             }
 
             'Medium' {
                 $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
                 $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
                 $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
-                $ThrottleOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleOverhead
+                $ThrottleCutOffOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleCutOffOverhead
             }
 
             'Aggressive' {
                 $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
                 $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
                 $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
-                $ThrottleOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleOverhead
+                $ThrottleCutOffOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleCutOffOverhead
             }
 
             default {
                 $DelayMultiplier = $Script:ThrottleAggressionDefaults['Default'].DelayMultiplier
                 $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults['Default'].LowUtilCheckInterval
                 $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults['Default'].ThrottleUtilisationThreshold
-                $ThrottleOverhead = $Script:ThrottleAggressionDefaults['Default'].ThrottleOverhead
+                $ThrottleCutOffOverhead = $Script:ThrottleAggressionDefaults['Default'].ThrottleCutOffOverhead
             }
         }
 
         $Config['DelayMultiplier'] = $DelayMultiplier
         $Config['LowUtilCheckInterval'] = $LowUtilCheckInterval
         $Config['ThrottleUtilisationThreshold'] = $ThrottleUtilisationThreshold
-        $Config['ThrottleOverhead'] = $ThrottleOverhead
+        $Config['ThrottleCutOffOverhead'] = $ThrottleCutOffOverhead
         Write-Verbose "Set DelayMultiplier to: $DelayMultiplier"
         Write-Verbose "Set LowUtilCheckInterval to: $LowUtilCheckInterval"
         Write-Verbose "Set ThrottleUtilisationThreshold to: $ThrottleUtilisationThreshold"
-        Write-Verbose "Set ThrottleOverhead to: $ThrottleOverhead"
+        Write-Verbose "Set ThrottleCutOffOverhead to: $ThrottleCutOffOverhead"
 
         # Update current session variables and active throttle settings
         $Script:RMMThrottle.DelayMultiplier = $DelayMultiplier
         $Script:RMMThrottle.LowUtilCheckInterval = $LowUtilCheckInterval
         $Script:RMMThrottle.ThrottleUtilisationThreshold = $ThrottleUtilisationThreshold
-        $Script:RMMThrottle.ThrottleOverhead = $ThrottleOverhead
+        $Script:RMMThrottle.ThrottleCutOffOverhead = $ThrottleCutOffOverhead
 
     }
 

@@ -14,7 +14,7 @@ function Get-RMMRequestRate {
     }
 
     Write-Debug "Getting request rate information from Datto RMM API."
-    $Headers = @{ Authorization = "Bearer $($script:RMMAuth.AccessToken)" }
+    $Headers = @{Authorization = "Bearer $($script:RMMAuth.AccessToken)"}
     Invoke-RestMethod -Uri "$API/system/request_rate" -Method Get -Headers $Headers
     
 }

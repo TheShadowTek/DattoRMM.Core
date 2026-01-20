@@ -61,10 +61,13 @@ function Set-RMMPageSize {
 
         Write-Warning "Requested page size ($PageSize) exceeds account maximum ($($Script:MaxPageSize)). Setting to maximum."
         $Script:PageSize = $Script:MaxPageSize
+        $Script:ConfigDefaultPageSize = $Script:MaxPageSize
+
 
     } else {
 
         $Script:PageSize = $PageSize
+        $Script:ConfigDefaultPageSize = $PageSize
 
     }
 
