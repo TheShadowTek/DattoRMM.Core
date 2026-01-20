@@ -10,7 +10,7 @@ Get-RMMThrottle [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the current session's ThrottleAggressiveness (Cautious, Medium, Aggressive),
+Returns the current session's ThrottleProfile (Cautious, Medium, Aggressive),
 the corresponding DelayMultiplier and LowUtilCheckInterval, and if available,
 the persisted configuration values from Get-RMMConfig.
 

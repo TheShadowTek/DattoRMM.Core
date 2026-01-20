@@ -5,7 +5,7 @@ SHORT DESCRIPTION
     Describes the throttling system in the DattoRMM.Core PowerShell module, including configuration, behavior, and best practices for single and concurrent API usage.
 
 LONG DESCRIPTION
-    The DattoRMM.Core module implements adaptive throttling to manage API request rates and avoid exceeding Datto RMM account limits. Throttling is configurable via the ThrottleAggressiveness setting, which determines how quickly delays are applied as API utilisation increases. The system dynamically adjusts request pacing based on current utilisation, with aggressive, medium, and cautious modes for different usage scenarios. 
+    The DattoRMM.Core module implements adaptive throttling to manage API request rates and avoid exceeding Datto RMM account limits. Throttling is configurable via the ThrottleProfile setting, which determines how quickly delays are applied as API utilisation increases. The system dynamically adjusts request pacing based on current utilisation, with aggressive, medium, and cautious modes for different usage scenarios. 
  
 Throttling is essential for: 
 - Preventing API rate limit violations 
@@ -15,7 +15,7 @@ Throttling is essential for:
 ### How Throttling Works 
 - The module tracks API utilisation as a ratio of requests made to the account's rate limit (e.g., 600 requests per 60 seconds). 
 - When utilisation exceeds the configured threshold (ThrottleUtilisationThreshold), delays are introduced before each request. 
-- The delay and rate check frequency are determined by the selected ThrottleAggressiveness mode: 
+- The delay and rate check frequency are determined by the selected ThrottleProfile mode: 
   - **Aggressive:** Minimal delay, infrequent checks (fastest, riskier) 
   - **Medium:** Balanced delay and check frequency 
   - **Cautious:** Maximum delay, frequent checks (safest, slowest) 
@@ -24,9 +24,9 @@ Throttling is essential for:
  
 ### Configuration 
 - Use `Set-RMMThrottle` to adjust throttling for the current session, or `Set-RMMConfig` to persist settings. 
-- By default, the module uses `Medium` ThrottleAggressiveness for a balance of safety and performance. 
+- By default, the module uses `Medium` ThrottleProfile for a balance of safety and performance. 
 - Key parameters: 
-  - `ThrottleAggressiveness` (Aggressive, Medium, Cautious) 
+  - `ThrottleProfile` (Aggressive, Medium, Cautious) 
   - `ThrottleUtilisationThreshold` (when delays start) 
   - `LowUtilCheckInterval` (base rate check frequency) 
   - `DelayMultiplier` (base delay applied) 
@@ -77,12 +77,12 @@ If 100 requests are made in one second, and 500 more 59 seconds later, the reque
  
 ### Example 1: Set aggressive throttling for a single session 
 ```powershell 
-Set-RMMThrottle -ThrottleAggressiveness Aggressive 
+Set-RMMThrottle -ThrottleProfile Aggressive 
 ``` 
  
 ### Example 2: Set cautious throttling for heavy automation 
 ```powershell 
-Set-RMMThrottle -ThrottleAggressiveness Cautious -Persist 
+Set-RMMThrottle -ThrottleProfile Cautious -Persist 
 ``` 
  
 ### Example 3: Monitor throttling status 
@@ -110,7 +110,7 @@ You can set custom values using:
 >The following configuration options are intended for advanced users only. If you are modifying these values, you should already understand the implications and accept full responsibility for any rate-limit or service-impact risks. 
  
 Customisable parameters include: 
-- `ThrottleAggressiveness` (required: 'Custom') 
+- `ThrottleProfile` (required: 'Custom') 
 - `ThrottleCutOffOverhead` (fractional overhead for pause threshold) 
 - `ThrottleUtilisationThreshold` (utilisation ratio at which delays begin) 
 - `LowUtilCheckInterval` (base rate check frequency) 

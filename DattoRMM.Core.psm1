@@ -14,7 +14,7 @@ $Script:ConfigDefaultPageSize = $null
 $Script:TokenExpireHours = 100
 
 # Throttle defaults
-$Script:ThrottleAggressionDefaults = @{
+$Script:ThrottleProfileDefaults = @{
     'Cautious' = @{
         DelayMultiplier = 1250
         LowUtilCheckInterval = 25
@@ -139,15 +139,15 @@ try {
 
         }
 
-        if ($LoadedConfig.PSObject.Properties.Name -contains 'ThrottleAggressiveness') {
+        if ($LoadedConfig.PSObject.Properties.Name -contains 'ThrottleProfile') {
 
-            if ($LoadedConfig.ThrottleAggressiveness -eq 'Custom') {
+            if ($LoadedConfig.ThrottleProfile -eq 'Custom') {
 
-                $Aggresiveness = $LoadedConfig.ThrottleAggressiveness
-                $Script:RMMThrottle.LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$Aggresiveness].DelayMultiplier
-                $Script:RMMThrottle.DelayMultiplier = $Script:ThrottleAggressionDefaults[$Aggresiveness].LowUtilCheckInterval
-                $Script:RMMThrottle.ThrottleCutOffOverhead = $Script:ThrottleAggressionDefaults[$Aggresiveness].ThrottleCutOffOverhead
-                Write-Debug "  ThrottleAggressiveness: $($Aggresiveness)"
+                $Aggresiveness = $LoadedConfig.ThrottleProfile
+                $Script:RMMThrottle.LowUtilCheckInterval = $Script:ThrottleProfileDefaults[$Aggresiveness].DelayMultiplier
+                $Script:RMMThrottle.DelayMultiplier = $Script:ThrottleProfileDefaults[$Aggresiveness].LowUtilCheckInterval
+                $Script:RMMThrottle.ThrottleCutOffOverhead = $Script:ThrottleProfileDefaults[$Aggresiveness].ThrottleCutOffOverhead
+                Write-Debug "  ThrottleProfile: $($Aggresiveness)"
                 Write-Debug "  LowUtilCheckInterval: $($Script:RMMThrottle.LowUtilCheckInterval)"
                 Write-Debug "  DelayMultiplier: $($Script:RMMThrottle.DelayMultiplier)"
                 Write-Debug "  ThrottleCutOffOverhead: $($Script:RMMThrottle.ThrottleCutOffOverhead)"

@@ -33,10 +33,10 @@ You can adjust throttling for the current session or persistently:
 
 ```powershell
 # Set throttling to Cautious for this session
-Set-RMMThrottle -ThrottleAggressiveness Cautious
+Set-RMMThrottle -ThrottleProfile Cautious
 
 # Set throttling to Aggressive and persist for future sessions
-Set-RMMThrottle -ThrottleAggressiveness Aggressive -Persist
+Set-RMMThrottle -ThrottleProfile Aggressive -Persist
 ```
 
 All default values are managed centrally and can be tuned in one place. For advanced options, custom settings, and Datto's official API guidance, see:

@@ -7,7 +7,7 @@ Configures persistent settings for the DattoRMM.Core module.
 
 ```
 Set-RMMConfig [[-DefaultPlatform] <RMMPlatform>] [[-DefaultPageSize] <Int32>]
- [[-ThrottleAggressiveness] <String>] [[-TokenExpireHours] <Int32>] [-ProgressAction <ActionPreference>]
+ [[-ThrottleProfile] <String>] [[-TokenExpireHours] <Int32>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
@@ -37,7 +37,7 @@ Sets both the default platform and page size.
 
 EXAMPLE 3
 ```
-Set-RMMConfig -ThrottleAggressiveness Cautious -TokenExpireHours 50
+Set-RMMConfig -ThrottleProfile Cautious -TokenExpireHours 50
 ```
 
 Configures advanced throttling and token refresh settings for maximum safety.
@@ -80,7 +80,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ThrottleAggressiveness
+### -ThrottleProfile
 Controls how aggressively the module throttles API requests when nearing rate limits.
 Cautious: Maximum delay, checks rate limit frequently (safest, slowest).
 Medium: Balanced delay and check frequency.

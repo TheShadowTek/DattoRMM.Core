@@ -6,7 +6,7 @@ Sets throttling behavior for the current DattoRMM.Core session.
 ## SYNTAX
 
 ```
-Set-RMMThrottle [-ThrottleAggressiveness] <String> [-Persist] [-ProgressAction <ActionPreference>]
+Set-RMMThrottle [-ThrottleProfile] <String> [-Persist] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
@@ -18,21 +18,21 @@ Optionally, use -Persist to save the setting for future sessions (calls Set-RMMC
 
 EXAMPLE 1
 ```
-Set-RMMThrottle -ThrottleAggressiveness Aggressive
+Set-RMMThrottle -ThrottleProfile Aggressive
 ```
 
 Sets throttling to aggressive for the current session only.
 
 EXAMPLE 2
 ```
-Set-RMMThrottle -ThrottleAggressiveness Cautious -Persist
+Set-RMMThrottle -ThrottleProfile Cautious -Persist
 ```
 
 Sets throttling to cautious for the current session and persists it for future sessions.
 
 ## PARAMETERS
 
-### -ThrottleAggressiveness
+### -ThrottleProfile
 Controls how aggressively the module throttles API requests when nearing rate limits.
 Cautious: Maximum delay, checks rate limit frequently (safest, slowest).
 Medium: Balanced delay and check frequency.

@@ -78,3 +78,18 @@ maxing at 87% - wireless connection
 
 # Get Device PII
 Better message
+
+# Was it my WiFi? ONCE - make that twice - is the API/AWS having a bad night 20/1/24 22:30-00:00
+DEBUG: Uri: https://pinotage-api.centrastage.net/api/v2/site/3498e5a1-40ba-4bef-bbd9-4f4721c7bd8f/alerts/resolved?max=250
+Invoke-RestMethod: C:\Users\..\DattoRMM.Core\Private\Invoke-APIMethod.ps1:141
+Line |
+ 141 |              $Result = Invoke-RestMethod @RequestParams
+     |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Unable to read data from the transport connection: An
+     | existing connection was forcibly closed by the remote host..
+
+4 concurrent session, only impacted one session, last debug was 72%, 540ms delay, throttle medium
+
+# Add retry
+Doh, I need a retry on failure! Not had an error till now see above
+Leaving it out for now to ensure catch errors in long running concurrent jobs.

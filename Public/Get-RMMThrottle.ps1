@@ -8,7 +8,7 @@ function Get-RMMThrottle {
         Gets the current and configured throttling settings for DattoRMM.Core.
 
     .DESCRIPTION
-        Returns the current session's ThrottleAggressiveness (Cautious, Medium, Aggressive),
+        Returns the current session's ThrottleProfile (Cautious, Medium, Aggressive),
         the corresponding DelayMultiplier and LowUtilCheckInterval, and if available,
         the persisted configuration values from Get-RMMConfig.
 
@@ -69,9 +69,9 @@ function Get-RMMThrottle {
 
         $Config = Get-RMMConfig
 
-        if ($Config -and $Config.ThrottleAggressiveness) {
+        if ($Config -and $Config.ThrottleProfile) {
 
-            $ConfigLevel = $Config.ThrottleAggressiveness
+            $ConfigLevel = $Config.ThrottleProfile
             $ConfigDelay = $Config.DelayMultiplier
             $ConfigCheck = $Config.LowUtilCheckInterval
             
@@ -109,10 +109,10 @@ function Get-RMMThrottle {
     }
 
     [PSCustomObject]@{
-        SessionThrottleAggressiveness = $SessionLevel
+        SessionThrottleProfile = $SessionLevel
         SessionDelayMultiplier = $SessionDelay
         SessionLowUtilCheckInterval = $SessionCheck
-        ConfigThrottleAggressiveness = $ConfigLevel
+        ConfigThrottleProfile = $ConfigLevel
         ConfigDelayMultiplier = $ConfigDelay
         ConfigLowUtilCheckInterval = $ConfigCheck
         AccountCount = $AccountCount

@@ -11,7 +11,7 @@ function Set-RMMThrottle {
         Set-RMMThrottle allows you to adjust the throttling aggressiveness for the active session.
         Optionally, use -Persist to save the setting for future sessions (calls Set-RMMConfig).
 
-    .PARAMETER ThrottleAggressiveness
+    .PARAMETER ThrottleProfile
         Controls how aggressively the module throttles API requests when nearing rate limits.
         Cautious: Maximum delay, checks rate limit frequently (safest, slowest).
         Medium: Balanced delay and check frequency.
@@ -22,12 +22,12 @@ function Set-RMMThrottle {
         If specified, also saves the setting to the persistent configuration (calls Set-RMMConfig).
 
     .EXAMPLE
-        Set-RMMThrottle -ThrottleAggressiveness Aggressive
+        Set-RMMThrottle -ThrottleProfile Aggressive
 
         Sets throttling to aggressive for the current session only.
 
     .EXAMPLE
-        Set-RMMThrottle -ThrottleAggressiveness Cautious -Persist
+        Set-RMMThrottle -ThrottleProfile Cautious -Persist
 
         Sets throttling to cautious for the current session and persists it for future sessions.
 
@@ -58,45 +58,45 @@ function Set-RMMThrottle {
             'Aggressive'
         )]
         [string]
-        $ThrottleAggressiveness,
+        $ThrottleProfile,
 
         [Parameter(Mandatory = $false)]
         [switch] $Persist
     )
 
-    switch ($ThrottleAggressiveness) {
+    switch ($ThrottleProfile) {
 
         'Cautious'   {
             
-            $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
-            $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
-            $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
-            $ThrottleCutOffOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleCutOffOverhead
+            $DelayMultiplier = $Script:ThrottleProfileDefaults[$_].DelayMultiplier
+            $LowUtilCheckInterval = $Script:ThrottleProfileDefaults[$_].LowUtilCheckInterval
+            $ThrottleUtilisationThreshold = $Script:ThrottleProfileDefaults[$_].ThrottleUtilisationThreshold
+            $ThrottleCutOffOverhead = $Script:ThrottleProfileDefaults[$_].ThrottleCutOffOverhead
         }
 
         'Medium'     {
             
-            $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
-            $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
-            $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
-            $ThrottleCutOffOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleCutOffOverhead
+            $DelayMultiplier = $Script:ThrottleProfileDefaults[$_].DelayMultiplier
+            $LowUtilCheckInterval = $Script:ThrottleProfileDefaults[$_].LowUtilCheckInterval
+            $ThrottleUtilisationThreshold = $Script:ThrottleProfileDefaults[$_].ThrottleUtilisationThreshold
+            $ThrottleCutOffOverhead = $Script:ThrottleProfileDefaults[$_].ThrottleCutOffOverhead
         }
 
         'Aggressive' {
             
-            $DelayMultiplier = $Script:ThrottleAggressionDefaults[$_].DelayMultiplier
-            $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults[$_].LowUtilCheckInterval
-            $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults[$_].ThrottleUtilisationThreshold
-            $ThrottleCutOffOverhead = $Script:ThrottleAggressionDefaults[$_].ThrottleCutOffOverhead
+            $DelayMultiplier = $Script:ThrottleProfileDefaults[$_].DelayMultiplier
+            $LowUtilCheckInterval = $Script:ThrottleProfileDefaults[$_].LowUtilCheckInterval
+            $ThrottleUtilisationThreshold = $Script:ThrottleProfileDefaults[$_].ThrottleUtilisationThreshold
+            $ThrottleCutOffOverhead = $Script:ThrottleProfileDefaults[$_].ThrottleCutOffOverhead
 
         }
 
         default      {
             
-            $DelayMultiplier = $Script:ThrottleAggressionDefaults['Default'].DelayMultiplier
-            $LowUtilCheckInterval = $Script:ThrottleAggressionDefaults['Default'].LowUtilCheckInterval
-            $ThrottleUtilisationThreshold = $Script:ThrottleAggressionDefaults['Default'].ThrottleUtilisationThreshold
-            $ThrottleCutOffOverhead = $Script:ThrottleAggressionDefaults['Default'].ThrottleCutOffOverhead
+            $DelayMultiplier = $Script:ThrottleProfileDefaults['Default'].DelayMultiplier
+            $LowUtilCheckInterval = $Script:ThrottleProfileDefaults['Default'].LowUtilCheckInterval
+            $ThrottleUtilisationThreshold = $Script:ThrottleProfileDefaults['Default'].ThrottleUtilisationThreshold
+            $ThrottleCutOffOverhead = $Script:ThrottleProfileDefaults['Default'].ThrottleCutOffOverhead
 
         }
     }
@@ -110,7 +110,7 @@ function Set-RMMThrottle {
     if ($Persist) {
 
         $SetRMMConfig = @{
-            ThrottleAggressiveness = $ThrottleAggressiveness
+            ThrottleProfile = $ThrottleProfile
         }
 
         if ($PSBoundParameters.Keys -contains 'ThrottleCutOffOverhead') {

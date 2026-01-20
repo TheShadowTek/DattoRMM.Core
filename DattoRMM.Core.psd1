@@ -8,7 +8,7 @@
 RootModule = 'DattoRMM.Core.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.5.3'
+ModuleVersion = '0.5.5'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -23,7 +23,7 @@ Author = 'Robert Faddes'
 CompanyName = 'Robert Faddes'
 
 # Copyright statement for this module
-Copyright = '(c) 2025 TheShadowTek. All rights reserved.'
+Copyright = '(c) 2025-2026 Robert Faddes. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'PowerShell module for interfacing with Datto RMM API v2'
