@@ -36,6 +36,41 @@ function Invoke-APIMethod {
         [string]
         $PageElement
     )
+    function InvokeRestMethod {
+        param(
+            [hashtable]
+            $Parameters
+        )
+
+        $Attempt = 0
+        $Success = $false
+
+        while (-not $Success -and $Attempts -le $Script:APIMethodRetry.MaxRetries) {
+
+            try {
+
+                $Response = Invoke-RestMethod @Parameters -ErrorAction Stop
+                $Success = $true
+
+            } catch {
+
+                $Attempt ++
+                Write-Warning "API Error: $($_.Exception.Message)`n`tRetry in $($Script:APIMethodRetry.RetryIntervalSeconds) seconds. Attempt $Attempt of $($Script:APIMethodRetry.MaxRetries)..."
+                Start-Sleep -Seconds $Script:APIMethodRetry.RetryIntervalSeconds
+
+            }
+        }
+
+        if ($Success) {
+
+            return $Response
+
+        } else {
+
+            throw "The operation could not be completed due to repeated connection interruptions."
+
+        }
+    }
 
     if (-not $script:RMMAuth) {
 
@@ -138,7 +173,8 @@ function Invoke-APIMethod {
 
         if ($Paginate) {
 
-            $Result = Invoke-RestMethod @RequestParams
+            #$Result = Invoke-RestMethod @RequestParams
+            $Result = InvokeRestMethod -Parameters $RequestParams
 
             # Parse the original URI to extract query parameters (excluding max and page)
             $OriginalUri = [System.Uri]$RequestParams.Uri
@@ -243,14 +279,17 @@ function Invoke-APIMethod {
                 }
 
                 $RequestParams.Uri = $NextUrl
-                $Result = Invoke-RestMethod @RequestParams
+                #$Result = Invoke-RestMethod @RequestParams
+                $Result = InvokeRestMethod -Parameters $RequestParams
                 $Result.$PageElement
 
             }
 
         } else {
             
-            Invoke-RestMethod @RequestParams
+            #Invoke-RestMethod @RequestParams
+            InvokeRestMethod -Parameters $RequestParams
+
         }
 
     } catch {

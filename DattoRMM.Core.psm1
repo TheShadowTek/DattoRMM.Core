@@ -47,6 +47,12 @@ $Script:ThrottleProfileDefaults = @{
     }
 }
 
+# Retry settings
+$Script:APIMethodRetry = @{
+    MaxRetries = 5
+    RetryIntervalSeconds = 5
+}
+
 # Initialize throttle state variable, and set safe defaults
 $Script:RMMThrottle = @{
     CheckInterval = 1                   # Force intilisation of throttle state
