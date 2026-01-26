@@ -16,8 +16,7 @@ function Write-ConfigFile {
 
     try {
 
-        $ConfigPath = Get-ConfigFilePath
-        $ConfigDir = Split-Path -Path $ConfigPath -Parent
+        $ConfigDir = Split-Path -Path $Script:ConfigPath -Parent
 
         # Create directory if it doesn't exist
         if (-not (Test-Path $ConfigDir)) {
@@ -28,8 +27,8 @@ function Write-ConfigFile {
         }
 
         # Convert to JSON and write
-        $Config | ConvertTo-Json -Depth 10 | Set-Content -Path $ConfigPath -Force -ErrorAction Stop
-        Write-Verbose "Configuration saved to: $ConfigPath"
+        $Config | ConvertTo-Json -Depth 10 | Set-Content -Path $Script:ConfigPath -Force -ErrorAction Stop
+        Write-Verbose "Configuration saved to: $Script:ConfigPath"
 
         return $true
 

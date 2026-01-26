@@ -8,8 +8,7 @@ function Get-RMMConfig {
         Retrieves the current DattoRMM.Core module configuration.
 
     .DESCRIPTION
-        The Get-RMMConfig function displays the current configuration settings for the DattoRMM.Core module,
-        including both values loaded from the configuration file and their current in-memory values.
+        The Get-RMMConfig function displays the current configuration settings for the DattoRMM.Core module, including both values loaded from the configuration file and their current in-memory values.
         
         This helps verify what defaults are configured and active in the current session.
 
@@ -20,9 +19,9 @@ function Get-RMMConfig {
 
     .EXAMPLE
         $Config = Get-RMMConfig
-        $Config.DefaultPlatform
+        $Config.SessionPageSize
 
-        Retrieves the configuration and accesses a specific property.
+        Retrieves the configuration and accesses the SessionPageSize property.
 
     .INPUTS
         None. You cannot pipe objects to Get-RMMConfig.
@@ -35,12 +34,12 @@ function Get-RMMConfig {
         
         The output shows:
         - Configured values from the config file
-        - Current session values (may differ if changed via Set-RMMConfig during session)
+        - Current session values (may differ if changed via Save-RMMConfig during session)
         - Default fallback values when no configuration exists
 
     .LINK
-        Set-RMMConfig
-        Reset-RMMConfig
+        Save-RMMConfig
+        ReSave-RMMConfig
         Set-RMMPageSize
         Get-RMMPageSize
     #>
@@ -48,33 +47,16 @@ function Get-RMMConfig {
     [CmdletBinding()]
     param()
 
-    # Read config file
-    $FileConfig = Read-ConfigFile
-
-    # Build output object with both file and session values
+    # Output only the current session configuration values
     $ConfigInfo = [PSCustomObject]@{
-        DefaultPlatform = [PSCustomObject]@{
-            Configured = if ($FileConfig.DefaultPlatform) { $FileConfig.DefaultPlatform } else { $null }
-            CurrentSession = if ($Script:ConfigDefaultPlatform) { $Script:ConfigDefaultPlatform.ToString() } else { $null }
-            Fallback = 'Pinotage'
-        }
-        DefaultPageSize = [PSCustomObject]@{
-            Configured = if ($FileConfig.DefaultPageSize) { $FileConfig.DefaultPageSize } else { $null }
-            CurrentSession = $Script:ConfigDefaultPageSize
-            Fallback = 'Account Maximum'
-        }
-        LowUtilCheckInterval = [PSCustomObject]@{
-            Configured = if ($FileConfig.LowUtilCheckInterval) { $FileConfig.LowUtilCheckInterval } else { $null }
-            CurrentSession = $Script:ConfigLowUtilCheckInterval
-            Fallback = 50
-        }
-        TokenExpireHours = [PSCustomObject]@{
-            Configured = if ($FileConfig.TokenExpireHours) { $FileConfig.TokenExpireHours } else { $null }
-            CurrentSession = $Script:TokenExpireHours
-            Fallback = 100
-        }
-        ConfigFilePath = Get-ConfigFilePath
-        ConfigFileExists = Test-Path (Get-ConfigFilePath)
+        ConfiguredPlatform = $Script:ConfigPlatform
+        ConfiguredPageSize = $Script:ConfigPageSize
+        ConfiguredThrottleProfile = $Script:ConfigThrottleProfile
+        ConfiguredTokenExpireHours = $Script:ConfigTokenExpireHours
+        SessionPlatform = $Script:SessionPlatform
+        SessionPageSize = $Script:SessionPageSize
+        SessionThrottleProfile = $Script:RMMThrottle.Profile
+        SessionTokenExpireHours = $Script:TokenExpireHours
     }
 
     return $ConfigInfo

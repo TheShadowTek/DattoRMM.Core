@@ -10,11 +10,9 @@ Disconnect-DattoRMM
 ```
 
 ## DESCRIPTION
-The Disconnect-DattoRMM function clears the stored authentication token and credentials
-from the module's script scope, effectively ending the current API session.
+The Disconnect-DattoRMM function clears the stored authentication token and credentials from the module's script scope, effectively ending the current API session.
 
-This function should be called when you are finished working with the Datto RMM API
-to ensure credentials are removed from memory.
+This function should be called when you are finished working with the Datto RMM API to ensure credentials are removed from memory.
 
 ## EXAMPLES
 

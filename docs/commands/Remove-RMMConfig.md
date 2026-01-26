@@ -1,37 +1,34 @@
-# Reset-RMMConfig
+# Remove-RMMConfig
 
 ## SYNOPSIS
-Resets DattoRMM.Core module configuration to defaults.
+Deletes the persistent DattoRMM.Core configuration file (factory reset for future sessions).
 
 ## SYNTAX
 
 ```
-Reset-RMMConfig [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-RMMConfig [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Reset-RMMConfig function clears the persistent configuration file, resetting all
-settings to their default values.
-This affects future PowerShell sessions but does not
-modify the current session's runtime values.
-
-To reset configuration in the current session, reload the module after running this function.
+Remove-RMMConfig deletes the configuration file at $HOME/.DattoRMM.Core/config.json, removing all saved settings.
+This does not affect the current session or in-memory configuration.
+To apply defaults in the current session, use Set-RMMConfig -Default or reload the module.
 
 ## EXAMPLES
 
 EXAMPLE 1
 ```
-Reset-RMMConfig
+Remove-RMMConfig
 ```
 
-Prompts for confirmation before resetting the configuration.
+Prompts for confirmation before deleting the configuration file.
 
 EXAMPLE 2
 ```
-Reset-RMMConfig -Force
+Remove-RMMConfig -Force
 ```
 
-Resets the configuration without prompting for confirmation.
+Deletes the configuration file without prompting for confirmation.
 
 ## PARAMETERS
 
@@ -83,26 +80,18 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-None. You cannot pipe objects to Reset-RMMConfig.
+None. You cannot pipe objects to Remove-RMMConfig.
 ## OUTPUTS
 
 None. Displays a message indicating success or failure.
 ## NOTES
 Configuration file location: $HOME/.DattoRMM.Core/config.json
-
 This function only deletes the configuration file.
-Current session values remain unchanged
-until the module is reloaded.
-
-Default values after reset:
-- DefaultPlatform: Pinotage
-- DefaultPageSize: Account Maximum
-- LowUtilCheckInterval: 50
-- TokenExpireHours: 100
+Current session values remain unchanged until the module is reloaded.
 
 ## RELATED LINKS
 
+[Save-RMMConfig
+Get-RMMConfig]()
 
-- [Get-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMConfig.md)
-- [Set-RMMPageSize](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Set-RMMPageSize.md)
 

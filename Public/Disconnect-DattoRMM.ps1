@@ -8,11 +8,9 @@ function Disconnect-DattoRMM {
         Disconnects from the Datto RMM API and clears authentication information.
 
     .DESCRIPTION
-        The Disconnect-DattoRMM function clears the stored authentication token and credentials
-        from the module's script scope, effectively ending the current API session.
+        The Disconnect-DattoRMM function clears the stored authentication token and credentials from the module's script scope, effectively ending the current API session.
 
-        This function should be called when you are finished working with the Datto RMM API
-        to ensure credentials are removed from memory.
+        This function should be called when you are finished working with the Datto RMM API to ensure credentials are removed from memory.
 
     .EXAMPLE
         Disconnect-DattoRMM
@@ -44,6 +42,11 @@ function Disconnect-DattoRMM {
     #>
 
     $Script:RMMAuth = $null
+    $Script:MaxPageSize = $null
+    $Script:APIUrl = $null
+    $Script:API = $null
+    $Script:PageSize = $null
+
     Write-Verbose "Disconnected from Datto RMM API."
 
 }

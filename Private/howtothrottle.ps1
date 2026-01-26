@@ -1,23 +1,24 @@
-$Message = @"
+$art = @(
+    '             .-------------------------. ',
+    '            | .-----------------------. |',
+    '            | |      _                | |',
+    '            | |     \ \               | |',
+    '            | |      \ \              | |',
+    '            | |       > >             | |',
+    '            | |      / /              | |',
+    '            | |     /_/    _______    | |',
+    '            | |           |_______|   | |',
+    '            | ''-----------------------'' |',
+    '             ''-------------------------'' '
+)
+
+$post = @'
+             HOW TO CUSTOMISE THROTTLING
+             ---------------------------
+
 !The following configuration options are intended for advanced users only.  
 If you are modifying these values, you should already understand the implications and accept 
 full responsibility for any rate-limit or service-impact risks.
-
-
-             .-------------------------. 
-            | .-----------------------. |
-            | |      _                | |
-            | |     \ \               | |
-            | |      \ \              | |
-            | |       > >             | |
-            | |      / /              | |
-            | |     /_/    _______    | |
-            | |           |_______|   | |
-            | '-----------------------' |
-             '-------------------------' 
-
-             HOW TO CUSTOMISE THROTTLING
-             ---------------------------
 
  1. Open the DattoRMM.Core module folder on your system: `$HOME/.DattoRMM.Core/config.json
  2. Edit the "ThrottleProfile" setting to one of the following values:
@@ -25,7 +26,7 @@ full responsibility for any rate-limit or service-impact risks.
     - "Medium"     : Balanced API usage and caution (default)
     - "Aggressive" : Higher API usage, suitable for high rate limits
 
-Alternativley, you can override module throttling profile preset completly.
+Alternatively, you can override module throttling profile preset completly.
 DO THIS AT YOUR OWN RISK.
 
 Manually set any of the following throttle values in your config JSON to override the module presets:
@@ -51,7 +52,7 @@ Manually set any of the following throttle values in your config JSON to overrid
 
  Testing, use this command or similar in one or more concurrent sessions to simulate high API usage:
 
-     1..1000 | ForEach-Object { Get-RMMSite -Debug | Get-RMMAlert -Status All -Debug | Out-Null }
+     1..1000 | % {Get-RMMSite -Debug | Get-RMMAlert -Status All -Debug | Out-Null}
 
  Throttle debug messages will show current utilisation and delay calculation results.
 
@@ -70,7 +71,31 @@ DEBUG: Throttling:
         
  Enjoy, and try not to get banned.
  TheShadowTek
+'@
 
-"@
+# Smooth transition from dark green to green
+$steps = 10
+$sleepMs = [math]::Ceiling(5000 / $steps)
+$ansiSteps = @(
+    "`e[2;32m",      # dim green
+    "`e[38;5;22m",   # dark green
+    "`e[38;5;28m",   # medium-dark green
+    "`e[38;5;34m",   # medium green
+    "`e[38;5;40m",   # medium-bright green
+    "`e[38;5;46m",   # bright green
+    "`e[38;5;40m",   # medium-bright green
+    "`e[38;5;34m",   # medium green
+    "`e[38;5;28m",   # medium-dark green
+    "`e[38;5;22m"    # dark green
+)
+for ($i = 0; $i -lt $steps; $i++) {
+    Clear-Host
+    $ansi = $ansiSteps[$i]
+    foreach ($line in $art) {
+        Write-Host "$ansi$line`e[0m"
+    }
+    Start-Sleep -Milliseconds $sleepMs
+}
 
-Write-Host $Message -ForegroundColor DarkGreen
+# Print the rest of the message
+Write-Host $post -ForegroundColor DarkGreen

@@ -102,3 +102,7 @@ Retry I think would workaround, but would rather understand issue better...
 Doh, I need a retry on failure! Not had an error till now see above
 Leaving it out for now to ensure catch errors in long running concurrent jobs.
 
+retry working errors being caught in warning stream
+
+# comment/remove class using
+need to comment or remove scriptanlyser friendly using in class ps1 files, verbose shows drmmobject being repeatidly loaded

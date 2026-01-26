@@ -34,10 +34,10 @@ function Connect-DattoRMM {
         Specifies the Datto RMM platform region to connect to.
         Valid values: Pinotage, Concord, Vidal, Merlot, Zinfandel, Syrah
         
-        If not specified, uses the default platform configured via Set-RMMConfig.
+        If not specified, uses the default platform configured via Save-RMMConfig.
         If no default is configured, falls back to 'Pinotage'.
         
-        To set a persistent default platform: Set-RMMConfig -DefaultPlatform Merlot
+        To set a persistent default platform: Save-RMMConfig -DefaultPlatform Merlot
 
     .EXAMPLE
         $Secret = Read-Host -Prompt "Enter API Secret" -AsSecureString
@@ -85,16 +85,16 @@ function Connect-DattoRMM {
         On module removal, the authentication information is cleared from memory.
 
         Default Platform and Page Size:
-        You can configure persistent defaults using Set-RMMConfig to avoid specifying them each time:
-        - Set-RMMConfig -DefaultPlatform Merlot
-        - Set-RMMConfig -DefaultPageSize 100
+        You can configure persistent defaults using Save-RMMConfig to avoid specifying them each time:
+        - Save-RMMConfig -DefaultPlatform Merlot
+        - Save-RMMConfig -DefaultPageSize 100
         
         The configured default page size will be used if it's within your account's maximum limit.
         You can still override these defaults by explicitly specifying the -Platform parameter.
 
     .LINK
         Disconnect-DattoRMM
-        Set-RMMConfig
+        Save-RMMConfig
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'Key')]
@@ -135,9 +135,14 @@ function Connect-DattoRMM {
     if (-not $PSBoundParameters.ContainsKey('Platform')) {
 
         # User didn't specify platform, check for configured default
-        if ($Script:ConfigDefaultPlatform) {
+        if ($null -ne $Script:SessionPlatform) {
 
-            $Platform = $Script:ConfigDefaultPlatform
+            $Platform = $Script:SessionPlatform
+            Write-Verbose "Using existing session platform: $Platform"
+
+        } elseif ($null -ne $Script:ConfigPlatform) {
+
+            $Platform = $Script:ConfigPlatform
             Write-Verbose "Using configured default platform: $Platform"
 
         } else {
@@ -147,10 +152,16 @@ function Connect-DattoRMM {
             Write-Verbose "Using default platform: $Platform"
 
         }
+
+    } else {
+
+        Write-Verbose "Using specified platform: $Platform"
+
     }
 
     # Build the request body
     $APIServer = "$($Platform.ToString().ToLower())-api"
+    $Script:SessionPlatform = $Platform
     $Script:APIUrl = "https://$APIServer.centrastage.net"
     $Script:API = "$APIUrl/api/v2"
 
@@ -213,13 +224,21 @@ function Connect-DattoRMM {
 
     if ($AutoRefresh) {
 
-        $Script:RMMAuth.Key = $Credential.UserName ?? $Key.ToString()
-        $Script:RMMAuth.Secret = $Credential.Password ?? $Secret
+        $Script:RMMAuth.Key = $AuthKey
 
+        if ($PSCmdlet.ParameterSetName -eq 'Cred') {
+
+            $Script:RMMAuth.Secret = $Credential.Password
+
+        } else {
+
+            $Script:RMMAuth.Secret = $Secret
+
+        }
     }
 
     # Test connection and set page size
-    Write-Debug "Testing connection to Datto RMM API."
+    Write-Debug "Testing connection to Datto RMM API & setting maxpage size."
     $PageSizeMethod = @{
         Path = "system/pagination"
         Method = 'Get'
@@ -231,12 +250,17 @@ function Connect-DattoRMM {
             $Script:MaxPageSize = $AccountMaxPageSize
 
             # Check if there's a configured default page size
-            if ($Script:ConfigDefaultPageSize -and $Script:ConfigDefaultPageSize -le $AccountMaxPageSize) {
+            If ($null -ne $Script:SessionPageSize -and $Script:SessionPageSize -le $AccountMaxPageSize) {
 
-                $Script:PageSize = $Script:ConfigDefaultPageSize
+                $Script:PageSize = $Script:SessionPageSize
+                Write-Verbose "Set page size to existing session value: $($Script:PageSize)."
+
+            } elseif ($null -ne $Script:ConfigPageSize -and $Script:ConfigPageSize -le $AccountMaxPageSize) {
+
+                $Script:PageSize = $Script:ConfigPageSize
                 Write-Verbose "Set page size to configured default: $($Script:PageSize)."
 
-            } elseif ($Script:PageSize -and $Script:PageSize -le $AccountMaxPageSize) {
+            } elseif ($null -ne $Script:PageSize -and $Script:PageSize -le $AccountMaxPageSize) {
 
                 # If PageSize was previously set in this session and is within limits, keep it
                 Write-Verbose "Retaining previously set page size: $($Script:PageSize)."
@@ -247,6 +271,9 @@ function Connect-DattoRMM {
                 Write-Verbose "Set page size to account maximum: $($Script:PageSize)."
 
             }
+
+            $Script:SessionPageSize = $Script:PageSize
+            Write-Verbose "Using page size: $($Script:PageSize)."
 
     } catch {
 

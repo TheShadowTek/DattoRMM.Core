@@ -22,18 +22,28 @@ Throttling is essential for:
   - **Cautious:** Maximum delay, frequent checks (safest, slowest)
 - Throttling adapts dynamically: as utilisation rises, delays and check intervals increase to prevent hitting the limit.
 
-
 ### Configuration
-- Use `Set-RMMThrottle` to adjust throttling for the current session, or `Set-RMMConfig` to persist settings.
-- By default, the module uses `Medium` ThrottleProfile for a balance of safety and performance.
-- Key parameters:
-  - `ThrottleProfile` (Aggressive, Medium, Cautious)
-  - `ThrottleUtilisationThreshold` (when delays start)
-  - `LowUtilCheckInterval` (base rate check frequency)
-  - `DelayMultiplier` (base delay applied)
+Throttling is configured using the `ThrottleProfile` parameter. Use `Set-RMMConfig -ThrottleProfile <Profile>` to set the throttling profile for the current session. To persist this setting for future sessions, add the `-Persist` parameter:
+
+```powershell
+Set-RMMConfig -ThrottleProfile Cautious -Persist
+```
+
+Alternatively, you can use `Save-RMMConfig` to save the current session's configuration for future use:
+
+```powershell
+Set-RMMConfig -ThrottleProfile Aggressive
+Save-RMMConfig
+```
+
+The available profiles are:
+- `Aggressive` (fastest, least conservative)
+- `Medium` (default, balanced)
+- `Cautious` (safest, slowest)
 
 **Default behavior:**
-- With platform default threshold (90%), API calls will pause at 85% utilisation until utilisation drops below this value.
+- The module uses the `Medium` ThrottleProfile by default for a balance of safety and performance.
+- With the platform default threshold (90%), API calls will pause at 85% utilisation until utilisation drops below this value.
 
 ## CONCURRENT USE
 
@@ -75,56 +85,29 @@ If 100 requests are made in one second, and 500 more 59 seconds later, the reque
 
 ## EXAMPLES
 
-
-### Example 1: Set aggressive throttling for a single session
+### Example: Persist throttling profile for all sessions
 ```powershell
-Set-RMMThrottle -ThrottleProfile Aggressive
-```
-
-### Example 2: Set cautious throttling for heavy automation
-```powershell
-Set-RMMThrottle -ThrottleProfile Cautious -Persist
-```
-
-### Example 3: Monitor throttling status
-```powershell
-Get-RMMThrottle
+Set-RMMConfig -ThrottleProfile Cautious -Persist
 ```
 
 ## BEST PRACTICES
 
 1. Always set throttling to Medium or Cautious for concurrent or automated workloads.
 2. Monitor API utilisation and adjust aggressiveness as needed.
-3. Use Get-RMMThrottle to review current and configured settings.
-4. Persist settings with Set-RMMConfig for consistent behavior across sessions.
-5. For accounts with higher rate limits, you may use Aggressive mode for most tasks, but switch to Medium for long-running or parallel jobs.
+3. Persist settings with Save-RMMConfig for consistent behavior across sessions.
 
-## CUSTOM THROTTLING SETTINGS (USE AT YOUR OWN RISK!)
 
-Advanced users can override default throttling parameters for fine-tuned control. This is not generally recommended unless you fully understand the impact, as custom settings may increase the risk of hitting API rate limits or being temporarily blocked.
+## CUSTOM THROTTLING SETTINGS (ADVANCED)
 
-You can set custom values using:
-- `Set-RMMConfig` (persistent, applies to all future sessions)
-- `Set-RMMThrottle -Persist` (sets and saves for current and future sessions)
+For those who enjoy exploring beyond the standard profiles, further customization is possible by editing the configuration file directly. Setting `ThrottleProfile` to `Custom` in your config file unlocks advanced options for fine-tuning throttling behavior.
 
->[!IMPORTANT]
->The following configuration options are intended for advanced users only. If you are modifying these values, you should already understand the implications and accept full responsibility for any rate-limit or service-impact risks.
-
-Customisable parameters include:
-- `ThrottleProfile` (required: 'Custom')
-- `ThrottleCutOffOverhead` (fractional overhead for pause threshold)
-- `ThrottleUtilisationThreshold` (utilisation ratio at which delays begin)
-- `LowUtilCheckInterval` (base rate check frequency)
-- `DelayMultiplier` (base delay applied)
-
-**Any throttle property present in your config file will override the profile preset.**
-
-### Manual Configuration
+> [!IMPORTANT]
+> These options are intended for advanced users only. If you choose to experiment, you accept full responsibility for any rate-limit or service-impact risks.
 
 Settings are stored in a JSON file at:
 `$HOME/.DattoRMM.Core/config.json`
 
-You may edit this file directly to set advanced or unsupported values. Changes take effect the next time the module is loaded or when you call `Set-RMMConfig`.
+How far you take your configuration is up to you.
 
 > [!WARNING]
 > - Invalid or overly aggressive settings may result in API errors, 429/403 responses, or temporary IP bans.
@@ -137,9 +120,3 @@ You may edit this file directly to set advanced or unsupported values. Changes t
 - By default, the module pauses API requests at 85% utilisation (90% platform threshold minus 0.05 overhead) until utilisation drops below this value.
 - All throttling settings can be adjusted at runtime for flexibility.
 - For best results, coordinate throttling settings across all scripts and jobs using the same API account.
-
-## SEE ALSO
-- Set-RMMThrottle
-- Set-RMMConfig
-- Get-RMMThrottle
-- Update-Throttle

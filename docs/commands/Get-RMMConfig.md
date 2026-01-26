@@ -10,8 +10,7 @@ Get-RMMConfig [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-RMMConfig function displays the current configuration settings for the DattoRMM.Core module,
-including both values loaded from the configuration file and their current in-memory values.
+The Get-RMMConfig function displays the current configuration settings for the DattoRMM.Core module, including both values loaded from the configuration file and their current in-memory values.
 
 This helps verify what defaults are configured and active in the current session.
 
@@ -27,10 +26,10 @@ Displays all current configuration settings.
 EXAMPLE 2
 ```
 $Config = Get-RMMConfig
-$Config.DefaultPlatform
+$Config.SessionPageSize
 ```
 
-Retrieves the configuration and accesses a specific property.
+Retrieves the configuration and accesses the SessionPageSize property.
 
 ## PARAMETERS
 
@@ -45,12 +44,12 @@ Configuration is stored at: $HOME/.DattoRMM.Core/config.json
 
 The output shows:
 - Configured values from the config file
-- Current session values (may differ if changed via Set-RMMConfig during session)
+- Current session values (may differ if changed via Save-RMMConfig during session)
 - Default fallback values when no configuration exists
 
 ## RELATED LINKS
 
 
-- [Reset-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Reset-RMMConfig.md)
+- [ReSave-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/ReSave-RMMConfig.md)
 - [Set-RMMPageSize](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Set-RMMPageSize.md)
 

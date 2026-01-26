@@ -23,7 +23,7 @@ Throttling is essential for:
  
  
 ### Configuration 
-- Use `Set-RMMThrottle` to adjust throttling for the current session, or `Set-RMMConfig` to persist settings. 
+- Use `Set-RMMThrottle` to adjust throttling for the current session, or `Save-RMMConfig` to persist settings. 
 - By default, the module uses `Medium` ThrottleProfile for a balance of safety and performance. 
 - Key parameters: 
   - `ThrottleProfile` (Aggressive, Medium, Cautious) 
@@ -95,7 +95,7 @@ Get-RMMThrottle
 1. Always set throttling to Medium or Cautious for concurrent or automated workloads. 
 2. Monitor API utilisation and adjust aggressiveness as needed. 
 3. Use Get-RMMThrottle to review current and configured settings. 
-4. Persist settings with Set-RMMConfig for consistent behavior across sessions. 
+4. Persist settings with Save-RMMConfig for consistent behavior across sessions. 
 5. For accounts with higher rate limits, you may use Aggressive mode for most tasks, but switch to Medium for long-running or parallel jobs. 
  
 ## CUSTOM THROTTLING SETTINGS (USE AT YOUR OWN RISK!) 
@@ -103,7 +103,7 @@ Get-RMMThrottle
 Advanced users can override default throttling parameters for fine-tuned control. This is not generally recommended unless you fully understand the impact, as custom settings may increase the risk of hitting API rate limits or being temporarily blocked. 
  
 You can set custom values using: 
-- `Set-RMMConfig` (persistent, applies to all future sessions) 
+- `Save-RMMConfig` (persistent, applies to all future sessions) 
 - `Set-RMMThrottle -Persist` (sets and saves for current and future sessions) 
  
 >[!IMPORTANT] 
@@ -123,7 +123,7 @@ Customisable parameters include:
 Settings are stored in a JSON file at: 
 `$HOME/.DattoRMM.Core/config.json` 
  
-You may edit this file directly to set advanced or unsupported values. Changes take effect the next time the module is loaded or when you call `Set-RMMConfig`. 
+You may edit this file directly to set advanced or unsupported values. Changes take effect the next time the module is loaded or when you call `Save-RMMConfig`. 
  
 > [!WARNING] 
 > - Invalid or overly aggressive settings may result in API errors, 429/403 responses, or temporary IP bans. 

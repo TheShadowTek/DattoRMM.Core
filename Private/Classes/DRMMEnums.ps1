@@ -22,3 +22,9 @@ enum RMMPlatform {
     Syrah
 }
 
+enum RMMThrottleProfile {
+    Medium
+    Aggressive
+    Cautious
+    DefaultProfile
+}

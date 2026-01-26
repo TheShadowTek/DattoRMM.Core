@@ -139,10 +139,10 @@ Accept wildcard characters: False
 Specifies the Datto RMM platform region to connect to.
 Valid values: Pinotage, Concord, Vidal, Merlot, Zinfandel, Syrah
 
-If not specified, uses the default platform configured via Set-RMMConfig.
+If not specified, uses the default platform configured via Save-RMMConfig.
 If no default is configured, falls back to 'Pinotage'.
 
-To set a persistent default platform: Set-RMMConfig -DefaultPlatform Merlot
+To set a persistent default platform: Save-RMMConfig -DefaultPlatform Merlot
 
 ```yaml
 Type: RMMPlatform
@@ -174,9 +174,9 @@ refreshed when it expires.
 On module removal, the authentication information is cleared from memory.
 
 Default Platform and Page Size:
-You can configure persistent defaults using Set-RMMConfig to avoid specifying them each time:
-- Set-RMMConfig -DefaultPlatform Merlot
-- Set-RMMConfig -DefaultPageSize 100
+You can configure persistent defaults using Save-RMMConfig to avoid specifying them each time:
+- Save-RMMConfig -DefaultPlatform Merlot
+- Save-RMMConfig -DefaultPageSize 100
 
 The configured default page size will be used if it's within your account's maximum limit.
 You can still override these defaults by explicitly specifying the -Platform parameter.
@@ -184,6 +184,6 @@ You can still override these defaults by explicitly specifying the -Platform par
 ## RELATED LINKS
 
 [Disconnect-DattoRMM
-Set-RMMConfig]()
+Save-RMMConfig]()
 
 

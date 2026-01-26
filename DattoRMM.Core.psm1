@@ -9,11 +9,14 @@
 $Script:RMMAuth = $null
 
 # Default configuration values (fallback if config file doesn't exist or fails to load)
-$Script:ConfigDefaultPlatform = $null
-$Script:ConfigDefaultPageSize = $null
+$Script:ConfigPlatform = $null
+$Script:ConfigPageSize = $null
+$Script:ConfigThrottleProfile = $null
+$Script:ConfigTokenExpireHours = $null
 $Script:TokenExpireHours = 100
+$Script:MaxPageSize = $null
 
-# Throttle defaults
+# Throttle profile defaults
 $Script:ThrottleProfileDefaults = @{
     'Cautious' = @{
         DelayMultiplier = 1250
@@ -27,19 +30,13 @@ $Script:ThrottleProfileDefaults = @{
         ThrottleUtilisationThreshold = 0.5
         ThrottleCutOffOverhead = 0.05
     }
-    'Custom' = @{
-        DelayMultiplier = 750
-        LowUtilCheckInterval = 25
-        ThrottleUtilisationThreshold = 0.5
-        ThrottleCutOffOverhead = 0.05
-    }
     'Aggressive' = @{
         DelayMultiplier = 500
         LowUtilCheckInterval = 50
         ThrottleUtilisationThreshold = 0.5
         ThrottleCutOffOverhead = 0.04
     }
-    'Default' = @{
+    'DefaultProfile' = @{
         DelayMultiplier = 750
         LowUtilCheckInterval = 25
         ThrottleUtilisationThreshold = 0.5
@@ -54,7 +51,8 @@ $Script:APIMethodRetry = @{
 }
 
 # Initialize throttle state variable, and set safe defaults
-$Script:RMMThrottle = @{
+$Script:RMMThrottle = [ordered]@{
+    Profile = 'DefaultProfile'          # Initalise defualt profile
     CheckInterval = 1                   # Force intilisation of throttle state
     CheckCount = 1                      # Number of checks since last update - force initial delay
     Utilisation = 0                     # Current rate limit utilisation (0 to 1) - force initial update
@@ -63,46 +61,39 @@ $Script:RMMThrottle = @{
     DelayMS = 0                         # Current delay in milliseconds
     Pause = $false                      # Whether to pause requests entirely
     Throttle = $false                   # Whether to throttle requests
-    ThrottleCutOffOverhead = 0.05             # Fraction of rate limit to reserve as safety margin (default 5%)
+    ThrottleCutOffOverhead = 0.05       # Fraction of rate limit to reserve as safety margin (default 5%)
     ThrottleUtilisationThreshold = 0.5  # Utilisation threshold to start throttling
 }
 
 # Dot-source classes in Private/Classes folder - dependency order
-Write-Debug "Loading DattoRMM.Core classes..."
-Write-Debug "  Loading DRMMEnums..."
-. $PSScriptRoot\Private\Classes\DRMMEnums.ps1
-Write-Debug "  Loading DRMMAccount..."
-. $PSScriptRoot\Private\Classes\DRMMAccount.ps1
-Write-Debug "  Loading DRMMActivityLog..."
-. $PSScriptRoot\Private\Classes\DRMMActivityLog.ps1
-Write-Debug "  Loading DRMMAlert..."
-. $PSScriptRoot\Private\Classes\DRMMAlert.ps1
-Write-Debug "  Loading DRMMComponent..."
-. $PSScriptRoot\Private\Classes\DRMMComponent.ps1
-Write-Debug "  Loading DRMMNetworkInterface..."
-. $PSScriptRoot\Private\Classes\DRMMNetworkInterface.ps1
-Write-Debug "  Loading DRMMDeviceAudit..."
-. $PSScriptRoot\Private\Classes\DRMMDeviceAudit.ps1
-Write-Debug "  Loading DRMMEsxiHostAudit..."
-. $PSScriptRoot\Private\Classes\DRMMEsxiHostAudit.ps1
-Write-Debug "  Loading DRMMPrinterAudit..."
-. $PSScriptRoot\Private\Classes\DRMMPrinterAudit.ps1
-Write-Debug "  Loading DRMMJob..."
-. $PSScriptRoot\Private\Classes\DRMMJob.ps1
-Write-Debug "  Loading DRMMDevice..."
-. $PSScriptRoot\Private\Classes\DRMMDevice.ps1
-Write-Debug "  Loading DRMMVariable..."
-. $PSScriptRoot\Private\Classes\DRMMVariable.ps1
-Write-Debug "  Loading DRMMFilter..."
-. $PSScriptRoot\Private\Classes\DRMMFilter.ps1
-Write-Debug "  Loading DRMMSite..."
-. $PSScriptRoot\Private\Classes\DRMMSite.ps1
-Write-Debug "  Loading DRMMNetMapping..."
-. $PSScriptRoot\Private\Classes\DRMMNetMapping.ps1
-Write-Debug "  Loading DRMMStatus..."
-. $PSScriptRoot\Private\Classes\DRMMStatus.ps1
-Write-Debug "  Loading DRMMUser..."
-. $PSScriptRoot\Private\Classes\DRMMUser.ps1
+Write-Verbose "Loading DattoRMM.Core classes..."
+
+$ClassFilesOrder = @(
+    'DRMMEnums',
+    'DRMMAccount',
+    'DRMMActivityLog',
+    'DRMMAlert',
+    'DRMMComponent',
+    'DRMMNetworkInterface',
+    'DRMMDeviceAudit',
+    'DRMMEsxiHostAudit',
+    'DRMMPrinterAudit',
+    'DRMMJob',
+    'DRMMDevice',
+    'DRMMVariable',
+    'DRMMFilter',
+    'DRMMSite',
+    'DRMMNetMapping',
+    'DRMMStatus',
+    'DRMMUser'
+)
+
+foreach ($ClassFile in $ClassFilesOrder) {
+
+    Write-Verbose "`tLoading $ClassFile..."
+    . $PSScriptRoot\Private\Classes\$ClassFile.ps1
+
+}
 
 # Dot-source remaining .ps1 files in Private folder
 Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 | Where-Object {$_.BaseName -ne 'howtothrottle'} | ForEach-Object {
@@ -122,85 +113,93 @@ if (Test-Path $PSScriptRoot\Public) {
 }
 
 # Load configuration from file if it exists
-try {
+Write-Verbose "Attempting to load configuration file..."
+$ConfigDir = Join-Path $HOME '.DattoRMM.Core'
+$Script:ConfigPath = Join-Path $ConfigDir 'config.json'
+$SavedConfig = Read-ConfigFile
 
-    Write-Debug "Attempting to load configuration file..."
-    $LoadedConfig = Read-ConfigFile
+if ($null -ne $SavedConfig) {
 
-    if ($null -ne $LoadedConfig) {
+    try {
 
-        Write-Debug "Loading configuration from file..."
+        switch ($SavedConfig.Keys) {
 
-        if ($LoadedConfig.PSObject.Properties.Name -contains 'DefaultPlatform') {
+            'Platform' {
+                $Script:ConfigPlatform = $SavedConfig.Platform
+                $Script:SessionPlatform = $SavedConfig.Platform
+                Write-Verbose "`tPlatform: $($Script:ConfigPlatform)"
+            }
 
-            $Script:ConfigDefaultPlatform = $LoadedConfig.DefaultPlatform
-            Write-Debug "  DefaultPlatform: $($Script:ConfigDefaultPlatform)"
+            'PageSize' {
+                $Script:ConfigPageSize = $SavedConfig.PageSize
+                $Script:SessionPageSize = $SavedConfig.PageSize
+                Write-Verbose "`tPageSize: $($Script:ConfigPageSize)"
+            }
 
-        }
+            'TokenExpireHours' {
+                $Script:TokenExpireHours = $SavedConfig.TokenExpireHours
+                $Script:ConfigTokenExpireHours = $SavedConfig.TokenExpireHours
 
-        if ($LoadedConfig.PSObject.Properties.Name -contains 'DefaultPageSize') {
+                Write-Verbose "`tTokenExpireHours: $($Script:TokenExpireHours)"
+            }
 
-            $Script:ConfigDefaultPageSize = $LoadedConfig.DefaultPageSize
-            Write-Debug "  DefaultPageSize: $($Script:ConfigDefaultPageSize)"
+            'ThrottleProfile' {
 
-        }
+                if ($SavedConfig.ThrottleProfile -ne 'Custom') {
 
-        if ($LoadedConfig.PSObject.Properties.Name -contains 'ThrottleProfile') {
+                    Set-RMMConfig -ThrottleProfile $SavedConfig.ThrottleProfile
+                    $Script:RMMThrottle.Profile = $SavedConfig.ThrottleProfile
+                    $Script:ConfigThrottleProfile = $SavedConfig.ThrottleProfile
+                    $Script:SessionThrottleProfile = $SavedConfig.ThrottleProfile
+                    Write-Verbose "`tThrottleProfile: $($SavedConfig.ThrottleProfile)"
 
-            if ($LoadedConfig.ThrottleProfile -eq 'Custom') {
+                } else {
 
-                $Aggresiveness = $LoadedConfig.ThrottleProfile
-                $Script:RMMThrottle.LowUtilCheckInterval = $Script:ThrottleProfileDefaults[$Aggresiveness].DelayMultiplier
-                $Script:RMMThrottle.DelayMultiplier = $Script:ThrottleProfileDefaults[$Aggresiveness].LowUtilCheckInterval
-                $Script:RMMThrottle.ThrottleCutOffOverhead = $Script:ThrottleProfileDefaults[$Aggresiveness].ThrottleCutOffOverhead
-                Write-Debug "  ThrottleProfile: $($Aggresiveness)"
-                Write-Debug "  LowUtilCheckInterval: $($Script:RMMThrottle.LowUtilCheckInterval)"
-                Write-Debug "  DelayMultiplier: $($Script:RMMThrottle.DelayMultiplier)"
-                Write-Debug "  ThrottleCutOffOverhead: $($Script:RMMThrottle.ThrottleCutOffOverhead)"
+                    # Load defaults for any incomplete or missing settings
+                    Write-Warning "Loading custom configuration settings from $($Script:ConfigPath) - session behaviour may be unpredictable..."
+                    $Script:ConfigThrottleProfile = 'Custom'
+                    $Script:RMMThrottle.Profile = 'Custom'
+                    $Script:RMMThrottle.DelayMultiplier =  $Script:ThrottleProfileDefaults.DefaultProfile.DelayMultiplier
+                    $Script:RMMThrottle.LowUtilCheckInterval = $Script:ThrottleProfileDefaults.DefaultProfile.LowUtilCheckInterval
+                    $Script:RMMThrottle.ThrottleCutOffOverhead = $Script:ThrottleProfileDefaults.DefaultProfile.ThrottleCutOffOverhead
+                    $Script:RMMThrottle.ThrottleUtilisationThreshold = $Script:ThrottleProfileDefaults.DefaultProfile.ThrottleUtilisationThreshold
 
-                # Load cusotm throttle values if present
-                switch ($LoadedConfig.PSObject.Properties.Name) {
+                    # Load custom defaults
+                    switch ($SavedConfig.Keys) {
 
-                    'DelayMultiplier' {
-                        $Script:RMMThrottle.DelayMultiplier = $LoadedConfig.DelayMultiplier
-                        Write-Debug "  CUSTOM: DelayMultiplier: $($Script:RMMThrottle.DelayMultiplier)"
-                    }
+                        'DelayMultiplier' {
+                            $Script:RMMThrottle.DelayMultiplier = $SavedConfig.DelayMultiplier
+                            Write-Warning "`tCUSTOM DelayMultiplier: $($Script:RMMThrottle.DelayMultiplier)"
+                        }
+                        'LowUtilCheckInterval' {
+                            $Script:RMMThrottle.LowUtilCheckInterval = $SavedConfig.LowUtilCheckInterval
+                            Write-Warning "`tCUSTOM LowUtilCheckInterval: $($Script:RMMThrottle.LowUtilCheckInterval)"
+                        }
 
-                    'LowUtilCheckInterval' {
-                        $Script:RMMThrottle.LowUtilCheckInterval = $LoadedConfig.LowUtilCheckInterval
-                        Write-Debug "  CUSTOM: LowUtilCheckInterval: $($Script:RMMThrottle.LowUtilCheckInterval)"
-                    }
+                        'ThrottleCutOffOverhead' {
+                            $Script:RMMThrottle.ThrottleCutOffOverhead = $SavedConfig.ThrottleCutOffOverhead
+                            Write-Warning "`tCUSTOM ThrottleCutOffOverhead: $($Script:RMMThrottle.ThrottleCutOffOverhead)"
+                        }
 
-                    'ThrottleCutOffOverhead' {
-                        $Script:RMMThrottle.ThrottleCutOffOverhead = $LoadedConfig.ThrottleCutOffOverhead
-                        Write-Debug "  CUSTOM: ThrottleCutOffOverhead: $($Script:RMMThrottle.ThrottleCutOffOverhead)"
-                    }
-
-                    'ThrottleUtilisationThreshold' {
-                        $Script:RMMThrottle.ThrottleUtilisationThreshold = $LoadedConfig.ThrottleUtilisationThreshold
-                        Write-Debug "  CUSTOM: ThrottleUtilisationThreshold: $($Script:RMMThrottle.ThrottleUtilisationThreshold)"
+                        'ThrottleUtilisationThreshold' {
+                            $Script:RMMThrottle.ThrottleUtilisationThreshold = $SavedConfig.ThrottleUtilisationThreshold
+                            Write-Warning "`tCUSTOM ThrottleUtilisationThreshold: $($Script:RMMThrottle.ThrottleUtilisationThreshold)"
+                        }
                     }
                 }
-
-            } 
+            }
         }
 
-        if ($LoadedConfig.PSObject.Properties.Name -contains 'TokenExpireHours') {
-            
-            $Script:TokenExpireHours = $LoadedConfig.TokenExpireHours
-            Write-Debug "  TokenExpireHours: $($Script:TokenExpireHours)"
-    
-        }
+    } catch {
 
-    } else {
-
-        Write-Debug "No configuration file found; using default settings."
+        Write-Error "Error loading saved config $($Script:ConfigPath). Session settings may be incomplete: $($_.Exception.Message)"
 
     }
 
-} catch {
+} else {
 
-    Write-Debug "Configuration file not loaded: $_"
+    $Script:RMMThrottle.Profile = 'DefaultProfile'
+    Write-Verbose "No configuration file found; using default settings."
 
 }
 
@@ -211,6 +210,7 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
     if ($Script:RMMAuth) {
 
         Remove-Variable -Name RMMAuth -Scope Script -ErrorAction SilentlyContinue
+        Remove-Variable -Name SessionPlatform -Scope Script -ErrorAction SilentlyContinue
 
     }
     
@@ -219,12 +219,5 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 
         Remove-Variable -Name RMMThrottle -Scope Script -ErrorAction SilentlyContinue
 
-    }
-    
-    # Remove token expiration variable
-    if ($Script:TokenExpireHours) {
-
-        Remove-Variable -Name TokenExpireHours -Scope Script -ErrorAction SilentlyContinue
-        
     }
 }

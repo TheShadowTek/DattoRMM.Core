@@ -11,12 +11,12 @@ function Read-ConfigFile {
     param()
 
     try {
-        $ConfigPath = Get-ConfigFilePath
+        $ConfigPath = $Script:ConfigPath
 
         if (Test-Path $ConfigPath) {
 
             $ConfigContent = Get-Content -Path $ConfigPath -Raw -ErrorAction Stop
-            $Config = $ConfigContent | ConvertFrom-Json -ErrorAction Stop
+            $Config = $ConfigContent | ConvertFrom-Json -AsHashtable -ErrorAction Stop
             return $Config
             
         }

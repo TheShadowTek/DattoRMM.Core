@@ -38,6 +38,35 @@ This enhancement would align Datto RMM with industry best practices from AWS, Az
 
 ---
 
+### Token Invalidation Endpoint for Refresh Operations
+**API Endpoint:** Authentication infrastructure (suggested: `POST /v2/auth/invalidateToken`)
+
+**Issue:** The API currently does not provide a way to explicitly invalidate a specific token when a refresh operation occurs. This means that when a token is refreshed, the previous token may remain valid until its expiry, increasing the risk window if the old token is compromised or leaked.
+
+**Requested Enhancement:**
+- Add an authentication endpoint that allows clients to invalidate a specific token as part of the refresh process.
+- Ensure the endpoint is separate from main API resource endpoints and is part of the authentication infrastructure.
+- The endpoint should accept the token to be invalidated and immediately revoke its access, regardless of its expiry.
+
+**Business Justification:**
+- **Security Best Practice:** Minimizes the risk window by ensuring that only the latest token is valid after a refresh, reducing exposure from token leakage or compromise.
+- **Incident Response:** Enables automated workflows to immediately invalidate compromised tokens during a refresh, improving response times and reducing manual intervention.
+- **Compliance:** Supports security and compliance requirements for strict token lifecycle management and auditability.
+
+
+**Suggested Response Schema:**
+```json
+{
+  "invalidatedToken": "string",
+  "status": "success|failure",
+  "timestamp": "datetime"
+}
+```
+
+This enhancement would improve API security posture and align Datto RMM with industry standards for token lifecycle management.
+
+---
+
 
 ### API Endpoints for Security Level Membership Management
 **API Endpoint:** N/A - Missing endpoints

@@ -40,6 +40,6 @@ as soon as it is received.
 ## RELATED LINKS
 
 
-- [Set-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Set-RMMConfig.md)
+- [Save-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Save-RMMConfig.md)
 - [Get-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMConfig.md)
 

@@ -1,3 +1,4 @@
+
 # about_DattoRMM.Core
 
 ## SHORT DESCRIPTION
@@ -9,12 +10,13 @@ The DattoRMM.Core module provides an object-oriented interface for interacting w
 - Secure API authentication (API key/secret, PSCredential, SecretStore)
 - Comprehensive device, job, account, and site management
 - Advanced filtering, querying, and automation
-- Built-in rate limiting and throttling for safe parallel workloads
+- Built-in rate limiting and adaptive throttling for safe parallel workloads
 - Extensible, scriptable, and designed for integration into larger PowerShell workflows
 
 Security is a core focus: secrets are handled securely, tokens are never written to disk, and sensitive operations are PII-hardened. The module is suitable for both interactive and unattended automation, including Azure Automation and CI/CD pipelines.
 
 ## EXAMPLES
+
 ### Example 1: Connect and Get Devices
 ```powershell
 $Secret = Read-Host -Prompt "Enter API Secret" -AsSecureString
@@ -29,5 +31,13 @@ $Component = Get-RMMComponent | Where-Object Name -eq "Patch WebServer - URGENT"
 Get-RMMDevice -FilterId $Filter.Id | New-RMMQuickJob -JobName "Patch WebServer - URGENT" -Component $Component -Force
 ```
 
+### Example 3: Save and Reset Configuration
+```powershell
+Set-RMMConfig -Platform Merlot -PageSize 100 -Persist
+# or, to save the current session config:
+Save-RMMConfig
+```
+
 ## SEE ALSO
-[Project README](https://github.com/TheShadowTek/DattoRMM.Core/README.md)
+- [Project README](https://github.com/TheShadowTek/DattoRMM.Core/README.md)
+- about_DattoRMM.CoreThrottling

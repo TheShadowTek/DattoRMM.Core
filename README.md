@@ -69,7 +69,7 @@ Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Platform Merlot
 Or persist your preferred default platform for all sessions:
 
 ```powershell
-Set-RMMConfig -DefaultPlatform Merlot
+Save-RMMConfig -DefaultPlatform Merlot
 ```
 
 If you do not specify a platform, the module will use your configured default (if set), or fall back to Pinotage.
