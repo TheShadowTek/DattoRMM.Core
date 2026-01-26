@@ -30,11 +30,13 @@ function Get-RMMActivityLog {
     .PARAMETER Start
         Start date/time for fetching data. Accepts local or UTC; local times are automatically converted
         to UTC for the API. Format: yyyy-MM-ddTHH:mm:ssZ. Required.
+        Defaults to 24 hours ago.
 
     .PARAMETER End
         End date/time for fetching data. Accepts local or UTC; local times are automatically converted
         to UTC for the API. Format: yyyy-MM-ddTHH:mm:ssZ. Required.
-
+        Defaults to the current time.
+        
     .PARAMETER Entity
         Filters activity logs by entity type. Valid values: 'Device', 'User'.
 
@@ -69,11 +71,9 @@ function Get-RMMActivityLog {
         Retrieves activity logs for sites with IDs 1234 and 5678. Prompts for each site.
 
     .EXAMPLE
-        $Start = Get-Date '2024-01-01'
-        PS > $End = Get-Date '2024-01-02'
-        PS > Get-RMMActivityLog -SiteId 1234,5678 -Start $Start -End $End -Confirm:$false
+        Get-RMMSite | Get-RMMActivityLog
 
-        Retrieves activity logs for sites with IDs 1234 and 5678 without confirmation prompts (for automation).
+        Retrieves activity logs for last 24 hours for all sites. Prompts for each site, or select Yes to All to proceed without further prompts.
 
     .INPUTS
         DRMMSite. You can pipe site objects from Get-RMMSite (uses the Id property).
@@ -106,14 +106,14 @@ function Get-RMMActivityLog {
         [long[]]$SiteId,
 
         [Parameter(
-            Mandatory = $true
+            Mandatory = $false
         )]
-        [datetime]$Start,
+        [datetime]$Start = (Get-Date).AddHours(-24),
 
         [Parameter(
-            Mandatory = $true
+            Mandatory = $false
         )]
-        [datetime]$End,
+        [datetime]$End = (Get-Date),
 
         [Parameter()]
         [ValidateSet('Device', 'User')]
@@ -216,8 +216,7 @@ function Get-RMMActivityLog {
 
             } else {
                 
-                Write-Warning 'Operation cancelled by user.'
-                return
+                Write-Warning "Skipping activity log retrieval for site: $($SiteObject.Name)"
 
             }
         }
