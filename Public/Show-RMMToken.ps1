@@ -31,7 +31,7 @@ function Show-RMMToken {
 
         } else {
 
-            Write-Host "`nCurrent Datto RMM Authentication Token:"
+            Write-Host "`nCurrent Datto RMM API Authentication Token:"
             Write-Host "-----------------------------------------------"
             Write-host "Access Token : $($Script:RMMAuth.AccessToken)"
             Write-host "Token Type : $($Script:RMMAuth.TokenType)"

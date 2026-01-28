@@ -60,3 +60,32 @@ class DRMMUser : DRMMObject {
     }
 }
 
+class DRMMAPIKeySecret : DRMMObject {
+
+    [string]$ApiKey
+    [securestring]$ApiSecret
+    [string]$Username
+
+    DRMMAPIKeySecret() : base() {
+
+    }
+
+    static [DRMMAPIKeySecret] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $KeySecret = [DRMMAPIKeySecret]::new()
+        $KeySecret.ApiKey = $Response.apiAccessKey
+        $KeySecret.ApiSecret = ConvertTo-SecureString -String $Response.apiSecretKey -AsPlainText -Force
+        $Response.apiSecretKey = $null # Clear plain text secret from memory
+        $KeySecret.Username = $Response.userName
+
+        return $KeySecret
+
+    }
+
+}

@@ -3,10 +3,10 @@
     SPDX-License-Identifier: MPL-2.0
 #>
 using module '.\DRMMObject.psm1'
-. $PSScriptRoot\DRMMNetworkInterface.ps1
-. $PSScriptRoot\DRMMAlert.ps1
-# using module '.\DRMMAlert.ps1'   # For PSScriptAnalyzer only
-# using module '.\DRMMDeviceAudit.ps1'   # For PSScriptAnalyzer only
+using module '.\DRMMNetworkInterface.psm1'
+using module '.\DRMMAlert.psm1'
+using module '.\DRMMDeviceAudit.psm1'
+using module '.\DRMMJob.psm1'
 
 class DRMMDevice : DRMMObject {
 

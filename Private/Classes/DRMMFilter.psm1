@@ -3,8 +3,8 @@
     SPDX-License-Identifier: MPL-2.0
 #>
 using module '.\DRMMObject.psm1'
-# using module '.\DRMMAlert.ps1'   # For PSScriptAnalyzer only
-# using module '.\DRMMDevice.ps1'   # For PSScriptAnalyzer only
+using module '.\DRMMAlert.psm1'
+using module '.\DRMMDevice.psm1'
 
 class DRMMFilter : DRMMObject {
 

@@ -5,6 +5,27 @@
 # DattoRMM.Core.psm1
 # Main module file for Datto RMM API v2 PowerShell module
 
+# Load class definitions - dependency order
+using module '.\Private\Classes\DRMMEnums.psm1'
+using module '.\Private\Classes\DRMMObject.psm1'
+using module '.\Private\Classes\DRMMAccount.psm1'
+using module '.\Private\Classes\DRMMActivityLog.psm1'
+using module '.\Private\Classes\DRMMAlert.psm1'
+using module '.\Private\Classes\DRMMComponent.psm1'
+using module '.\Private\Classes\DRMMNetworkInterface.psm1'
+using module '.\Private\Classes\DRMMDeviceAudit.psm1'
+using module '.\Private\Classes\DRMMEsxiHostAudit.psm1'
+using module '.\Private\Classes\DRMMPrinterAudit.psm1'
+using module '.\Private\Classes\DRMMJob.psm1'
+using module '.\Private\Classes\DRMMDevice.psm1'
+using module '.\Private\Classes\DRMMVariable.psm1'
+using module '.\Private\Classes\DRMMFilter.psm1'
+using module '.\Private\Classes\DRMMSite.psm1'
+using module '.\Private\Classes\DRMMNetMapping.psm1'
+using module '.\Private\Classes\DRMMStatus.psm1'
+using module '.\Private\Classes\DRMMUser.psm1'
+
+
 # Initialize script-scoped auth object
 $Script:RMMAuth = $null
 
@@ -66,6 +87,7 @@ $Script:RMMThrottle = [ordered]@{
 }
 
 # Dot-source classes in Private/Classes folder - dependency order
+<#
 Write-Verbose "Loading DattoRMM.Core classes..."
 
 $ClassFilesOrder = @(
@@ -94,6 +116,7 @@ foreach ($ClassFile in $ClassFilesOrder) {
     . $PSScriptRoot\Private\Classes\$ClassFile.ps1
 
 }
+#>
 
 # Dot-source remaining .ps1 files in Private folder
 Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 | Where-Object {$_.BaseName -ne 'howtothrottle'} | ForEach-Object {

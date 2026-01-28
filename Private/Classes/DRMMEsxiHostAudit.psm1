@@ -3,7 +3,7 @@
     SPDX-License-Identifier: MPL-2.0
 #>
 using module '.\DRMMObject.psm1'
-. $PSScriptRoot/DRMMNetworkInterface.ps1
+using module '.\DRMMNetworkInterface.psm1'
 
 class DRMMEsxiDatastore : DRMMObject {
 

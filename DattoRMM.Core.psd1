@@ -8,7 +8,7 @@
 RootModule = 'DattoRMM.Core.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.5.8'
+ModuleVersion = '0.5.9'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -62,7 +62,7 @@ TypesToProcess = @('DattoRMM.Core.Types.ps1xml')
 FormatsToProcess = @('DattoRMM.Core.Format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = @('Private\Classes\DRMMObject.psm1')
+#NestedModules = @('Private\Classes\DRMMObject.psm1')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @(
