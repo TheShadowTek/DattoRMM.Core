@@ -26,7 +26,7 @@ Get-RMMDevice
 
 ### Example 2: Run a Job on All Web Servers
 ```powershell
-$Filter = Get-RMMDeviceFilter -Name "Web Servers" | Where-Object {$_.IsGlobal()}
+$Filter = Get-RMMFilter -Name "Web Servers" | Where-Object {$_.IsGlobal()}
 $Component = Get-RMMComponent | Where-Object Name -eq "Patch WebServer - URGENT"
 Get-RMMDevice -FilterId $Filter.Id | New-RMMQuickJob -JobName "Patch WebServer - URGENT" -Component $Component -Force
 ```

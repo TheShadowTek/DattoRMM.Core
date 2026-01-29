@@ -170,7 +170,7 @@ Connect-DattoRMM -Key $ApiKey -Secret $Secret
 
 Get a device filter by name for a site, then get devices in that filter, and resolve all low alerts:
 ```powershell
-$Filter = Get-RMMSite -Name "Main Office" | Get-RMMDeviceFilter -Name "Critical Servers"
+$Filter = Get-RMMSite -Name "Main Office" | Get-RMMFilter -Name "Critical Servers"
 $Devices = Get-RMMDevice -FilterId $Filter.Id
 $Devices | Get-RMMAlert -Status Low | Resolve-RMMAlert
 ```
@@ -178,13 +178,13 @@ $Devices | Get-RMMAlert -Status Low | Resolve-RMMAlert
 Move all devices in a site filter to another site:
 ```powershell
 $TargetSite = Get-RMMSite -Name "New Office"
-$SourceFilter = Get-RMMSite -Name "Main Office" | Get-RMMDeviceFilter -Name "Production Servers"
+$SourceFilter = Get-RMMSite -Name "Main Office" | Get-RMMFilter -Name "Production Servers"
 $SourceFilter | Get-RMMDevice | Move-RMMDevice -Site $TargetSite
 ```
 
 Start a patch job on all devices in the global 'Web Servers' filter:
 ```powershell
-$Filter = Get-RMMDeviceFilter -Name "Web Servers" | Where-Object {$_.IsGlobal()}
+$Filter = Get-RMMFilter -Name "Web Servers" | Where-Object {$_.IsGlobal()}
 $Component = Get-RMMComponent | Where-Object Name -eq "Patch WebServer - URGENT"
 Get-RMMDevice -FilterId $Filter.Id | New-RMMQuickJob -JobName "Patch WebServer - URGENT" -Component $Component -Force
 ```

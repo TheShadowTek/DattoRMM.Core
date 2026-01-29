@@ -435,7 +435,7 @@ foreach ($site in $sites) {
    ```
    Instead of:
    ```powershell
-   $filter = Get-RMMDeviceFilter -SiteUid $site.Uid -Name "name"
+    $filter = Get-RMMFilter -SiteUid $site.Uid -Name "name"
    $devices = Get-RMMDevice -SiteUid $site.Uid -FilterId $filter.FilterId
    ```
 
@@ -462,7 +462,7 @@ foreach ($site in $sites) {
 - Set-RMMSiteProxy
 - Remove-RMMSiteProxy
 - [Get-RMMDevice](Get-RMMDevice.md)
-- [Get-RMMDeviceFilter](Get-RMMDeviceFilter.md)
+- [Get-RMMFilter](Get-RMMFilter.md)
 - [Get-RMMVariable](Get-RMMVariable.md)
 - New-RMMVariable
 - [Get-RMMAlert](Get-RMMAlert.md)

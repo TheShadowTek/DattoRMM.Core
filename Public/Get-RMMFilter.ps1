@@ -2,21 +2,17 @@
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
-function Get-RMMDeviceFilter {
+function Get-RMMFilter {
     <#
     .SYNOPSIS
-        Retrieves device filters from the Datto RMM API.
+        Retrieves filters from the Datto RMM API.
 
     .DESCRIPTION
-        The Get-RMMDeviceFilter function retrieves device filters at different scopes: global
-        (account-level) or site-level. Filters can be retrieved by ID, name, or all filters
-        at a given scope.
+        The Get-RMMFilter function retrieves filters at different scopes: global (account-level) or site-level. Filters can be retrieved by ID, name, or all filters at a given scope.
 
-        Device filters in Datto RMM are used to group devices based on criteria and can be
-        applied when retrieving devices with Get-RMMDevice.
+        Filters in Datto RMM are used to group devices based on criteria and can be applied when retrieving devices with Get-RMMDevice.
 
-        Filters are categorized as either "Default" (built-in system filters) or "Custom"
-        (user-created filters).
+        Filters are categorized as either "Default" (built-in system filters) or "Custom" (user-created filters).
 
     .PARAMETER Site
         A DRMMSite object to retrieve filters for. Accepts pipeline input from Get-RMMSite.
@@ -35,38 +31,38 @@ function Get-RMMDeviceFilter {
         Only applicable for global scope queries.
 
     .EXAMPLE
-        Get-RMMDeviceFilter
+        Get-RMMFilter
 
-        Retrieves all device filters at the account level.
-
-    .EXAMPLE
-        Get-RMMDeviceFilter -FilterType Custom
-
-        Retrieves only custom (user-created) device filters.
+        Retrieves all filters at the account level.
 
     .EXAMPLE
-        Get-RMMDeviceFilter -Id 12345
+        Get-RMMFilter -FilterType Custom
+
+        Retrieves only custom (user-created) filters.
+
+    .EXAMPLE
+        Get-RMMFilter -Id 12345
 
         Retrieves a specific filter by its ID.
 
     .EXAMPLE
-        Get-RMMDeviceFilter -Name "Windows Servers"
+        Get-RMMFilter -Name "Windows Servers"
 
         Retrieves a filter by exact name match.
 
     .EXAMPLE
-        Get-RMMSite -Name "Main Office" | Get-RMMDeviceFilter
+        Get-RMMSite -Name "Main Office" | Get-RMMFilter
 
-        Gets all device filters for the "Main Office" site.
+        Gets all filters for the "Main Office" site.
 
     .EXAMPLE
-        $Filter = Get-RMMDeviceFilter -Name "Production Servers"
+        $Filter = Get-RMMFilter -Name "Production Servers"
         Get-RMMDevice -FilterId $Filter.Id
 
         Retrieves a filter and uses it to get matching devices.
 
     .EXAMPLE
-        Get-RMMSite | Get-RMMDeviceFilter | Where-Object {$_.Type -eq 'custom'}
+        Get-RMMSite | Get-RMMFilter -FilterType Custom
 
         Gets custom filters for all sites.
 

@@ -118,7 +118,7 @@ function Get-RMMSite {
         Get-RMMDevice
 
     .LINK
-        Get-RMMDeviceFilter
+        Get-RMMFilter
     #>
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
@@ -216,7 +216,7 @@ function Add-SiteExtendedProperties {
 
     if ($ExtendedProperties -contains [RMMSiteExtendedProperty]::Filters) {
 
-        $Site.Filters = Get-RMMDeviceFilter -SiteUid $Site.Uid
+        $Site.Filters = Get-RMMFilter -SiteUid $Site.Uid
         
     }
 }

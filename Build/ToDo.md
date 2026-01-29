@@ -21,7 +21,7 @@ Analyse alert context class, no reference, command builds class properties list 
 # Alert Times - done
 Alert date time parsing currently commented and returning raw
 
-# Hardening
+# Hardening - done
 Username exposed by activity log 'job' User, and details. Limited documentation as to what will be returned by activitylog details,
 Review add confirm acceptable, or full PII masking on top for known entities?
 Confirm on execution - site level confirmation, or All
@@ -45,7 +45,7 @@ Test udf csv and json methods
 
 # Alpha test plan
 Devices - ESXi, printers, switches, what about datto backup devices (do they appear) - am I missing any datto product integration stuff?
-Would it help workflow migraation to return raw object for users?
+Would it help workflow migration to return raw object for users?
 
 # Beta test plan
 
@@ -65,13 +65,13 @@ allows control for concurrancy with other lighter workloads that are not throttl
 value relative to the account back off limit.
 Mor ereliable than current hard 0.85.
 
-# Throttle Class
-Throttle could possibly get a class given it returns a psobject
+# Throttle Class - done
+Throttle could possibly get a class given it returns a psobject - no, internal except debug
 
-# Config functions
+# Config functions - done
 Set and Get need refactor
 
-# Throttle!!!
+# Throttle!!! - Fixed
 Pause didn't kick in when expected above 85% util - modified last throttle refactor
 havne't been band tho, throttle kept 3 x medium, 1 x aggressive, 1 x cautious concurrent sustained
 maxing at 87% - wireless connection
@@ -98,11 +98,20 @@ more reasearch required
 All sessions start again without issue (infinite loop stress testing throttle) - so not banned.
 Retry I think would workaround, but would rather understand issue better...
 
-# Add retry
+# Add retry - done
 Doh, I need a retry on failure! Not had an error till now see above
 Leaving it out for now to ensure catch errors in long running concurrent jobs.
 
 retry working errors being caught in warning stream
 
-# comment/remove class using
+# comment/remove class using - done
 need to comment or remove scriptanlyser friendly using in class ps1 files, verbose shows drmmobject being repeatidly loaded
+need to test module load without
+resolved with updated module load process
+
+# Rename Get-RMMDeviceFilter - done
+Should noun be -RMMFilter, how it was originally?
+Filter is site and global scope, not device - it identifies devices
+
+# Update Build Help scripts
+Scripts need some refinment, and new docs structure

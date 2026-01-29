@@ -245,13 +245,13 @@ class DRMMSite : DRMMObject {
     # Filter Management Methods
     [DRMMFilter[]] GetFilters() {
 
-        if (-not (Get-Command -Name Get-RMMDeviceFilter -ErrorAction SilentlyContinue)) {
+        if (-not (Get-Command -Name Get-RMMFilter -ErrorAction SilentlyContinue)) {
 
             [DRMMObject]::ThrowMissingHelperError()
 
         }
 
-        $result = Get-RMMDeviceFilter -SiteUid $this.Uid
+        $result = Get-RMMFilter -SiteUid $this.Uid
 
         if ($null -eq $result) {
 
@@ -265,13 +265,13 @@ class DRMMSite : DRMMObject {
 
     [DRMMFilter] GetFilter([string]$Name) {
 
-        if (-not (Get-Command -Name Get-RMMDeviceFilter -ErrorAction SilentlyContinue)) {
+        if (-not (Get-Command -Name Get-RMMFilter -ErrorAction SilentlyContinue)) {
 
             [DRMMObject]::ThrowMissingHelperError()
 
         }
 
-        return Get-RMMDeviceFilter -SiteUid $this.Uid -Name $Name
+        return Get-RMMFilter -SiteUid $this.Uid -Name $Name
 
     }
 

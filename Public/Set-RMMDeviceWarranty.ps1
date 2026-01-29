@@ -44,7 +44,7 @@ function Set-RMMDeviceWarranty {
 
     .EXAMPLE
         $Site = Get-RMMSite -Name "Chicago Office"
-        PS > $Filter = Get-RMMDeviceFilter -SiteUid $Site.Uid | Where-Object {$_.Name -eq "Dell Latitude 7490"}
+        PS > $Filter = Get-RMMFilter -SiteUid $Site.Uid | Where-Object {$_.Name -eq "Dell Latitude 7490"}
         PS > Get-RMMDevice -FilterId $Filter.FilterId | Set-RMMDeviceWarranty -WarrantyDate (Get-Date "2026-06-30")
 
         Sets the warranty date for all Dell Latitude 7490 laptops at the Chicago Office site.

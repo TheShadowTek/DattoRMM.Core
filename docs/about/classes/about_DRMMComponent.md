@@ -177,7 +177,7 @@ foreach ($var in $component.GetInputVariables()) {
 
 ```powershell
 $component = Get-RMMComponent | Where-Object {$_.Name -eq "Disk Cleanup"}
-$filter = Get-RMMDeviceFilter -Name "Windows Servers"
+$filter = Get-RMMFilter -Name "Windows Servers"
 $devices = $filter.GetDevices()
 
 $variables = @{days = '30'; path = 'C:\Temp'}

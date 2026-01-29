@@ -8,7 +8,7 @@
 RootModule = 'DattoRMM.Core.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.5.9'
+ModuleVersion = '0.5.10'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -75,9 +75,9 @@ FunctionsToExport = @(
     'Get-RMMConfig',
     'Get-RMMDevice',
     'Get-RMMDeviceAudit',
-    'Get-RMMDeviceFilter',
     'Get-RMMDeviceSoftware',
     'Get-RMMEsxiHostAudit',
+    'Get-RMMFilter',
     'Get-RMMJob',
     'Get-RMMNetMapping',
     'Get-RMMPrinterAudit',

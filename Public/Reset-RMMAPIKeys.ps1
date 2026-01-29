@@ -78,23 +78,38 @@ function Reset-RMMAPIKeys {
         $ReturnNewKey
     )
 
-    $WarningMessage = @"
-WARNING: This will immediately invalidate your current API keys and disconnect your session.
+    if ($ReturnNewKey) {
 
-If you want to retrieve the new API key and secret, use the -ReturnNewKey parameter and capture the output in a variable:
-    `$NewKeys = Reset-RMMAPIKeys -ReturnNewKey
+        $WarningMessage = @"
+This will immediately invalidate your current API keys and disconnect your session.
 
+You have chosen to retrieve the new API key and secret. The new secret will only be available in this session and will be returned as a SecureString.
+You MUST securely store the new secret immediately. If you lose it, you will need to log in to the Datto RMM web portal to generate new API keys.
 
-If you do not use -ReturnNewKey, the new secret will be discarded and cannot be retrieved later. You will need to log in to the Datto RMM web portal to generate new API keys if you lose it.
-
-Are you sure you want to reset your API keys?
+Are you sure you want to reset your API keys and retrieve the new secret?
 "@
 
-    if (-not $PSCmdlet.ShouldContinue($WarningMessage, "Reset API Keys")) {
-        return
+    } else {
+
+        $WarningMessage = @"
+This will immediately invalidate your current API keys and disconnect your session.
+
+You have chosen NOT to retrieve the new API key and secret. The new secret will be discarded and cannot be retrieved later.
+You will need to log in to the Datto RMM web portal to generate new API keys if you lose access.
+
+Are you sure you want to reset your API keys? This action is irreversible unless you generate new keys in the web portal.
+"@
+
     }
 
-    Write-Warning "Resetting API keys. Current session will be invalidated."
+    Write-Warning $WarningMessage
+
+    if (-not $PSCmdlet.ShouldContinue('Current session will be disconnected.', 'Reset API Keys')) {
+
+        Write-Warning "API key reset operation cancelled by user."
+        return
+
+    }
 
     $APIMethod = @{
         Path = "user/resetApiKeys"

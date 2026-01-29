@@ -107,7 +107,7 @@ Use -Persist to save as the default for future sessions.
 Type: RMMThrottleProfile
 Parameter Sets: Set
 Aliases:
-Accepted values: Medium, Aggressive, Cautious
+Accepted values: Medium, Aggressive, Cautious, DefaultProfile
 
 Required: False
 Position: Named

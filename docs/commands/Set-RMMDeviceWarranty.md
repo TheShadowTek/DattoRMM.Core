@@ -51,7 +51,7 @@ Clears the warranty date without confirmation.
 EXAMPLE 4
 ```
 $Site = Get-RMMSite -Name "Chicago Office"
-$Filter = Get-RMMDeviceFilter -SiteUid $Site.Uid | Where-Object {$_.Name -eq "Dell Latitude 7490"}
+$Filter = Get-RMMFilter -SiteUid $Site.Uid | Where-Object {$_.Name -eq "Dell Latitude 7490"}
 Get-RMMDevice -FilterId $Filter.FilterId | Set-RMMDeviceWarranty -WarrantyDate (Get-Date "2026-06-30")
 ```
 

@@ -132,7 +132,7 @@ function Get-RMMDevice {
         about_DRMMFilter
 
     .LINK
-        Get-RMMDeviceFilter
+        Get-RMMFilter
 
     .LINK
         Get-RMMSite

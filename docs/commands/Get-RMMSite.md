@@ -187,5 +187,5 @@ Only request extended properties when needed.
 
 - [about_DRMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about_DRMMSite.md)
 - [Get-RMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMDevice.md)
-- [Get-RMMDeviceFilter](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMDeviceFilter.md)
+- [Get-RMMFilter](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/Get-RMMFilter.md)
 

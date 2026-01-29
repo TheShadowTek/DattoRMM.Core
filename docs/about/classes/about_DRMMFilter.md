@@ -12,7 +12,7 @@ Filters can be scoped at two levels:
 - **Global:** Available across all sites in the account
 - **Site:** Specific to a single site
 
-DRMMFilter objects are returned by [Get-RMMDeviceFilter](Get-RMMDeviceFilter.md) and provide methods for retrieving devices that match the filter criteria.
+DRMMFilter objects are returned by [Get-RMMFilter](Get-RMMFilter.md) and provide methods for retrieving devices that match the filter criteria.
 
 ## PROPERTIES
 
@@ -41,7 +41,7 @@ Retrieves all devices that match this filter's criteria. Automatically handles b
 **Returns:** `[DRMMDevice[]]`
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Windows Servers"
+$filter = Get-RMMFilter -Name "Windows Servers"
 $devices = $filter.GetDevices()
 Write-Host "Found $($devices.Count) Windows servers"
 ```
@@ -53,7 +53,7 @@ Returns the number of devices that match this filter's criteria.
 **Returns:** `[int]`
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Offline Devices"
+$filter = Get-RMMFilter -Name "Offline Devices"
 $count = $filter.GetDeviceCount()
 Write-Host "There are $count offline devices"
 ```
@@ -67,7 +67,7 @@ Retrieves all alerts for devices matching this filter. Aggregates alerts from al
 **Returns:** `[DRMMAlert[]]`
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Production Servers"
+$filter = Get-RMMFilter -Name "Production Servers"
 $alerts = $filter.GetAlerts()
 Write-Host "Production servers have $($alerts.Count) total alerts"
 ```
@@ -82,7 +82,7 @@ Retrieves alerts with specific status for devices matching this filter.
 **Returns:** `[DRMMAlert[]]`
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Critical Infrastructure"
+$filter = Get-RMMFilter -Name "Critical Infrastructure"
 $openAlerts = $filter.GetAlerts('Open')
 Write-Host "Critical infrastructure has $($openAlerts.Count) open alerts"
 ```
@@ -96,7 +96,7 @@ Returns true if the filter is globally scoped (available to all sites).
 **Returns:** `[bool]`
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "All Windows"
+$filter = Get-RMMFilter -Name "All Windows"
 if ($filter.IsGlobal()) {
     Write-Host "This filter is available to all sites"
 }
@@ -109,7 +109,7 @@ Returns true if the filter is site-scoped (specific to one site).
 **Returns:** `[bool]`
 
 ```powershell
-$filter = Get-RMMDeviceFilter -SiteUid $siteUid -Name "Branch Servers"
+$filter = Get-RMMFilter -SiteUid $siteUid -Name "Branch Servers"
 if ($filter.IsSite()) {
     Write-Host "This filter is specific to site: $($filter.SiteUid)"
 }
@@ -122,7 +122,7 @@ Returns true if the filter is a default RMM filter (Type = 'rmm_default'). Defau
 **Returns:** `[bool]`
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Online Devices"
+$filter = Get-RMMFilter -Name "Online Devices"
 if ($filter.IsDefault()) {
     Write-Host "This is a built-in Datto RMM filter"
 }
@@ -135,7 +135,7 @@ Returns true if the filter is a custom user-created filter (Type = 'custom').
 **Returns:** `[bool]`
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Production Servers"
+$filter = Get-RMMFilter -Name "Production Servers"
 if ($filter.IsCustom()) {
     Write-Host "This is a custom filter"
 }
@@ -150,7 +150,7 @@ Returns a formatted summary string of the filter.
 **Returns:** `[string]`
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Windows Servers"
+$filter = Get-RMMFilter -Name "Windows Servers"
 Write-Host $filter.GetSummary()
 # Output: Windows Servers [Site] (custom)
 ```
@@ -184,7 +184,7 @@ Available across all sites in the account:
 - Identified using IsGlobal() method
 
 ```powershell
-$globalFilters = Get-RMMDeviceFilter
+$globalFilters = Get-RMMFilter
 $globalFilters | Where-Object {$_.IsGlobal()}
 ```
 
@@ -198,7 +198,7 @@ Specific to a single site:
 
 ```powershell
 $site = Get-RMMSite -Name "Contoso Ltd"
-$siteFilters = Get-RMMDeviceFilter -SiteUid $site.Uid
+$siteFilters = Get-RMMFilter -SiteUid $site.Uid
 $siteFilters | Where-Object {$_.IsSite()}
 ```
 
@@ -214,7 +214,7 @@ $devices = $site.GetFilter("Windows Servers").GetDevices()
 
 ```powershell
 # Chain filter operations
-$filter = Get-RMMDeviceFilter -Name "Critical Infrastructure"
+$filter = Get-RMMFilter -Name "Critical Infrastructure"
 $devices = $filter.GetDevices()
 foreach ($device in $devices) {
     $alerts = $device.GetAlerts('Open')
@@ -229,7 +229,7 @@ foreach ($device in $devices) {
 ### Example 1: Get devices from a global filter
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Windows Workstations"
+$filter = Get-RMMFilter -Name "Windows Workstations"
 $devices = $filter.GetDevices()
 Write-Host "Found $($devices.Count) Windows workstations"
 ```
@@ -237,7 +237,7 @@ Write-Host "Found $($devices.Count) Windows workstations"
 ### Example 2: Get device count without fetching full device objects
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Offline Devices"
+$filter = Get-RMMFilter -Name "Offline Devices"
 $count = $filter.GetDeviceCount()
 Write-Host "There are $count offline devices"
 ```
@@ -245,7 +245,7 @@ Write-Host "There are $count offline devices"
 ### Example 3: Get alerts for all devices in a filter
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Production Servers"
+$filter = Get-RMMFilter -Name "Production Servers"
 $openAlerts = $filter.GetAlerts('Open')
 
 Write-Host "Production servers have $($openAlerts.Count) open alerts"
@@ -258,14 +258,14 @@ $openAlerts | Group-Object AlertSourceInfo | ForEach-Object {
 
 ```powershell
 $site = Get-RMMSite -Name "Contoso Ltd"
-$filter = Get-RMMDeviceFilter -SiteUid $site.Uid -Name "Servers"
+$filter = Get-RMMFilter -SiteUid $site.Uid -Name "Servers"
 $servers = $filter.GetDevices()
 ```
 
 ### Example 5: Check filter type and scope
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Production Devices"
+$filter = Get-RMMFilter -Name "Production Devices"
 
 $type = if ($filter.IsDefault()) {"Default"} else {"Custom"}
 $scope = if ($filter.IsGlobal()) {"Global"} else {"Site"}
@@ -276,7 +276,7 @@ Write-Host "$($filter.Name) is a $type $scope filter"
 ### Example 6: Process devices from multiple filters
 
 ```powershell
-$filters = Get-RMMDeviceFilter | Where-Object {$_.IsCustom()}
+$filters = Get-RMMFilter | Where-Object {$_.IsCustom()}
 
 foreach ($filter in $filters) {
     $devices = $filter.GetDevices()
@@ -306,12 +306,12 @@ foreach ($device in $criticalDevices) {
 
 ```powershell
 # Global filters
-$globalFilters = Get-RMMDeviceFilter
+$globalFilters = Get-RMMFilter
 Write-Host "Global filters: $($globalFilters.Count)"
 
 # Site filters
 $site = Get-RMMSite -Name "Contoso Ltd"
-$siteFilters = Get-RMMDeviceFilter -SiteUid $site.Uid
+$siteFilters = Get-RMMFilter -SiteUid $site.Uid
 Write-Host "Site filters: $($siteFilters.Count)"
 ```
 
@@ -332,7 +332,7 @@ Write-Host "Site filters: $($siteFilters.Count)"
 
 5. Cache filter objects when processing multiple operations to avoid repeated API calls:
    ```powershell
-   $filter = Get-RMMDeviceFilter -Name "Servers"
+   $filter = Get-RMMFilter -Name "Servers"
    $devices = $filter.GetDevices()
    # Use $devices multiple times without re-querying
    ```
@@ -363,7 +363,7 @@ Write-Host "Site filters: $($siteFilters.Count)"
 
 ## SEE ALSO
 
-- [Get-RMMDeviceFilter](Get-RMMDeviceFilter.md)
+- [Get-RMMFilter](Get-RMMFilter.md)
 - [Get-RMMDevice](Get-RMMDevice.md)
 - [Get-RMMSite](Get-RMMSite.md)
 - [about_DRMMSite](about_DRMMSite.md)

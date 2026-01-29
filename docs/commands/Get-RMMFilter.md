@@ -1,109 +1,103 @@
-# Get-RMMDeviceFilter
+# Get-RMMFilter
 
 ## SYNOPSIS
-Retrieves device filters from the Datto RMM API.
+Retrieves filters from the Datto RMM API.
 
 ## SYNTAX
 
 GlobalAll (Default)
 ```
-Get-RMMDeviceFilter [-FilterType <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMFilter [-FilterType <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 SiteByName
 ```
-Get-RMMDeviceFilter -Site <DRMMSite> -Name <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMFilter -Site <DRMMSite> -Name <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 SiteById
 ```
-Get-RMMDeviceFilter -Site <DRMMSite> -Id <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMFilter -Site <DRMMSite> -Id <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 SiteAll
 ```
-Get-RMMDeviceFilter -Site <DRMMSite> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMFilter -Site <DRMMSite> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 SiteUidByName
 ```
-Get-RMMDeviceFilter -SiteUid <Guid> -Name <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMFilter -SiteUid <Guid> -Name <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 SiteUidById
 ```
-Get-RMMDeviceFilter -SiteUid <Guid> -Id <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMFilter -SiteUid <Guid> -Id <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 SiteAllUid
 ```
-Get-RMMDeviceFilter -SiteUid <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMFilter -SiteUid <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 GlobalById
 ```
-Get-RMMDeviceFilter -Id <Int32> [-FilterType <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-RMMFilter -Id <Int32> [-FilterType <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 GlobalByName
 ```
-Get-RMMDeviceFilter -Name <String> [-FilterType <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-RMMFilter -Name <String> [-FilterType <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-RMMDeviceFilter function retrieves device filters at different scopes: global
-(account-level) or site-level.
-Filters can be retrieved by ID, name, or all filters
-at a given scope.
+The Get-RMMFilter function retrieves filters at different scopes: global (account-level) or site-level.
+Filters can be retrieved by ID, name, or all filters at a given scope.
 
-Device filters in Datto RMM are used to group devices based on criteria and can be
-applied when retrieving devices with Get-RMMDevice.
+Filters in Datto RMM are used to group devices based on criteria and can be applied when retrieving devices with Get-RMMDevice.
 
-Filters are categorized as either "Default" (built-in system filters) or "Custom"
-(user-created filters).
+Filters are categorized as either "Default" (built-in system filters) or "Custom" (user-created filters).
 
 ## EXAMPLES
 
 EXAMPLE 1
 ```
-Get-RMMDeviceFilter
+Get-RMMFilter
 ```
 
-Retrieves all device filters at the account level.
+Retrieves all filters at the account level.
 
 EXAMPLE 2
 ```
-Get-RMMDeviceFilter -FilterType Custom
+Get-RMMFilter -FilterType Custom
 ```
 
-Retrieves only custom (user-created) device filters.
+Retrieves only custom (user-created) filters.
 
 EXAMPLE 3
 ```
-Get-RMMDeviceFilter -Id 12345
+Get-RMMFilter -Id 12345
 ```
 
 Retrieves a specific filter by its ID.
 
 EXAMPLE 4
 ```
-Get-RMMDeviceFilter -Name "Windows Servers"
+Get-RMMFilter -Name "Windows Servers"
 ```
 
 Retrieves a filter by exact name match.
 
 EXAMPLE 5
 ```
-Get-RMMSite -Name "Main Office" | Get-RMMDeviceFilter
+Get-RMMSite -Name "Main Office" | Get-RMMFilter
 ```
 
-Gets all device filters for the "Main Office" site.
+Gets all filters for the "Main Office" site.
 
 EXAMPLE 6
 ```
-$Filter = Get-RMMDeviceFilter -Name "Production Servers"
+$Filter = Get-RMMFilter -Name "Production Servers"
 Get-RMMDevice -FilterId $Filter.Id
 ```
 
@@ -111,7 +105,7 @@ Retrieves a filter and uses it to get matching devices.
 
 EXAMPLE 7
 ```
-Get-RMMSite | Get-RMMDeviceFilter | Where-Object {$_.Type -eq 'custom'}
+Get-RMMSite | Get-RMMFilter -FilterType Custom
 ```
 
 Gets custom filters for all sites.

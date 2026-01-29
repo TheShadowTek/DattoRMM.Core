@@ -424,7 +424,7 @@ $recentJobs | Format-Table Name, Status, DateCreated
 ### Example 6: Parallel job execution with result tracking
 
 ```powershell
-$filter = Get-RMMDeviceFilter -Name "Production Servers"
+$filter = Get-RMMFilter -Name "Production Servers"
 $devices = $filter.GetDevices()
 $component = Get-RMMComponent | Where-Object {$_.Name -eq "Update Agent"}
 
@@ -544,7 +544,7 @@ $listening | Group-Object Protocol, LocalPort | Format-Table Count, Name
 
 ```powershell
 # Run inventory component on multiple devices and aggregate results
-$filter = Get-RMMDeviceFilter -Name "All Servers"
+$filter = Get-RMMFilter -Name "All Servers"
 $devices = $filter.GetDevices()
 $component = Get-RMMComponent | Where-Object {$_.Name -eq "Disk Space Report"}
 

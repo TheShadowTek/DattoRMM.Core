@@ -7,21 +7,21 @@ Retrieves activity logs from the Datto RMM API.
 
 Global (Default)
 ```
-Get-RMMActivityLog -Start <DateTime> -End <DateTime> [-Entity <String[]>] [-Category <String[]>]
+Get-RMMActivityLog [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>] [-Category <String[]>]
  [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-ProgressAction <ActionPreference>] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
 Site
 ```
-Get-RMMActivityLog [-Site <DRMMSite[]>] -Start <DateTime> -End <DateTime> [-Entity <String[]>]
+Get-RMMActivityLog [-Site <DRMMSite[]>] [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
  [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 SiteId
 ```
-Get-RMMActivityLog [-SiteId <Int64[]>] -Start <DateTime> -End <DateTime> [-Entity <String[]>]
+Get-RMMActivityLog [-SiteId <Int64[]>] [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
  [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -72,12 +72,11 @@ Prompts for each site.
 
 EXAMPLE 4
 ```
-$Start = Get-Date '2024-01-01'
-$End = Get-Date '2024-01-02'
-Get-RMMActivityLog -SiteId 1234,5678 -Start $Start -End $End -Confirm:$false
+Get-RMMSite | Get-RMMActivityLog
 ```
 
-Retrieves activity logs for sites with IDs 1234 and 5678 without confirmation prompts (for automation).
+Retrieves activity logs for last 24 hours for all sites.
+Prompts for each site, or select Yes to All to proceed without further prompts.
 
 ## PARAMETERS
 
@@ -119,15 +118,16 @@ Accepts local or UTC; local times are automatically converted
 to UTC for the API.
 Format: yyyy-MM-ddTHH:mm:ssZ.
 Required.
+Defaults to 24 hours ago.
 
 ```yaml
 Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
-Default value: None
+Default value: (Get-Date).AddHours(-24)
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -138,15 +138,16 @@ Accepts local or UTC; local times are automatically converted
 to UTC for the API.
 Format: yyyy-MM-ddTHH:mm:ssZ.
 Required.
+Defaults to the current time.
 
 ```yaml
 Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
-Default value: None
+Default value: (Get-Date)
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -66,31 +66,32 @@ class DRMMFilter : DRMMObject {
     # API Methods
     [DRMMDevice[]] GetDevices() {
 
-        $result = if ($this.SiteUid) {
+        if ($this.IsSite()) {
 
-            Get-RMMDevice -SiteUid $this.SiteUid -FilterId $this.FilterId
+            return Get-RMMDevice -SiteUid $this.SiteUid -FilterId $this.FilterId
 
         } else {
 
-            Get-RMMDevice -FilterId $this.FilterId
+            return Get-RMMDevice -FilterId $this.FilterId
 
         }
 
-        if ($null -eq $result) {
+        <#
+        if ($null -eq $Devices) {
 
             return @()
 
         }
 
-        return $result
+        return $Devices
+
+        #>
 
     }
 
     [int] GetDeviceCount() {
 
-        $devices = $this.GetDevices()
-
-        return $devices.Count
+        return $this.GetDevices().Count
 
     }
 
