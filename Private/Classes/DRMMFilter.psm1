@@ -49,15 +49,52 @@ class DRMMFilter : DRMMObject {
 
     }
 
-    [bool] IsGlobal() { return ($this.Scope -eq 'Global') }
-    [bool] IsSite()   { return ($this.Scope -eq 'Site') }
-    [bool] IsDefault() { return ($this.Type -eq 'rmm_default') }
-    [bool] IsCustom()  { return ($this.Type -eq 'custom') }
+    [bool] IsGlobal() {
+        
+        return ($this.Scope -eq 'Global')
+    
+    }
+
+    [bool] IsSite() {
+        
+        return ($this.Scope -eq 'Site')
+    
+    }
+
+    [bool] IsDefault() {
+        
+        return ($this.Type -eq 'rmm_default')
+    
+    }
+
+    [bool] IsCustom() {
+        
+        return ($this.Type -eq 'custom')
+    
+    }
+
 
     [string] GetSummary() {
 
-        $ScopeValue = if ($this.Scope) { $this.Scope } else { 'Global' }
-        $TypeValue = if ($this.Type) { " ($($this.Type))" } else { '' }
+        if ($this.Scope) {
+
+            $ScopeValue = $this.Scope
+
+        } else {
+
+            $ScopeValue = 'Global'
+
+        }
+
+        if ($this.Type) {
+
+            $TypeValue = $this.Type
+
+        } else {
+
+            $TypeValue = '-'
+
+        }
 
         return "$($this.Name) [$ScopeValue]$TypeValue"
 
@@ -75,18 +112,6 @@ class DRMMFilter : DRMMObject {
             return Get-RMMDevice -FilterId $this.FilterId
 
         }
-
-        <#
-        if ($null -eq $Devices) {
-
-            return @()
-
-        }
-
-        return $Devices
-
-        #>
-
     }
 
     [int] GetDeviceCount() {
@@ -97,53 +122,40 @@ class DRMMFilter : DRMMObject {
 
     [DRMMAlert[]] GetAlerts() {
 
-        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+        $Devices = $this.GetDevices()
+        $AllAlerts = @()
 
-            [DRMMObject]::ThrowMissingHelperError()
+        foreach ($Device in $Devices) {
 
-        }
+            $Alerts = Get-RMMAlert -DeviceUid $Device.Uid -Status 'Open'
 
-        $devices = $this.GetDevices()
-        $allAlerts = @()
+            if ($Alerts) {
 
-        foreach ($device in $devices) {
-
-            $alerts = Get-RMMAlert -DeviceUid $device.Uid -Status 'All'
-
-            if ($alerts) {
-
-                $allAlerts += $alerts
-
+                $AllAlerts += $Alerts
             }
         }
 
-        return $allAlerts
+        return $AllAlerts
 
     }
 
     [DRMMAlert[]] GetAlerts([string]$Status) {
 
-        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+        $Devices = $this.GetDevices()
+        $AllAlerts = @()
 
-            [DRMMObject]::ThrowMissingHelperError()
+        foreach ($Device in $Devices) {
 
-        }
+            $Alerts = Get-RMMAlert -DeviceUid $Device.Uid -Status $Status
 
-        $devices = $this.GetDevices()
-        $allAlerts = @()
+            if ($Alerts) {
 
-        foreach ($device in $devices) {
-
-            $alerts = Get-RMMAlert -DeviceUid $device.Uid -Status $Status
-
-            if ($alerts) {
-
-                $allAlerts += $alerts
+                $AllAlerts += $Alerts
 
             }
         }
 
-        return $allAlerts
+        return $AllAlerts
 
     }
 }

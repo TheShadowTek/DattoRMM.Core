@@ -200,7 +200,6 @@ function Invoke-APIMethod {
 
             while ($Result.pageDetails.nextPageUrl) {
 
-                Write-Debug "Next page URL found: $($Result.pageDetails.nextPageUrl)"
                 $NextUrl = $Result.pageDetails.nextPageUrl
 
                 # If we have original parameters, check which ones are missing from nextPageUrl

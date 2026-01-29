@@ -61,11 +61,6 @@ function Get-RMMFilter {
 
         Retrieves a filter and uses it to get matching devices.
 
-    .EXAMPLE
-        Get-RMMSite | Get-RMMFilter -FilterType Custom
-
-        Gets custom filters for all sites.
-
     .INPUTS
         DRMMSite. You can pipe site objects from Get-RMMSite.
         You can also pipe objects with SiteUid properties.
@@ -119,18 +114,15 @@ function Get-RMMFilter {
 
         [Parameter(
             ParameterSetName = 'SiteAllUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Parameter(
             ParameterSetName = 'SiteUidById',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Parameter(
             ParameterSetName = 'SiteUidByName',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Alias('Uid')]
         [guid]
