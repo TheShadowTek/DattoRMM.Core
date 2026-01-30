@@ -8,7 +8,7 @@ Describes the DRMMVariable class and its methods for working with variables in D
 
 The DRMMVariable class represents a variable within Datto RMM. Variables are used to store values that can be referenced in jobs, scripts, or device/site configuration. Variables can be scoped globally or to a specific site, and may be masked (secret) for sensitive data.
 
-DRMMVariable objects are returned by [Get-RMMVariable](Get-RMMVariable.md) and provide methods for inspecting and summarizing variable details.
+DRMMVariable objects are returned by [Get-RMMVariable](Get-RMMVariable.md) and provide methods for inspecting and summarising variable details.
 
 ## PROPERTIES
 

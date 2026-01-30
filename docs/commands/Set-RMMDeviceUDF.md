@@ -43,7 +43,7 @@ Set-RMMDeviceUDF -DeviceUid <Guid> -UDFFields <Hashtable> [-Force] [-ProgressAct
 The Set-RMMDeviceUDF function updates one or more user-defined fields (UDF1-UDF30) on a
 device in the Datto RMM system.
 UDFs are custom fields that can store additional metadata
-about devices for organizational and reporting purposes.
+about devices for organisational and reporting purposes.
 
 Important behaviors:
 - Fields included in the request with empty values will be cleared (set to null)
@@ -655,7 +655,7 @@ This function requires an active connection to the Datto RMM API.
 Use Connect-DattoRMM to authenticate before calling this function.
 
 Best practices for UDF usage:
-- Establish consistent naming conventions across your organization
+- Establish consistent naming conventions across your organisation
 - Document which UDFs are used for what purpose
 - Use UDFs for data that doesn't fit standard device properties
 - Consider using UDFs for: location, department, owner, cost center, project codes, etc.

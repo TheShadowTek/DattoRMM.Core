@@ -9,7 +9,7 @@ function New-RMMSite {
 
     .DESCRIPTION
         The New-RMMSite creates a new site in the authenticated user's account.
-        A site represents a customer location or organizational unit within Datto RMM.
+        A site represents a customer location or organisational unit within Datto RMM.
 
         Supports creating sites with proxy settings in a single operation,
         or proxy settings can be configured later using Set-RMMSiteProxy.

@@ -56,7 +56,7 @@ Currently, Security Level membership changes must be performed manually in the w
 **Business Justification:**
 - **Automated Access Provisioning:** Enables automated onboarding, offboarding, and internal role changes without manual UI intervention.
 - **JIT Access:** Supports just-in-time access for restricted customer accounts, improving security and compliance.
-- **Scalability:** Manual membership management does not scale for organizations with many users, sites, or groups.
+- **Scalability:** Manual membership management does not scale for organisations with many users, sites, or groups.
 - **Consistency:** Reduces human error and ensures consistent application of access policies across the environment.
 - **Auditability:** Programmatic changes can be logged and audited, supporting compliance requirements.
 
@@ -72,7 +72,7 @@ This enhancement would enable true end-to-end automation for user and resource a
 ### API Keys Should Respect Security Levels
 **API Endpoint:** N/A - Platform-wide behavior
 
-**Issue:** API keys are assigned to users, but do not honor user Security Levels. As a result, any user with an API key effectively has full administrative rights for all API operations, regardless of their assigned Security Level in the UI. This creates a significant security risk and limits the ability to safely distribute API access.
+**Issue:** API keys are assigned to users, but do not honour user Security Levels. As a result, any user with an API key effectively has full administrative rights for all API operations, regardless of their assigned Security Level in the UI. This creates a significant security risk and limits the ability to safely distribute API access.
 
 **Requested Enhancement:**
 - Enforce Security Level restrictions for all API operations performed using user API keys, so that API access is limited to the same permissions and scopes as the user's interactive UI session.
@@ -81,7 +81,7 @@ This enhancement would enable true end-to-end automation for user and resource a
 - **Principle of Least Privilege:** Ensures users and automation tools only have access to the resources and operations appropriate for their role.
 - **Wider Adoption:** If API keys respected Security Levels, interactive automation tools (such as PowerShell modules) could be safely distributed to management teams and non-admin users.
 - **CI/CD Isolation:** Enables secure, isolated automation in CI/CD pipelines by assigning API keys with only the necessary permissions for each workflow.
-- **Risk Reduction:** Prevents accidental or malicious use of API keys to perform unauthorized actions across the environment.
+- **Risk Reduction:** Prevents accidental or malicious use of API keys to perform unauthorised actions across the environment.
 
 **Current Limitation:**
 - All users with API keys have full admin rights on API operations, regardless of their Security Level, making it unsafe to broadly distribute API access.
@@ -104,9 +104,9 @@ This enhancement would align API access controls with UI-based security, improvi
 ### Full CRUD Support for Site Groups
 **API Endpoint:** N/A - Missing endpoints
 
-**Issue:** The Datto RMM API does not provide endpoints for full management (Create, Read, Update, Delete) of Site Groups, as described in the [Datto RMM Site Groups documentation](https://rmm.datto.com/help/en/Content/3NEWUI/Sites/SiteGroups.htm). Site Groups are essential for organizing sites and managing access, but currently, all Site Group operations must be performed manually through the web UI.
+**Issue:** The Datto RMM API does not provide endpoints for full management (Create, Read, Update, Delete) of Site Groups, as described in the [Datto RMM Site Groups documentation](https://rmm.datto.com/help/en/Content/3NEWUI/Sites/SiteGroups.htm). Site Groups are essential for Organising sites and managing access, but currently, all Site Group operations must be performed manually through the web UI.
 
-This limitation makes it impossible to fully automate site onboarding or to create, update, or delete Site Groups as part of a workflow. Organizations cannot programmatically assign sites to groups, manage group membership, or enforce access policies at scale.
+This limitation makes it impossible to fully automate site onboarding or to create, update, or delete Site Groups as part of a workflow. organisations cannot programmatically assign sites to groups, manage group membership, or enforce access policies at scale.
 
 **Requested Enhancement:**
 - Add endpoints to support full CRUD operations for Site Groups:
@@ -119,12 +119,12 @@ This limitation makes it impossible to fully automate site onboarding or to crea
 
 **Business Justification:**
 - **Automated Site Onboarding:** Full Site Group CRUD support is required to automate the entire site onboarding process, including group assignment and access control.
-- **Workflow Automation:** Enables organizations to create, update, and delete Site Groups as part of larger provisioning, compliance, or access management workflows.
+- **Workflow Automation:** Enables organisations to create, update, and delete Site Groups as part of larger provisioning, compliance, or access management workflows.
 - **Consistency and Scale:** Manual group management does not scale for MSPs or enterprises managing hundreds of sites. API support ensures consistency and reduces human error.
 - **Access Policy Enforcement:** Programmatic group management is essential for enforcing access policies, role-based access control, and compliance requirements.
 
 **Current Limitation:**
-Currently, there is no way to automate Site Group creation or management. All operations must be performed manually in the UI, which is a significant blocker for organizations seeking to automate onboarding and access workflows.
+Currently, there is no way to automate Site Group creation or management. All operations must be performed manually in the UI, which is a significant blocker for organisations seeking to automate onboarding and access workflows.
 
 This enhancement would bring Site Group management in line with other core objects in the Datto RMM API and enable true end-to-end automation for site provisioning and access control.
 
@@ -203,11 +203,11 @@ This creates operational challenges when jobs hang, run longer than expected, or
 **Operational Efficiency:**
 - **Automated Incident Response**: When monitoring systems detect jobs running beyond expected thresholds, automated workflows should be able to stop them without manual web portal intervention. This reduces mean time to resolution (MTTR) and prevents resource exhaustion.
 
-- **Bulk Job Management**: Organizations deploying components to hundreds of devices need ability to programmatically stop jobs on a subset if issues are detected, rather than waiting for all executions to timeout naturally.
+- **Bulk Job Management**: organisations deploying components to hundreds of devices need ability to programmatically stop jobs on a subset if issues are detected, rather than waiting for all executions to timeout naturally.
 
-- **Retry Without Reconfiguration**: Failed jobs should be retryable without recreating the entire job definition and variable payload. A rerun endpoint maintains job history while enabling quick recovery.
+- **Retry Without Reconfiguration**: Failed jobs should be retry completed job without recreating the entire job definition and variable payload. A rerun endpoint maintains job history while enabling quick recovery.
 
-- **Automated Cleanup:** Automated deletion of job history enables organizations to implement retention policies, reduce manual cleanup, and ensure that only relevant job records are retained for compliance or troubleshooting.
+- **Automated Cleanup:** Automated deletion of job history enables organisations to implement retention policies, reduce manual cleanup, and ensure that only relevant job records are retained for compliance or troubleshooting.
 
 **Current Workarounds and Limitations:**
 - Jobs must be manually cancelled through the web UI, requiring human intervention even during automated workflows
@@ -215,7 +215,7 @@ This creates operational challenges when jobs hang, run longer than expected, or
 - Long-running jobs must timeout naturally, consuming platform resources until completion
 - No programmatic way to implement job timeout policies across the estate
 
-- No way to delete job history except manual UI cleanup, which is not scalable or automatable
+- No way to delete job history except manual UI cleanup, which is not scalable or automated
 
 **Suggested API Design:**
 ```http

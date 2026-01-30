@@ -282,7 +282,7 @@ Export-Csv -Path "component_inventory.csv" -NoTypeInformation
    }
    ```
 
-7. Group components by CategoryCode for better organization and reporting.
+7. Group components by CategoryCode for better organisation and reporting.
 
 8. Document custom components with clear descriptions and variable names to aid future maintenance and usage.
 
@@ -312,7 +312,7 @@ Export-Csv -Path "component_inventory.csv" -NoTypeInformation
 
 - Not all components have variables - check the Variables array before attempting to access variable properties.
 
-- Component categories vary by Datto RMM configuration and may include custom categories defined by your organization.
+- Component categories vary by Datto RMM configuration and may include custom categories defined by your organisation.
 
 - Components are account-level resources and available across all sites unless specifically restricted.
 

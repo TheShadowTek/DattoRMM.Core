@@ -534,7 +534,7 @@ while ($job.IsActive()) {
 $headers = @('Protocol', 'LocalAddress', 'LocalPort', 'RemoteAddress', 'RemotePort', 'State')
 $connections = $job.GetStdOutAsCsv($device.Uid, $false, $headers)
 
-# Analyze connections
+# Analyse connections
 $listening = $connections | Where-Object {$_.State -eq 'LISTENING'}
 Write-Host "Listening ports: $($listening.Count)"
 $listening | Group-Object Protocol, LocalPort | Format-Table Count, Name

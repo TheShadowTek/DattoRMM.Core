@@ -64,7 +64,7 @@ function Get-RMMUser {
         Use Connect-DattoRMM to authenticate before calling this function.
 
         This function retrieves PII and requires high-impact confirmation by default.
-        Handle user data in compliance with your organization's privacy policies.
+        Handle user data in compliance with your organisation's privacy policies.
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
 

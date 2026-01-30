@@ -51,3 +51,9 @@ Get site needs a switch to get deleted devices, currently excluded....
 
 # Class Methods review
 DRMMFilter - done
+
+# Token Security
+Can token security be improved?
+
+# Custom Type/Format
+Extensibility with type and format ps1xml files for bespoke environment implementation

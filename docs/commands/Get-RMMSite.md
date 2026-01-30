@@ -26,7 +26,7 @@ Get-RMMSite [-SiteName <String>] [-ExtendedProperties <RMMSiteExtendedProperty[]
 ## DESCRIPTION
 The Get-RMMSite function retrieves site information from Datto RMM.
 Sites represent
-customer organizations or locations within your RMM account.
+customer organisations or locations within your RMM account.
 
 The function supports multiple query modes:
 - Get all sites

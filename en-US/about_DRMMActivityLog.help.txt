@@ -7,7 +7,7 @@ SHORT DESCRIPTION
 LONG DESCRIPTION
     The DRMMActivityLog class models a single activity log entry in Datto RMM, capturing actions, events, and changes across devices, users, and sites. Activity logs are highly flexible, with the Details property dynamically parsed from JSON and varying based on the log category and action. This allows the class to represent a wide range of audit and event records. 
  
-DRMMActivityLog objects are returned by Get-RMMActivityLog, which retrieves activity log entries for audit and event tracking. Use Get-RMMActivityLog to list, filter, and analyze activity logs programmatically.
+DRMMActivityLog objects are returned by Get-RMMActivityLog, which retrieves activity log entries for audit and event tracking. Use Get-RMMActivityLog to list, filter, and analyse activity logs programmatically.
 
 PROPERTIES (from class)
     Id [string]

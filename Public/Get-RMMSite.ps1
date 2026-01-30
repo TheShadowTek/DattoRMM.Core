@@ -9,7 +9,7 @@ function Get-RMMSite {
 
     .DESCRIPTION
         The Get-RMMSite function retrieves site information from Datto RMM. Sites represent
-        customer organizations or locations within your RMM account.
+        customer organisations or locations within your RMM account.
 
         The function supports multiple query modes:
         - Get all sites
@@ -23,7 +23,7 @@ function Get-RMMSite {
         The unique identifier (GUID) of a specific site to retrieve.
 
     .PARAMETER All
-        Retrieve all sites in the account. This is the default behavior. Set to $false to
+        Retrieve all sites in the account. This is the default behaviour. Set to $false to
         disable when using other parameters.
 
     .PARAMETER SiteName

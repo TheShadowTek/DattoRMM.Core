@@ -38,7 +38,7 @@ Represents account configuration details.
 - TimeZone `[string]`
 
 ### DRMMAccountDevicesStatus
-Summarizes device statistics for the account.
+summarises device statistics for the account.
 - NumberOfDevices `[int]`
 - NumberOfOnlineDevices `[int]`
 - NumberOfOfflineDevices `[int]`
