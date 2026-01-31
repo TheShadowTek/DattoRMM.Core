@@ -148,17 +148,5 @@ class DRMMObject {
         return ($Visible + ($MaskChar * $MaskedCount))
 
     }
-
-    static [string] GetMissingHelperErrorMessage() {
-
-        return "Required internal API helper is not available. Ensure the module is loaded and try again."
-
-    }
-
-    static [void] ThrowMissingHelperError() {
-
-        throw [DRMMObject]::GetMissingHelperErrorMessage()
-
-    }
 }
 

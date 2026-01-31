@@ -57,3 +57,23 @@ Can token security be improved?
 
 # Custom Type/Format
 Extensibility with type and format ps1xml files for bespoke environment implementation
+
+# Variable Hardening
+Update get and set to better handle masked variables, and secure update,... and new variable too!!
+
+# Add Filters to Site
+Add filters logic to get site expanded properties
+
+# BUG RETrY on 400 error
+Retry counter not working on 400 error
+observed whilst testing set rmm variable 
+
+[!IMPORTANT]
+# Invoke Rest Method Exceptions
+Allow pipeline to continue
+Handle:
+- 4xx something went wrong
+- 5xx service errors, retry
+
+# DRMMObject::GetValue
+Remove from all but edge case safety coverage

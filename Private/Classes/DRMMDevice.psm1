@@ -121,23 +121,11 @@ class DRMMDevice : DRMMObject {
 
     [DRMMAlert[]] GetAlerts() {
 
-        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
-        return Get-RMMAlert -DeviceUid $this.Uid -Status 'All'
+        return Get-RMMAlert -DeviceUid $this.Uid -Status 'Open'
 
     }
 
     [DRMMAlert[]] GetAlerts([string]$Status) {
-
-        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
 
         return Get-RMMAlert -DeviceUid $this.Uid -Status $Status
 
@@ -258,17 +246,11 @@ class DRMMDevice : DRMMObject {
     # Alert Management Methods
     [void] ResolveAllAlerts() {
 
-        if (-not (Get-Command -Name Resolve-RMMAlert -ErrorAction SilentlyContinue)) {
+        $Alerts = $this.GetAlerts('Open')
 
-            [DRMMObject]::ThrowMissingHelperError()
+        foreach ($Alert in $Alerts) {
 
-        }
-
-        $alerts = $this.GetAlerts('Open')
-
-        foreach ($alert in $alerts) {
-
-            Resolve-RMMAlert -AlertUid $alert.Uid -Force
+            Resolve-RMMAlert -AlertUid $Alert.Uid -Force
 
         }
     }
@@ -276,23 +258,11 @@ class DRMMDevice : DRMMObject {
     # Data Retrieval Methods
     [DRMMDeviceAudit] GetAudit() {
 
-        if (-not (Get-Command -Name Get-RMMDeviceAudit -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
         return Get-RMMDeviceAudit -DeviceUid $this.Uid
 
     }
 
     [DRMMDeviceAuditSoftware[]] GetSoftware() {
-
-        if (-not (Get-Command -Name Get-RMMDeviceSoftware -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
 
         return Get-RMMDeviceSoftware -DeviceUid $this.Uid
 
@@ -301,23 +271,11 @@ class DRMMDevice : DRMMObject {
     # Device Management Methods
     [DRMMDevice] SetUDF([hashtable]$UDFFields) {
 
-        if (-not (Get-Command -Name Set-RMMDeviceUDF -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
         return Set-RMMDeviceUDF -DeviceUid $this.Uid @UDFFields -Force
 
     }
 
     [DRMMDevice] ClearUDF([int]$UdfNumber) {
-
-        if (-not (Get-Command -Name Set-RMMDeviceUDF -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
 
         if ($UdfNumber -lt 1 -or $UdfNumber -gt 30) {
 
@@ -333,12 +291,6 @@ class DRMMDevice : DRMMObject {
 
     [DRMMDevice] ClearUDFs() {
 
-        if (-not (Get-Command -Name Set-RMMDeviceUDF -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
         $udfParams = @{}
 
         for ($i = 1; $i -le 30; $i++) {
@@ -353,35 +305,17 @@ class DRMMDevice : DRMMObject {
 
     [DRMMDevice] SetWarranty([datetime]$WarrantyDate) {
 
-        if (-not (Get-Command -Name Set-RMMDeviceWarranty -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
         return Set-RMMDeviceWarranty -DeviceUid $this.Uid -WarrantyDate $WarrantyDate -Force
 
     }
 
     [DRMMJob] RunQuickJob([guid]$ComponentUid, [hashtable]$Variables) {
 
-        if (-not (Get-Command -Name New-RMMQuickJob -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
         return New-RMMQuickJob -DeviceUid $this.Uid -ComponentUid $ComponentUid -Variables $Variables -Force
 
     }
 
     [DRMMDevice] Move([guid]$TargetSiteUid) {
-
-        if (-not (Get-Command -Name Move-RMMDevice -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
 
         return Move-RMMDevice -DeviceUid $this.Uid -TargetSiteUid $TargetSiteUid -Force
 

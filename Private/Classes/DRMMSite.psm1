@@ -22,7 +22,7 @@ class DRMMSite : DRMMObject {
     [DRMMDevicesStatus]$DevicesStatus
     [DRMMSiteSettings]$SiteSettings
     [DRMMVariable[]]$Variables
-    [object]$Filters  # Placeholder for filters data
+    [DRMMFilter[]]$Filters
     [string]$AutotaskCompanyName
     [string]$AutotaskCompanyId
     [string]$PortalUrl
@@ -90,12 +90,6 @@ class DRMMSite : DRMMObject {
 
     [DRMMSite] Set([hashtable]$Properties) {
 
-        if (-not (Get-Command -Name Set-RMMSite -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
         $params = @{
             Site = $this
             Force = $true
@@ -113,25 +107,29 @@ class DRMMSite : DRMMObject {
 
     [DRMMAlert[]] GetAlerts() {
 
-        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+        $Result = Get-RMMAlert -SiteUid $this.Uid -Status 'All'
 
-            [DRMMObject]::ThrowMissingHelperError()
+        if ($null -eq $Result) {
+
+            return @()
 
         }
 
-        return Get-RMMAlert -SiteUid $this.Uid -Status 'All'
+        return $Result
 
     }
 
     [DRMMAlert[]] GetAlerts([string]$Status) {
 
-        if (-not (Get-Command -Name Get-RMMAlert -ErrorAction SilentlyContinue)) {
+        $Result = Get-RMMAlert -SiteUid $this.Uid -Status $Status
 
-            [DRMMObject]::ThrowMissingHelperError()
+        if ($null -eq $Result) {
+
+            return @()
 
         }
 
-        return Get-RMMAlert -SiteUid $this.Uid -Status $Status
+        return $Result
 
     }
 
@@ -151,33 +149,29 @@ class DRMMSite : DRMMObject {
     # Device Management Methods
     [DRMMDevice[]] GetDevices() {
 
-        if (-not (Get-Command -Name Get-RMMDevice -ErrorAction SilentlyContinue)) {
+        $Result = Get-RMMDevice -SiteUid $this.Uid
 
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
-        $result = Get-RMMDevice -SiteUid $this.Uid
-
-        if ($null -eq $result) {
+        if ($null -eq $Result) {
 
             return @()
 
         }
 
-        return $result
+        return $Result
 
     }
 
     [DRMMDevice[]] GetDevices([long]$FilterId) {
 
-        if (-not (Get-Command -Name Get-RMMDevice -ErrorAction SilentlyContinue)) {
+        $Result = Get-RMMDevice -SiteUid $this.Uid -FilterId $FilterId
 
-            [DRMMObject]::ThrowMissingHelperError()
+        if ($null -eq $Result) {
+
+            return @()
 
         }
 
-        return Get-RMMDevice -SiteUid $this.Uid -FilterId $FilterId
+        return $Result
 
     }
 
@@ -196,47 +190,39 @@ class DRMMSite : DRMMObject {
     # Variable Management Methods
     [DRMMVariable[]] GetVariables() {
 
-        if (-not (Get-Command -Name Get-RMMVariable -ErrorAction SilentlyContinue)) {
+        $Result = Get-RMMVariable -SiteUid $this.Uid
 
-            [DRMMObject]::ThrowMissingHelperError()
+        if ($null -eq $Result) {
+
+            return @()
 
         }
 
-        return Get-RMMVariable -SiteUid $this.Uid
+        return $Result
 
     }
 
     [DRMMVariable] GetVariable([string]$Name) {
 
-        if (-not (Get-Command -Name Get-RMMVariable -ErrorAction SilentlyContinue)) {
+        $Result = Get-RMMVariable -SiteUid $this.Uid -Name $Name
 
-            [DRMMObject]::ThrowMissingHelperError()
+        if ($null -eq $Result) {
+
+            return $null
 
         }
 
-        return Get-RMMVariable -SiteUid $this.Uid -Name $Name
+        return $Result
 
     }
 
     [DRMMVariable] NewVariable([string]$Name, [string]$Value) {
-
-        if (-not (Get-Command -Name New-RMMVariable -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
 
         return New-RMMVariable -SiteUid $this.Uid -Name $Name -Value $Value -Force
 
     }
 
     [DRMMVariable] NewVariable([string]$Name, [string]$Value, [bool]$Masked) {
-
-        if (-not (Get-Command -Name New-RMMVariable -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
 
         return New-RMMVariable -SiteUid $this.Uid -Name $Name -Value $Value -Masked:$Masked -Force
 
@@ -245,43 +231,33 @@ class DRMMSite : DRMMObject {
     # Filter Management Methods
     [DRMMFilter[]] GetFilters() {
 
-        if (-not (Get-Command -Name Get-RMMFilter -ErrorAction SilentlyContinue)) {
+        $Result = Get-RMMFilter -SiteUid $this.Uid
 
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
-        $result = Get-RMMFilter -SiteUid $this.Uid
-
-        if ($null -eq $result) {
+        if ($null -eq $Result) {
 
             return @()
 
         }
 
-        return $result
+        return $Result
 
     }
 
     [DRMMFilter] GetFilter([string]$Name) {
 
-        if (-not (Get-Command -Name Get-RMMFilter -ErrorAction SilentlyContinue)) {
+        $Result = Get-RMMFilter -SiteUid $this.Uid -Name $Name
 
-            [DRMMObject]::ThrowMissingHelperError()
+        if ($null -eq $Result) {
+
+            return $null
 
         }
 
-        return Get-RMMFilter -SiteUid $this.Uid -Name $Name
+        return $Result
 
     }
 
     [DRMMSiteSettings] GetSettings() {
-
-        if (-not (Get-Command -Name Get-RMMSiteSettings -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
 
         return Get-RMMSiteSettings -SiteUid $this.Uid
 
@@ -289,35 +265,17 @@ class DRMMSite : DRMMObject {
 
     [DRMMSiteSettings] SetProxy([string]$ProxyHost, [int]$Port, [string]$Type) {
 
-        if (-not (Get-Command -Name Set-RMMSiteProxy -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
         return Set-RMMSiteProxy -SiteUid $this.Uid -Host $ProxyHost -Port $Port -Type $Type -Force
 
     }
 
     [DRMMSiteSettings] SetProxy([string]$ProxyHost, [int]$Port, [string]$Type, [string]$Username, [SecureString]$Password) {
 
-        if (-not (Get-Command -Name Set-RMMSiteProxy -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
-
         return Set-RMMSiteProxy -SiteUid $this.Uid -Host $ProxyHost -Port $Port -Type $Type -Username $Username -Password $Password -Force
 
     }
 
     [DRMMSiteSettings] RemoveProxy() {
-
-        if (-not (Get-Command -Name Remove-RMMSiteProxy -ErrorAction SilentlyContinue)) {
-
-            [DRMMObject]::ThrowMissingHelperError()
-
-        }
 
         return Remove-RMMSiteProxy -SiteUid $this.Uid -Force
 
@@ -514,12 +472,12 @@ class DRMMDevicesStatus : DRMMObject {
         
         }
 
-            $DevicesStatus = [DRMMDevicesStatus]::new()
-            $DevicesStatus.NumberOfDevices = $Response.numberOfDevices
-            $DevicesStatus.NumberOfOnlineDevices = $Response.numberOfOnlineDevices
-            $DevicesStatus.NumberOfOfflineDevices = $Response.numberOfOfflineDevices
+        $DevicesStatus = [DRMMDevicesStatus]::new()
+        $DevicesStatus.NumberOfDevices = $Response.numberOfDevices
+        $DevicesStatus.NumberOfOnlineDevices = $Response.numberOfOnlineDevices
+        $DevicesStatus.NumberOfOfflineDevices = $Response.numberOfOfflineDevices
 
-            return $DevicesStatus
+        return $DevicesStatus
 
     }
 
@@ -529,5 +487,3 @@ class DRMMDevicesStatus : DRMMObject {
 
     }
 }
-
-

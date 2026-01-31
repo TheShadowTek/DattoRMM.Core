@@ -15,8 +15,6 @@ METHODS (from class)
     static ConvertEpochToDateTime([long]$Epoch) datetime
     static ParseApiDate([object]$Value) hashtable
     static MaskString([string]$Value, [int]$VisibleChars = 1, [string]$MaskChar = '*') string
-    static GetMissingHelperErrorMessage() string
-    static ThrowMissingHelperError() void
 
 SEE ALSO
     about_DRMMObject.md
