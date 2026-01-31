@@ -5,7 +5,10 @@
 # DattoRMM.Core.psm1
 # Main module file for Datto RMM API v2 PowerShell module
 
-# Load class definitions - dependency order
+# Load class definitions
+using module '.\Private\Classes\Classes.psm1'
+
+<# Moved to Classes.psm1 for better maintainability
 using module '.\Private\Classes\DRMMEnums.psm1'
 using module '.\Private\Classes\DRMMObject.psm1'
 using module '.\Private\Classes\DRMMAccount.psm1'
@@ -24,6 +27,7 @@ using module '.\Private\Classes\DRMMSite.psm1'
 using module '.\Private\Classes\DRMMNetMapping.psm1'
 using module '.\Private\Classes\DRMMStatus.psm1'
 using module '.\Private\Classes\DRMMUser.psm1'
+#>
 
 
 # Initialize script-scoped auth object
