@@ -52,6 +52,9 @@ function Save-RMMConfig {
         'PageSize' = $Script:PageSize
         'ThrottleProfile' = $Script:RMMThrottle.Profile
         'TokenExpireHours' = $Script:TokenExpireHours
+        'APIMaxRetries' = $Script:APIMethodRetry.MaxRetries
+        'APIRetryIntervalSeconds' = $Script:APIMethodRetry.RetryIntervalSeconds
+        'APITimeoutSeconds' = $Script:APIMethodRetry.TimeoutSeconds
     }
 
     $Success = Write-ConfigFile -Config $Config

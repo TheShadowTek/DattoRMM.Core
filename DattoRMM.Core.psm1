@@ -38,6 +38,9 @@ $Script:ConfigPlatform = $null
 $Script:ConfigPageSize = $null
 $Script:ConfigThrottleProfile = $null
 $Script:ConfigTokenExpireHours = $null
+$Script:ConfigAPIMaxRetries = $null
+$Script:ConfigAPIRetryIntervalSeconds = $null
+$Script:ConfigAPITimeoutSeconds = $null
 $Script:TokenExpireHours = 100
 $Script:MaxPageSize = $null
 
@@ -72,13 +75,14 @@ $Script:ThrottleProfileDefaults = @{
 # Retry settings
 $Script:APIMethodRetry = @{
     MaxRetries = 5
-    RetryIntervalSeconds = 5
+    RetryIntervalSeconds = 10
+    TimeoutSeconds = 60
 }
 
 # Initialize throttle state variable, and set safe defaults
 $Script:RMMThrottle = [ordered]@{
-    Profile = 'DefaultProfile'          # Initalise defualt profile
-    CheckInterval = 1                   # Force intilisation of throttle state
+    Profile = 'DefaultProfile'          # Initialise default profile
+    CheckInterval = 1                   # Force initialisation of throttle state
     CheckCount = 1                      # Number of checks since last update - force initial delay
     Utilisation = 0                     # Current rate limit utilisation (0 to 1) - force initial update
     LowUtilCheckInterval = 25           # Utilisation limit before delaying requests - throttling activation threshold
@@ -214,6 +218,24 @@ if ($null -ne $SavedConfig) {
                         }
                     }
                 }
+            }
+
+            'APIMaxRetries' {
+                $Script:APIMethodRetry.MaxRetries = $SavedConfig.APIMaxRetries
+                $Script:ConfigAPIMaxRetries = $SavedConfig.APIMaxRetries
+                Write-Verbose "`tAPIMaxRetries: $($Script:APIMethodRetry.MaxRetries)"
+            }
+
+            'APIRetryIntervalSeconds' {
+                $Script:APIMethodRetry.RetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
+                $Script:ConfigAPIRetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
+                Write-Verbose "`tAPIRetryIntervalSeconds: $($Script:APIMethodRetry.RetryIntervalSeconds)"
+            }
+
+            'APITimeoutSeconds' {
+                $Script:APIMethodRetry.TimeoutSeconds = $SavedConfig.APITimeoutSeconds
+                $Script:ConfigAPITimeoutSeconds = $SavedConfig.APITimeoutSeconds
+                Write-Verbose "`tAPITimeoutSeconds: $($Script:APIMethodRetry.TimeoutSeconds)"
             }
         }
 

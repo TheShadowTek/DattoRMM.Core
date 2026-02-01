@@ -36,28 +36,137 @@ function Invoke-APIMethod {
         [string]
         $PageElement
     )
+    
+    # Local function to handle retries for Invoke-RestMethod
     function InvokeRestMethod {
         param(
             [hashtable]
             $Parameters
         )
 
-        $Attempt = 0
-        $Success = $false
+        $Attempt      = 0
+        $Success      = $false
+        $LastError    = $null
 
-        while (-not $Success -and $Attempts -le $Script:APIMethodRetry.MaxRetries) {
+        # Retry loop
+        while (-not $Success -and $Attempt -le $Script:APIMethodRetry.MaxRetries) {
 
             try {
 
                 $Response = Invoke-RestMethod @Parameters -ErrorAction Stop
-                $Success = $true
+                $Success  = $true
 
             } catch {
 
-                $Attempt ++
-                Write-Warning "API Error: $($_.Exception.Message)`n`tRetry in $($Script:APIMethodRetry.RetryIntervalSeconds) seconds. Attempt $Attempt of $($Script:APIMethodRetry.MaxRetries)..."
-                Start-Sleep -Seconds $Script:APIMethodRetry.RetryIntervalSeconds
+                $Attempt++
+                $LastError = $_
+                $StatusCode = $LastError.Exception.Response.StatusCode.value__
+                $ApiMessage = $LastError.Exception.Response.StatusDescription
 
+                # Determine if we should retry based on status code, with generic messages, and termination conditions - based on documented API behaviour
+                switch ($StatusCode) {
+
+                    500 {
+
+                        # Terminating condition after max retries
+                        $Generic = "Internal server error. Please try again later or contact support."
+                        $ShouldRetry = $true
+
+                    }
+
+                    400 {
+
+                        # Non-terminating condition no retry
+                        $Generic = "Invalid request. Please check your parameters and data."
+                        Write-Warning "$Generic`nAPI Response: $ApiMessage"
+                        return $null
+
+                    }
+
+                    401 {
+
+                        # Terminating condition no retry
+                        $Generic = "Authorization failed. Please check your credentials."
+                        $ShouldRetry = $false
+
+                    }
+
+                    403 {
+
+                        # Terminating condition no retry
+                        $Generic = "Access denied. You do not have permission to access this resource."
+                        $ShouldRetry = $false
+
+                    }
+
+                    404 {
+                        
+                        # Non-terminating condition no retry
+                        $Generic = "Resource not found. Please check the resource identifier."
+                        Write-Warning "$Generic`nAPI Response: $ApiMessage"
+                        return $null
+
+                    }
+
+                    409 {
+
+                        # Non-terminating condition after max retries
+                        $Generic = "Conflict detected. The resource is being modified elsewhere or there is a data conflict."
+
+                        if ($Attempt -lt $Script:APIMethodRetry.MaxRetries) {
+
+                            $ShouldRetry = $true
+
+                        } else {
+
+                            Write-Warning "$Generic`nAPI Response: $ApiMessage"
+                            return $null
+
+                        }
+                    }
+
+                    429 {
+
+                        # Non-terminating condition after max retries
+                        $Generic = "Rate limit exceeded. Too many requests have been made in a short period."
+                        
+                        # Hardcoded 429 2 minute wait in addition to retry interval
+                        Write-Warning "Rate limit exceeded. Waiting 2 minutes before retrying @ $((Get-Date).AddSeconds(120).ToString("HH:mm:ss"))..."
+                        Start-Sleep -Seconds 120
+                        $ShouldRetry = $true
+
+                    }
+
+                    default {
+
+                        # Non-terminating condition after max retries - uncertain if this should be terminating
+                        $Generic = "Unexpected error occurred."
+                        $ShouldRetry = $true
+
+                        if ($Attempt -lt $Script:APIMethodRetry.MaxRetries) {
+
+                            $ShouldRetry = $true
+
+                        } else {
+
+                            Write-Warning "$Generic`nAPI Response: $ApiMessage"
+                            return $null
+
+                        }
+                    }
+                }
+
+
+                if ($ShouldRetry -and $Attempt -le $Script:APIMethodRetry.MaxRetries) {
+
+                    Write-Warning "Retry in $($Script:APIMethodRetry.RetryIntervalSeconds) seconds. Attempt $Attempt of $($Script:APIMethodRetry.MaxRetries)..."
+                    Start-Sleep -Seconds $Script:APIMethodRetry.RetryIntervalSeconds
+
+                } else {
+
+                    break
+
+                }
             }
         }
 
@@ -67,7 +176,7 @@ function Invoke-APIMethod {
 
         } else {
 
-            throw "The operation could not be completed due to repeated connection interruptions."
+            throw "Failed to invoke API method after $($Script:APIMethodRetry.MaxRetries) attempts. Last error: $($LastError.Exception.Message)"
 
         }
     }
@@ -134,6 +243,7 @@ function Invoke-APIMethod {
         Method = $Method
         ContentType = 'application/json'
         Headers = $RMMAuth.AuthHeader
+        TimeoutSec = $Script:APIMethodRetry.TimeoutSeconds
     }
 
     if ($Parameters) {
@@ -202,7 +312,7 @@ function Invoke-APIMethod {
 
                 $NextUrl = $Result.pageDetails.nextPageUrl
 
-                # If we have original parameters, check which ones are missing from nextPageUrl
+                # If we have original parameters, check which ones are missing from nextPageUrl - workaround for API not preserving all query params
                 if ($OriginalParams.Count -gt 0) {
 
                     $NextUri = [System.Uri]$NextUrl
@@ -278,7 +388,6 @@ function Invoke-APIMethod {
                 }
 
                 $RequestParams.Uri = $NextUrl
-                #$Result = Invoke-RestMethod @RequestParams
                 $Result = InvokeRestMethod -Parameters $RequestParams
                 $Result.$PageElement
 
@@ -286,7 +395,6 @@ function Invoke-APIMethod {
 
         } else {
             
-            #Invoke-RestMethod @RequestParams
             InvokeRestMethod -Parameters $RequestParams
 
         }

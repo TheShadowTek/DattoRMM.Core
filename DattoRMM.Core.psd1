@@ -8,7 +8,7 @@
 RootModule = 'DattoRMM.Core.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.5.13'
+ModuleVersion = '0.5.14'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')

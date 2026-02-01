@@ -246,6 +246,7 @@ function Connect-DattoRMM {
 
     try {
 
+            #$AccountMaxPageSize = (Invoke-APIMethod @PageSizeMethod -ErrorAction Stop).max
             $AccountMaxPageSize = (Invoke-APIMethod @PageSizeMethod).max
             $Script:MaxPageSize = $AccountMaxPageSize
 
@@ -277,9 +278,7 @@ function Connect-DattoRMM {
 
     } catch {
 
-        $HttpResponseCode = $_.Exception.Response.StatusCode.value__
-        $HttpResponseDescription = $_.Exception.Response.StatusDescription.value__
-        throw "Failed to connect to Datto RMM API! Response: $HttpResponseCode $HttpResponseDescription"
+        throw "Failed to connect to Datto RMM API. Exception: $($_.Exception.Message)"
 
     }
 }

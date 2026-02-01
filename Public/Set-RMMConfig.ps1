@@ -24,6 +24,15 @@ function Set-RMMConfig {
     .PARAMETER TokenExpireHours
         Sets the token refresh interval (in hours) for the current session. Valid range: 1-100. Default is 100. Use -Persist to save as the default for future sessions.
 
+    .PARAMETER APIMaxRetries
+        Sets the maximum number of retry attempts for failed API requests. Valid range: 1-10. Default is 5. Use -Persist to save as the default for future sessions.
+
+    .PARAMETER APIRetryIntervalSeconds
+        Sets the wait time in seconds between retry attempts. Valid range: 1-300. Default is 10. Use -Persist to save as the default for future sessions.
+
+    .PARAMETER APITimeoutSeconds
+        Sets the timeout in seconds for API requests. Valid range: 10-300. Default is 60. Use -Persist to save as the default for future sessions.
+
     .PARAMETER Persist
         If specified, saves the provided settings to the configuration file for future sessions. Without -Persist, changes apply only to the current session.
 
@@ -105,6 +114,30 @@ function Set-RMMConfig {
         [ValidateRange(1, 100)]
         [int]
         $TokenExpireHours,
+
+        [Parameter(
+            ParameterSetName = 'Set',
+            Mandatory = $false
+        )]
+        [ValidateRange(1, 10)]
+        [int]
+        $APIMaxRetries,
+
+        [Parameter(
+            ParameterSetName = 'Set',
+            Mandatory = $false
+        )]
+        [ValidateRange(1, 300)]
+        [int]
+        $APIRetryIntervalSeconds,
+
+        [Parameter(
+            ParameterSetName = 'Set',
+            Mandatory = $false
+        )]
+        [ValidateRange(10, 300)]
+        [int]
+        $APITimeoutSeconds,
 
         [Parameter(
             ParameterSetName = 'Set',
@@ -266,6 +299,42 @@ function Set-RMMConfig {
 
             }
         }
+
+        'APIMaxRetries' {
+
+            Write-Verbose "Set APIMaxRetries to: $APIMaxRetries"
+            $Script:APIMethodRetry.MaxRetries = $APIMaxRetries
+
+            if ($Persist) {
+
+                $Config['APIMaxRetries'] = $APIMaxRetries
+
+            }
+        }
+
+        'APIRetryIntervalSeconds' {
+
+            Write-Verbose "Set APIRetryIntervalSeconds to: $APIRetryIntervalSeconds"
+            $Script:APIMethodRetry.RetryIntervalSeconds = $APIRetryIntervalSeconds
+
+            if ($Persist) {
+
+                $Config['APIRetryIntervalSeconds'] = $APIRetryIntervalSeconds
+
+            }
+        }
+
+        'APITimeoutSeconds' {
+
+            Write-Verbose "Set APITimeoutSeconds to: $APITimeoutSeconds"
+            $Script:APIMethodRetry.TimeoutSeconds = $APITimeoutSeconds
+
+            if ($Persist) {
+
+                $Config['APITimeoutSeconds'] = $APITimeoutSeconds
+
+            }
+        }
     }
 
     if ($Persist) {
@@ -291,6 +360,18 @@ function Set-RMMConfig {
 
                 'TokenExpireHours' {
                     $Script:ConfigTokenExpireHours = $Script:TokenExpireHours
+                }
+
+                'APIMaxRetries' {
+                    $Script:ConfigAPIMaxRetries = $Script:APIMethodRetry.MaxRetries
+                }
+
+                'APIRetryIntervalSeconds' {
+                    $Script:ConfigAPIRetryIntervalSeconds = $Script:APIMethodRetry.RetryIntervalSeconds
+                }
+
+                'APITimeoutSeconds' {
+                    $Script:ConfigAPITimeoutSeconds = $Script:APIMethodRetry.TimeoutSeconds
                 }
             }
 

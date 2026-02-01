@@ -53,10 +53,16 @@ function Get-RMMConfig {
         ConfiguredPageSize = $Script:ConfigPageSize
         ConfiguredThrottleProfile = $Script:ConfigThrottleProfile
         ConfiguredTokenExpireHours = $Script:ConfigTokenExpireHours
+        ConfiguredAPIMaxRetries = $Script:ConfigAPIMaxRetries
+        ConfiguredAPIRetryIntervalSeconds = $Script:ConfigAPIRetryIntervalSeconds
+        ConfiguredAPITimeoutSeconds = $Script:ConfigAPITimeoutSeconds
         SessionPlatform = $Script:SessionPlatform
         SessionPageSize = $Script:SessionPageSize
         SessionThrottleProfile = $Script:RMMThrottle.Profile
         SessionTokenExpireHours = $Script:TokenExpireHours
+        SessionAPIMaxRetries = $Script:APIMethodRetry.MaxRetries
+        SessionAPIRetryIntervalSeconds = $Script:APIMethodRetry.RetryIntervalSeconds
+        SessionAPITimeoutSeconds = $Script:APIMethodRetry.TimeoutSeconds
     }
 
     return $ConfigInfo
