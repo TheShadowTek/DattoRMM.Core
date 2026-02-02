@@ -297,7 +297,6 @@ function Connect-DattoRMM {
     $PageSizeMethod = @{
         Path = "system/pagination"
         Method = 'Get'
-        TimeoutSec = $Script:APIMethodRetry.TimeoutSeconds
     }
 
     try {
