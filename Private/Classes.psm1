@@ -232,13 +232,13 @@ class DRMMAccount : DRMMObject {
 
         $Account = [DRMMAccount]::new()
 
-        $Account.Id = [DRMMObject]::GetValue($Response, 'id')
-        $Account.Uid = [DRMMObject]::GetValue($Response, 'uid')
-        $Account.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Account.Currency = [DRMMObject]::GetValue($Response, 'currency')
+        $Account.Id = $Response.id
+        $Account.Uid = $Response.uid
+        $Account.Name = $Response.name
+        $Account.Currency = $Response.currency
 
         # Parse descriptor
-        $DescriptorData = [DRMMObject]::GetValue($Response, 'descriptor')
+        $DescriptorData = $Response.descriptor
 
         if ($null -ne $DescriptorData) {
 
@@ -247,7 +247,7 @@ class DRMMAccount : DRMMObject {
         }
 
         # Parse devices status
-        $DevicesStatusData = [DRMMObject]::GetValue($Response, 'devicesStatus')
+        $DevicesStatusData = $Response.devicesStatus
 
         if ($null -ne $DevicesStatusData) {
 
@@ -282,9 +282,9 @@ class DRMMAccountDescriptor : DRMMObject {
 
         $Descriptor = [DRMMAccountDescriptor]::new()
 
-        $Descriptor.BillingEmail = [DRMMObject]::GetValue($Response, 'bilingEmail')
-        $Descriptor.DeviceLimit = [DRMMObject]::GetValue($Response, 'deviceLimit')
-        $Descriptor.TimeZone = [DRMMObject]::GetValue($Response, 'timeZone')
+        $Descriptor.BillingEmail = $Response.bilingEmail
+        $Descriptor.DeviceLimit = $Response.deviceLimit
+        $Descriptor.TimeZone = $Response.timeZone
 
         return $Descriptor
 
@@ -307,11 +307,11 @@ class DRMMAccountDevicesStatus : DRMMObject {
 
         $Status = [DRMMAccountDevicesStatus]::new()
 
-        $Status.NumberOfDevices = [DRMMObject]::GetValue($Response, 'numberOfDevices')
-        $Status.NumberOfOnlineDevices = [DRMMObject]::GetValue($Response, 'numberOfOnlineDevices')
-        $Status.NumberOfOfflineDevices = [DRMMObject]::GetValue($Response, 'numberOfOfflineDevices')
-        $Status.NumberOfOnDemandDevices = [DRMMObject]::GetValue($Response, 'numberOfOnDemandDevices')
-        $Status.NumberOfManagedDevices = [DRMMObject]::GetValue($Response, 'numberOfManagedDevices')
+        $Status.NumberOfDevices = $Response.numberOfDevices
+        $Status.NumberOfOnlineDevices = $Response.numberOfOnlineDevices
+        $Status.NumberOfOfflineDevices = $Response.numberOfOfflineDevices
+        $Status.NumberOfOnDemandDevices = $Response.numberOfOnDemandDevices
+        $Status.NumberOfManagedDevices = $Response.numberOfManagedDevices
 
         return $Status
 
@@ -634,7 +634,7 @@ class DRMMAlertContext : DRMMObject {
 
         }
 
-        $ClassValue = [DRMMObject]::GetValue($Response, '@class')
+        $ClassValue = $Response.'@class'
 
         if ($null -eq $ClassValue) {
 
@@ -699,9 +699,9 @@ class DRMMAlertContextAntivirus : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextAntivirus]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Status = [DRMMObject]::GetValue($Response, 'status')
-        $Context.ProductName = [DRMMObject]::GetValue($Response, 'productName')
+        $Context.Class = $Response.'@class'
+        $Context.Status = $Response.status
+        $Context.ProductName = $Response.productName
 
         return $Context
 
@@ -726,9 +726,9 @@ class DRMMAlertContextBackupManagement : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextBackupManagement]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.ErrorMessage = [DRMMObject]::GetValue($Response, 'errorMessage')
-        $Context.Timeout = [DRMMObject]::GetValue($Response, 'timeout')
+        $Context.Class = $Response.'@class'
+        $Context.ErrorMessage = $Response.errorMessage
+        $Context.Timeout = $Response.timeout
 
         return $Context
 
@@ -754,10 +754,10 @@ class DRMMAlertContextCustomSNMP : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextCustomSNMP]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.DisplayName = [DRMMObject]::GetValue($Response, 'displayName')
-        $Context.CurrentValue = [DRMMObject]::GetValue($Response, 'currentValue')
-        $Context.MonitorInstance = [DRMMObject]::GetValue($Response, 'monitorInstance')
+        $Context.Class = $Response.'@class'
+        $Context.DisplayName = $Response.displayName
+        $Context.CurrentValue = $Response.currentValue
+        $Context.MonitorInstance = $Response.monitorInstance
 
         return $Context
 
@@ -782,9 +782,9 @@ class DRMMAlertContextDiskHealth : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextDiskHealth]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Reason = [DRMMObject]::GetValue($Response, 'reason')
-        $Context.Type = [DRMMObject]::GetValue($Response, 'type')
+        $Context.Class = $Response.'@class'
+        $Context.Reason = $Response.reason
+        $Context.Type = $Response.type
 
         return $Context
 
@@ -812,12 +812,12 @@ class DRMMAlertContextDiskUsage : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextDiskUsage]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.DiskName = [DRMMObject]::GetValue($Response, 'diskName')
-        $Context.TotalVolume = [DRMMObject]::GetValue($Response, 'totalVolume')
-        $Context.FreeSpace = [DRMMObject]::GetValue($Response, 'freeSpace')
-        $Context.UnitOfMeasure = [DRMMObject]::GetValue($Response, 'unitOfMeasure')
-        $Context.DiskNameDesignation = [DRMMObject]::GetValue($Response, 'diskNameDesignation')
+        $Context.Class = $Response.'@class'
+        $Context.DiskName = $Response.diskName
+        $Context.TotalVolume = $Response.totalVolume
+        $Context.FreeSpace = $Response.freeSpace
+        $Context.UnitOfMeasure = $Response.unitOfMeasure
+        $Context.DiskNameDesignation = $Response.diskNameDesignation
 
         return $Context
 
@@ -842,9 +842,9 @@ class DRMMAlertContextEndpointSecurityThreat : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextEndpointSecurityThreat]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.EsAlertId = [DRMMObject]::GetValue($Response, 'esAlertId')
-        $Context.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Context.Class = $Response.'@class'
+        $Context.EsAlertId = $Response.esAlertId
+        $Context.Description = $Response.description
 
         return $Context
 
@@ -869,9 +869,9 @@ class DRMMAlertContextEndpointSecurityWindowsDefender : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextEndpointSecurityWindowsDefender]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.EsAlertId = [DRMMObject]::GetValue($Response, 'esAlertId')
-        $Context.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Context.Class = $Response.'@class'
+        $Context.EsAlertId = $Response.esAlertId
+        $Context.Description = $Response.description
 
         return $Context
 
@@ -902,15 +902,15 @@ class DRMMAlertContextEventLog : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextEventLog]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.LogName = [DRMMObject]::GetValue($Response, 'logName')
-        $Context.Code = [DRMMObject]::GetValue($Response, 'code')
-        $Context.Type = [DRMMObject]::GetValue($Response, 'type')
-        $Context.Source = [DRMMObject]::GetValue($Response, 'source')
-        $Context.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Context.TriggerCount = [DRMMObject]::GetValue($Response, 'triggerCount')
-        $Context.LastTriggered = ([DRMMObject]::ParseApiDate([DRMMObject]::GetValue($Response, 'lastTriggered'))).DateTime
-        $Context.CausedSuspension = [DRMMObject]::GetValue($Response, 'causedSuspension')
+        $Context.Class = $Response.'@class'
+        $Context.LogName = $Response.logName
+        $Context.Code = $Response.code
+        $Context.Type = $Response.type
+        $Context.Source = $Response.source
+        $Context.Description = $Response.description
+        $Context.TriggerCount = $Response.triggerCount
+        $Context.LastTriggered = ([DRMMObject]::ParseApiDate($Response.lastTriggered)).DateTime
+        $Context.CausedSuspension = $Response.causedSuspension
 
         return $Context
 
@@ -935,9 +935,9 @@ class DRMMAlertContextFan : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextFan]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Reason = [DRMMObject]::GetValue($Response, 'reason')
-        $Context.Type = [DRMMObject]::GetValue($Response, 'type')
+        $Context.Class = $Response.'@class'
+        $Context.Reason = $Response.reason
+        $Context.Type = $Response.type
 
         return $Context
 
@@ -965,12 +965,12 @@ class DRMMAlertContextFileSystem : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextFileSystem]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Sample = [DRMMObject]::GetValue($Response, 'sample')
-        $Context.Threshold = [DRMMObject]::GetValue($Response, 'threshold')
-        $Context.Path = [DRMMObject]::GetValue($Response, 'path')
-        $Context.ObjectType = [DRMMObject]::GetValue($Response, 'objectType')
-        $Context.Condition = [DRMMObject]::GetValue($Response, 'condition')
+        $Context.Class = $Response.'@class'
+        $Context.Sample = $Response.sample
+        $Context.Threshold = $Response.threshold
+        $Context.Path = $Response.path
+        $Context.ObjectType = $Response.objectType
+        $Context.Condition = $Response.condition
 
         return $Context
 
@@ -994,7 +994,7 @@ class DRMMAlertContextGeneric : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextGeneric]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
+        $Context.Class = $Response.'@class'
         
         # Store all properties except @class
         $Context.Properties = @{}
@@ -1029,8 +1029,8 @@ class DRMMAlertContextNetworkMonitor : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextNetworkMonitor]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Description = [DRMMObject]::GetValue($Response, 'description')
+        $Context.Class = $Response.'@class'
+        $Context.Description = $Response.description
 
         return $Context
 
@@ -1054,8 +1054,8 @@ class DRMMAlertContextOnlineOfflineStatus : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextOnlineOfflineStatus]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Status = [DRMMObject]::GetValue($Response, 'status')
+        $Context.Class = $Response.'@class'
+        $Context.Status = $Response.status
 
         return $Context
 
@@ -1082,11 +1082,11 @@ class DRMMAlertContextPatch : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextPatch]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.PatchUid = [DRMMObject]::GetValue($Response, 'patchUid')
-        $Context.PolicyUid = [DRMMObject]::GetValue($Response, 'policyUid')
-        $Context.Result = [DRMMObject]::GetValue($Response, 'result')
-        $Context.Info = [DRMMObject]::GetValue($Response, 'info')
+        $Context.Class = $Response.'@class'
+        $Context.PatchUid = $Response.patchUid
+        $Context.PolicyUid = $Response.policyUid
+        $Context.Result = $Response.result
+        $Context.Info = $Response.info
 
         return $Context
 
@@ -1112,10 +1112,10 @@ class DRMMAlertContextPing : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextPing]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.InstanceName = [DRMMObject]::GetValue($Response, 'instanceName')
-        $Context.RoundtripTime = [DRMMObject]::GetValue($Response, 'roundtripTime')
-        $Context.Reasons = [DRMMObject]::GetValue($Response, 'reasons')
+        $Context.Class = $Response.'@class'
+        $Context.InstanceName = $Response.instanceName
+        $Context.RoundtripTime = $Response.roundtripTime
+        $Context.Reasons = $Response.reasons
 
         return $Context
 
@@ -1142,11 +1142,11 @@ class DRMMAlertContextPrinter : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextPrinter]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.IpAddress = [DRMMObject]::GetValue($Response, 'ipAddress')
-        $Context.MacAddress = [DRMMObject]::GetValue($Response, 'macAddress')
-        $Context.MarkerSupplyIndex = [DRMMObject]::GetValue($Response, 'markerSupplyIndex')
-        $Context.CurrentLevel = [DRMMObject]::GetValue($Response, 'currentLevel')
+        $Context.Class = $Response.'@class'
+        $Context.IpAddress = $Response.ipAddress
+        $Context.MacAddress = $Response.macAddress
+        $Context.MarkerSupplyIndex = $Response.markerSupplyIndex
+        $Context.CurrentLevel = $Response.currentLevel
 
         return $Context
 
@@ -1171,9 +1171,9 @@ class DRMMAlertContextPsu : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextPsu]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Reason = [DRMMObject]::GetValue($Response, 'reason')
-        $Context.Type = [DRMMObject]::GetValue($Response, 'type')
+        $Context.Class = $Response.'@class'
+        $Context.Reason = $Response.reason
+        $Context.Type = $Response.type
 
         return $Context
 
@@ -1203,14 +1203,14 @@ class DRMMAlertContextRansomWare : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextRansomWare]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.State = [DRMMObject]::GetValue($Response, 'state')
-        $Context.ConfidenceFactor = [DRMMObject]::GetValue($Response, 'confidenceFactor')
-        $Context.AffectedDirectories = [DRMMObject]::GetValue($Response, 'affectedDirectories')
-        $Context.WatchPaths = [DRMMObject]::GetValue($Response, 'watchPaths')
-        $Context.Rwextension = [DRMMObject]::GetValue($Response, 'rwextension')
-        $Context.MetaAlertTime = ([DRMMObject]::ParseApiDate([DRMMObject]::GetValue($Response, 'metaAlertTime'))).DateTime
-        $Context.AlertTime = ([DRMMObject]::ParseApiDate([DRMMObject]::GetValue($Response, 'alertTime'))).DateTime
+        $Context.Class = $Response.'@class'
+        $Context.State = $Response.state
+        $Context.ConfidenceFactor = $Response.confidenceFactor
+        $Context.AffectedDirectories = $Response.affectedDirectories
+        $Context.WatchPaths = $Response.watchPaths
+        $Context.Rwextension = $Response.rwextension
+        $Context.MetaAlertTime = ([DRMMObject]::ParseApiDate($Response.metaAlertTime)).DateTime
+        $Context.AlertTime = ([DRMMObject]::ParseApiDate($Response.alertTime)).DateTime
 
         return $Context
 
@@ -1236,10 +1236,10 @@ class DRMMAlertContextResourceUsage : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextResourceUsage]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.ProcessName = [DRMMObject]::GetValue($Response, 'processName')
-        $Context.Sample = [DRMMObject]::GetValue($Response, 'sample')
-        $Context.Type = [DRMMObject]::GetValue($Response, 'type')
+        $Context.Class = $Response.'@class'
+        $Context.ProcessName = $Response.processName
+        $Context.Sample = $Response.sample
+        $Context.Type = $Response.type
 
         return $Context
 
@@ -1263,9 +1263,9 @@ class DRMMAlertContextScript : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextScript]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
+        $Context.Class = $Response.'@class'
         
-        $SamplesData = [DRMMObject]::GetValue($Response, 'samples')
+        $SamplesData = $Response.samples
         if ($null -ne $SamplesData) {
 
             $Context.Samples = @{}
@@ -1299,9 +1299,9 @@ class DRMMAlertContextSecCenter : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextSecCenter]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.ProductName = [DRMMObject]::GetValue($Response, 'productName')
-        $Context.AlertType = [DRMMObject]::GetValue($Response, 'alertType')
+        $Context.Class = $Response.'@class'
+        $Context.ProductName = $Response.productName
+        $Context.AlertType = $Response.alertType
 
         return $Context
 
@@ -1332,15 +1332,15 @@ class DRMMAlertContextSecurityManagement : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextSecurityManagement]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Status = [DRMMObject]::GetValue($Response, 'status')
-        $Context.ProductName = [DRMMObject]::GetValue($Response, 'productName')
-        $Context.InfoTime = [DRMMObject]::GetValue($Response, 'infoTime')
-        $Context.VirusName = [DRMMObject]::GetValue($Response, 'virusName')
-        $Context.InfectedFiles = [DRMMObject]::GetValue($Response, 'infectedFiles')
-        $Context.ProductNotUpdatedForDays = [DRMMObject]::GetValue($Response, 'productNotUpdatedForDays')
-        $Context.SystemRemainsInfectedForHours = [DRMMObject]::GetValue($Response, 'systemRemainsInfectedForHours')
-        $Context.ExpiryLicenseForDays = [DRMMObject]::GetValue($Response, 'expiryLicenseForDays')
+        $Context.Class = $Response.'@class'
+        $Context.Status = $Response.status
+        $Context.ProductName = $Response.productName
+        $Context.InfoTime = $Response.infoTime
+        $Context.VirusName = $Response.virusName
+        $Context.InfectedFiles = $Response.infectedFiles
+        $Context.ProductNotUpdatedForDays = $Response.productNotUpdatedForDays
+        $Context.SystemRemainsInfectedForHours = $Response.systemRemainsInfectedForHours
+        $Context.ExpiryLicenseForDays = $Response.expiryLicenseForDays
 
         return $Context
 
@@ -1369,14 +1369,14 @@ class DRMMAlertContextSNMPProbe : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextSNMPProbe]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.IpAddress = [DRMMObject]::GetValue($Response, 'ipAddress')
-        $Context.OID = [DRMMObject]::GetValue($Response, 'OID')
-        $Context.RuleName = [DRMMObject]::GetValue($Response, 'ruleName')
-        $Context.ResponseValue = [DRMMObject]::GetValue($Response, 'responseValue')
-        $Context.DeviceName = [DRMMObject]::GetValue($Response, 'deviceName')
-        $Context.MonitorName = [DRMMObject]::GetValue($Response, 'monitorName')
-        $Context.Oid = [DRMMObject]::GetValue($Response, 'oid')
+        $Context.Class = $Response.'@class'
+        $Context.IpAddress = $Response.ipAddress
+        $Context.OID = $Response.OID
+        $Context.RuleName = $Response.ruleName
+        $Context.ResponseValue = $Response.responseValue
+        $Context.DeviceName = $Response.deviceName
+        $Context.MonitorName = $Response.monitorName
+        $Context.Oid = $Response.oid
 
         return $Context
 
@@ -1401,9 +1401,9 @@ class DRMMAlertContextStatus : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextStatus]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.ProcessName = [DRMMObject]::GetValue($Response, 'processName')
-        $Context.Status = [DRMMObject]::GetValue($Response, 'status')
+        $Context.Class = $Response.'@class'
+        $Context.ProcessName = $Response.processName
+        $Context.Status = $Response.status
 
         return $Context
 
@@ -1428,9 +1428,9 @@ class DRMMAlertContextTemperature : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextTemperature]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Degree = [DRMMObject]::GetValue($Response, 'degree')
-        $Context.Type = [DRMMObject]::GetValue($Response, 'type')
+        $Context.Class = $Response.'@class'
+        $Context.Degree = $Response.degree
+        $Context.Type = $Response.type
 
         return $Context
 
@@ -1454,8 +1454,8 @@ class DRMMAlertContextWindowsPerformance : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextWindowsPerformance]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Value = [DRMMObject]::GetValue($Response, 'value')
+        $Context.Class = $Response.'@class'
+        $Context.Value = $Response.value
 
         return $Context
 
@@ -1479,8 +1479,8 @@ class DRMMAlertContextWmi : DRMMAlertContext {
         }
 
         $Context = [DRMMAlertContextWmi]::new()
-        $Context.Class = [DRMMObject]::GetValue($Response, '@class')
-        $Context.Value = [DRMMObject]::GetValue($Response, 'value')
+        $Context.Class = $Response.'@class'
+        $Context.Value = $Response.value
 
         return $Context
 
@@ -1624,16 +1624,16 @@ class DRMMComponent : DRMMObject {
 
         $Component = [DRMMComponent]::new()
 
-        $Component.Id = [DRMMObject]::GetValue($Response, 'id')
-        $Component.Uid = [DRMMObject]::GetValue($Response, 'uid')
-        $Component.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Component.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Component.CategoryCode = [DRMMObject]::GetValue($Response, 'categoryCode')
-        $Component.CredentialsRequired = [DRMMObject]::GetValue($Response, 'credentialsRequired')
+        $Component.Id = $Response.id
+        $Component.Uid = $Response.uid
+        $Component.Name = $Response.name
+        $Component.Description = $Response.description
+        $Component.CategoryCode = $Response.categoryCode
+        $Component.CredentialsRequired = $Response.credentialsRequired
 
         # Parse variables array
         $Component.Variables = @()
-        $VariablesArray = [DRMMObject]::GetValue($Response, 'variables')
+        $VariablesArray = $Response.variables
         if ($null -ne $VariablesArray -and $VariablesArray.Count -gt 0) {
 
             foreach ($VarItem in $VariablesArray) {
@@ -1694,12 +1694,12 @@ class DRMMComponentVariable : DRMMObject {
 
         $Variable = [DRMMComponentVariable]::new()
 
-        $Variable.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Variable.DefaultValue = [DRMMObject]::GetValue($Response, 'defaultVal')
-        $Variable.Type = [DRMMObject]::GetValue($Response, 'type')
-        $Variable.Direction = [DRMMObject]::GetValue($Response, 'direction')
-        $Variable.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Variable.Index = [DRMMObject]::GetValue($Response, 'variablesIdx')
+        $Variable.Name = $Response.name
+        $Variable.DefaultValue = $Response.defaultVal
+        $Variable.Type = $Response.type
+        $Variable.Direction = $Response.direction
+        $Variable.Description = $Response.description
+        $Variable.Index = $Response.variablesIdx
 
         return $Variable
 
@@ -1770,11 +1770,11 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         $Audit = [DRMMDeviceAudit]::new()
-        $Audit.PortalUrl = [DRMMObject]::GetValue($Response, 'portalUrl')
-        $Audit.WebRemoteUrl = [DRMMObject]::GetValue($Response, 'webRemoteUrl')
+        $Audit.PortalUrl = $Response.portalUrl
+        $Audit.WebRemoteUrl = $Response.webRemoteUrl
         
         # System info
-        $SystemInfoData = [DRMMObject]::GetValue($Response, 'systemInfo')
+        $SystemInfoData = $Response.systemInfo
         if ($null -ne $SystemInfoData) {
 
             $Audit.SystemInfo = [DRMMDeviceAuditSystemInfo]::FromAPIMethod($SystemInfoData)
@@ -1782,7 +1782,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # BIOS
-        $BiosData = [DRMMObject]::GetValue($Response, 'bios')
+        $BiosData = $Response.bios
         if ($null -ne $BiosData) {
 
             $Audit.Bios = [DRMMDeviceAuditBios]::FromAPIMethod($BiosData)
@@ -1790,7 +1790,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # Base board
-        $BaseBoardData = [DRMMObject]::GetValue($Response, 'baseBoard')
+        $BaseBoardData = $Response.baseBoard
         if ($null -ne $BaseBoardData) {
 
             $Audit.BaseBoard = [DRMMDeviceAuditBaseBoard]::FromAPIMethod($BaseBoardData)
@@ -1798,7 +1798,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # SNMP info
-        $SnmpData = [DRMMObject]::GetValue($Response, 'snmpInfo')
+        $SnmpData = $Response.snmpInfo
         if ($null -ne $SnmpData) {
 
             $Audit.SnmpInfo = [DRMMDeviceAuditSnmpInfo]::FromAPIMethod($SnmpData)
@@ -1806,7 +1806,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # Network interfaces
-        $NicsData = [DRMMObject]::GetValue($Response, 'nics')
+        $NicsData = $Response.nics
         if ($null -ne $NicsData -and $NicsData.Count -gt 0) {
 
             $Audit.Nics = @($NicsData | ForEach-Object { [DRMMNetworkInterface]::FromAPIMethod($_) })
@@ -1814,7 +1814,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # Displays
-        $DisplaysData = [DRMMObject]::GetValue($Response, 'displays')
+        $DisplaysData = $Response.displays
         if ($null -ne $DisplaysData -and $DisplaysData.Count -gt 0) {
 
             $Audit.Displays = @($DisplaysData | ForEach-Object { [DRMMDeviceAuditDisplay]::FromAPIMethod($_) })
@@ -1822,7 +1822,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # Logical disks
-        $DisksData = [DRMMObject]::GetValue($Response, 'logicalDisks')
+        $DisksData = $Response.logicalDisks
         if ($null -ne $DisksData -and $DisksData.Count -gt 0) {
 
             $Audit.LogicalDisks = @($DisksData | ForEach-Object { [DRMMDeviceAuditLogicalDisk]::FromAPIMethod($_) })
@@ -1830,7 +1830,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # Mobile info
-        $MobileData = [DRMMObject]::GetValue($Response, 'mobileInfo')
+        $MobileData = $Response.mobileInfo
         if ($null -ne $MobileData -and $MobileData.Count -gt 0) {
 
             $Audit.MobileInfo = @($MobileData | ForEach-Object { [DRMMDeviceAuditMobileInfo]::FromAPIMethod($_) })
@@ -1838,7 +1838,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # Processors
-        $ProcessorsData = [DRMMObject]::GetValue($Response, 'processors')
+        $ProcessorsData = $Response.processors
         if ($null -ne $ProcessorsData -and $ProcessorsData.Count -gt 0) {
 
             $Audit.Processors = @($ProcessorsData | ForEach-Object { [DRMMDeviceAuditProcessor]::FromAPIMethod($_) })
@@ -1846,7 +1846,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # Video boards
-        $VideoData = [DRMMObject]::GetValue($Response, 'videoBoards')
+        $VideoData = $Response.videoBoards
         if ($null -ne $VideoData -and $VideoData.Count -gt 0) {
 
             $Audit.VideoBoards = @($VideoData | ForEach-Object { [DRMMDeviceAuditVideoBoard]::FromAPIMethod($_) })
@@ -1854,7 +1854,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # Attached devices
-        $AttachedData = [DRMMObject]::GetValue($Response, 'attachedDevices')
+        $AttachedData = $Response.attachedDevices
         if ($null -ne $AttachedData -and $AttachedData.Count -gt 0) {
 
             $Audit.AttachedDevices = @($AttachedData | ForEach-Object { [DRMMDeviceAuditAttachedDevice]::FromAPIMethod($_) })
@@ -1862,7 +1862,7 @@ class DRMMDeviceAudit : DRMMObject {
         }
 
         # Physical memory
-        $MemoryData = [DRMMObject]::GetValue($Response, 'physicalMemory')
+        $MemoryData = $Response.physicalMemory
         if ($null -ne $MemoryData -and $MemoryData.Count -gt 0) {
 
             $Audit.PhysicalMemory = @($MemoryData | ForEach-Object { [DRMMDeviceAuditPhysicalMemory]::FromAPIMethod($_) })
@@ -1892,8 +1892,8 @@ class DRMMDeviceAuditAttachedDevice : DRMMObject {
         }
 
         $Device = [DRMMDeviceAuditAttachedDevice]::new()
-        $Device.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Device.Instance = [DRMMObject]::GetValue($Response, 'instance')
+        $Device.Description = $Response.description
+        $Device.Instance = $Response.instance
 
         return $Device
 
@@ -1919,9 +1919,9 @@ class DRMMDeviceAuditBaseBoard : DRMMObject {
         }
 
         $BaseBoard = [DRMMDeviceAuditBaseBoard]::new()
-        $BaseBoard.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
-        $BaseBoard.Product = [DRMMObject]::GetValue($Response, 'product')
-        $BaseBoard.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
+        $BaseBoard.Manufacturer = $Response.manufacturer
+        $BaseBoard.Product = $Response.product
+        $BaseBoard.SerialNumber = $Response.serialNumber
 
         return $BaseBoard
 
@@ -1948,10 +1948,10 @@ class DRMMDeviceAuditBios : DRMMObject {
         }
 
         $Bios = [DRMMDeviceAuditBios]::new()
-        $Bios.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
-        $Bios.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Bios.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
-        $Bios.SmbiosBiosVersion = [DRMMObject]::GetValue($Response, 'smbiosBiosVersion')
+        $Bios.Manufacturer = $Response.manufacturer
+        $Bios.Name = $Response.name
+        $Bios.SerialNumber = $Response.serialNumber
+        $Bios.SmbiosBiosVersion = $Response.smbiosBiosVersion
 
         return $Bios
 
@@ -1977,9 +1977,9 @@ class DRMMDeviceAuditDisplay : DRMMObject {
         }
 
         $Display = [DRMMDeviceAuditDisplay]::new()
-        $Display.Instance = [DRMMObject]::GetValue($Response, 'instance')
-        $Display.ScreenHeight = [DRMMObject]::GetValue($Response, 'screenHeight')
-        $Display.ScreenWidth = [DRMMObject]::GetValue($Response, 'screenWidth')
+        $Display.Instance = $Response.instance
+        $Display.ScreenHeight = $Response.screenHeight
+        $Display.ScreenWidth = $Response.screenWidth
 
         return $Display
 
@@ -2006,10 +2006,10 @@ class DRMMDeviceAuditLogicalDisk : DRMMObject {
         }
 
         $Disk = [DRMMDeviceAuditLogicalDisk]::new()
-        $Disk.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Disk.DiskIdentifier = [DRMMObject]::GetValue($Response, 'diskIdentifier')
-        $Disk.Freespace = [DRMMObject]::GetValue($Response, 'freespace')
-        $Disk.Size = [DRMMObject]::GetValue($Response, 'size')
+        $Disk.Description = $Response.description
+        $Disk.DiskIdentifier = $Response.diskIdentifier
+        $Disk.Freespace = $Response.freespace
+        $Disk.Size = $Response.size
 
         return $Disk
 
@@ -2036,10 +2036,10 @@ class DRMMDeviceAuditMobileInfo : DRMMObject {
         }
 
         $Mobile = [DRMMDeviceAuditMobileInfo]::new()
-        $Mobile.Iccid = [DRMMObject]::GetValue($Response, 'iccid')
-        $Mobile.Imei = [DRMMObject]::GetValue($Response, 'imei')
-        $Mobile.Number = [DRMMObject]::GetValue($Response, 'number')
-        $Mobile.Operator = [DRMMObject]::GetValue($Response, 'operator')
+        $Mobile.Iccid = $Response.iccid
+        $Mobile.Imei = $Response.imei
+        $Mobile.Number = $Response.number
+        $Mobile.Operator = $Response.operator
 
         return $Mobile
 
@@ -2068,12 +2068,12 @@ class DRMMDeviceAuditPhysicalMemory : DRMMObject {
         }
 
         $Memory = [DRMMDeviceAuditPhysicalMemory]::new()
-        $Memory.BankLabel = [DRMMObject]::GetValue($Response, 'bankLabel')
-        $Memory.Capacity = [DRMMObject]::GetValue($Response, 'capacity')
-        $Memory.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
-        $Memory.PartNumber = [DRMMObject]::GetValue($Response, 'partNumber')
-        $Memory.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
-        $Memory.Speed = [DRMMObject]::GetValue($Response, 'speed')
+        $Memory.BankLabel = $Response.bankLabel
+        $Memory.Capacity = $Response.capacity
+        $Memory.Manufacturer = $Response.manufacturer
+        $Memory.PartNumber = $Response.partNumber
+        $Memory.SerialNumber = $Response.serialNumber
+        $Memory.Speed = $Response.speed
 
         return $Memory
 
@@ -2097,7 +2097,7 @@ class DRMMDeviceAuditProcessor : DRMMObject {
         }
 
         $Processor = [DRMMDeviceAuditProcessor]::new()
-        $Processor.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Processor.Name = $Response.name
 
         return $Processor
 
@@ -2124,10 +2124,10 @@ class DRMMDeviceAuditSnmpInfo : DRMMObject {
         }
 
         $Snmp = [DRMMDeviceAuditSnmpInfo]::new()
-        $Snmp.Contact = [DRMMObject]::GetValue($Response, 'contact')
-        $Snmp.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Snmp.Location = [DRMMObject]::GetValue($Response, 'location')
-        $Snmp.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Snmp.Contact = $Response.contact
+        $Snmp.Description = $Response.description
+        $Snmp.Location = $Response.location
+        $Snmp.Name = $Response.name
 
         return $Snmp
 
@@ -2152,8 +2152,8 @@ class DRMMDeviceAuditSoftware : DRMMObject {
         }
 
         $Software = [DRMMDeviceAuditSoftware]::new()
-        $Software.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Software.Version = [DRMMObject]::GetValue($Response, 'version')
+        $Software.Name = $Response.name
+        $Software.Version = $Response.version
 
         return $Software
 
@@ -2182,12 +2182,12 @@ class DRMMDeviceAuditSystemInfo : DRMMObject {
         }
 
         $SystemInfo = [DRMMDeviceAuditSystemInfo]::new()
-        $SystemInfo.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
-        $SystemInfo.Model = [DRMMObject]::GetValue($Response, 'model')
-        $SystemInfo.TotalPhysicalMemory = [DRMMObject]::GetValue($Response, 'totalPhysicalMemory')
-        $SystemInfo.Username = [DRMMObject]::GetValue($Response, 'username')
-        $SystemInfo.DotNetVersion = [DRMMObject]::GetValue($Response, 'dotNetVersion')
-        $SystemInfo.TotalCpuCores = [DRMMObject]::GetValue($Response, 'totalCpuCores')
+        $SystemInfo.Manufacturer = $Response.manufacturer
+        $SystemInfo.Model = $Response.model
+        $SystemInfo.TotalPhysicalMemory = $Response.totalPhysicalMemory
+        $SystemInfo.Username = $Response.username
+        $SystemInfo.DotNetVersion = $Response.dotNetVersion
+        $SystemInfo.TotalCpuCores = $Response.totalCpuCores
 
         return $SystemInfo
 
@@ -2211,7 +2211,7 @@ class DRMMDeviceAuditVideoBoard : DRMMObject {
         }
 
         $VideoBoard = [DRMMDeviceAuditVideoBoard]::new()
-        $VideoBoard.DisplayAdapter = [DRMMObject]::GetValue($Response, 'displayAdapter')
+        $VideoBoard.DisplayAdapter = $Response.displayAdapter
 
         return $VideoBoard
 
@@ -2242,12 +2242,12 @@ class DRMMEsxiDatastore : DRMMObject {
         }
 
         $Datastore = [DRMMEsxiDatastore]::new()
-        $Datastore.DatastoreName = [DRMMObject]::GetValue($Response, 'datastoreName')
-        $Datastore.SubscriptionPercent = [DRMMObject]::GetValue($Response, 'subscriptionPercent')
-        $Datastore.FreeSpace = [DRMMObject]::GetValue($Response, 'freeSpace')
-        $Datastore.Size = [DRMMObject]::GetValue($Response, 'size')
-        $Datastore.FileSystem = [DRMMObject]::GetValue($Response, 'fileSystem')
-        $Datastore.Status = [DRMMObject]::GetValue($Response, 'status')
+        $Datastore.DatastoreName = $Response.datastoreName
+        $Datastore.SubscriptionPercent = $Response.subscriptionPercent
+        $Datastore.FreeSpace = $Response.freeSpace
+        $Datastore.Size = $Response.size
+        $Datastore.FileSystem = $Response.fileSystem
+        $Datastore.Status = $Response.status
 
         return $Datastore
 
@@ -2275,11 +2275,11 @@ class DRMMEsxiGuest : DRMMObject {
         }
 
         $Guest = [DRMMEsxiGuest]::new()
-        $Guest.GuestName = [DRMMObject]::GetValue($Response, 'guestName')
-        $Guest.ProcessorSpeedTotal = [DRMMObject]::GetValue($Response, 'processorSpeedTotal')
-        $Guest.MemorySizeTotal = [DRMMObject]::GetValue($Response, 'memorySizeTotal')
-        $Guest.NumberOfSnapshots = [DRMMObject]::GetValue($Response, 'numberOfSnapshots')
-        $Guest.Datastores = [DRMMObject]::GetValue($Response, 'datastores')
+        $Guest.GuestName = $Response.guestName
+        $Guest.ProcessorSpeedTotal = $Response.processorSpeedTotal
+        $Guest.MemorySizeTotal = $Response.memorySizeTotal
+        $Guest.NumberOfSnapshots = $Response.numberOfSnapshots
+        $Guest.Datastores = $Response.datastores
 
         return $Guest
 
@@ -2311,10 +2311,10 @@ class DRMMEsxiHostAudit : DRMMObject {
 
         $Audit = [DRMMEsxiHostAudit]::new()
         $Audit.DeviceUid = $DeviceUid
-        $Audit.PortalUrl = [DRMMObject]::GetValue($Response, 'portalUrl')
+        $Audit.PortalUrl = $Response.portalUrl
 
         # System info
-        $SystemInfoData = [DRMMObject]::GetValue($Response, 'systemInfo')
+        $SystemInfoData = $Response.systemInfo
         if ($null -ne $SystemInfoData) {
 
             $Audit.SystemInfo = [DRMMEsxiSystemInfo]::FromAPIMethod($SystemInfoData)
@@ -2322,7 +2322,7 @@ class DRMMEsxiHostAudit : DRMMObject {
         }
 
         # Guests
-        $GuestsData = [DRMMObject]::GetValue($Response, 'guests')
+        $GuestsData = $Response.guests
         if ($null -ne $GuestsData -and $GuestsData.Count -gt 0) {
 
             $Audit.Guests = @($GuestsData | ForEach-Object { [DRMMEsxiGuest]::FromAPIMethod($_) })
@@ -2330,7 +2330,7 @@ class DRMMEsxiHostAudit : DRMMObject {
         }
 
         # Processors
-        $ProcessorsData = [DRMMObject]::GetValue($Response, 'processors')
+        $ProcessorsData = $Response.processors
         if ($null -ne $ProcessorsData -and $ProcessorsData.Count -gt 0) {
 
             $Audit.Processors = @($ProcessorsData | ForEach-Object { [DRMMEsxiProcessor]::FromAPIMethod($_) })
@@ -2338,7 +2338,7 @@ class DRMMEsxiHostAudit : DRMMObject {
         }
 
         # Nics
-        $NicsData = [DRMMObject]::GetValue($Response, 'nics')
+        $NicsData = $Response.nics
         if ($null -ne $NicsData -and $NicsData.Count -gt 0) {
 
             $Audit.Nics = @($NicsData | ForEach-Object { [DRMMEsxiNic]::FromAPIMethod($_) })
@@ -2346,7 +2346,7 @@ class DRMMEsxiHostAudit : DRMMObject {
         }
 
         # Physical memory
-        $MemoryData = [DRMMObject]::GetValue($Response, 'physicalMemory')
+        $MemoryData = $Response.physicalMemory
         if ($null -ne $MemoryData -and $MemoryData.Count -gt 0) {
 
             $Audit.PhysicalMemory = @($MemoryData | ForEach-Object { [DRMMEsxiPhysicalMemory]::FromAPIMethod($_) })
@@ -2354,7 +2354,7 @@ class DRMMEsxiHostAudit : DRMMObject {
         }
 
         # Datastores
-        $DatastoresData = [DRMMObject]::GetValue($Response, 'datastores')
+        $DatastoresData = $Response.datastores
         if ($null -ne $DatastoresData -and $DatastoresData.Count -gt 0) {
 
             $Audit.Datastores = @($DatastoresData | ForEach-Object { [DRMMEsxiDatastore]::FromAPIMethod($_) })
@@ -2388,12 +2388,12 @@ class DRMMEsxiNic : DRMMObject {
         }
 
         $Nic = [DRMMEsxiNic]::new()
-        $Nic.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Nic.Ipv4 = [DRMMObject]::GetValue($Response, 'ipv4')
-        $Nic.Ipv6 = [DRMMObject]::GetValue($Response, 'ipv6')
-        $Nic.MacAddress = [DRMMObject]::GetValue($Response, 'macAddress')
-        $Nic.Speed = [DRMMObject]::GetValue($Response, 'speed')
-        $Nic.Type = [DRMMObject]::GetValue($Response, 'type')
+        $Nic.Name = $Response.name
+        $Nic.Ipv4 = $Response.ipv4
+        $Nic.Ipv6 = $Response.ipv6
+        $Nic.MacAddress = $Response.macAddress
+        $Nic.Speed = $Response.speed
+        $Nic.Type = $Response.type
 
         return $Nic
 
@@ -2423,13 +2423,13 @@ class DRMMEsxiPhysicalMemory : DRMMObject {
         }
 
         $Memory = [DRMMEsxiPhysicalMemory]::new()
-        $Memory.Module = [DRMMObject]::GetValue($Response, 'module')
-        $Memory.Size = [DRMMObject]::GetValue($Response, 'size')
-        $Memory.Type = [DRMMObject]::GetValue($Response, 'type')
-        $Memory.Speed = [DRMMObject]::GetValue($Response, 'speed')
-        $Memory.SerialNumber = [DRMMObject]::GetValue($Response, 'serialNumber')
-        $Memory.PartNumber = [DRMMObject]::GetValue($Response, 'partNumber')
-        $Memory.Bank = [DRMMObject]::GetValue($Response, 'bank')
+        $Memory.Module = $Response.module
+        $Memory.Size = $Response.size
+        $Memory.Type = $Response.type
+        $Memory.Speed = $Response.speed
+        $Memory.SerialNumber = $Response.serialNumber
+        $Memory.PartNumber = $Response.partNumber
+        $Memory.Bank = $Response.bank
 
         return $Memory
 
@@ -2455,9 +2455,9 @@ class DRMMEsxiProcessor : DRMMObject {
         }
 
         $Processor = [DRMMEsxiProcessor]::new()
-        $Processor.Frequency = [DRMMObject]::GetValue($Response, 'frequency')
-        $Processor.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Processor.NumberOfCores = [DRMMObject]::GetValue($Response, 'numberOfCores')
+        $Processor.Frequency = $Response.frequency
+        $Processor.Name = $Response.name
+        $Processor.NumberOfCores = $Response.numberOfCores
 
         return $Processor
 
@@ -2485,11 +2485,11 @@ class DRMMEsxiSystemInfo : DRMMObject {
         }
 
         $SystemInfo = [DRMMEsxiSystemInfo]::new()
-        $SystemInfo.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
-        $SystemInfo.Model = [DRMMObject]::GetValue($Response, 'model')
-        $SystemInfo.Name = [DRMMObject]::GetValue($Response, 'name')
-        $SystemInfo.NumberOfSnapshots = [DRMMObject]::GetValue($Response, 'numberOfSnapshots')
-        $SystemInfo.ServiceTag = [DRMMObject]::GetValue($Response, 'serviceTag')
+        $SystemInfo.Manufacturer = $Response.manufacturer
+        $SystemInfo.Model = $Response.model
+        $SystemInfo.Name = $Response.name
+        $SystemInfo.NumberOfSnapshots = $Response.numberOfSnapshots
+        $SystemInfo.ServiceTag = $Response.serviceTag
 
         return $SystemInfo
 
@@ -2515,7 +2515,7 @@ class DRMMPrinter : DRMMObject {
         }
 
         $Printer = [DRMMPrinter]::new()
-        $Printer.PrintedPageCount = [DRMMObject]::GetValue($Response, 'printedPageCount')
+        $Printer.PrintedPageCount = $Response.printedPageCount
 
         return $Printer
 
@@ -2546,10 +2546,10 @@ class DRMMPrinterAudit : DRMMObject {
 
         $Audit = [DRMMPrinterAudit]::new()
         $Audit.DeviceUid = $DeviceUid
-        $Audit.PortalUrl = [DRMMObject]::GetValue($Response, 'portalUrl')
+        $Audit.PortalUrl = $Response.portalUrl
 
         # SNMP info
-        $SnmpInfoData = [DRMMObject]::GetValue($Response, 'snmpInfo')
+        $SnmpInfoData = $Response.snmpInfo
         if ($null -ne $SnmpInfoData) {
 
             $Audit.SnmpInfo = [DRMMPrinterSnmpInfo]::FromAPIMethod($SnmpInfoData)
@@ -2557,7 +2557,7 @@ class DRMMPrinterAudit : DRMMObject {
         }
 
         # Printer marker supplies
-        $SuppliesData = [DRMMObject]::GetValue($Response, 'printerMarkerSupplies')
+        $SuppliesData = $Response.printerMarkerSupplies
         if ($null -ne $SuppliesData -and $SuppliesData.Count -gt 0) {
 
             $Audit.PrinterMarkerSupplies = @($SuppliesData | ForEach-Object { [DRMMPrinterMarkerSupply]::FromAPIMethod($_) })
@@ -2565,7 +2565,7 @@ class DRMMPrinterAudit : DRMMObject {
         }
 
         # Printer
-        $PrinterData = [DRMMObject]::GetValue($Response, 'printer')
+        $PrinterData = $Response.printer
         if ($null -ne $PrinterData) {
 
             $Audit.Printer = [DRMMPrinter]::FromAPIMethod($PrinterData)
@@ -2573,7 +2573,7 @@ class DRMMPrinterAudit : DRMMObject {
         }
 
         # System info
-        $SystemInfoData = [DRMMObject]::GetValue($Response, 'systemInfo')
+        $SystemInfoData = $Response.systemInfo
         if ($null -ne $SystemInfoData) {
 
             $Audit.SystemInfo = [DRMMPrinterSystemInfo]::FromAPIMethod($SystemInfoData)
@@ -2581,7 +2581,7 @@ class DRMMPrinterAudit : DRMMObject {
         }
 
         # Network interfaces
-        $NicsData = [DRMMObject]::GetValue($Response, 'nics')
+        $NicsData = $Response.nics
         if ($null -ne $NicsData -and $NicsData.Count -gt 0) {
 
             $Audit.Nics = @($NicsData | ForEach-Object { [DRMMNetworkInterface]::FromAPIMethod($_) })
@@ -2612,9 +2612,9 @@ class DRMMPrinterMarkerSupply : DRMMObject {
         }
 
         $Supply = [DRMMPrinterMarkerSupply]::new()
-        $Supply.Description = [DRMMObject]::GetValue($Response, 'description')
-        $Supply.MaxCapacity = [DRMMObject]::GetValue($Response, 'maxCapacity')
-        $Supply.SuppliesLevel = [DRMMObject]::GetValue($Response, 'suppliesLevel')
+        $Supply.Description = $Response.description
+        $Supply.MaxCapacity = $Response.maxCapacity
+        $Supply.SuppliesLevel = $Response.suppliesLevel
 
         return $Supply
 
@@ -2645,14 +2645,14 @@ class DRMMPrinterSnmpInfo : DRMMObject {
         }
 
         $Snmp = [DRMMPrinterSnmpInfo]::new()
-        $Snmp.SnmpName = [DRMMObject]::GetValue($Response, 'snmpName')
-        $Snmp.SnmpContact = [DRMMObject]::GetValue($Response, 'snmpContact')
-        $Snmp.SnmpDescription = [DRMMObject]::GetValue($Response, 'snmpDescription')
-        $Snmp.SnmpLocation = [DRMMObject]::GetValue($Response, 'snmpLocation')
-        $Snmp.SnmpUptime = [DRMMObject]::GetValue($Response, 'snmpUptime')
-        $Snmp.NicManufacturer = [DRMMObject]::GetValue($Response, 'nicManufacturer')
-        $Snmp.ObjectId = [DRMMObject]::GetValue($Response, 'objectId')
-        $Snmp.SnmpSerial = [DRMMObject]::GetValue($Response, 'snmpSerial')
+        $Snmp.SnmpName = $Response.snmpName
+        $Snmp.SnmpContact = $Response.snmpContact
+        $Snmp.SnmpDescription = $Response.snmpDescription
+        $Snmp.SnmpLocation = $Response.snmpLocation
+        $Snmp.SnmpUptime = $Response.snmpUptime
+        $Snmp.NicManufacturer = $Response.nicManufacturer
+        $Snmp.ObjectId = $Response.objectId
+        $Snmp.SnmpSerial = $Response.snmpSerial
 
         return $Snmp
 
@@ -2677,8 +2677,8 @@ class DRMMPrinterSystemInfo : DRMMObject {
         }
 
         $SystemInfo = [DRMMPrinterSystemInfo]::new()
-        $SystemInfo.Manufacturer = [DRMMObject]::GetValue($Response, 'manufacturer')
-        $SystemInfo.Model = [DRMMObject]::GetValue($Response, 'model')
+        $SystemInfo.Manufacturer = $Response.manufacturer
+        $SystemInfo.Model = $Response.model
 
         return $SystemInfo
 
@@ -2708,12 +2708,12 @@ class DRMMJob : DRMMObject {
         }
 
         $Job = [DRMMJob]::new()
-        $Job.Id = [DRMMObject]::GetValue($Response, 'id')
-        $Job.Uid = [DRMMObject]::GetValue($Response, 'uid')
-        $Job.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Job.Status = [DRMMObject]::GetValue($Response, 'status')
+        $Job.Id = $Response.id
+        $Job.Uid = $Response.uid
+        $Job.Name = $Response.name
+        $Job.Status = $Response.status
 
-        $DateCreatedValue = [DRMMObject]::GetValue($Response, 'dateCreated')
+        $DateCreatedValue = $Response.dateCreated
 
         if ($null -ne $DateCreatedValue) {
 
@@ -2938,8 +2938,8 @@ class DRMMJobComponent : DRMMObject {
         }
 
         $Component = [DRMMJobComponent]::new()
-        $Component.Uid = [DRMMObject]::GetValue($Response, 'uid')
-        $Component.Name = [DRMMObject]::GetValue($Response, 'name')
+        $Component.Uid = $Response.uid
+        $Component.Name = $Response.name
         
         if ($Response.variables) {
 
@@ -2977,12 +2977,12 @@ class DRMMJobComponentResult : DRMMObject {
         }
 
         $Result = [DRMMJobComponentResult]::new()
-        $Result.ComponentUid = [DRMMObject]::GetValue($Response, 'componentUid')
-        $Result.ComponentName = [DRMMObject]::GetValue($Response, 'componentName')
-        $Result.ComponentStatus = [DRMMObject]::GetValue($Response, 'componentStatus')
-        $Result.NumberOfWarnings = [DRMMObject]::GetValue($Response, 'numberOfWarnings')
-        $Result.HasStdOut = [DRMMObject]::GetValue($Response, 'hasStdOut')
-        $Result.HasStdErr = [DRMMObject]::GetValue($Response, 'hasStdErr')
+        $Result.ComponentUid = $Response.componentUid
+        $Result.ComponentName = $Response.componentName
+        $Result.ComponentStatus = $Response.componentStatus
+        $Result.NumberOfWarnings = $Response.numberOfWarnings
+        $Result.HasStdOut = $Response.hasStdOut
+        $Result.HasStdErr = $Response.hasStdErr
 
         return $Result
 
@@ -3007,8 +3007,8 @@ class DRMMJobComponentVariable : DRMMObject {
         }
 
         $Variable = [DRMMJobComponentVariable]::new()
-        $Variable.Name = [DRMMObject]::GetValue($Response, 'name')
-        $Variable.Value = [DRMMObject]::GetValue($Response, 'value')
+        $Variable.Name = $Response.name
+        $Variable.Value = $Response.value
 
         return $Variable
 
@@ -3036,11 +3036,11 @@ class DRMMJobResults : DRMMObject {
         }
 
         $Results = [DRMMJobResults]::new()
-        $Results.JobUid = [DRMMObject]::GetValue($Response, 'jobUid')
-        $Results.DeviceUid = [DRMMObject]::GetValue($Response, 'deviceUid')
-        $Results.JobDeploymentStatus = [DRMMObject]::GetValue($Response, 'jobDeploymentStatus')
+        $Results.JobUid = $Response.jobUid
+        $Results.DeviceUid = $Response.deviceUid
+        $Results.JobDeploymentStatus = $Response.jobDeploymentStatus
 
-        $RanOnValue = [DRMMObject]::GetValue($Response, 'ranOn')
+        $RanOnValue = $Response.ranOn
         $Results.RanOn = ([DRMMObject]::ParseApiDate($RanOnValue)).DateTime
 
         if ($Response.componentResults) {
@@ -3081,9 +3081,9 @@ class DRMMJobStdData : DRMMObject {
         $Result = [DRMMJobStdData]::new()
         $Result.JobUid = $JobUid
         $Result.DeviceUid = $DeviceUid
-        $Result.ComponentUid = [DRMMObject]::GetValue($Response, 'componentUid')
-        $Result.ComponentName = [DRMMObject]::GetValue($Response, 'componentName')
-        $Result.StdData = [DRMMObject]::GetValue($Response, 'stdData')
+        $Result.ComponentUid = $Response.componentUid
+        $Result.ComponentName = $Response.componentName
+        $Result.StdData = $Response.stdData
 
         return $Result
 
@@ -4392,10 +4392,10 @@ class DRMMStatus : DRMMObject {
         }
 
         $Result = [DRMMStatus]::new()
-        $Result.Version = [DRMMObject]::GetValue($Response, 'version')
-        $Result.Status = [DRMMObject]::GetValue($Response, 'status')
+        $Result.Version = $Response.version
+        $Result.Status = $Response.status
         
-        $StartedValue = [DRMMObject]::GetValue($Response, 'started')
+        $StartedValue = $Response.started
 
         if ($null -ne $StartedValue) {
             

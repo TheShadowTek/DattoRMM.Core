@@ -6,29 +6,7 @@
 # Main module file for Datto RMM API v2 PowerShell module
 
 # Load class definitions
-using module '.\Private\Classes\Classes.psm1'
-
-<# Moved to Classes.psm1 for better maintainability
-using module '.\Private\Classes\DRMMEnums.psm1'
-using module '.\Private\Classes\DRMMObject.psm1'
-using module '.\Private\Classes\DRMMAccount.psm1'
-using module '.\Private\Classes\DRMMActivityLog.psm1'
-using module '.\Private\Classes\DRMMAlert.psm1'
-using module '.\Private\Classes\DRMMComponent.psm1'
-using module '.\Private\Classes\DRMMNetworkInterface.psm1'
-using module '.\Private\Classes\DRMMDeviceAudit.psm1'
-using module '.\Private\Classes\DRMMEsxiHostAudit.psm1'
-using module '.\Private\Classes\DRMMPrinterAudit.psm1'
-using module '.\Private\Classes\DRMMJob.psm1'
-using module '.\Private\Classes\DRMMDevice.psm1'
-using module '.\Private\Classes\DRMMVariable.psm1'
-using module '.\Private\Classes\DRMMFilter.psm1'
-using module '.\Private\Classes\DRMMSite.psm1'
-using module '.\Private\Classes\DRMMNetMapping.psm1'
-using module '.\Private\Classes\DRMMStatus.psm1'
-using module '.\Private\Classes\DRMMUser.psm1'
-#>
-
+using module '.\Private\Classes.psm1'
 
 # Initialize script-scoped auth object
 $Script:RMMAuth = $null
@@ -94,38 +72,6 @@ $Script:RMMThrottle = [ordered]@{
     ThrottleUtilisationThreshold = 0.5  # Utilisation threshold to start throttling
 }
 
-# Dot-source classes in Private/Classes folder - dependency order
-<#
-Write-Verbose "Loading DattoRMM.Core classes..."
-
-$ClassFilesOrder = @(
-    'DRMMEnums',
-    'DRMMAccount',
-    'DRMMActivityLog',
-    'DRMMAlert',
-    'DRMMComponent',
-    'DRMMNetworkInterface',
-    'DRMMDeviceAudit',
-    'DRMMEsxiHostAudit',
-    'DRMMPrinterAudit',
-    'DRMMJob',
-    'DRMMDevice',
-    'DRMMVariable',
-    'DRMMFilter',
-    'DRMMSite',
-    'DRMMNetMapping',
-    'DRMMStatus',
-    'DRMMUser'
-)
-
-foreach ($ClassFile in $ClassFilesOrder) {
-
-    Write-Verbose "`tLoading $ClassFile..."
-    . $PSScriptRoot\Private\Classes\$ClassFile.ps1
-
-}
-#>
-
 # Dot-source remaining .ps1 files in Private folder
 Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 | Where-Object {$_.BaseName -ne 'howtothrottle'} | ForEach-Object {
 
@@ -174,6 +120,23 @@ if ($null -ne $SavedConfig) {
                 Write-Verbose "`tTokenExpireHours: $($Script:TokenExpireHours)"
             }
 
+            'APIMaxRetries' {
+                $Script:APIMethodRetry.MaxRetries = $SavedConfig.APIMaxRetries
+                $Script:ConfigAPIMaxRetries = $SavedConfig.APIMaxRetries
+                Write-Verbose "`tAPIMaxRetries: $($Script:APIMethodRetry.MaxRetries)"
+            }
+
+            'APIRetryIntervalSeconds' {
+                $Script:APIMethodRetry.RetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
+                $Script:ConfigAPIRetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
+                Write-Verbose "`tAPIRetryIntervalSeconds: $($Script:APIMethodRetry.RetryIntervalSeconds)"
+            }
+
+            'APITimeoutSeconds' {
+                $Script:APIMethodRetry.TimeoutSeconds = $SavedConfig.APITimeoutSeconds
+                $Script:ConfigAPITimeoutSeconds = $SavedConfig.APITimeoutSeconds
+                Write-Verbose "`tAPITimeoutSeconds: $($Script:APIMethodRetry.TimeoutSeconds)"
+            }
             'ThrottleProfile' {
 
                 if ($SavedConfig.ThrottleProfile -ne 'Custom') {
@@ -218,24 +181,6 @@ if ($null -ne $SavedConfig) {
                         }
                     }
                 }
-            }
-
-            'APIMaxRetries' {
-                $Script:APIMethodRetry.MaxRetries = $SavedConfig.APIMaxRetries
-                $Script:ConfigAPIMaxRetries = $SavedConfig.APIMaxRetries
-                Write-Verbose "`tAPIMaxRetries: $($Script:APIMethodRetry.MaxRetries)"
-            }
-
-            'APIRetryIntervalSeconds' {
-                $Script:APIMethodRetry.RetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
-                $Script:ConfigAPIRetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
-                Write-Verbose "`tAPIRetryIntervalSeconds: $($Script:APIMethodRetry.RetryIntervalSeconds)"
-            }
-
-            'APITimeoutSeconds' {
-                $Script:APIMethodRetry.TimeoutSeconds = $SavedConfig.APITimeoutSeconds
-                $Script:ConfigAPITimeoutSeconds = $SavedConfig.APITimeoutSeconds
-                Write-Verbose "`tAPITimeoutSeconds: $($Script:APIMethodRetry.TimeoutSeconds)"
             }
         }
 
