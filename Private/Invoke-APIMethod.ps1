@@ -195,7 +195,20 @@ function Invoke-APIMethod {
         if ($script:RMMAuth.AutoRefresh) {
 
             # Refresh
-            Connect-DattoRMM -Key $script:RMMAuth.Key -Secret $script:RMMAuth.Secret -AutoRefresh
+            $RefreshConnectParams = @{
+                Key = $script:RMMAuth.Key
+                Secret = $script:RMMAuth.Secret
+                AutoRefresh = $true
+            }
+
+            switch ($Script:RMMAuth.Keys) {
+
+                'Proxy' {$RefreshConnectParams.Proxy = $script:RMMAuth.Proxy}
+                'ProxyCredential' {$RefreshConnectParams.ProxyCredential = $script:RMMAuth.ProxyCredential}
+
+            }
+
+            Connect-DattoRMM @RefreshConnectParams
 
         } else {
 
@@ -246,6 +259,19 @@ function Invoke-APIMethod {
         TimeoutSec = $Script:APIMethodRetry.TimeoutSeconds
     }
 
+    # Add proxy settings if configured
+    if ($Script:RMMAuth.ContainsKey('Proxy')) {
+
+        $RequestParams.Proxy = $Script:RMMAuth.Proxy
+
+    }
+
+    if ($Script:RMMAuth.ContainsKey('ProxyCredential')) {
+
+        $RequestParams.ProxyCredential = $Script:RMMAuth.ProxyCredential
+
+    }
+
     if ($Parameters) {
 
         $QueryParams = @($Parameters.GetEnumerator() | ForEach-Object {"$($_.Key)=$($_.Value)"})
@@ -283,7 +309,6 @@ function Invoke-APIMethod {
 
         if ($Paginate) {
 
-            #$Result = Invoke-RestMethod @RequestParams
             $Result = InvokeRestMethod -Parameters $RequestParams
 
             # Parse the original URI to extract query parameters (excluding max and page)

@@ -39,6 +39,16 @@ function Connect-DattoRMM {
         
         To set a persistent default platform: Save-RMMConfig -DefaultPlatform Merlot
 
+    .PARAMETER Proxy
+        Specifies a proxy server for the request, rather than connecting directly to the Datto RMM API.
+        Enter the URI of a network proxy server. This parameter is optional and only needed if your
+        network requires proxy access.
+
+    .PARAMETER ProxyCredential
+        Specifies a user account that has permission to use the proxy server specified by the Proxy parameter.
+        This parameter is optional and can be used with or without the Proxy parameter (for transparent proxies
+        that still require authentication).
+
     .EXAMPLE
         $Secret = Read-Host -Prompt "Enter API Secret" -AsSecureString
         PS > Connect-DattoRMM -Key "your-api-key" -Secret $Secret
@@ -68,6 +78,13 @@ function Connect-DattoRMM {
         PS > Connect-DattoRMM -Credential $Cred -AutoRefresh -Platform Pinotage
 
         Creates a credential object using Get-Credential and connects with auto-refresh to the Pinotage platform.
+
+    .EXAMPLE
+        $Secret = Read-Host -AsSecureString -Prompt "Enter API Secret"
+        PS > $ProxyCred = Get-Credential -Message "Enter proxy credentials"
+        PS > Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Proxy "http://proxy.company.com:8080" -ProxyCredential $ProxyCred
+
+        Connects to the API through a proxy server with authentication.
 
     .INPUTS
         None. You cannot pipe objects to Connect-DattoRMM.
@@ -128,7 +145,20 @@ function Connect-DattoRMM {
             Mandatory = $false
         )]
         [RMMPlatform]
-        $Platform
+        $Platform,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateNotNullOrEmpty()]
+        [uri]
+        $Proxy,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [pscredential]
+        $ProxyCredential
     )
 
     # Determine platform to use
@@ -194,6 +224,19 @@ function Connect-DattoRMM {
         Method = 'Post'
         Body = "grant_type=password&username=$AuthKey&password=$AuthSecret"
         ContentType = 'application/x-www-form-urlencoded'
+        TimeoutSec = $Script:APIMethodRetry.TimeoutSeconds
+    }
+
+    if ($PSBoundParameters.ContainsKey('Proxy')) {
+
+        $TokenRequest.Proxy = $Proxy
+
+    }
+
+    if ($PSBoundParameters.ContainsKey('ProxyCredential')) {
+
+        $TokenRequest.ProxyCredential = $ProxyCredential
+        
     }
 
     try {
@@ -222,16 +265,28 @@ function Connect-DattoRMM {
         AuthHeader = @{ Authorization = "$($Response.token_type) $($Response.access_token)" }
     }
 
-    if ($AutoRefresh) {
+    if ($PSBoundParameters.ContainsKey('Proxy')) {
 
-        $Script:RMMAuth.Key = $AuthKey
+        $Script:RMMAuth.Proxy = $Proxy
+
+    }
+
+    if ($PSBoundParameters.ContainsKey('ProxyCredential')) {
+
+        $Script:RMMAuth.ProxyCredential = $ProxyCredential
+        
+    }
+
+    if ($AutoRefresh) {
 
         if ($PSCmdlet.ParameterSetName -eq 'Cred') {
 
+            $Script:RMMAuth.Key = $Credential.UserName
             $Script:RMMAuth.Secret = $Credential.Password
 
         } else {
 
+            $Script:RMMAuth.Key = $Key
             $Script:RMMAuth.Secret = $Secret
 
         }
@@ -242,6 +297,7 @@ function Connect-DattoRMM {
     $PageSizeMethod = @{
         Path = "system/pagination"
         Method = 'Get'
+        TimeoutSec = $Script:APIMethodRetry.TimeoutSeconds
     }
 
     try {

@@ -255,8 +255,14 @@ if ($null -ne $SavedConfig) {
 # Module removal handler - cleanup module variables
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 
-    # Remove authentication variable
+    # Remove authentication variable and clear proxy settings
     if ($Script:RMMAuth) {
+
+        if ($Script:RMMAuth.ContainsKey('ProxyCredential')) {
+
+            $Script:RMMAuth.ProxyCredential = $null
+            
+        }
 
         Remove-Variable -Name RMMAuth -Scope Script -ErrorAction SilentlyContinue
         Remove-Variable -Name SessionPlatform -Scope Script -ErrorAction SilentlyContinue
