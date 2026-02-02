@@ -200,18 +200,14 @@ function Connect-DattoRMM {
         'Cred' {
 
             $AuthKey = $Credential.UserName
-            $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password)
-            $AuthSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-            [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
+            $AuthSecret = ConvertFrom-SecureStringToPlaintext -SecureString $Credential.Password
 
         }
 
         'Key' {
 
             $AuthKey = $Key.ToString()
-            $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Secret)
-            $AuthSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-            [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
+            $AuthSecret = ConvertFrom-SecureStringToPlaintext -SecureString $Secret
 
         }
     }

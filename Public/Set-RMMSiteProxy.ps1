@@ -173,9 +173,7 @@ function Set-RMMSiteProxy {
             'Password' {
 
                 # Convert SecureString to plain text for API
-                $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
-                $PlainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-                [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
+                $PlainPassword = ConvertFrom-SecureStringToPlaintext -SecureString $Password
                 $Body.password = $PlainPassword
 
             }
@@ -190,6 +188,14 @@ function Set-RMMSiteProxy {
         Invoke-APIMethod @APIMethod | Out-Null
 
         Write-Verbose "Proxy settings configured for site $SiteUid"
+
+    }
+
+    end {
+
+        # Clear plaintext password from memory
+        $PlainPassword = $null
+        $Body.password = $null
 
     }
 }

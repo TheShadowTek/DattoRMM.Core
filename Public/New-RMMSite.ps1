@@ -173,9 +173,7 @@ function New-RMMSite {
                 'ProxyPassword' {
 
                     # Convert SecureString to plain text for API
-                    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($ProxyPassword)
-                    $PlainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-                    [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
+                    $PlainPassword = ConvertFrom-SecureStringToPlaintext -SecureString $ProxyPassword
                     $ProxySettings.password = $PlainPassword
                     
                 }
@@ -194,6 +192,14 @@ function New-RMMSite {
         $Response = Invoke-APIMethod @APIMethod
 
         [DRMMSite]::FromAPIMethod($Response)
+
+    }
+
+    end {
+
+        # Clear plaintext password from memory
+        $PlainPassword = $null
+        $ProxySettings.password = $null
 
     }
 }

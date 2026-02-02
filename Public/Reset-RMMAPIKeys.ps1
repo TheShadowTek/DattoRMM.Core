@@ -14,7 +14,12 @@ function Reset-RMMAPIKeys {
         currently authenticated user. This invalidates the existing keys immediately.
 
         When using -ReturnNewKey, the API secret key (as shown in the Datto RMM UI) will NOT be returned in plain text, but as a SecureString for security. To convert the SecureString to plain text (not recommended unless absolutely necessary), use:
+            Windows:
             [Runtime.InteropServices.Marshal]::PtrToStringBSTR([Runtime.InteropServices.Marshal]::SecureStringToBSTR($newKeys.ApiSecret))
+
+            Linux/macOS:
+            (New-Object System.Management.Automation.PSCredential('user', $newKeys.ApiSecret)).GetNetworkCredential().Password
+
         Only do this in a secure environment, and immediately clear any script or session logs that may contain the secret. Avoid exposing the secret in plain text whenever possible.
 
         WARNING: If you do not use -ReturnNewKey, this operation will immediately invalidate the current API connection. After running you will need to:
