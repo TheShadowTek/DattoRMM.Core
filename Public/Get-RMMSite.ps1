@@ -11,10 +11,14 @@ function Get-RMMSite {
         The Get-RMMSite function retrieves site information from Datto RMM. Sites represent
         customer organisations or locations within your RMM account.
 
+        By default, this function excludes the "Deleted Devices" system site which has an 
+        invalid GUID. Use the -DeletedDevices parameter to retrieve only that specific site.
+
         The function supports multiple query modes:
-        - Get all sites
+        - Get all sites (excludes Deleted Devices)
         - Get a specific site by UID
         - Search for sites by name
+        - Get only the Deleted Devices system site
         - Include extended properties (settings, variables, filters)
 
         Extended properties allow you to retrieve related data for sites in a single command.
@@ -39,10 +43,21 @@ function Get-RMMSite {
         Use this to populate the SiteSettings, Variables, and Filters properties of the
         returned site objects.
 
+    .PARAMETER DeletedDevices
+        Retrieve only the special "Deleted Devices" system site. This is a system Datto RMM
+        site that has an invalid GUID. This switch uses a dedicated parameter set and cannot
+        be combined with other filtering parameters.
+        
+        Returns a DRMMDeletedDevicesSite object with a string Uid property instead of guid.
+        
+        WARNING: Methods inherited from DRMMSite (such as GetDevices(), GetAlerts(), etc.)
+        will throw errors when called on this object due to the malformed GUID. This site is
+        included only for completeness and should not be used in normal operations.
+
     .EXAMPLE
         Get-RMMSite
 
-        Retrieves all sites in the account.
+        Retrieves all sites in the account (excludes the Deleted Devices system site).
 
     .EXAMPLE
         Get-RMMSite -SiteUid "12067610-8504-48e3-b5de-60e48416aaad"
@@ -70,6 +85,12 @@ function Get-RMMSite {
 
         Retrieves a site with its settings and accesses the general settings.
 
+    .EXAMPLE
+        Get-RMMSite -DeletedDevices
+
+        Retrieves only the \"Deleted Devices\" system site (if it exists). Returns a
+        DRMMDeletedDevicesSite object with string Uid property. Note that methods like
+        GetDevices() will fail due to the invalid GUID.
 
     .EXAMPLE
         Get-RMMSite | Sort-Object Name | Select-Object Name, Uid
@@ -92,7 +113,7 @@ function Get-RMMSite {
 
     .OUTPUTS
         DRMMSite. Returns site objects with the following properties:
-        - Uid: Site unique identifier
+        - Uid: Site unique identifier (guid)
         - Id: Site numeric ID
         - Name: Site name
         - Description: Site description
@@ -102,6 +123,11 @@ function Get-RMMSite {
         - DevicesStatus: Device statistics for the site
         - SiteSettings: Site settings (if ExtendedProperties includes Settings)
         - Variables: Site variables (if ExtendedProperties includes Variables)
+        
+        DRMMDeletedDevicesSite. When using -DeletedDevices, returns a derived site object:
+        - Uid: Site unique identifier (string, invalid GUID format)
+        - All other properties same as DRMMSite
+        - WARNING: Inherited methods will fail due to invalid GUID
         - Filters: Device filters (if ExtendedProperties includes Filters)
 
     .NOTES
@@ -129,7 +155,6 @@ function Get-RMMSite {
         [guid]
         $SiteUid,
 
-        # Parameter help description
         [Parameter(
             ParameterSetName = 'Search',
             Mandatory = $false
@@ -137,8 +162,24 @@ function Get-RMMSite {
         [string]
         $SiteName,
 
+        [Parameter(
+            ParameterSetName = 'All'
+        )]
+        [Parameter(
+            ParameterSetName = 'Single'
+        )]
+        [Parameter(
+            ParameterSetName = 'Search'
+        )]
         [RMMSiteExtendedProperty[]]
-        $ExtendedProperties
+        $ExtendedProperties,
+
+        [Parameter(
+            ParameterSetName = 'DeletedDevices',
+            Mandatory
+        )]
+        [switch]
+        $DeletedDevices
     )
 
     $APIMethod = @{
@@ -164,6 +205,20 @@ function Get-RMMSite {
 
         }
 
+        'DeletedDevices' {
+            
+            $APIMethod.Path = 'account/sites'
+            $APIMethod.Paginate = $true
+            $APIMethod.PageElement = 'sites'
+            
+            # Return only sites with invalid GUIDs (e.g., "Deleted Devices" system site)
+            Invoke-APIMethod @APIMethod | Where-Object {try {[void][guid]$_.uid; $false} catch {$true}} | ForEach-Object {
+                
+                [DRMMDeletedDevicesSite]::FromAPIMethod($_)
+                
+            }
+        }
+
         {$_ -in 'All', 'Search'} {
 
             $APIMethod.Path = 'account/sites'
@@ -176,17 +231,19 @@ function Get-RMMSite {
 
             }
 
+            # Process sites - filter out invalid GUIDs
             Invoke-APIMethod @APIMethod | Where-Object {try {[void][guid]$_.uid; $true} catch {$false}} | ForEach-Object {
 
+                Write-Verbose "Processing site: $($_.name)"
                 $Site = [DRMMSite]::FromAPIMethod($_)
-
+                
                 if ($ExtendedProperties.Count -gt 0) {
 
                     Add-SiteExtendedProperties -Site $Site -ExtendedProperties $ExtendedProperties
 
                 }
 
-                $Site
+                return $Site
 
             }
         }

@@ -43,7 +43,7 @@ All default values are managed centrally and can be tuned in one place. For adva
 
 - [docs/about/about_DattoRMM.CoreThrottling.md](docs/about/about_DattoRMM.CoreThrottling.md)
 
-> With this built-in throttling, it is safe to run large parallel workloads (such as data extraction or bulk operations) without risking API lockouts or service disruption.
+With this built-in throttling, it is safe to run large parallel workloads (such as data extraction or bulk operations) without risking API lockouts or service disruption.
 
 
 ## Platform Support
@@ -69,7 +69,7 @@ Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Platform Merlot
 Or persist your preferred default platform for all sessions:
 
 ```powershell
-Save-RMMConfig -DefaultPlatform Merlot
+Set-RMMConfig -Platform Merlot -Persist
 ```
 
 If you do not specify a platform, the module will use your configured default (if set), or fall back to Pinotage.
@@ -192,6 +192,30 @@ Get-RMMDevice -FilterId $Filter.Id | New-RMMQuickJob -JobName "Patch WebServer -
 ### More Examples
 
 See the `docs/` folder and in-module help for detailed usage and advanced scenarios.
+
+## SecureString Handling and Cross-Platform Security
+
+- On **Windows**, SecureString values are decrypted using secure .NET APIs and memory is immediately zeroed after use.
+- On **Linux/macOS**, SecureString is converted using `PSCredential.GetNetworkCredential().Password`. Due to .NET Core limitations, plaintext may persist in managed memory until garbage collection runs.
+- All sensitive variables are cleared from memory as soon as possible.
+- For high-security scenarios on Linux/macOS, you may call `[GC]::Collect()` after sensitive operations to force memory cleanup.
+
+**Example:**
+```powershell
+$secret = Read-Host -AsSecureString
+Connect-DattoRMM -Key "your-api-key" -Secret $secret
+[System.GC]::Collect() # Optional: for extra security on Linux/macOS
+```
+
+### Commands Requiring [GC]::Collect() for Maximum Security (Linux/macOS)
+
+If you are operating in a high-security environment on Linux or macOS, consider running `[System.GC]::Collect()` after using any of the following commands with SecureString input:
+
+- `Connect-DattoRMM` (when using the `-Secret` or `-Credential` parameter)
+- `New-RMMVariable` (when using a SecureString for the `-Value` parameter)
+- `Set-RMMVariable` (when using a SecureString for the `-Value` parameter)
+
+This ensures that any sensitive plaintext temporarily created in memory is more quickly cleaned up by the .NET garbage collector.
 
 ## Known Issues
 

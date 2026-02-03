@@ -3836,7 +3836,7 @@ class DRMMFilter : DRMMObject {
 class DRMMSite : DRMMObject {
 
     [long]$Id
-    [string]$Uid
+    [guid]$Uid
     [string]$AccountUid
     [string]$Name
     [string]$Description
@@ -4164,6 +4164,47 @@ class DRMMSiteMailRecipient : DRMMObject {
 
         return $Recipient
 
+    }
+}
+
+# Derived class for the "Deleted Devices" system site which has an invalid GUID
+class DRMMDeletedDevicesSite : DRMMSite {
+    
+    # Shadow the base Uid property with string type to handle invalid GUIDs
+    [string]$Uid
+    
+    DRMMDeletedDevicesSite() : base() {
+    }
+    
+    static [DRMMDeletedDevicesSite] FromAPIMethod([pscustomobject]$Response) {
+        
+        if ($null -eq $Response) {
+            return $null
+        }
+        
+        $Site = [DRMMDeletedDevicesSite]::new()
+        
+        $Site.Id = $Response.id
+        $Site.Uid = $Response.uid  # String assignment, no GUID validation
+        $Site.AccountUid = $Response.accountUid
+        $Site.Name = $Response.name
+        $Site.Description = $Response.description
+        $Site.Notes = $Response.notes
+        $Site.OnDemand = $Response.onDemand
+        $Site.SplashtopAutoInstall = $Response.splashtopAutoInstall
+        $Site.AutotaskCompanyName = $Response.autotaskCompanyName
+        $Site.AutotaskCompanyId = $Response.autotaskCompanyId
+        $Site.PortalUrl = $Response.portalUrl
+        
+        if ($Response.proxySettings) {
+            $Site.ProxySettings = [DRMMSiteProxySettings]::FromAPIMethod($Response.proxySettings)
+        }
+        
+        if ($Response.devicesStatus) {
+            $Site.DevicesStatus = [DRMMDevicesStatus]::FromAPIMethod($Response.devicesStatus)
+        }
+        
+        return $Site
     }
 }
 
