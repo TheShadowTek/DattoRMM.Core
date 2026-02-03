@@ -61,7 +61,17 @@ function Invoke-APIMethod {
                 $Attempt++
                 $LastError = $_
                 $StatusCode = $LastError.Exception.Response.StatusCode.value__
-                $ApiMessage = $LastError.Exception.Response.StatusDescription
+                
+                # Try to get the actual API error message from the response body
+                if ($LastError.ErrorDetails.Message) {
+
+                    $ApiMessage = $LastError.ErrorDetails.Message
+
+                } else {
+
+                    $ApiMessage = $LastError.Exception.Response.StatusDescription
+
+                }
 
                 # Determine if we should retry based on status code, with generic messages, and termination conditions - based on documented API behaviour
                 switch ($StatusCode) {

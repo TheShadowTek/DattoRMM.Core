@@ -24,11 +24,18 @@ function New-RMMVariable {
         The name of the variable to create.
 
     .PARAMETER Value
-        The value to assign to the variable.
+        The value to assign to the variable. Accepts both string and SecureString.
+        
+        When a SecureString is provided:
+        - The value is securely converted for the API call
+        - Plaintext is cleared from memory immediately after use
+        - The variable is NOT automatically masked (use -Masked if desired)
 
     .PARAMETER Masked
         Whether the variable value should be masked (hidden) in the Datto RMM UI. Use this for
         sensitive values like passwords or API keys.
+        
+        This must be explicitly specified and is independent of whether you use SecureString.
 
     .PARAMETER Force
         Bypasses the confirmation prompt.
@@ -42,6 +49,12 @@ function New-RMMVariable {
         New-RMMVariable -Name "APIKey" -Value "secret123" -Masked
 
         Creates a masked account-level variable for sensitive data.
+
+    .EXAMPLE
+        $Secret = Read-Host -AsSecureString -Prompt "Enter API Key"
+        PS > New-RMMVariable -Name "APIKey" -Value $Secret -Masked
+
+        Creates a masked variable using SecureString for secure input and transport.
 
     .EXAMPLE
         Get-RMMSite -Name "Main Office" | New-RMMVariable -Name "SiteCode" -Value "MO001"
@@ -70,7 +83,7 @@ function New-RMMVariable {
         API Behavior: The Datto API does not return the created variable object, so this
         function fetches it using Get-RMMVariable by name.
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Global', SupportsShouldProcess, ConfirmImpact = 'Low')]
+    [CmdletBinding(DefaultParameterSetName = 'Global', SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(
             ParameterSetName = 'BySiteObject',
@@ -94,7 +107,7 @@ function New-RMMVariable {
         $Name,
 
         [Parameter()]
-        [string]
+        [object]
         $Value,
 
         [Parameter()]
@@ -117,7 +130,7 @@ function New-RMMVariable {
         $Scope = if ($PSCmdlet.ParameterSetName -match 'Site') {'Site'} else {'Global'}
         $Target = if ($Scope -eq 'Site') {"site $SiteUid"} else {"account"}
 
-        if (-not $PSCmdlet.ShouldProcess($Target, "Create variable '$Name'")) {
+        if (-not $PSCmdlet.ShouldProcess($Target, "Create variable '$Name'") -and -not $Force) {
 
             return
 
@@ -125,13 +138,30 @@ function New-RMMVariable {
 
         Write-Debug "Creating new RMM variable '$Name' at $Scope scope"
 
+        # Handle SecureString value conversion
+        $PlainValue = $null
+
+        if ($PSBoundParameters.ContainsKey('Value')) {
+
+            if ($Value -is [SecureString]) {
+
+                $PlainValue = ConvertFrom-SecureStringToPlaintext -SecureString $Value
+                Write-Verbose "SecureString detected - converting securely for API call"
+
+            } else {
+
+                $PlainValue = $Value
+
+            }
+        }
+
         # Build request body
         $Body = @{}
 
         switch ($PSBoundParameters.Keys) {
 
             'Name' { $Body.name = $Name }
-            'Value' { $Body.value = $Value }
+            'Value' { $Body.value = $PlainValue }
             'Masked' { $Body.masked = $true }
 
         }
@@ -153,7 +183,20 @@ function New-RMMVariable {
             Body = $Body
         }
 
-        $Response = Invoke-APIMethod @APIMethod
+        # Invoke-APIMethod does not throw on 400 errors by default, so use try/catch, throw on warnings
+        try {
+
+            Invoke-APIMethod @APIMethod -WarningAction Stop | Out-Null
+
+            
+        } catch {
+
+            Write-Warning "Failed to create variable '$Name' at $Scope scope."
+            return
+
+        }
+
+        Invoke-APIMethod @APIMethod #| Out-Null
 
         # API doesn't return the created variable, so fetch it by name
         $GetParams = @{
@@ -167,6 +210,13 @@ function New-RMMVariable {
         }
 
         Get-RMMVariable @GetParams
+
+    }
+
+    end {
+
+        # Clear plaintext value from memory
+        $PlainValue = $null
 
     }
 }

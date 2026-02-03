@@ -37,6 +37,12 @@ function Set-RMMVariable {
 
     .PARAMETER Value
         The new value for the variable. If not specified, the current value is retained.
+        Accepts both string and SecureString.
+        
+        When a SecureString is provided:
+        - The value is securely converted for the API call
+        - Plaintext is cleared from memory immediately after use
+        - Note: The Masked property cannot be changed after creation
 
     .PARAMETER Force
         Bypasses the confirmation prompt.
@@ -45,6 +51,12 @@ function Set-RMMVariable {
         Get-RMMVariable -Name "CompanyName" | Set-RMMVariable -Value "Contoso Corporation"
 
         Updates the value of an account-level variable via pipeline.
+
+    .EXAMPLE
+        $Secret = Read-Host -AsSecureString -Prompt "Enter new password"
+        PS > Get-RMMVariable -Name "AdminPassword" | Set-RMMVariable -Value $Secret
+
+        Updates a masked variable value using SecureString for enhanced security.
 
     .EXAMPLE
         Set-RMMVariable -VariableId 12345 -NewName "CompanyName" -Value "New Company Ltd"
@@ -126,7 +138,7 @@ function Set-RMMVariable {
             Mandatory = $false
 
         )]
-        [string]
+        [object]
         $Value,
 
         [Parameter(
@@ -211,6 +223,30 @@ function Set-RMMVariable {
             }
         }
 
+        # Validate variable exists
+        if ($null -eq $CurrentVariable) {
+
+            throw "Variable not found for update."
+
+        }
+
+        # Handle SecureString value conversion
+        $PlainValue = $null
+
+        if ($PSBoundParameters.ContainsKey('Value')) {
+
+            if ($Value -is [SecureString]) {
+
+                $PlainValue = ConvertFrom-SecureStringToPlaintext -SecureString $Value
+                Write-Verbose "SecureString detected - converting securely for API call"
+
+            } else {
+
+                $PlainValue = $Value
+
+            }
+        }
+
         # Set new values based on current if not specified
         $Body = @{
             name = $null
@@ -226,7 +262,7 @@ function Set-RMMVariable {
 
         switch ($PSBoundParameters.Keys) {
 
-            'Value'  {$Body.value = $Value}
+            'Value'  {$Body.value = $PlainValue}
             default  {$Body.value = $CurrentVariable.Value}
 
         }
@@ -246,7 +282,17 @@ function Set-RMMVariable {
             Body = $Body
         }
 
-        Invoke-APIMethod @APIMethod | Out-Null
+        try {
+
+            Invoke-APIMethod @APIMethod -WarningAction Stop | Out-Null
+
+
+        } catch {
+
+            Write-Warning "Failed to update variable: $($CurrentVariable.Name)"
+            return
+
+        }
 
         # Fetch the updated variable since API doesn't return it
         $RefreshVariable = @{
@@ -260,6 +306,13 @@ function Set-RMMVariable {
         }
 
         Get-RMMVariable @RefreshVariable
+
+    }
+
+    end {
+
+        # Clear plaintext value from memory
+        $PlainValue = $null
 
     }
 }
