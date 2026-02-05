@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the audit information of an ESXi host, including system info, guests, processors, network interfaces, physical memory, and datastores.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMEsxiHostAudit class encapsulates detailed information about an ESXi host, such as its unique identifier, portal URL, system information, guest virtual machines, processors, network interfaces, physical memory modules, and datastores. This class is typically used to represent the results of an ESXi host audit operation within the DRMM system.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,31 +16,20 @@ The DRMMEsxiHostAudit class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DeviceUid      | guid                     | Add description |
-| PortalUrl      | string                   | Add description |
-| SystemInfo     | DRMMEsxiSystemInfo       | Add description |
-| Guests         | DRMMEsxiGuest[]          | Add description |
-| Processors     | DRMMEsxiProcessor[]      | Add description |
-| Nics           | DRMMEsxiNic[]            | Add description |
-| PhysicalMemory | DRMMEsxiPhysicalMemory[] | Add description |
-| Datastores     | DRMMEsxiDatastore[]      | Add description |
+| DeviceUid      | guid                     | The unique identifier of the ESXi host. |
+| PortalUrl      | string                   | The portal URL of the ESXi host. |
+| SystemInfo     | DRMMEsxiSystemInfo       | The system information of the ESXi host. |
+| Guests         | DRMMEsxiGuest[]          | The guest virtual machines running on the ESXi host. |
+| Processors     | DRMMEsxiProcessor[]      | The processors of the ESXi host. |
+| Nics           | DRMMEsxiNic[]            | The network interface cards (NICs) of the ESXi host. |
+| PhysicalMemory | DRMMEsxiPhysicalMemory[] | The physical memory modules of the ESXi host. |
+| Datastores     | DRMMEsxiDatastore[]      | The datastores associated with the ESXi host. |
 
 ## METHODS
 
 The DRMMEsxiHostAudit class provides the following methods:
 
-### DRMMEsxiHostAudit()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMAPIKeySecret class
+Represents API key and secret information for authenticating with the DRMM API.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAPIKeySecret class encapsulates the API key, API secret, and associated username for a DRMM account. It provides a static method to create an instance of the class from a typical API response object that contains these credentials. The API secret is stored as a secure string to enhance security when handling sensitive information.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,26 +16,15 @@ The DRMMAPIKeySecret class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| ApiKey    | string       | Add description |
-| ApiSecret | securestring | Add description |
-| Username  | string       | Add description |
+| ApiKey    | string       | API authentication key. |
+| ApiSecret | securestring | API authentication secret. |
+| Username  | string       | Username associated with the API key and secret. |
 
 ## METHODS
 
 The DRMMAPIKeySecret class provides the following methods:
 
-### DRMMAPIKeySecret()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

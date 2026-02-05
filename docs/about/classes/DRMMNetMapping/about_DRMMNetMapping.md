@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMNetMapping class
+Represents a network mapping in the DRMM system, including properties such as name, unique identifier, description, associated network IDs, and portal URL.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMNetMapping class models a network mapping within the DRMM platform. It includes properties such as Id, Uid, AccountUid, Name, Description, DatatoNetworkingNetworkIds, and PortalUrl. The class provides a constructor and a static method to create an instance from API response data. Additionally, it includes a method to open the portal URL associated with the network mapping in the default web browser. The class serves as a representation of network mappings within the DRMM system, allowing for easy access and management of network mapping information.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,43 +16,23 @@ The DRMMNetMapping class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id                         | long   | Add description |
-| Uid                        | guid   | Add description |
-| AccountUid                 | string | Add description |
-| Name                       | string | Add description |
-| Description                | string | Add description |
-| DatatoNetworkingNetworkIds | long[] | Add description |
-| PortalUrl                  | string | Add description |
+| Id                         | long   | The identifier of the network mapping. |
+| Uid                        | guid   | The unique identifier (UID) of the network mapping. |
+| AccountUid                 | string | The unique identifier (UID) of the account. |
+| Name                       | string | The name of the network mapping. |
+| Description                | string | The description of the network mapping. |
+| DatatoNetworkingNetworkIds | long[] | The network IDs associated with Datto Networking. |
+| PortalUrl                  | string | The URL of the portal. |
 
 ## METHODS
 
 The DRMMNetMapping class provides the following methods:
 
-### DRMMNetMapping()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### OpenPortal()
 
-Add method description explaining what this method does
+Opens the portal URL associated with the network mapping in the default web browser.
 
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
 
 ## USAGE EXAMPLES
 

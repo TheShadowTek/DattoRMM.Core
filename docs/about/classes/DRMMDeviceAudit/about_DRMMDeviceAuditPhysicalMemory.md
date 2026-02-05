@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the physical memory information of a device in a device audit, including bank label, capacity, manufacturer, part number, serial number, and speed.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditPhysicalMemory class models the information about the physical memory modules of the audited system. It includes properties such as BankLabel, Capacity, Manufacturer, PartNumber, SerialNumber, and Speed, which provide details about each physical memory module. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,29 +16,18 @@ The DRMMDeviceAuditPhysicalMemory class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| BankLabel    | string | Add description |
-| Capacity     | long   | Add description |
-| Manufacturer | string | Add description |
-| PartNumber   | string | Add description |
-| SerialNumber | string | Add description |
-| Speed        | int    | Add description |
+| BankLabel    | string | The label of the memory bank. |
+| Capacity     | long   | The capacity of the physical memory module. |
+| Manufacturer | string | The manufacturer of the physical memory module. |
+| PartNumber   | string | The part number of the physical memory module. |
+| SerialNumber | string | The serial number of the physical memory module. |
+| Speed        | int    | The speed of the physical memory module. |
 
 ## METHODS
 
 The DRMMDeviceAuditPhysicalMemory class provides the following methods:
 
-### DRMMDeviceAuditPhysicalMemory()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

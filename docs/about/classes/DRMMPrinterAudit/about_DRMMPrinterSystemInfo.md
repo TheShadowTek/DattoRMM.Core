@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the system information of a printer, including manufacturer and model.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMPrinterSystemInfo class models the system-related information of a printer. It includes properties such as Manufacturer and Model. This class is typically used as part of the DRMMPrinterAudit to represent the system details of the printer.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,25 +16,14 @@ The DRMMPrinterSystemInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Manufacturer | string | Add description |
-| Model        | string | Add description |
+| Manufacturer | string | The manufacturer of the printer. |
+| Model        | string | The model of the printer. |
 
 ## METHODS
 
 The DRMMPrinterSystemInfo class provides the following methods:
 
-### DRMMPrinterSystemInfo()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the processor information of an ESXi host, including its frequency, name, and number of cores.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMEsxiProcessor class models the information about the processor(s) of an ESXi host. It includes properties such as Frequency, Name, and NumberOfCores, which provide details about the CPU configuration of the ESXi host. This class is typically used as part of the DRMMEsxiHostAudit to represent the processor information of the ESXi host being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,26 +16,15 @@ The DRMMEsxiProcessor class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Frequency     | Nullable[double] | Add description |
-| Name          | string           | Add description |
-| NumberOfCores | Nullable[int]    | Add description |
+| Frequency     | Nullable[double] | The frequency of the processor. |
+| Name          | string           | The name of the processor. |
+| NumberOfCores | Nullable[int]    | The number of cores in the processor. |
 
 ## METHODS
 
 The DRMMEsxiProcessor class provides the following methods:
 
-### DRMMEsxiProcessor()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

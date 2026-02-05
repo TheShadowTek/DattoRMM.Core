@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a status alert in the DRMM system, including process name and status information.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextStatus class models the context information specific to status alerts in the DRMM platform. It encapsulates properties such as process name and status that provide detailed context about the status alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,25 +16,14 @@ The DRMMAlertContextStatus class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| ProcessName | string | Add description |
-| Status      | string | Add description |
+| ProcessName | string | The name of the process associated with the status alert. |
+| Status      | string | The current status of the process. |
 
 ## METHODS
 
 The DRMMAlertContextStatus class provides the following methods:
 
-### DRMMAlertContextStatus()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

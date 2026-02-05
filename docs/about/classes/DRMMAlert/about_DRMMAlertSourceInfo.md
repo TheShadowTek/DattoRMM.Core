@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the source information for an alert in the DRMM system, including device and site details.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertSourceInfo class models the source information specific to alerts in the DRMM platform. It encapsulates properties such as DeviceUid, DeviceName, SiteUid, and SiteName that provide detailed context about the alert's source.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,40 +16,20 @@ The DRMMAlertSourceInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DeviceUid  | string | Add description |
-| DeviceName | string | Add description |
-| SiteUid    | string | Add description |
-| SiteName   | string | Add description |
+| DeviceUid  | string | The unique identifier of the device associated with the alert. |
+| DeviceName | string | The name of the device associated with the alert. |
+| SiteUid    | string | The unique identifier of the site associated with the alert. |
+| SiteName   | string | The name of the site associated with the alert. |
 
 ## METHODS
 
 The DRMMAlertSourceInfo class provides the following methods:
 
-### DRMMAlertSourceInfo()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the alert source information, including device and site details.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string for the alert source information, including device and site details.
 
 ## USAGE EXAMPLES
 

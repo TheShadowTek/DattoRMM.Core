@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents a component of a DRMM job, including its unique identifier, name, and associated variables.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMJobComponent class models a component within a DRMM job. It includes properties such as Uid, Name, and Variables, which provide details about the component's identity and configuration. The class also includes a static method to create an instance of DRMMJobComponent from API response data.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,26 +16,15 @@ The DRMMJobComponent class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Uid       | guid                       | Add description |
-| Name      | string                     | Add description |
-| Variables | DRMMJobComponentVariable[] | Add description |
+| Uid       | guid                       | The unique identifier (UID) of the job component. |
+| Name      | string                     | The name of the job component. |
+| Variables | DRMMJobComponentVariable[] | The variables associated with the job component. |
 
 ## METHODS
 
 The DRMMJobComponent class provides the following methods:
 
-### DRMMJobComponent()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

@@ -16,39 +16,28 @@ The DRMMDeviceAudit class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DeviceUid       | guid                            | Add description |
-| PortalUrl       | string                          | Add description |
-| WebRemoteUrl    | string                          | Add description |
-| SystemInfo      | DRMMDeviceAuditSystemInfo       | Add description |
-| Nics            | DRMMNetworkInterface[]          | Add description |
-| Bios            | DRMMDeviceAuditBios             | Add description |
-| BaseBoard       | DRMMDeviceAuditBaseBoard        | Add description |
-| Displays        | DRMMDeviceAuditDisplay[]        | Add description |
-| LogicalDisks    | DRMMDeviceAuditLogicalDisk[]    | Add description |
-| MobileInfo      | DRMMDeviceAuditMobileInfo[]     | Add description |
-| Processors      | DRMMDeviceAuditProcessor[]      | Add description |
-| VideoBoards     | DRMMDeviceAuditVideoBoard[]     | Add description |
-| AttachedDevices | DRMMDeviceAuditAttachedDevice[] | Add description |
-| SnmpInfo        | DRMMDeviceAuditSnmpInfo         | Add description |
-| PhysicalMemory  | DRMMDeviceAuditPhysicalMemory[] | Add description |
-| Software        | DRMMDeviceAuditSoftware[]       | Add description |
+| DeviceUid       | guid                            | The unique identifier of the audited device. |
+| PortalUrl       | string                          | The portal URL associated with the audited device. |
+| WebRemoteUrl    | string                          | The web remote URL associated with the audited device. |
+| SystemInfo      | DRMMDeviceAuditSystemInfo       | Information about the system of the audited device. |
+| Nics            | DRMMNetworkInterface[]          | Information about the network interfaces of the audited device. |
+| Bios            | DRMMDeviceAuditBios             | Information about the BIOS of the audited device. |
+| BaseBoard       | DRMMDeviceAuditBaseBoard        | Information about the baseboard (motherboard) of the audited device. |
+| Displays        | DRMMDeviceAuditDisplay[]        | Information about the display configurations of the audited device. |
+| LogicalDisks    | DRMMDeviceAuditLogicalDisk[]    | Information about the logical disks of the audited device. |
+| MobileInfo      | DRMMDeviceAuditMobileInfo[]     | Information about the mobile aspects of the audited device. |
+| Processors      | DRMMDeviceAuditProcessor[]      | Information about the processors of the audited device. |
+| VideoBoards     | DRMMDeviceAuditVideoBoard[]     | Information about the video boards of the audited device. |
+| AttachedDevices | DRMMDeviceAuditAttachedDevice[] | Information about devices attached to the audited device. |
+| SnmpInfo        | DRMMDeviceAuditSnmpInfo         | Information about the SNMP configuration of the audited device. |
+| PhysicalMemory  | DRMMDeviceAuditPhysicalMemory[] | Information about the physical memory of the audited device. |
+| Software        | DRMMDeviceAuditSoftware[]       | Information about the software installed on the audited device. |
 
 ## METHODS
 
 The DRMMDeviceAudit class provides the following methods:
 
-### DRMMDeviceAudit()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

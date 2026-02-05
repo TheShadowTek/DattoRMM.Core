@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of an alert in the DRMM system, including its class and specific details based on the type of alert.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContext class models the context information associated with an alert in the DRMM platform. It includes a property for the class of the context, which indicates the type of alert context (e
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,37 +16,17 @@ The DRMMAlertContext class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Class | string | Add description |
+| Class | string | The class of the alert context, indicating the type of context information associated with the alert. |
 
 ## METHODS
 
 The DRMMAlertContext class provides the following methods:
 
-### DRMMAlertContext()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetSummary()
 
-Add method description explaining what this method does
+Gets a summary of the alert context.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string of the alert context.
 
 ## USAGE EXAMPLES
 

@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a network monitor alert in the DRMM system, including a description of the alert.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextNetworkMonitor class models the context information specific to network monitor alerts in the DRMM platform. It encapsulates a description property that provides detailed information about the network event that triggered the alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,24 +16,13 @@ The DRMMAlertContextNetworkMonitor class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Description | string | Add description |
+| Description | string | A description of the network monitor alert. |
 
 ## METHODS
 
 The DRMMAlertContextNetworkMonitor class provides the following methods:
 
-### DRMMAlertContextNetworkMonitor()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

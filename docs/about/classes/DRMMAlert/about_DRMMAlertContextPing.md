@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a ping alert in the DRMM system, including instance name, roundtrip time, and reasons for the alert.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextPing class models the context information specific to ping alerts in the DRMM platform. It encapsulates properties such as instance name, roundtrip time, and reasons that provide detailed context about the ping alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,26 +16,15 @@ The DRMMAlertContextPing class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| InstanceName  | string   | Add description |
-| RoundtripTime | int      | Add description |
-| Reasons       | string[] | Add description |
+| InstanceName  | string   | The name of the instance associated with the ping alert. |
+| RoundtripTime | int      | The roundtrip time of the ping. |
+| Reasons       | string[] | The reasons for the ping alert. |
 
 ## METHODS
 
 The DRMMAlertContextPing class provides the following methods:
 
-### DRMMAlertContextPing()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

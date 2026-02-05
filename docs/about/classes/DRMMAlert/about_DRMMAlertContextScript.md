@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a script alert in the DRMM system, including a hashtable of sample values.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextScript class models the context information specific to script alerts in the DRMM platform. It encapsulates properties such as a hashtable of sample values that provide detailed context about the script alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,24 +16,13 @@ The DRMMAlertContextScript class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Samples | hashtable | Add description |
+| Samples | hashtable | A hashtable of sample values associated with the script alert. |
 
 ## METHODS
 
 The DRMMAlertContextScript class provides the following methods:
 
-### DRMMAlertContextScript()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents patch management information for a device in the DRMM system.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDevicePatchManagement class models the patch management status for a device in the DRMM platform. It includes properties such as PatchStatus, PatchesApprovedPending, PatchesNotApproved, and PatchesInstalled, which provide insights into the device's patch management state. The class provides a constructor and a static method to create an instance from API response data.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,27 +16,16 @@ The DRMMDevicePatchManagement class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| PatchStatus            | string         | Add description |
-| PatchesApprovedPending | Nullable[long] | Add description |
-| PatchesNotApproved     | Nullable[long] | Add description |
-| PatchesInstalled       | Nullable[long] | Add description |
+| PatchStatus            | string         | The current status of patch management on the device. |
+| PatchesApprovedPending | Nullable[long] | The number of patches that are approved but pending installation. |
+| PatchesNotApproved     | Nullable[long] | The number of patches that are not approved for installation. |
+| PatchesInstalled       | Nullable[long] | The number of patches that have been installed on the device. |
 
 ## METHODS
 
 The DRMMDevicePatchManagement class provides the following methods:
 
-### DRMMDevicePatchManagement()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

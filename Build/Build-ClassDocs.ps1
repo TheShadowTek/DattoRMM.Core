@@ -320,7 +320,7 @@ try {
                     }
                 }
                 
-                # Extract methods (excluding static FromAPIMethod)
+                # Extract methods (excluding static FromAPIMethod and constructors)
                 $Methods = $TypeDef.Members | Where-Object { 
                     $_ -is [System.Management.Automation.Language.FunctionMemberAst] 
                 }
@@ -328,6 +328,11 @@ try {
                 $TypeInfo.Methods = foreach ($Method in $Methods) {
                     # Skip static FromAPIMethod (internal constructor)
                     if ($Method.IsStatic -and $Method.Name -eq 'FromAPIMethod') {
+                        continue
+                    }
+                    
+                    # Skip constructors (methods with same name as class)
+                    if ($Method.Name -eq $TypeInfo.Name) {
                         continue
                     }
                     
@@ -425,6 +430,11 @@ try {
                     }
                     
                     foreach ($Method in $TypeInfo.Methods | Where-Object { -not $_.IsHidden }) {
+                        # Skip constructors (methods with same name as class)
+                        if ($Method.Name -eq $TypeName) {
+                            continue
+                        }
+                        
                         if ($Method.Name) {
                             $MethodDoc = @{
                                 Description = $Method.Comment
@@ -445,25 +455,12 @@ try {
                 # Existing class/enum - check for new/deprecated members and update AST comments
                 $ExistingDoc = $DocContent[$RegionKey][$TypeName]
                 
-                # Update class-level descriptions if they're null/empty/placeholder and we have comments
-                $shouldUpdateSynopsis = $TypeInfo.Synopsis -and (
-                    -not $ExistingDoc.ShortDescription -or 
-                    $ExistingDoc.ShortDescription -eq '' -or
-                    $ExistingDoc.ShortDescription -match '^region ' -or
-                    $ExistingDoc.ShortDescription -match 'related classes'
-                )
-                if ($shouldUpdateSynopsis) {
-                    Write-Host "  Updating class synopsis for: $RegionKey.$TypeName" -ForegroundColor Magenta
+                # Always update class-level descriptions from Classes.psm1 (source of truth for these)
+                if ($TypeInfo.Synopsis) {
                     $ExistingDoc.ShortDescription = $TypeInfo.Synopsis
                 }
                 
-                $shouldUpdateDescription = $TypeInfo.Description -and (
-                    -not $ExistingDoc.LongDescription -or 
-                    $ExistingDoc.LongDescription -eq '' -or
-                    $ExistingDoc.LongDescription -match '^The ' -and $ExistingDoc.LongDescription -match 'TODO'
-                )
-                if ($shouldUpdateDescription) {
-                    Write-Host "  Updating class description for: $RegionKey.$TypeName" -ForegroundColor Magenta
+                if ($TypeInfo.Description) {
                     $ExistingDoc.LongDescription = $TypeInfo.Description
                 }
                 
@@ -473,9 +470,8 @@ try {
                         if (-not $ExistingDoc.PropertyDescriptions.ContainsKey($Prop.Name)) {
                             Write-Host "  New property: $RegionKey.$TypeName.$($Prop.Name)" -ForegroundColor Cyan
                             $ExistingDoc.PropertyDescriptions[$Prop.Name] = $Prop.Comment
-                        } elseif ($Prop.Comment -and (-not $ExistingDoc.PropertyDescriptions[$Prop.Name] -or $ExistingDoc.PropertyDescriptions[$Prop.Name] -eq '')) {
-                            # Update null/empty descriptions with AST comments
-                            Write-Host "  Updating AST comment for property: $RegionKey.$TypeName.$($Prop.Name)" -ForegroundColor Magenta
+                        } elseif ($Prop.Comment) {
+                            # Always update property description from Classes.psm1 (source of truth for property descriptions)
                             $ExistingDoc.PropertyDescriptions[$Prop.Name] = $Prop.Comment
                         }
                     }
@@ -507,11 +503,18 @@ try {
                                 }
                             }
                             $ExistingDoc.MethodDescriptions[$Method.Name] = $MethodDoc
-                        } elseif ($Method.Comment -and (-not $ExistingDoc.MethodDescriptions[$Method.Name].Description -or $ExistingDoc.MethodDescriptions[$Method.Name].Description -eq '')) {
-                            # Update null/empty descriptions with AST comments
-                            Write-Host "  Updating AST comment for method: $RegionKey.$TypeName.$($Method.Name)()" -ForegroundColor Magenta
+                        } elseif ($Method.Comment) {
+                            # Always update method description from Classes.psm1 (source of truth for method descriptions)
                             $ExistingDoc.MethodDescriptions[$Method.Name].Description = $Method.Comment
                         }
+                    }
+                    
+                    # Remove constructor entries (methods with same name as class)
+                    # Also remove any deprecated constructor entries
+                    $ConstructorKeys = @($ExistingDoc.MethodDescriptions.Keys | Where-Object { $_ -eq $TypeName -or $_ -eq "_Deprecated_$TypeName" })
+                    foreach ($Key in $ConstructorKeys) {
+                        Write-Host "  Removing constructor entry: $RegionKey.$TypeName.$Key" -ForegroundColor Gray
+                        $ExistingDoc.MethodDescriptions.Remove($Key)
                     }
                     
                     # Mark deprecated methods
@@ -749,12 +752,15 @@ The $TypeName class provides the following methods:
                                 }
                             }
                             
-                            $MethodExample = Get-DocContent $MethodDoc.Example "# TODO: Add usage example for this method"
-                            $Content += "`n**Example:**`n`n``````powershell`n$MethodExample`n``````
+                            # Only add example section if the example is not null/empty
+                            if ($null -ne $MethodDoc.Example -and $MethodDoc.Example -ne '') {
+                                $MethodExample = Get-DocContent $MethodDoc.Example "# TODO: Add usage example for this method"
+                                $Content += "`n**Example:**`n`n``````powershell`n$MethodExample`n``````
 `n"
+                            }
                         }
                     } else {
-                        $Content += "`nNo public methods defined.\n"
+                        $Content += "`nNo public methods defined.`n"
                     }
                     
                     $Content += @"

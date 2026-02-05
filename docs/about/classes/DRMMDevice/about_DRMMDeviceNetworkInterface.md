@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents a network interface associated with a device in the DRMM system.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceNetworkInterface class models the network interface information for a device in the DRMM platform. It includes properties such as Id, Uid, SiteId, SiteUid, SiteName, DeviceType, Hostname, IntIpAddress, ExtIpAddress, and an array of network interfaces (Nics). The class provides a constructor and a static method to create an instance from API response data.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,33 +16,22 @@ The DRMMDeviceNetworkInterface class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id           | long                   | Add description |
-| Uid          | guid                   | Add description |
-| SiteId       | long                   | Add description |
-| SiteUid      | guid                   | Add description |
-| SiteName     | string                 | Add description |
-| DeviceType   | DRMMDeviceType         | Add description |
-| Hostname     | string                 | Add description |
-| IntIpAddress | string                 | Add description |
-| ExtIpAddress | string                 | Add description |
-| Nics         | DRMMNetworkInterface[] | Add description |
+| Id           | long                   | The unique identifier of the network interface. |
+| Uid          | guid                   | The unique identifier (UID) of the network interface. |
+| SiteId       | long                   | The unique identifier of the site to which the network interface belongs. |
+| SiteUid      | guid                   | The unique identifier (UID) of the site to which the network interface belongs. |
+| SiteName     | string                 | The name of the site to which the network interface belongs. |
+| DeviceType   | DRMMDeviceType         | The type of the network device. |
+| Hostname     | string                 | The hostname associated with the network interface. |
+| IntIpAddress | string                 | The internal IP address of the network interface. |
+| ExtIpAddress | string                 | The external IP address of the network interface. |
+| Nics         | DRMMNetworkInterface[] | The network interface cards associated with the device. |
 
 ## METHODS
 
 The DRMMDeviceNetworkInterface class provides the following methods:
 
-### DRMMDeviceNetworkInterface()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

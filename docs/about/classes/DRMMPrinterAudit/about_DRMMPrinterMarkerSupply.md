@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the marker supply information of a printer, including description, maximum capacity, and supply level.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMPrinterMarkerSupply class models the information about the marker supplies of a printer. It includes properties such as Description, MaxCapacity, and SuppliesLevel, which provide details about the printer's consumable supplies (e
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,26 +16,15 @@ The DRMMPrinterMarkerSupply class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Description   | string | Add description |
-| MaxCapacity   | string | Add description |
-| SuppliesLevel | string | Add description |
+| Description   | string | The description of the printer's marker supply. |
+| MaxCapacity   | string | The maximum capacity of the printer's marker supply. |
+| SuppliesLevel | string | The current supply level of the printer's marker supply. |
 
 ## METHODS
 
 The DRMMPrinterMarkerSupply class provides the following methods:
 
-### DRMMPrinterMarkerSupply()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

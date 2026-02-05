@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMVariable class
+Represents a variable in the DRMM system, including its name, value, scope, and other attributes.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMVariable class models a variable within the DRMM platform, encapsulating properties such as Id, Name, Value, Scope, SiteUid, and IsSecret. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to determine if the variable is global or site-specific, as well as a method to generate a summary string of the variable's information.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,68 +16,34 @@ The DRMMVariable class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id       | long           | Add description |
-| Name     | string         | Add description |
-| Value    | object         | Add description |
-| Scope    | string         | Add description |
-| SiteUid  | Nullable[guid] | Add description |
-| IsSecret | bool           | Add description |
+| Id       | long           | The unique identifier of the variable. |
+| Name     | string         | The name of the variable. |
+| Value    | object         | The value of the variable. |
+| Scope    | string         | The scope of the variable. |
+| SiteUid  | Nullable[guid] | The unique identifier (UID) of the site associated with the variable. |
+| IsSecret | bool           | Indicates whether the variable is a secret variable. |
 
 ## METHODS
 
 The DRMMVariable class provides the following methods:
 
-### DRMMVariable()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### IsGlobal()
 
-Add method description explaining what this method does
+Determines if the variable is global in scope.
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - True if the variable is global in scope; otherwise, false.
 
 ### IsSite()
 
-Add method description explaining what this method does
+Determines if the variable is site-specific in scope.
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - True if the variable is site-specific in scope; otherwise, false.
 
 ### GetSummary()
 
-API already returns masked values for secret variables
+Generates a summary string for the variable, including its name, scope, and value.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string that includes the name, scope, and value of the variable.
 
 ## USAGE EXAMPLES
 

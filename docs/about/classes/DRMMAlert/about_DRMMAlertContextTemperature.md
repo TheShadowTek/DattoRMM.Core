@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a temperature alert in the DRMM system, including degree and type of temperature issue.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextTemperature class models the context information specific to temperature alerts in the DRMM platform. It encapsulates properties such as degree and type that provide detailed context about the temperature alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,25 +16,14 @@ The DRMMAlertContextTemperature class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Degree | float  | Add description |
-| Type   | string | Add description |
+| Degree | float  | The degree of the temperature alert. |
+| Type   | string | The type of temperature alert. |
 
 ## METHODS
 
 The DRMMAlertContextTemperature class provides the following methods:
 
-### DRMMAlertContextTemperature()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

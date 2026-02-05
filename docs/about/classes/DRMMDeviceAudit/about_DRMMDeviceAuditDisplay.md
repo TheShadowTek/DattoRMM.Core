@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the display information of a device in a device audit, including instance, screen height, and screen width.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditDisplay class models the information about the display of the audited system. It includes properties such as Instance, ScreenHeight, and ScreenWidth, which provide details about the display. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,26 +16,15 @@ The DRMMDeviceAuditDisplay class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Instance     | string | Add description |
-| ScreenHeight | int    | Add description |
-| ScreenWidth  | int    | Add description |
+| Instance     | string | The instance identifier of the display. |
+| ScreenHeight | int    | The height of the display screen in pixels. |
+| ScreenWidth  | int    | The width of the display screen in pixels. |
 
 ## METHODS
 
 The DRMMDeviceAuditDisplay class provides the following methods:
 
-### DRMMDeviceAuditDisplay()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

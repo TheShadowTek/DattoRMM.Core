@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a PSU (Power Supply Unit) alert in the DRMM system, including reason and type of the alert.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextPsu class models the context information specific to PSU alerts in the DRMM platform. It encapsulates properties such as reason and type that provide detailed context about the PSU alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,25 +16,14 @@ The DRMMAlertContextPsu class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Reason | string | Add description |
-| Type   | string | Add description |
+| Reason | string | The reason for the PSU alert. |
+| Type   | string | The type of PSU alert. |
 
 ## METHODS
 
 The DRMMAlertContextPsu class provides the following methods:
 
-### DRMMAlertContextPsu()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

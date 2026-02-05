@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the audit information of a printer, including SNMP info, marker supplies, printer details, system info, and network interfaces.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMPrinterAudit class encapsulates detailed information about a printer, such as its unique identifier, portal URL, SNMP information, marker supplies, printer details, system information, and network interfaces. This class is typically used to represent the results of a printer audit operation within the DRMM system.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,30 +16,19 @@ The DRMMPrinterAudit class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DeviceUid             | guid                      | Add description |
-| PortalUrl             | string                    | Add description |
-| SnmpInfo              | DRMMPrinterSnmpInfo       | Add description |
-| PrinterMarkerSupplies | DRMMPrinterMarkerSupply[] | Add description |
-| Printer               | DRMMPrinter               | Add description |
-| SystemInfo            | DRMMPrinterSystemInfo     | Add description |
-| Nics                  | DRMMNetworkInterface[]    | Add description |
+| DeviceUid             | guid                      | The unique identifier (UID) of the device. |
+| PortalUrl             | string                    | The URL of the portal. |
+| SnmpInfo              | DRMMPrinterSnmpInfo       | The SNMP information of the printer. |
+| PrinterMarkerSupplies | DRMMPrinterMarkerSupply[] | The marker supplies of the printer. |
+| Printer               | DRMMPrinter               | The printer associated with the audit. |
+| SystemInfo            | DRMMPrinterSystemInfo     | The system information of the printer. |
+| Nics                  | DRMMNetworkInterface[]    | The network interfaces of the printer. |
 
 ## METHODS
 
 The DRMMPrinterAudit class provides the following methods:
 
-### DRMMPrinterAudit()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

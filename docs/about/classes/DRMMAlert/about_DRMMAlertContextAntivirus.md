@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents a generic alert context in the DRMM system when specific context class information is not available.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextGeneric class models a generic alert context for cases where the specific context class information is not available or does not match known types. It captures the raw response data and provides a summary that includes the class if available. This allows for handling of alert contexts that may not fit into predefined categories while still retaining the original information for reference.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,25 +16,14 @@ The DRMMAlertContextAntivirus class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Status      | string | Add description |
-| ProductName | string | Add description |
+| Status      | string | The current status of the antivirus alert context. |
+| ProductName | string | The name of the antivirus product associated with the alert context. |
 
 ## METHODS
 
 The DRMMAlertContextAntivirus class provides the following methods:
 
-### DRMMAlertContextAntivirus()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

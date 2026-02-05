@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a security center alert in the DRMM system, including product name and alert type.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextSecCenter class models the context information specific to security center alerts in the DRMM platform. It encapsulates properties such as product name and alert type that provide detailed context about the security center alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,25 +16,14 @@ The DRMMAlertContextSecCenter class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| ProductName | string | Add description |
-| AlertType   | string | Add description |
+| ProductName | string | The name of the product generating the security center alert. |
+| AlertType   | string | The type of the security center alert. |
 
 ## METHODS
 
 The DRMMAlertContextSecCenter class provides the following methods:
 
-### DRMMAlertContextSecCenter()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of an SNMP probe alert in the DRMM system, including IP address, OID, rule name, response value, device name, and monitor name.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextSNMPProbe class models the context information specific to SNMP probe alerts in the DRMM platform. It encapsulates properties such as IP address, OID, rule name, response value, device name, and monitor name that provide detailed context about the SNMP probe alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,29 +16,18 @@ The DRMMAlertContextSNMPProbe class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| IpAddress     | string | Add description |
-| Oid           | string | Add description |
-| RuleName      | string | Add description |
-| ResponseValue | string | Add description |
-| DeviceName    | string | Add description |
-| MonitorName   | string | Add description |
+| IpAddress     | string | The IP address involved in the SNMP probe alert. |
+| Oid           | string | The Object Identifier (OID) relevant to the SNMP probe alert. |
+| RuleName      | string | The name of the rule that triggered the SNMP probe alert. |
+| ResponseValue | string | The response value received from the SNMP probe. |
+| DeviceName    | string | The name of the device associated with the SNMP probe alert. |
+| MonitorName   | string | The name of the monitor related to the SNMP probe alert. |
 
 ## METHODS
 
 The DRMMAlertContextSNMPProbe class provides the following methods:
 
-### DRMMAlertContextSNMPProbe()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

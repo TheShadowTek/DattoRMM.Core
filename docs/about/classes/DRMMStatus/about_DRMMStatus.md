@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMStatus class
+Represents the status of the DRMM system, including properties such as version, status, and start time.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMStatus class models the status of the DRMM system, encapsulating properties such as Version, Status, and Started. The class provides a constructor and a static method to create an instance from API response data. The FromAPIMethod static method takes a response object, extracts the relevant information, and populates the properties of the DRMMStatus instance accordingly. The class serves as a representation of the current status of the DRMM system, allowing for easy access to version information, overall status, and the time when the system started.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,26 +16,15 @@ The DRMMStatus class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Version | string             | Add description |
-| Status  | string             | Add description |
-| Started | Nullable[datetime] | Add description |
+| Version | string             | The version information. |
+| Status  | string             | The current status. |
+| Started | Nullable[datetime] | The start time of the status. |
 
 ## METHODS
 
 The DRMMStatus class provides the following methods:
 
-### DRMMStatus()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

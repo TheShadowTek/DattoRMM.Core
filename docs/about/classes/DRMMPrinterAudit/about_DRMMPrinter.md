@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMPrinterAudit and related classes
+Represents the audit information of a printer, including SNMP info, marker supplies, printer details, system info, and network interfaces.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMPrinterAudit class encapsulates detailed information about a printer, such as its unique identifier, portal URL, SNMP information, marker supplies, printer details, system information, and network interfaces. This class is typically used to represent the results of a printer audit operation within the DRMM system.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,24 +16,13 @@ The DRMMPrinter class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| PrintedPageCount | Nullable[long] | Add description |
+| PrintedPageCount | Nullable[long] | The total number of pages printed by the printer. |
 
 ## METHODS
 
 The DRMMPrinter class provides the following methods:
 
-### DRMMPrinter()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

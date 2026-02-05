@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of an event log alert in the DRMM system, including log name, code, type, source, description, trigger count, last triggered time, and suspension status.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextEventLog class models the context information specific to event log alerts in the DRMM platform. It encapsulates properties such as the log name, code, type, source, description, trigger count, last triggered time, and whether the event caused a suspension. This information provides detailed insights into the event log conditions that triggered the alert, facilitating better understanding and response to event log-related issues.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,31 +16,20 @@ The DRMMAlertContextEventLog class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| LogName          | string             | Add description |
-| Code             | string             | Add description |
-| Type             | string             | Add description |
-| Source           | string             | Add description |
-| Description      | string             | Add description |
-| TriggerCount     | int                | Add description |
-| LastTriggered    | Nullable[datetime] | Add description |
-| CausedSuspension | bool               | Add description |
+| LogName          | string             | The name of the event log. |
+| Code             | string             | The code associated with the event log alert. |
+| Type             | string             | The type of the event log alert. |
+| Source           | string             | The source of the event log alert. |
+| Description      | string             | A description of the event log alert. |
+| TriggerCount     | int                | The number of times the event log alert has been triggered. |
+| LastTriggered    | Nullable[datetime] | The last time the event log alert was triggered. |
+| CausedSuspension | bool               | Indicates whether the event caused a suspension. |
 
 ## METHODS
 
 The DRMMAlertContextEventLog class provides the following methods:
 
-### DRMMAlertContextEventLog()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

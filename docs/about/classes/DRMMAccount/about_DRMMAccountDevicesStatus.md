@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the device status information for a DRMM account, including counts of devices in various states.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAccountDevicesStatus class encapsulates information about the number of devices associated with a DRMM account, including the total number of devices, the number of online devices, offline devices, on-demand devices, and managed devices. It provides a static method to create an instance of the class from a typical API response object that contains these device status details. The class also includes methods to calculate the percentage of online devices and to generate a summary string that combines this information for easy display. This class is used as a property within the DRMMAccount class to provide insights into the account's device status.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,54 +16,27 @@ The DRMMAccountDevicesStatus class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| NumberOfDevices         | int | Add description |
-| NumberOfOnlineDevices   | int | Add description |
-| NumberOfOfflineDevices  | int | Add description |
-| NumberOfOnDemandDevices | int | Add description |
-| NumberOfManagedDevices  | int | Add description |
+| NumberOfDevices         | int | The total number of devices associated with the account. |
+| NumberOfOnlineDevices   | int | The number of devices that are currently online. |
+| NumberOfOfflineDevices  | int | The number of devices that are currently offline. |
+| NumberOfOnDemandDevices | int | The number of devices that are on-demand. |
+| NumberOfManagedDevices  | int | The number of devices that are managed within the account. |
 
 ## METHODS
 
 The DRMMAccountDevicesStatus class provides the following methods:
 
-### DRMMAccountDevicesStatus()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetOnlinePercentage()
 
-Add method description explaining what this method does
+Calculates the percentage of online devices for the account.
 
-**Returns:** `double` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `double` - The percentage of online devices as a double value.
 
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the device status, including the count of online devices and total devices.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string combining the count of online devices and total devices.
 
 ## USAGE EXAMPLES
 

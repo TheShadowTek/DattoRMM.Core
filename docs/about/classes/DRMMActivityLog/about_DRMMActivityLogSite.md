@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents site information associated with a DRMM activity log entry, including site ID and name.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMActivityLogSite class models the site information related to an activity log entry in the DRMM platform. It encapsulates properties such as the site ID and name. The class provides a static method to create an instance of the class from a typical API response object that contains these site details. This class is used as a property within the DRMMActivityLog class to provide additional context about the site associated with the activity log entry.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,25 +16,14 @@ The DRMMActivityLogSite class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id   | long   | Add description |
-| Name | string | Add description |
+| Id   | long   | The unique identifier for the site associated with the activity log entry. |
+| Name | string | The name of the site associated with the activity log entry. |
 
 ## METHODS
 
 The DRMMActivityLogSite class provides the following methods:
 
-### DRMMActivityLogSite()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

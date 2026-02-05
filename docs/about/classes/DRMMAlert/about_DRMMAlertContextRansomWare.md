@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a ransomware alert in the DRMM system, including state, confidence factor, affected directories, watch paths, ransomware extension, and alert times.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextRansomWare class models the context information specific to ransomware alerts in the DRMM platform. It encapsulates properties such as state, confidence factor, affected directories, watch paths, ransomware extension, and alert times that provide detailed context about the ransomware alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,30 +16,19 @@ The DRMMAlertContextRansomWare class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| State               | int                | Add description |
-| ConfidenceFactor    | int                | Add description |
-| AffectedDirectories | string[]           | Add description |
-| WatchPaths          | string[]           | Add description |
-| Rwextension         | string             | Add description |
-| MetaAlertTime       | Nullable[datetime] | Add description |
-| AlertTime           | Nullable[datetime] | Add description |
+| State               | int                | The current state of the ransomware alert. |
+| ConfidenceFactor    | int                | The confidence factor indicating the likelihood of a ransomware event. |
+| AffectedDirectories | string[]           | The directories affected by the ransomware. |
+| WatchPaths          | string[]           | The paths being watched for ransomware activity. |
+| Rwextension         | string             | The ransomware extension associated with the alert. |
+| MetaAlertTime       | Nullable[datetime] | The time when the meta alert related to the ransomware was generated. |
+| AlertTime           | Nullable[datetime] | The time when the ransomware alert was generated. |
 
 ## METHODS
 
 The DRMMAlertContextRansomWare class provides the following methods:
 
-### DRMMAlertContextRansomWare()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

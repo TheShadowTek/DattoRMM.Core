@@ -65,7 +65,7 @@ param(
     [Parameter(ParameterSetName = 'All')]
     [switch]$All,
     
-    [switch]$Force = $true,
+    [switch]$Force,
     
     [string]$AboutFolder = ".\docs\about",
     [string]$OutputFolder = ".\en-US"

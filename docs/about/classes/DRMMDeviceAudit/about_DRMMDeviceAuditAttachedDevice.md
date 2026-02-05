@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents an attached device in a device audit, including its description and instance information.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditAttachedDevice class models the information about a device that is attached to the audited system. It includes properties such as Description and Instance, which provide details about the attached device. This class is typically used as part of the DRMMDeviceAudit to represent the various devices connected to the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,25 +16,14 @@ The DRMMDeviceAuditAttachedDevice class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Description | string | Add description |
-| Instance    | string | Add description |
+| Description | string | A description of the attached device. |
+| Instance    | string | The instance identifier of the attached device. |
 
 ## METHODS
 
 The DRMMDeviceAuditAttachedDevice class provides the following methods:
 
-### DRMMDeviceAuditAttachedDevice()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

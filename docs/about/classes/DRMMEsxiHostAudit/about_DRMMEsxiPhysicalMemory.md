@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the physical memory information of an ESXi host, including module, size, type, speed, serial number, part number, and bank.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMEsxiPhysicalMemory class models the information about the physical memory modules of an ESXi host. It includes properties such as Module, Size, Type, Speed, SerialNumber, PartNumber, and Bank, which provide details about each physical memory module installed on the ESXi host. This class is typically used as part of the DRMMEsxiHostAudit to represent the memory configuration of the ESXi host being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,30 +16,19 @@ The DRMMEsxiPhysicalMemory class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Module       | string         | Add description |
-| Size         | Nullable[long] | Add description |
-| Type         | string         | Add description |
-| Speed        | string         | Add description |
-| SerialNumber | string         | Add description |
-| PartNumber   | string         | Add description |
-| Bank         | string         | Add description |
+| Module       | string         | The identifier or name of the physical memory module. |
+| Size         | Nullable[long] | The size of the physical memory module. |
+| Type         | string         | The type of the physical memory module. |
+| Speed        | string         | The speed of the physical memory module. |
+| SerialNumber | string         | The serial number of the physical memory module. |
+| PartNumber   | string         | The part number of the physical memory module. |
+| Bank         | string         | The bank location of the physical memory module. |
 
 ## METHODS
 
 The DRMMEsxiPhysicalMemory class provides the following methods:
 
-### DRMMEsxiPhysicalMemory()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMUser class
+Represents a user in the DRMM system, including properties such as first name, last name, username, email, telephone, status, creation date, last access date, and disabled status.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMUser class models a user within the DRMM platform, encapsulating properties such as FirstName, LastName, Username, Email, Telephone, Status, Created, LastAccess, and Disabled. The class provides a constructor and a static method to create an instance from API response data. The FromAPIMethod static method takes a response object, extracts the relevant information, and populates the properties of the DRMMUser instance accordingly. The class also includes methods to generate a full name for the user and to provide a summary of the user's information, including their username and disabled status. The DRMMUser class serves as a representation of users within the DRMM system, allowing for easy access to user information and status details.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,58 +16,31 @@ The DRMMUser class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| FirstName  | string             | Add description |
-| LastName   | string             | Add description |
-| Username   | string             | Add description |
-| Email      | string             | Add description |
-| Telephone  | string             | Add description |
-| Status     | string             | Add description |
-| Created    | Nullable[datetime] | Add description |
-| LastAccess | Nullable[datetime] | Add description |
-| Disabled   | bool               | Add description |
+| FirstName  | string             | The first name of the user. |
+| LastName   | string             | The last name of the user. |
+| Username   | string             | The username of the user. |
+| Email      | string             | The email address of the user. |
+| Telephone  | string             | The telephone number of the user. |
+| Status     | string             | The current status of the user. |
+| Created    | Nullable[datetime] | The creation date of the user. |
+| LastAccess | Nullable[datetime] | The last access date of the user. |
+| Disabled   | bool               | Indicates whether the user is disabled. |
 
 ## METHODS
 
 The DRMMUser class provides the following methods:
 
-### DRMMUser()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetFullName()
 
-Add method description explaining what this method does
+Generates the full name of the user by combining the first name and last name.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - The full name of the user, which is a combination of the first name and last name.
 
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the user, including their full name, username, and disabled status.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string that includes the full name, username, and disabled status of the user.
 
 ## USAGE EXAMPLES
 

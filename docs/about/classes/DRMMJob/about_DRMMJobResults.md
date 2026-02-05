@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the results of a DRMM job, including job and device identifiers, the time the job ran, deployment status, and component results.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMJobResults class models the outcome of a DRMM job execution. It includes properties such as JobUid, DeviceUid, RanOn, JobDeploymentStatus, and an array of ComponentResults, which provide detailed information about the job's execution and its components. The class also includes a static method to create an instance of DRMMJobResults from API response data.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,28 +16,17 @@ The DRMMJobResults class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| JobUid              | guid                     | Add description |
-| DeviceUid           | guid                     | Add description |
-| RanOn               | Nullable[datetime]       | Add description |
-| JobDeploymentStatus | string                   | Add description |
-| ComponentResults    | DRMMJobComponentResult[] | Add description |
+| JobUid              | guid                     | The unique identifier (UID) of the job. |
+| DeviceUid           | guid                     | The unique identifier (UID) of the device. |
+| RanOn               | Nullable[datetime]       | The date and time when the job was run. |
+| JobDeploymentStatus | string                   | The deployment status of the job. |
+| ComponentResults    | DRMMJobComponentResult[] | The results of the job components. |
 
 ## METHODS
 
 The DRMMJobResults class provides the following methods:
 
-### DRMMJobResults()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

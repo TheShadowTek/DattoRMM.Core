@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a Windows performance alert in the DRMM system, including a value that indicates the performance metric.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextWindowsPerformance class models the context information specific to Windows performance alerts in the DRMM platform. It encapsulates properties such as value that provide detailed context about the Windows performance alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,24 +16,13 @@ The DRMMAlertContextWindowsPerformance class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Value | float | Add description |
+| Value | float | The value that indicates the Windows performance metric. |
 
 ## METHODS
 
 The DRMMAlertContextWindowsPerformance class provides the following methods:
 
-### DRMMAlertContextWindowsPerformance()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

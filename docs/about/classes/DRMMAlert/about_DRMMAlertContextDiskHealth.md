@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a disk health alert in the DRMM system, including the reason for the alert and the type of issue detected.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextDiskHealth class models the context information specific to disk health alerts in the DRMM platform. It encapsulates properties such as the reason for the alert and the type of disk health issue that was detected, providing insights into the underlying cause of the alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,25 +16,14 @@ The DRMMAlertContextDiskHealth class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Reason | string | Add description |
-| Type   | string | Add description |
+| Reason | string | The reason for the disk health alert. |
+| Type   | string | The type of disk health issue detected. |
 
 ## METHODS
 
 The DRMMAlertContextDiskHealth class provides the following methods:
 
-### DRMMAlertContextDiskHealth()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

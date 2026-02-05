@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the processor information of a device in a device audit, including its name.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditProcessor class models the information about the processor(s) of the audited system. It includes a property for the Name of the processor, which provides details about the CPU. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,24 +16,13 @@ The DRMMDeviceAuditProcessor class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Name | string | Add description |
+| Name | string | The name of the processor. |
 
 ## METHODS
 
 The DRMMDeviceAuditProcessor class provides the following methods:
 
-### DRMMDeviceAuditProcessor()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

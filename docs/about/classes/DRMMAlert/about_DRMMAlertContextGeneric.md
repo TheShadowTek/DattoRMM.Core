@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents a generic alert context in the DRMM system when specific context class information is not available.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextGeneric class models a generic alert context in the DRMM platform. It is used when specific context class information is not available, encapsulating a hashtable of properties that provide detailed information about the alert context. This allows for flexible handling of various alert types that do not have dedicated context classes.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,24 +16,13 @@ The DRMMAlertContextGeneric class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Properties | hashtable | Add description |
+| Properties | hashtable | A hashtable containing properties that provide detailed information about the alert context when specific context class information is not available. |
 
 ## METHODS
 
 The DRMMAlertContextGeneric class provides the following methods:
 
-### DRMMAlertContextGeneric()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

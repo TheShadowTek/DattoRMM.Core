@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents a variable associated with a DRMM component, including its name, type, direction, and other metadata.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMComponentVariable class models a variable that can be used as input or output for a DRMM component. It includes properties for the variable's name, default value, type, direction (input/output), description, and index within the component's variable list. Methods allow for instantiation from API responses and for generating a summary string describing the variable.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,42 +16,22 @@ The DRMMComponentVariable class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Name         | string | Add description |
-| DefaultValue | string | Add description |
-| Type         | string | Add description |
-| Direction    | bool   | Add description |
-| Description  | string | Add description |
-| Index        | int    | Add description |
+| Name         | string | The name of the variable. |
+| DefaultValue | string | The default value of the variable. |
+| Type         | string | The data type of the variable. |
+| Direction    | bool   | The direction of the variable (input or output). |
+| Description  | string | A description of the variable. |
+| Index        | int    | The index of the variable within the component's variable list. |
 
 ## METHODS
 
 The DRMMComponentVariable class provides the following methods:
 
-### DRMMComponentVariable()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the component variable.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string for the component variable.
 
 ## USAGE EXAMPLES
 

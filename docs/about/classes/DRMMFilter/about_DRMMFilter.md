@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMFilter class
+Represents a filter in the DRMM system, including its name, description, type, scope, and associated site.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMFilter class models a filter within the DRMM platform, encapsulating properties such as Id, FilterId, Name, Description, Type, Scope, SiteUid, DateCreate, and LastUpdated. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to determine if the filter is global or site-specific, as well as a method to generate a summary string of the filter's information. Additionally, it includes methods to retrieve devices and alerts associated with the filter.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,152 +16,76 @@ The DRMMFilter class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id          | long               | Add description |
-| FilterId    | long               | Add description |
-| Name        | string             | Add description |
-| Description | string             | Add description |
-| Type        | string             | Add description |
-| Scope       | string             | Add description |
-| SiteUid     | Nullable[guid]     | Add description |
-| DateCreate  | Nullable[datetime] | Add description |
-| LastUpdated | Nullable[datetime] | Add description |
+| Id          | long               | The identifier of the filter. |
+| FilterId    | long               | The unique identifier of the filter. |
+| Name        | string             | The name of the filter. |
+| Description | string             | A brief description of the filter's purpose or criteria. |
+| Type        | string             | The type or category of the filter. |
+| Scope       | string             | The scope or context in which the filter is applied. |
+| SiteUid     | Nullable[guid]     | The unique identifier of the site associated with the filter. |
+| DateCreate  | Nullable[datetime] | The date and time when the filter was created. |
+| LastUpdated | Nullable[datetime] | The date and time when the filter was last updated. |
 
 ## METHODS
 
 The DRMMFilter class provides the following methods:
 
-### DRMMFilter()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### IsGlobal()
 
-Add method description explaining what this method does
+Determines if the variable is global in scope.
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - A boolean value indicating whether the filter is global in scope.
 
 ### IsSite()
 
-Add method description explaining what this method does
+Determines if the variable is site-specific in scope.
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - A boolean value indicating whether the filter is site-specific in scope.
 
 ### IsDefault()
 
-Add method description explaining what this method does
+Determines if the filter is the default type.
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - A boolean value indicating whether the filter is the default type.
 
 ### IsCustom()
 
-Add method description explaining what this method does
+Determines if the filter is a custom type.
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - A boolean value indicating whether the filter is a custom type.
 
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the filter, including its name, scope, and type.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string that includes the filter's name, scope, and type.
 
 ### GetDevices()
 
-API Methods
+Retrieves the devices associated with the filter.
 
-**Returns:** `DRMMDevice[]` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `DRMMDevice[]` - A list of devices associated with the filter.
 
 ### GetDeviceCount()
 
-Add method description explaining what this method does
+Retrieves the count of devices associated with the filter.
 
-**Returns:** `int` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `int` - The count of devices associated with the filter.
 
 ### GetAlerts()
 
-Add method description explaining what this method does
+Retrieves the alerts associated with the filter.
 
-**Returns:** `DRMMAlert[]` - region DRMMAlert and related classes
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `DRMMAlert[]` - A list of alerts associated with the filter, optionally filtered by status.
 
 ### GetAlerts([String]$Status)
 
-Add method description explaining what this method does
+Retrieves the alerts associated with the filter.
 
-**Returns:** `DRMMAlert[]` - region DRMMAlert and related classes
+**Returns:** `DRMMAlert[]` - A list of alerts associated with the filter, optionally filtered by status.
 
 **Parameters:**
-- `[String]$Status` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[String]$Status` - The status of the alerts to retrieve (e.g., "active", "resolved").
 
 ## USAGE EXAMPLES
 

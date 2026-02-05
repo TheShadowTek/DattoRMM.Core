@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a WMI alert in the DRMM system, including a value that indicates the WMI metric or status.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextWmi class models the context information specific to WMI alerts in the DRMM platform. It encapsulates properties such as value that provide detailed context about the WMI alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,24 +16,13 @@ The DRMMAlertContextWmi class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Value | string | Add description |
+| Value | string | The value that indicates the WMI metric or status. |
 
 ## METHODS
 
 The DRMMAlertContextWmi class provides the following methods:
 
-### DRMMAlertContextWmi()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

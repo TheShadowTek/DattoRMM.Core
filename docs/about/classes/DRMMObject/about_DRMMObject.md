@@ -19,102 +19,54 @@ No public properties defined.\n
 
 The DRMMObject class provides the following methods:
 
-### DRMMObject()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### static GetValue([PSObject]$InputObject, [String]$Key)
 
 Add method description explaining what this method does
 
-**Returns:** `object` - Describe what this method returns
+**Returns:** `object` - The value associated with the specified key in the input object, or null if the key does not exist.
 
 **Parameters:**
-- `[PSObject]$InputObject` - Describe this parameter
-- `[String]$Key` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[PSObject]$InputObject` - The object from which to retrieve the value.
+- `[String]$Key` - The key or property name whose value is to be retrieved from the input object.
 
 ### static ValidateShape([PSObject]$Sample, [String[]]$RequiredProperties)
 
 Add method description explaining what this method does
 
-**Returns:** `bool` - Describe what this method returns
+**Returns:** `bool` - A boolean value indicating whether the sample object contains all the required properties.
 
 **Parameters:**
-- `[PSObject]$Sample` - Describe this parameter
-- `[String[]]$RequiredProperties` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[PSObject]$Sample` - The sample object to validate against the required properties.
+- `[String[]]$RequiredProperties` - An array of property names that are required to be present in the input object.
 
 ### static ConvertEpochToDateTime([Int64]$Epoch)
 
 Add method description explaining what this method does
 
-**Returns:** `datetime` - Describe what this method returns
+**Returns:** `datetime` - The DateTime representation of the given epoch timestamp.
 
 **Parameters:**
-- `[Int64]$Epoch` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Int64]$Epoch` - The epoch timestamp to convert, which can be an integer, long, double, or numeric string representing the number of seconds since January 1, 1970.
 
 ### static ParseApiDate([Object]$Value)
 
 Handle numeric epoch timestamps (int, long, double, or numeric strings)
 
-**Returns:** `hashtable` - Describe what this method returns
+**Returns:** `hashtable` - The DateTime representation of the given API date value, or null if the value cannot be parsed as a date.
 
 **Parameters:**
-- `[Object]$Value` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Object]$Value` - The value to parse as an API date, which can be a numeric epoch timestamp or a date string.
 
 ### static MaskString([String]$Value, [Int32]$VisibleChars, [String]$MaskChar)
 
 Add method description explaining what this method does
 
-**Returns:** `string` - Describe what this method returns
+**Returns:** `string` - The masked string with the specified number of visible characters at the start.
 
 **Parameters:**
-- `[String]$Value` - Describe this parameter
-- `[Int32]$VisibleChars` - Describe this parameter
-- `[String]$MaskChar` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[String]$Value` - The string value to be masked.
+- `[Int32]$VisibleChars` - The number of characters to leave visible at the start of the string.
+- `[String]$MaskChar` - The character to use for masking the string (e.g., "*").
 
 ## USAGE EXAMPLES
 

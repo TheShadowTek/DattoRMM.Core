@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Derived class for the "Deleted Devices" system site which has an invalid GUID
+Represents a deleted site in the DRMM system, with properties similar to DRMMSite but with a string type for Uid to handle invalid GUIDs.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeletedDevicesSite class models a deleted site within the DRMM platform. It includes properties similar to the DRMMSite class, but the Uid property is defined as a string to accommodate cases where the GUID may be invalid or not properly formatted. The class provides a constructor and a static method to create an instance from API response data, allowing for the handling of deleted site information without strict GUID validation.
 
 This class inherits from [DRMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMSite/about_DRMMSite.md).
 
@@ -22,18 +22,7 @@ The DRMMDeletedDevicesSite class exposes the following properties:
 
 The DRMMDeletedDevicesSite class provides the following methods:
 
-### DRMMDeletedDevicesSite()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

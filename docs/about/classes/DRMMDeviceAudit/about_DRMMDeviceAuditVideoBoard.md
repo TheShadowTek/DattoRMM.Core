@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the video board information of a device in a device audit, including its display adapter name.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditVideoBoard class models the information about the video board (graphics card) of the audited system. It includes a property for the DisplayAdapter, which provides details about the graphics hardware. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,24 +16,13 @@ The DRMMDeviceAuditVideoBoard class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DisplayAdapter | string | Add description |
+| DisplayAdapter | string | The name of the display adapter (video board) in the system. |
 
 ## METHODS
 
 The DRMMDeviceAuditVideoBoard class provides the following methods:
 
-### DRMMDeviceAuditVideoBoard()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMAlert and related classes
+Represents an alert in the DRMM system, including its properties, context, source information, and response actions.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlert class models an alert within the DRMM platform, encapsulating properties such as the alert's unique identifier, priority, diagnostics, resolution status, ticket number, timestamp, and related information about the alert monitor, context, source, and response actions. It provides a static method to create an instance of the class from a typical API response object that contains alert information. The class also includes methods to determine if the alert is open or of certain priority levels, to resolve the alert, and to generate a summary string that combines key properties of the alert for easy display. The related classes DRMMAlertContext, DRMMAlertMonitorInfo, DRMMAlertSourceInfo, and DRMMAlertResponseAction represent nested information about the alert's context, monitoring configuration, source details, and response actions taken, respectively.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,103 +16,55 @@ The DRMMAlert class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| AlertUid         | guid                      | Add description |
-| Priority         | string                    | Add description |
-| Diagnostics      | string                    | Add description |
-| Resolved         | bool                      | Add description |
-| ResolvedBy       | string                    | Add description |
-| ResolvedOn       | Nullable[datetime]        | Add description |
-| Muted            | bool                      | Add description |
-| TicketNumber     | string                    | Add description |
-| Timestamp        | Nullable[datetime]        | Add description |
-| AlertMonitorInfo | DRMMAlertMonitorInfo      | Add description |
-| AlertContext     | DRMMAlertContext          | Add description |
-| AlertSourceInfo  | DRMMAlertSourceInfo       | Add description |
-| ResponseActions  | DRMMAlertResponseAction[] | Add description |
-| AutoresolveMins  | Nullable[int]             | Add description |
-| SiteUid          | Nullable[guid]            | Add description |
+| AlertUid         | guid                      | Unique identifier for the alert. |
+| Priority         | string                    | Priority level of the alert. |
+| Diagnostics      | string                    | Diagnostic information related to the alert. |
+| Resolved         | bool                      | Indicates whether the alert has been resolved. |
+| ResolvedBy       | string                    | Identifier of the user who resolved the alert. |
+| ResolvedOn       | Nullable[datetime]        | Timestamp when the alert was resolved. |
+| Muted            | bool                      | Indicates whether the alert is muted. |
+| TicketNumber     | string                    | Ticket number associated with the alert. |
+| Timestamp        | Nullable[datetime]        | Timestamp when the alert was created. |
+| AlertMonitorInfo | DRMMAlertMonitorInfo      | AlertMonitorInfo of the DRMMAlert object, containing details about the alert monitor configuration. |
+| AlertContext     | DRMMAlertContext          | AlertContext of the DRMMAlert object, providing contextual information about the alert. |
+| AlertSourceInfo  | DRMMAlertSourceInfo       | AlertSourceInfo of the DRMMAlert object, including information about the source of the alert such as device and site details. |
+| ResponseActions  | DRMMAlertResponseAction[] | Actions taken in response to the alert. |
+| AutoresolveMins  | Nullable[int]             | The number of minutes after which the alert will be automatically resolved if not resolved manually. |
+| SiteUid          | Nullable[guid]            | Unique identifier for the site associated with the alert. |
 
 ## METHODS
 
 The DRMMAlert class provides the following methods:
 
-### DRMMAlert()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### IsOpen()
 
-Add method description explaining what this method does
+Determines if the alert is currently open (not resolved).
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - True if the alert is currently open (not resolved), otherwise false.
 
 ### IsCritical()
 
-Add method description explaining what this method does
+Determines if the alert is of priority level "Critical".
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - True if the alert is of priority level "Critical", otherwise false.
 
 ### IsHigh()
 
-Add method description explaining what this method does
+Determines if the alert is of priority level "High".
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - True if the alert is of priority level "High", otherwise false.
 
 ### Resolve()
 
-Add method description explaining what this method does
+Resolves the alert.
 
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `void` - An updated instance of the DRMMAlert class with the alert marked as resolved.
 
 ### GetSummary()
 
-Add method description explaining what this method does
+Gets a summary of the alert.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string combining key properties of the alert for easy display.
 
 ## USAGE EXAMPLES
 

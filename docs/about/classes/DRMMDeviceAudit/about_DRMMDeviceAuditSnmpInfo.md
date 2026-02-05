@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the SNMP information of a device in a device audit, including contact, description, location, and name.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditSnmpInfo class models the information about the SNMP configuration of the audited system. It includes properties such as Contact, Description, Location, and Name, which provide details about the SNMP settings of the device. This class is typically used as part of the DRMMDeviceAudit to represent the network information of the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,27 +16,16 @@ The DRMMDeviceAuditSnmpInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Contact     | string | Add description |
-| Description | string | Add description |
-| Location    | string | Add description |
-| Name        | string | Add description |
+| Contact     | string | The contact information for SNMP. |
+| Description | string | A description of the SNMP configuration. |
+| Location    | string | The physical location of the SNMP device. |
+| Name        | string | The name of the SNMP device. |
 
 ## METHODS
 
 The DRMMDeviceAuditSnmpInfo class provides the following methods:
 
-### DRMMDeviceAuditSnmpInfo()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

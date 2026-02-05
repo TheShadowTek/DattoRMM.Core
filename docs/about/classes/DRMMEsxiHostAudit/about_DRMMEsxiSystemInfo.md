@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the system information of an ESXi host, including manufacturer, model, name, number of snapshots, and service tag.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMEsxiSystemInfo class models the information about the ESXi host system. It includes properties such as Manufacturer, Model, Name, NumberOfSnapshots, and ServiceTag, which provide details about the ESXi host's hardware and configuration. This class is typically used as part of the DRMMEsxiHostAudit to represent the overall system information of the ESXi host being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,28 +16,17 @@ The DRMMEsxiSystemInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Manufacturer      | string        | Add description |
-| Model             | string        | Add description |
-| Name              | string        | Add description |
-| NumberOfSnapshots | Nullable[int] | Add description |
-| ServiceTag        | string        | Add description |
+| Manufacturer      | string        | The manufacturer of the ESXi host. |
+| Model             | string        | The model of the ESXi host. |
+| Name              | string        | The name of the ESXi host. |
+| NumberOfSnapshots | Nullable[int] | The number of snapshots on the ESXi host. |
+| ServiceTag        | string        | The service tag of the ESXi host. |
 
 ## METHODS
 
 The DRMMEsxiSystemInfo class provides the following methods:
 
-### DRMMEsxiSystemInfo()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

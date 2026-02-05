@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents a device type in the DRMM system.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceType class models the type information for a device in the DRMM platform. It includes properties such as Category and Type. The class provides a constructor and a static method to create an instance from API response data.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,25 +16,14 @@ The DRMMDeviceType class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Category | string | Add description |
-| Type     | string | Add description |
+| Category | string | The category of the device type. |
+| Type     | string | The specific type of the device. |
 
 ## METHODS
 
 The DRMMDeviceType class provides the following methods:
 
-### DRMMDeviceType()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

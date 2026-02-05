@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the software information of a device in a device audit, including its name and version.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditSoftware class models the information about the software installed on the audited system. It includes properties such as Name and Version, which provide details about each software application. This class is typically used as part of the DRMMDeviceAudit to represent the software inventory of the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,25 +16,14 @@ The DRMMDeviceAuditSoftware class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Name    | string | Add description |
-| Version | string | Add description |
+| Name    | string | The name of the software. |
+| Version | string | The version of the software. |
 
 ## METHODS
 
 The DRMMDeviceAuditSoftware class provides the following methods:
 
-### DRMMDeviceAuditSoftware()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

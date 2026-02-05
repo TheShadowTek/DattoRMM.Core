@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of an endpoint security Windows Defender alert in the DRMM system, including alert ID and description.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextEndpointSecurityWindowsDefender class models the context information specific to endpoint security Windows Defender alerts in the DRMM platform. It encapsulates properties such as the alert ID and a description of the threat, providing detailed information about the security event that triggered the alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,25 +16,14 @@ The DRMMAlertContextEndpointSecurityWindowsDefender class exposes the following 
 
 | Property | Type | Description |
 |----------|------|-------------|
-| EsAlertId   | string | Add description |
-| Description | string | Add description |
+| EsAlertId   | string | The unique identifier for the endpoint security Windows Defender alert. |
+| Description | string | A description of the endpoint security Windows Defender threat. |
 
 ## METHODS
 
 The DRMMAlertContextEndpointSecurityWindowsDefender class provides the following methods:
 
-### DRMMAlertContextEndpointSecurityWindowsDefender()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

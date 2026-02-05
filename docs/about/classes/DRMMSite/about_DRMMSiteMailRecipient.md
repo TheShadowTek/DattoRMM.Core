@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents a mail recipient for site notifications in the DRMM system, including properties such as name, email, and type.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMSiteMailRecipient class models a mail recipient for site notifications within the DRMM platform. It includes properties such as Name, Email, and Type. The class provides a constructor and a static method to create an instance from API response data. Additionally, it includes a method to generate a summary string of the mail recipient's information.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,26 +16,15 @@ The DRMMSiteMailRecipient class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Name  | string | Add description |
-| Email | string | Add description |
-| Type  | string | Add description |
+| Name  | string | The name of the mail recipient. |
+| Email | string | The email address of the mail recipient. |
+| Type  | string | The type of the mail recipient (e.g., "To", "Cc", "Bcc"). |
 
 ## METHODS
 
 The DRMMSiteMailRecipient class provides the following methods:
 
-### DRMMSiteMailRecipient()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

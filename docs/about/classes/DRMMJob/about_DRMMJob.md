@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMJob and related classes
+Represents a job in the DRMM system, including its ID, unique identifier, name, creation date, and status.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMJob class models a job within the DRMM platform. It includes properties such as Id, Uid, Name, DateCreated, and Status. This class provides methods to interact with job components, results, standard output, and error data. It also includes utility methods to check the job's status, calculate its age, refresh its data, and generate a summary string. The class is used to represent and manage jobs in the DRMM system.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,221 +16,117 @@ The DRMMJob class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id          | long               | Add description |
-| Uid         | guid               | Add description |
-| Name        | string             | Add description |
-| DateCreated | Nullable[datetime] | Add description |
-| Status      | string             | Add description |
+| Id          | long               | The unique identifier of the job. |
+| Uid         | guid               | The unique identifier (UID) of the job. |
+| Name        | string             | The name of the job. |
+| DateCreated | Nullable[datetime] | The date and time when the job was created. |
+| Status      | string             | The current status of the job. |
 
 ## METHODS
 
 The DRMMJob class provides the following methods:
 
-### DRMMJob()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### IsActive()
 
-Status Check Methods
+Checks if the job is currently active.
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - Indicates whether the job is currently active (true/false).
 
 ### IsCompleted()
 
-Add method description explaining what this method does
+Checks if the job is completed.
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - Indicates whether the job is completed (true/false).
 
 ### GetAge()
 
-Time-based Methods
+Calculates the age of the job based on its creation date.
 
-**Returns:** `timespan` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `timespan` - The age of the job as a TimeSpan object, representing the time elapsed since the job was created.
 
 ### GetComponents()
 
-API Wrapper Methods
+Retrieves the components associated with the job.
 
-**Returns:** `DRMMJobComponent[]` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `DRMMJobComponent[]` - A list of components associated with the job.
 
 ### GetResults([Guid]$DeviceUid)
 
-Add method description explaining what this method does
+Retrieves the results associated with the job for a specific device.
 
-**Returns:** `DRMMJobResults` - Describe what this method returns
+**Returns:** `DRMMJobResults` - The results associated with the job for the specified device.
 
 **Parameters:**
-- `[Guid]$DeviceUid` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve job results.
 
 ### GetStdOut([Guid]$DeviceUid)
 
-Add method description explaining what this method does
+Retrieves the standard output data associated with the job for a specific device.
 
-**Returns:** `DRMMJobStdData[]` - Describe what this method returns
+**Returns:** `DRMMJobStdData[]` - The standard output data associated with the job for the specified device.
 
 **Parameters:**
-- `[Guid]$DeviceUid` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard output data.
 
 ### GetStdErr([Guid]$DeviceUid)
 
-Add method description explaining what this method does
+Retrieves the standard error data associated with the job for a specific device.
 
-**Returns:** `DRMMJobStdData[]` - Describe what this method returns
+**Returns:** `DRMMJobStdData[]` - The standard error data associated with the job for the specified device.
 
 **Parameters:**
-- `[Guid]$DeviceUid` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard error data.
 
 ### Refresh()
 
-Refresh Method
+Refreshes the job's data by fetching the latest information from the API.
 
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `void` - The updated job object with refreshed data.
 
 ### GetSummary()
 
-Utility Methods
+Generates a summary string for the job.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string representing the job.
 
 ### GetStdOutAsJson([Guid]$DeviceUid)
 
-Combine all stdout lines into single string
+Retrieves the standard output data associated with the job for a specific device.
 
-**Returns:** `pscustomobject[]` - Describe what this method returns
+**Returns:** `pscustomobject[]` - The standard output data associated with the job for the specified device, parsed from JSON into a PowerShell object.
 
 **Parameters:**
-- `[Guid]$DeviceUid` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard output data.
 
 ### GetStdOutAsCsv([Guid]$DeviceUid)
 
-Combine all stdout lines into single string
+Retrieves the standard output data associated with the job for a specific device.
 
-**Returns:** `pscustomobject[]` - Describe what this method returns
+**Returns:** `pscustomobject[]` - The standard output data associated with the job for the specified device, parsed from CSV into a PowerShell object.
 
 **Parameters:**
-- `[Guid]$DeviceUid` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard output data.
 
 ### GetStdOutAsCsv([Guid]$DeviceUid, [Boolean]$FirstRowAsHeader)
 
-Combine all stdout lines into single string
+Retrieves the standard output data associated with the job for a specific device.
 
-**Returns:** `pscustomobject[]` - Describe what this method returns
+**Returns:** `pscustomobject[]` - The standard output data associated with the job for the specified device, parsed from CSV into a PowerShell object.
 
 **Parameters:**
-- `[Guid]$DeviceUid` - Describe this parameter
-- `[Boolean]$FirstRowAsHeader` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard output data.
+- `[Boolean]$FirstRowAsHeader` - Indicates whether the first row of the output should be treated as a header (true/false).
 
 ### GetStdOutAsCsv([Guid]$DeviceUid, [Boolean]$FirstRowAsHeader, [String[]]$Headers)
 
-Combine all stdout lines into single string
+Retrieves the standard output data associated with the job for a specific device.
 
-**Returns:** `pscustomobject[]` - Describe what this method returns
+**Returns:** `pscustomobject[]` - The standard output data associated with the job for the specified device, parsed from CSV into a PowerShell object.
 
 **Parameters:**
-- `[Guid]$DeviceUid` - Describe this parameter
-- `[Boolean]$FirstRowAsHeader` - Describe this parameter
-- `[String[]]$Headers` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard output data.
+- `[Boolean]$FirstRowAsHeader` - Indicates whether the first row of the output should be treated as a header (true/false).
+- `[String[]]$Headers` - An optional array of headers to use for the CSV output. If not provided, default headers will be used.
 
 ## USAGE EXAMPLES
 

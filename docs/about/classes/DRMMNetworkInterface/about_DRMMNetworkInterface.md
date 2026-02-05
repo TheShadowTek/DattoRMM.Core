@@ -17,27 +17,16 @@ The DRMMNetworkInterface class exposes the following properties:
 | Property | Type | Description |
 |----------|------|-------------|
 | Instance   | string | region DRMMNetworkInterface class |
-| Ipv4       | string | Add description |
-| Ipv6       | string | Add description |
-| MacAddress | string | Add description |
-| Type       | string | Add description |
+| Ipv4       | string | The IPv4 address of the network interface. |
+| Ipv6       | string | The IPv6 address of the network interface. |
+| MacAddress | string | The MAC address of the network interface. |
+| Type       | string | The type of the network interface. |
 
 ## METHODS
 
 The DRMMNetworkInterface class provides the following methods:
 
-### DRMMNetworkInterface()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

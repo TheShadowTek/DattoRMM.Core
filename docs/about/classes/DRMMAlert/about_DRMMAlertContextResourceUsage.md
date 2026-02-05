@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a resource usage alert in the DRMM system, including process name, sample value, and type of resource.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextResourceUsage class models the context information specific to resource usage alerts in the DRMM platform. It encapsulates properties such as process name, sample value, and type that provide detailed context about the resource usage alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,26 +16,15 @@ The DRMMAlertContextResourceUsage class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| ProcessName | string | Add description |
-| Sample      | float  | Add description |
-| Type        | string | Add description |
+| ProcessName | string | The name of the process associated with the resource usage alert. |
+| Sample      | float  | The sample value indicating the resource usage. |
+| Type        | string | The type of resource being monitored. |
 
 ## METHODS
 
 The DRMMAlertContextResourceUsage class provides the following methods:
 
-### DRMMAlertContextResourceUsage()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

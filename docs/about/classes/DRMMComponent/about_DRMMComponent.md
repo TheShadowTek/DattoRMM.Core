@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMComponent and related classes
+Represents a component in the DRMM system, including its properties and associated variables.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMComponent class models a component within the DRMM platform, encapsulating properties such as Id, Uid, Name, Description, CategoryCode, CredentialsRequired, and an array of associated variables (DRMMComponentVariable). It provides methods to retrieve specific variables and generate summaries of the component's properties.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,85 +16,44 @@ The DRMMComponent class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id                  | int                     | Add description |
-| Uid                 | string                  | Add description |
-| Name                | string                  | Add description |
-| Description         | string                  | Add description |
-| CategoryCode        | string                  | Add description |
-| CredentialsRequired | bool                    | Add description |
-| Variables           | DRMMComponentVariable[] | Add description |
+| Id                  | int                     | The unique identifier of the component. |
+| Uid                 | string                  | The unique identifier string of the component. |
+| Name                | string                  | The name of the component. |
+| Description         | string                  | A description of the component. |
+| CategoryCode        | string                  | The category code that classifies the component within the DRMM system. |
+| CredentialsRequired | bool                    | Indicates whether the component requires credentials. |
+| Variables           | DRMMComponentVariable[] | An array of variables associated with the component. |
 
 ## METHODS
 
 The DRMMComponent class provides the following methods:
 
-### DRMMComponent()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetVariable([String]$Name)
 
-Add method description explaining what this method does
+Retrieves a specific variable from the component by name.
 
-**Returns:** `DRMMComponentVariable` - Describe what this method returns
+**Returns:** `DRMMComponentVariable` - The DRMMComponentVariable object that matches the specified name, or null if not found.
 
 **Parameters:**
-- `[String]$Name` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[String]$Name` - The name of the variable to retrieve.
 
 ### GetInputVariables()
 
-Add method description explaining what this method does
+Retrieves all input variables associated with the component.
 
-**Returns:** `DRMMComponentVariable[]` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `DRMMComponentVariable[]` - An array of DRMMComponentVariable objects that are designated as input variables for the component.
 
 ### GetOutputVariables()
 
-Add method description explaining what this method does
+Retrieves all output variables associated with the component.
 
-**Returns:** `DRMMComponentVariable[]` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `DRMMComponentVariable[]` - An array of DRMMComponentVariable objects that are designated as output variables for the component.
 
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the component, including its name, variable count, credentials requirement, and category.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string for the component, including its name, variable count, credentials requirement, and category.
 
 ## USAGE EXAMPLES
 

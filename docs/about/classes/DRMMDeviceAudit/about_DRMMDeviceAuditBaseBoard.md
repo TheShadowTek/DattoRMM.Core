@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the baseboard information of a device in a device audit, including manufacturer, product, and serial number.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditBaseBoard class models the information about the baseboard (motherboard) of the audited system. It includes properties such as Manufacturer, Product, and SerialNumber, which provide details about the baseboard. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,26 +16,15 @@ The DRMMDeviceAuditBaseBoard class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Manufacturer | string | Add description |
-| Product      | string | Add description |
-| SerialNumber | string | Add description |
+| Manufacturer | string | The manufacturer of the baseboard. |
+| Product      | string | The product name or model of the baseboard. |
+| SerialNumber | string | The serial number of the baseboard. |
 
 ## METHODS
 
 The DRMMDeviceAuditBaseBoard class provides the following methods:
 
-### DRMMDeviceAuditBaseBoard()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

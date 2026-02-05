@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the logical disk information of a device in a device audit, including description, disk identifier, free space, and size.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditLogicalDisk class models the information about the logical disks of the audited system. It includes properties such as Description, DiskIdentifier, Freespace, and Size, which provide details about each logical disk. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,27 +16,16 @@ The DRMMDeviceAuditLogicalDisk class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Description    | string | Add description |
-| DiskIdentifier | string | Add description |
-| Freespace      | long   | Add description |
-| Size           | long   | Add description |
+| Description    | string | A description of the logical disk. |
+| DiskIdentifier | string | The identifier of the logical disk. |
+| Freespace      | long   | The free space available on the logical disk. |
+| Size           | long   | The total size of the logical disk. |
 
 ## METHODS
 
 The DRMMDeviceAuditLogicalDisk class provides the following methods:
 
-### DRMMDeviceAuditLogicalDisk()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

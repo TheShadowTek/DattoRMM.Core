@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a backup management alert in the DRMM system, including error messages and timeout information.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextBackupManagement class models the context information specific to backup management alerts in the DRMM platform. It encapsulates properties such as error messages and timeout values that are relevant to backup management scenarios.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,25 +16,14 @@ The DRMMAlertContextBackupManagement class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| ErrorMessage | string | Add description |
-| Timeout      | int    | Add description |
+| ErrorMessage | string | The error message associated with the backup management alert context. |
+| Timeout      | int    | The timeout value related to the backup management alert context. |
 
 ## METHODS
 
 The DRMMAlertContextBackupManagement class provides the following methods:
 
-### DRMMAlertContextBackupManagement()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

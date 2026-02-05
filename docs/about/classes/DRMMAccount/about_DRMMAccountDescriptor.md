@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the descriptor information for a DRMM account, including billing and timezone details.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAccountDescriptor class encapsulates details about a DRMM account's billing email, device limit, and time zone. It provides a static method to create an instance of the class from a typical API response object that contains these descriptor details. This class is used as a property within the DRMMAccount class to provide additional information about the account's configuration and limitations.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,26 +16,15 @@ The DRMMAccountDescriptor class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| BillingEmail | string | Add description |
-| DeviceLimit  | int    | Add description |
-| TimeZone     | string | Add description |
+| BillingEmail | string | The billing email address associated with the account. |
+| DeviceLimit  | int    | The maximum number of devices allowed for the account. |
+| TimeZone     | string | The time zone setting for the account. |
 
 ## METHODS
 
 The DRMMAccountDescriptor class provides the following methods:
 
-### DRMMAccountDescriptor()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

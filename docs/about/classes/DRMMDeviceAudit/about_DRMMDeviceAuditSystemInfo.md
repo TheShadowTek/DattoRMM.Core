@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the system information of a device in a device audit, including manufacturer, model, total physical memory, username,
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditSystemInfo class models the information about the system of the audited device. It includes properties such as Manufacturer, Model, TotalPhysicalMemory, Username, DotNetVersion, and TotalCpuCores, which provide detailed information about the system's hardware and software environment. This class is typically used as part of the DRMMDeviceAudit to represent the overall system information of the device being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,29 +16,18 @@ The DRMMDeviceAuditSystemInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Manufacturer        | string | Add description |
-| Model               | string | Add description |
-| TotalPhysicalMemory | long   | Add description |
-| Username            | string | Add description |
-| DotNetVersion       | string | Add description |
-| TotalCpuCores       | int    | Add description |
+| Manufacturer        | string | The manufacturer of the system. |
+| Model               | string | The model of the system. |
+| TotalPhysicalMemory | long   | The total physical memory (RAM) of the system. |
+| Username            | string | The username of the currently logged-in user. |
+| DotNetVersion       | string | The version of the .NET framework installed on the system. |
+| TotalCpuCores       | int    | The total number of CPU cores in the system. |
 
 ## METHODS
 
 The DRMMDeviceAuditSystemInfo class provides the following methods:
 
-### DRMMDeviceAuditSystemInfo()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

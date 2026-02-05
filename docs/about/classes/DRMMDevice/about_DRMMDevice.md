@@ -16,311 +16,179 @@ The DRMMDevice class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id                         | long                      | Add description |
-| Uid                        | guid                      | Add description |
-| SiteId                     | long                      | Add description |
-| SiteUid                    | guid                      | Add description |
-| SiteName                   | string                    | Add description |
-| DeviceType                 | DRMMDeviceType            | Add description |
-| Hostname                   | string                    | Add description |
-| IntIpAddress               | string                    | Add description |
-| OperatingSystem            | string                    | Add description |
-| LastLoggedInUser           | string                    | Add description |
-| Domain                     | string                    | Add description |
-| CagVersion                 | string                    | Add description |
-| DisplayVersion             | string                    | Add description |
-| ExtIpAddress               | string                    | Add description |
-| Description                | string                    | Add description |
-| A64Bit                     | bool                      | Add description |
-| RebootRequired             | bool                      | Add description |
-| Online                     | bool                      | Add description |
-| Suspended                  | bool                      | Add description |
-| Deleted                    | bool                      | Add description |
-| LastSeen                   | Nullable[datetime]        | Add description |
-| LastReboot                 | Nullable[datetime]        | Add description |
-| LastAuditDate              | Nullable[datetime]        | Add description |
-| CreationDate               | Nullable[datetime]        | Add description |
-| Udfs                       | DRMMDeviceUdfs            | Add description |
-| SnmpEnabled                | bool                      | Add description |
-| DeviceClass                | string                    | Add description |
-| PortalUrl                  | string                    | Add description |
-| WarrantyDate               | string                    | Add description |
-| Antivirus                  | DRMMDeviceAntivirusInfo   | Add description |
-| PatchManagement            | DRMMDevicePatchManagement | Add description |
-| SoftwareStatus             | string                    | Add description |
-| WebRemoteUrl               | string                    | Add description |
-| NetworkProbe               | bool                      | Add description |
-| OnboardedViaNetworkMonitor | bool                      | Add description |
-| RevealLastLoggedInUser     | bool                      | Add description |
+| Id                         | long                      | The unique identifier of the device. |
+| Uid                        | guid                      | The unique identifier (UID) of the device. |
+| SiteId                     | long                      | The unique identifier of the site to which the device belongs. |
+| SiteUid                    | guid                      | The unique identifier (UID) of the site to which the device belongs. |
+| SiteName                   | string                    | The name of the site to which the device belongs. |
+| DeviceType                 | DRMMDeviceType            | The type of the device. |
+| Hostname                   | string                    | The hostname of the device. |
+| IntIpAddress               | string                    | The internal IP address of the device. |
+| OperatingSystem            | string                    | The operating system running on the device. |
+| LastLoggedInUser           | string                    | The user who last logged into the device. |
+| Domain                     | string                    | The domain to which the device belongs. |
+| CagVersion                 | string                    | The version of the CAG agent installed on the device. |
+| DisplayVersion             | string                    | The display version of the device. |
+| ExtIpAddress               | string                    | The external IP address of the device. |
+| Description                | string                    | The device's description. |
+| A64Bit                     | bool                      | Indicates whether the device is running a 64-bit operating system. |
+| RebootRequired             | bool                      | Indicates whether the device requires a reboot. |
+| Online                     | bool                      | Indicates whether the device is currently online. |
+| Suspended                  | bool                      | Indicates whether the device is currently suspended in the DRMM system. |
+| Deleted                    | bool                      | Indicates whether the device has been marked as deleted. |
+| LastSeen                   | Nullable[datetime]        | The last time the device was seen online. |
+| LastReboot                 | Nullable[datetime]        | The date and time when the device was last rebooted. |
+| LastAuditDate              | Nullable[datetime]        | The date when the device was last audited. |
+| CreationDate               | Nullable[datetime]        | The date when the device was created in the DRMM system. |
+| Udfs                       | DRMMDeviceUdfs            | User-defined fields associated with the device. |
+| SnmpEnabled                | bool                      | Indicates whether SNMP is enabled on the device. |
+| DeviceClass                | string                    | The class of the device, which may indicate its role or type within the organization. |
+| PortalUrl                  | string                    | The URL to access the device's portal in the DRMM system. |
+| WarrantyDate               | string                    | The date when the device's warranty expires. |
+| Antivirus                  | DRMMDeviceAntivirusInfo   | Information about the device's antivirus software. |
+| PatchManagement            | DRMMDevicePatchManagement | Information about the device's patch management status. |
+| SoftwareStatus             | string                    | Information about the device's software status. |
+| WebRemoteUrl               | string                    | The URL for web remote access to the device. |
+| NetworkProbe               | bool                      | Information about the device's network probe status. |
+| OnboardedViaNetworkMonitor | bool                      | Indicates whether the device was onboarded via network monitoring. |
+| RevealLastLoggedInUser     | bool                      | Indicates whether the last logged in user information is revealed for the device. |
 
 ## METHODS
 
 The DRMMDevice class provides the following methods:
 
-### DRMMDevice()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetAlerts()
 
-Add method description explaining what this method does
+Retrieves the alerts associated with the device, filtered by a specified status.
 
-**Returns:** `DRMMAlert[]` - region DRMMAlert and related classes
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `DRMMAlert[]` - An array of alerts associated with the device that match the specified status.
 
 ### GetAlerts([String]$Status)
 
-Add method description explaining what this method does
+Retrieves the alerts associated with the device, filtered by a specified status.
 
-**Returns:** `DRMMAlert[]` - region DRMMAlert and related classes
+**Returns:** `DRMMAlert[]` - An array of alerts associated with the device that match the specified status.
 
 **Parameters:**
-- `[String]$Status` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[String]$Status` - The status to filter alerts by.
 
 ### OpenPortal()
 
-Add method description explaining what this method does
+Opens the device's portal URL in the default web browser.
 
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
 
 ### OpenWebRemote()
 
-Add method description explaining what this method does
+Opens the device's web remote URL in the default web browser.
 
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `void` - This method does not return a value. It performs an action to open the web remote URL in the default web browser.
 
 ### GetUdfAsJson([Int32]$UdfNumber)
 
-Add method description explaining what this method does
+Retrieves the value of a specified User-Defined Field (UDF) as a JSON object.
 
-**Returns:** `object` - Describe what this method returns
+**Returns:** `object` - A JSON object containing the value of the specified UDF.
 
 **Parameters:**
-- `[Int32]$UdfNumber` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to retrieve as JSON.
 
 ### GetUdfAsCsv([Int32]$UdfNumber, [String[]]$Headers)
 
-Parse single row of delimited data with custom headers
+Retrieves the value of a specified User-Defined Field (UDF) as a CSV object with a custom delimiter and headers.
 
-**Returns:** `pscustomobject` - Describe what this method returns
+**Returns:** `pscustomobject` - A CSV object containing the value of the specified UDF, formatted with the provided delimiter and headers.
 
 **Parameters:**
-- `[Int32]$UdfNumber` - Describe this parameter
-- `[String[]]$Headers` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to retrieve as CSV.
+- `[String[]]$Headers` - An array of headers to include in the CSV output.
 
 ### GetUdfAsCsv([Int32]$UdfNumber, [String]$Delimiter, [String[]]$Headers)
 
-Parse single row of delimited data with custom headers
+Retrieves the value of a specified User-Defined Field (UDF) as a CSV object with a custom delimiter and headers.
 
-**Returns:** `pscustomobject` - Describe what this method returns
+**Returns:** `pscustomobject` - A CSV object containing the value of the specified UDF, formatted with the provided delimiter and headers.
 
 **Parameters:**
-- `[Int32]$UdfNumber` - Describe this parameter
-- `[String]$Delimiter` - Describe this parameter
-- `[String[]]$Headers` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to retrieve as CSV.
+- `[String]$Delimiter` - The delimiter to use in the CSV output (e.g., comma, semicolon).
+- `[String[]]$Headers` - An array of headers to include in the CSV output.
 
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the device, including its hostname and device type.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string for the device, including its hostname and device type.
 
 ### ResolveAllAlerts()
 
-Alert Management Methods
+Resolves all open alerts associated with the device.
 
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `void` - This method does not return a value. It performs an action to resolve all open alerts associated with the device.
 
 ### GetAudit()
 
 Gets the most recent audit information for this device.
 
-**Returns:** `DRMMDeviceAudit` - Represents a comprehensive audit of a device, including hardware, software, and network information.
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `DRMMDeviceAudit` - The most recent audit information for this device.
 
 ### GetSoftware()
 
-Add method description explaining what this method does
+Gets the software information for this device.
 
-**Returns:** `DRMMDeviceAuditSoftware[]` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `DRMMDeviceAuditSoftware[]` - The software information for this device.
 
 ### SetUDF([Hashtable]$UDFFields)
 
-Device Management Methods
+Sets the value of one or more User-Defined Fields (UDFs) for the device.
 
-**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
+**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to set the specified UDFs for the device.
 
 **Parameters:**
-- `[Hashtable]$UDFFields` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Hashtable]$UDFFields` - A hashtable of User-Defined Fields (UDFs) to set for the device.
 
 ### ClearUDF([Int32]$UdfNumber)
 
-Add method description explaining what this method does
+Clears the value of a specified User-Defined Field (UDF) for the device.
 
-**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
+**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to clear the specified UDF.
 
 **Parameters:**
-- `[Int32]$UdfNumber` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to clear.
 
 ### ClearUDFs()
 
-Add method description explaining what this method does
+Clears the values of all User-Defined Fields (UDFs) for the device.
 
-**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to clear all UDFs.
 
 ### SetWarranty([DateTime]$WarrantyDate)
 
-Add method description explaining what this method does
+Sets the warranty date for the device.
 
-**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
+**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to set the warranty date for the device.
 
 **Parameters:**
-- `[DateTime]$WarrantyDate` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[DateTime]$WarrantyDate` - The warranty date to set for the device.
 
 ### RunQuickJob([Guid]$ComponentUid, [Hashtable]$Variables)
 
-Add method description explaining what this method does
+Runs a quick job on the device for a specified job component and variables.
 
-**Returns:** `DRMMJob` - region DRMMJob and related classes
+**Returns:** `DRMMJob` - A DRMMJob object representing the job that was run on the device.
 
 **Parameters:**
-- `[Guid]$ComponentUid` - Describe this parameter
-- `[Hashtable]$Variables` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Guid]$ComponentUid` - The unique identifier of the job component to run.
+- `[Hashtable]$Variables` - A hashtable of variables to pass to the job component.
 
 ### Move([Guid]$TargetSiteUid)
 
-Add method description explaining what this method does
+Moves the device to a different site within the DRMM system.
 
-**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
+**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to move the device to the specified site.
 
 **Parameters:**
-- `[Guid]$TargetSiteUid` - Describe this parameter
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+- `[Guid]$TargetSiteUid` - The unique identifier of the target site to move the device to.
 
 ## USAGE EXAMPLES
 

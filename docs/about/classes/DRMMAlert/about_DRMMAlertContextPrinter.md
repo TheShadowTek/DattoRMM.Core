@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a printer alert in the DRMM system, including IP address, MAC address, marker supply index, and current level.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextPrinter class models the context information specific to printer alerts in the DRMM platform. It encapsulates properties such as IP address, MAC address, marker supply index, and current level that provide detailed context about the printer alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,27 +16,16 @@ The DRMMAlertContextPrinter class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| IpAddress         | string | Add description |
-| MacAddress        | string | Add description |
-| MarkerSupplyIndex | int    | Add description |
-| CurrentLevel      | int    | Add description |
+| IpAddress         | string | The IP address of the printer. |
+| MacAddress        | string | The MAC address of the printer. |
+| MarkerSupplyIndex | int    | The index of the marker supply in the printer. |
+| CurrentLevel      | int    | The current level of the printer marker supply. |
 
 ## METHODS
 
 The DRMMAlertContextPrinter class provides the following methods:
 
-### DRMMAlertContextPrinter()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

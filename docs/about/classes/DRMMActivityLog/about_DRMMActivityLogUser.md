@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents user information associated with a DRMM activity log entry, including user ID, username, and name details.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMActivityLogUser class models the user information related to an activity log entry in the DRMM platform. It encapsulates properties such as the user ID, username, first name, and last name. The class provides a static method to create an instance of the class from a typical API response object that contains these user details. Additionally, it includes a method to generate a summary string that combines the user's first name, last name, and username for easy display in contexts where user information is relevant.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,40 +16,20 @@ The DRMMActivityLogUser class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id        | long   | Add description |
-| UserName  | string | Add description |
-| FirstName | string | Add description |
-| LastName  | string | Add description |
+| Id        | long   | The unique identifier for the user associated with the activity log entry. |
+| UserName  | string | The username of the user associated with the activity log entry. |
+| FirstName | string | The first name of the user associated with the activity log entry. |
+| LastName  | string | The last name of the user associated with the activity log entry. |
 
 ## METHODS
 
 The DRMMActivityLogUser class provides the following methods:
 
-### DRMMActivityLogUser()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the user, including their first name, last name, and username.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string combining the user's first name, last name, and username.
 
 ## USAGE EXAMPLES
 

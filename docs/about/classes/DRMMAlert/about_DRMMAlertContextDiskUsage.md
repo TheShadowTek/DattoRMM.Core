@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a disk usage alert in the DRMM system, including details about the disk, total volume, free space, and unit of measure.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextDiskUsage class models the context information specific to disk usage alerts in the DRMM platform. It encapsulates properties such as the name of the disk, total volume, free space, unit of measure, and disk name designation. This information provides insights into the disk usage conditions that triggered the alert, allowing for better understanding and response to disk-related issues.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,28 +16,17 @@ The DRMMAlertContextDiskUsage class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DiskName            | string | Add description |
-| TotalVolume         | float  | Add description |
-| FreeSpace           | float  | Add description |
-| UnitOfMeasure       | string | Add description |
-| DiskNameDesignation | string | Add description |
+| DiskName            | string | The name of the disk associated with the disk usage alert. |
+| TotalVolume         | float  | The total volume or capacity of the disk. |
+| FreeSpace           | float  | The amount of free space available on the disk. |
+| UnitOfMeasure       | string | The unit of measure used for disk space values (e.g., bytes, megabytes). |
+| DiskNameDesignation | string | The designation or label of the disk associated with the disk usage alert. |
 
 ## METHODS
 
 The DRMMAlertContextDiskUsage class provides the following methods:
 
-### DRMMAlertContextDiskUsage()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

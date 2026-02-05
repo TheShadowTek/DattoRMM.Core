@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of an online/offline status alert in the DRMM system, including the current status.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextOnlineOfflineStatus class models the context information specific to online/offline status alerts in the DRMM platform. It encapsulates a status property that indicates the current online or offline state associated with the alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,24 +16,13 @@ The DRMMAlertContextOnlineOfflineStatus class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Status | string | Add description |
+| Status | string | The current online or offline status associated with the alert. |
 
 ## METHODS
 
 The DRMMAlertContextOnlineOfflineStatus class provides the following methods:
 
-### DRMMAlertContextOnlineOfflineStatus()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

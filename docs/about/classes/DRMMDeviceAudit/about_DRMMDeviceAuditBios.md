@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the BIOS information of a device in a device audit, including manufacturer, name, serial number, and SMBIOS BIOS version.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditBios class models the information about the BIOS of the audited system. It includes properties such as Manufacturer, Name, SerialNumber, and SmbiosBiosVersion, which provide details about the BIOS. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,27 +16,16 @@ The DRMMDeviceAuditBios class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Manufacturer      | string | Add description |
-| Name              | string | Add description |
-| SerialNumber      | string | Add description |
-| SmbiosBiosVersion | string | Add description |
+| Manufacturer      | string | The manufacturer of the BIOS. |
+| Name              | string | The name of the BIOS. |
+| SerialNumber      | string | The serial number of the BIOS. |
+| SmbiosBiosVersion | string | The SMBIOS BIOS version. |
 
 ## METHODS
 
 The DRMMDeviceAuditBios class provides the following methods:
 
-### DRMMDeviceAuditBios()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

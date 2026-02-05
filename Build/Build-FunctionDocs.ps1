@@ -38,7 +38,7 @@
 #>
 [CmdletBinding()]
 param(
-    [switch]$Force = $true,
+    [switch]$Force,
     [string]$OutputFolder = ".\docs\commands"
 )
 

@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents a variable associated with a DRMM job component, including its name and value.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMJobComponentVariable class models a variable within a DRMM job component. It includes properties such as Name and Value, which provide details about the variable's identity and configuration. The class also includes a static method to create an instance of DRMMJobComponentVariable from API response data.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,25 +16,14 @@ The DRMMJobComponentVariable class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Name  | string | Add description |
-| Value | string | Add description |
+| Name  | string | The name of the job component variable. |
+| Value | string | The value of the job component variable. |
 
 ## METHODS
 
 The DRMMJobComponentVariable class provides the following methods:
 
-### DRMMJobComponentVariable()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

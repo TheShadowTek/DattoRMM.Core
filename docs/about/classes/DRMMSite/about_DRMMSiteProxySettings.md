@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the proxy settings for a site in the DRMM system, including properties such as host, port, type, and authentication credentials.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMSiteProxySettings class models the proxy settings for a site within the DRMM platform. It includes properties such as Host, Port, Type, Username, and Password. The class provides a constructor and a static method to create an instance from API response data. Additionally, it includes a method to generate a summary string of the proxy settings information. The class handles the conversion of password data from the API response, ensuring that it is stored as a secure string when appropriate.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,41 +16,21 @@ The DRMMSiteProxySettings class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Host     | string       | Add description |
-| Username | string       | Add description |
-| Password | securestring | Add description |
-| Port     | int          | Add description |
-| Type     | string       | Add description |
+| Host     | string       | The host address of the proxy server. |
+| Username | string       | The username for the proxy server. |
+| Password | securestring | The password for the proxy server. |
+| Port     | int          | The port number of the proxy server. |
+| Type     | string       | The type of the proxy server (e.g., HTTP, SOCKS). |
 
 ## METHODS
 
 The DRMMSiteProxySettings class provides the following methods:
 
-### DRMMSiteProxySettings()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the proxy settings, including the type, host, and port information.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string that includes the type, host, and port information of the site's proxy settings.
 
 ## USAGE EXAMPLES
 

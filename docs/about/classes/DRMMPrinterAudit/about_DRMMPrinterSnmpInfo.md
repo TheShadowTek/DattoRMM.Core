@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the SNMP information of a printer, including SNMP name, contact, description, location, uptime, NIC manufacturer, object ID, and serial number.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMPrinterSnmpInfo class models the SNMP-related information of a printer. It includes properties such as SnmpName, SnmpContact, SnmpDescription, SnmpLocation, SnmpUptime, NicManufacturer, ObjectId, and SnmpSerial. This class is typically used as part of the DRMMPrinterAudit to represent the SNMP details of the printer.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,31 +16,20 @@ The DRMMPrinterSnmpInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| SnmpName        | string | Add description |
-| SnmpContact     | string | Add description |
-| SnmpDescription | string | Add description |
-| SnmpLocation    | string | Add description |
-| SnmpUptime      | string | Add description |
-| NicManufacturer | string | Add description |
-| ObjectId        | string | Add description |
-| SnmpSerial      | string | Add description |
+| SnmpName        | string | The name of the printer as reported by SNMP. |
+| SnmpContact     | string | The contact information for SNMP communication with the printer. |
+| SnmpDescription | string | The description of the SNMP configuration for the printer. |
+| SnmpLocation    | string | The physical location of the printer as reported by SNMP. |
+| SnmpUptime      | string | The uptime of the printer as reported by SNMP. |
+| NicManufacturer | string | The manufacturer of the network interface card (NIC) used for SNMP communication. |
+| ObjectId        | string | The SNMP object identifier (OID) associated with the printer. |
+| SnmpSerial      | string | The serial number of the printer as reported by SNMP. |
 
 ## METHODS
 
 The DRMMPrinterSnmpInfo class provides the following methods:
 
-### DRMMPrinterSnmpInfo()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

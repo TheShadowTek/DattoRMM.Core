@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the general settings for a site in the DRMM system, including properties such as name, unique identifier, description, and on-demand status.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMSiteGeneralSettings class models the general settings for a site within the DRMM platform. It includes properties such as Name, Uid, Description, and OnDemand status. The class provides a constructor and a static method to create an instance from API response data. Additionally, it includes a method to generate a summary string of the general settings information.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,40 +16,20 @@ The DRMMSiteGeneralSettings class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Name        | string | Add description |
-| Uid         | string | Add description |
-| Description | string | Add description |
-| OnDemand    | bool   | Add description |
+| Name        | string | The name of the site's general settings. |
+| Uid         | string | The unique identifier (UID) of the site's general settings. |
+| Description | string | The description of the site's general settings. |
+| OnDemand    | bool   | Indicates whether the site is on-demand. |
 
 ## METHODS
 
 The DRMMSiteGeneralSettings class provides the following methods:
 
-### DRMMSiteGeneralSettings()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the general settings, including the on-demand status.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string that includes the on-demand status of the site's general settings.
 
 ## USAGE EXAMPLES
 

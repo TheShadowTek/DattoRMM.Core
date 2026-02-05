@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the mobile information of a device in a device audit, including ICCID, IMEI, number, and operator.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAuditMobileInfo class models the information about the mobile connectivity of the audited system. It includes properties such as Iccid, Imei, Number, and Operator, which provide details about the mobile network information of the device. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,27 +16,16 @@ The DRMMDeviceAuditMobileInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Iccid    | string | Add description |
-| Imei     | string | Add description |
-| Number   | string | Add description |
-| Operator | string | Add description |
+| Iccid    | string | The ICCID (Integrated Circuit Card Identifier) of the mobile device. |
+| Imei     | string | The IMEI (International Mobile Equipment Identity) of the mobile device. |
+| Number   | string | The phone number associated with the mobile device. |
+| Operator | string | The mobile network operator of the device. |
 
 ## METHODS
 
 The DRMMDeviceAuditMobileInfo class provides the following methods:
 
-### DRMMDeviceAuditMobileInfo()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

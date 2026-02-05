@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents the context of a patch alert in the DRMM system, including patch UID, policy UID, result, and additional information.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertContextPatch class models the context information specific to patch alerts in the DRMM platform. It encapsulates properties such as patch UID, policy UID, result, and additional information that provide detailed context about the patch alert.
 
 This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
@@ -16,27 +16,16 @@ The DRMMAlertContextPatch class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| PatchUid  | string | Add description |
-| PolicyUid | string | Add description |
-| Result    | string | Add description |
-| Info      | string | Add description |
+| PatchUid  | string | The unique identifier for the patch. |
+| PolicyUid | string | The unique identifier for the policy associated with the patch. |
+| Result    | string | The result of the patch operation. |
+| Info      | string | Additional information about the patch alert. |
 
 ## METHODS
 
 The DRMMAlertContextPatch class provides the following methods:
 
-### DRMMAlertContextPatch()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 

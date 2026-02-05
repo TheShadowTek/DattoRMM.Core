@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents antivirus information for a device in the DRMM system, including the antivirus product name and its status.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMDeviceAntivirusInfo class models the antivirus information associated with a device in the DRMM platform. It includes properties such as AntivirusProduct and AntivirusStatus, which provide details about the antivirus software installed on the device and its current status. The class also includes methods to determine if the antivirus is running and up to date, as well as a method to generate a summary string of the antivirus information.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,64 +16,30 @@ The DRMMDeviceAntivirusInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| AntivirusProduct | string | Add description |
-| AntivirusStatus  | string | Add description |
+| AntivirusProduct | string | The name of the antivirus product installed on the device. |
+| AntivirusStatus  | string | The current status of the antivirus product on the device. |
 
 ## METHODS
 
 The DRMMDeviceAntivirusInfo class provides the following methods:
 
-### DRMMDeviceAntivirusInfo()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### IsRunning()
 
-Add method description explaining what this method does
+Determines if the antivirus is currently running on the device.
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - A boolean value indicating whether the antivirus is currently running on the device.
 
 ### IsUpToDate()
 
-Add method description explaining what this method does
+Determines if the antivirus is running and up to date on the device.
 
-**Returns:** `bool` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `bool` - A boolean value indicating whether the antivirus is running and up to date on the device.
 
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string of the antivirus product and its status.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string of the antivirus product and its status.
 
 ## USAGE EXAMPLES
 

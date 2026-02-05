@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Add a brief description of this class
+Represents a response action taken for an alert in the DRMM system, including action time, type, description, and references.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMAlertResponseAction class models the response actions specific to alerts in the DRMM platform. It encapsulates properties such as ActionTime, ActionType, Description, ActionReference, and ActionReferenceInt that provide detailed context about the response actions taken for an alert.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,41 +16,21 @@ The DRMMAlertResponseAction class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| ActionTime         | Nullable[datetime] | Add description |
-| ActionType         | string             | Add description |
-| Description        | string             | Add description |
-| ActionReference    | string             | Add description |
-| ActionReferenceInt | string             | Add description |
+| ActionTime         | Nullable[datetime] | The time when the action was taken. |
+| ActionType         | string             | The type of action taken. |
+| Description        | string             | Description of the action taken. |
+| ActionReference    | string             | Reference to the action taken. |
+| ActionReferenceInt | string             | Internal reference identifier for the action. |
 
 ## METHODS
 
 The DRMMAlertResponseAction class provides the following methods:
 
-### DRMMAlertResponseAction()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
-
 ### GetSummary()
 
-Add method description explaining what this method does
+Generates a summary string for the alert response action, including action type and description.
 
-**Returns:** `string` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+**Returns:** `string` - A summary string for the alert response action, including action type and description.
 
 ## USAGE EXAMPLES
 

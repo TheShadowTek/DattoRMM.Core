@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMEsxiHostAudit and related classes
+Represents the audit information of an ESXi host, including system info, guests, processors, network interfaces, physical memory, and datastores.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMEsxiHostAudit class encapsulates detailed information about an ESXi host, such as its unique identifier, portal URL, system information, guest virtual machines, processors, network interfaces, physical memory modules, and datastores. This class is typically used to represent the results of an ESXi host audit operation within the DRMM system.
 
 This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
@@ -16,29 +16,18 @@ The DRMMEsxiDatastore class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DatastoreName       | string         | Add description |
-| SubscriptionPercent | Nullable[int]  | Add description |
-| FreeSpace           | Nullable[long] | Add description |
-| Size                | Nullable[long] | Add description |
-| FileSystem          | string         | Add description |
-| Status              | string         | Add description |
+| DatastoreName       | string         | The name of the datastore. |
+| SubscriptionPercent | Nullable[int]  | The percentage of subscription used in the datastore. |
+| FreeSpace           | Nullable[long] | The amount of free space available in the datastore. |
+| Size                | Nullable[long] | The total size of the datastore. |
+| FileSystem          | string         | The file system type of the datastore. |
+| Status              | string         | The current status of the datastore. |
 
 ## METHODS
 
 The DRMMEsxiDatastore class provides the following methods:
 
-### DRMMEsxiDatastore()
-
-Add method description explaining what this method does
-
-**Returns:** `void` - Describe what this method returns
-
-**Example:**
-
-```powershell
-# TODO: Add usage example for this method
-```
-
+No public methods defined.
 
 ## USAGE EXAMPLES
 
