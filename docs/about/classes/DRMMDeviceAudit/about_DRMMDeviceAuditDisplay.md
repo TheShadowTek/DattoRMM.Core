@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMDeviceAuditDisplay class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMDeviceAuditDisplay class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,26 @@ The DRMMDeviceAuditDisplay class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Instance     | string | TODO: Add description |\n| ScreenHeight | int    | TODO: Add description |\n| ScreenWidth  | int    | TODO: Add description |\n
+| Instance     | string | Add description |
+| ScreenHeight | int    | Add description |
+| ScreenWidth  | int    | Add description |
+
 ## METHODS
 
 The DRMMDeviceAuditDisplay class provides the following methods:
 
 ### DRMMDeviceAuditDisplay()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

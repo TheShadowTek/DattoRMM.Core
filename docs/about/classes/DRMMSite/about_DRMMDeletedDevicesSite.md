@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMDeletedDevicesSite class used in DattoRMM.Core module.
+Derived class for the "Deleted Devices" system site which has an invalid GUID
 
 ## LONG DESCRIPTION
 
-The DRMMDeletedDevicesSite class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMSite](about_DRMMSite.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMSite/about_DRMMSite.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,24 @@ The DRMMDeletedDevicesSite class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Uid | string | TODO: Add description |\n
+| Uid | string | Shadow the base Uid property with string type to handle invalid GUIDs |
+
 ## METHODS
 
 The DRMMDeletedDevicesSite class provides the following methods:
 
 ### DRMMDeletedDevicesSite()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

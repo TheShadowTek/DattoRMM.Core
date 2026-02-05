@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMAccountDevicesStatus class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMAccountDevicesStatus class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,46 +16,54 @@ The DRMMAccountDevicesStatus class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| NumberOfDevices         | int | TODO: Add description |\n| NumberOfOnlineDevices   | int | TODO: Add description |\n| NumberOfOfflineDevices  | int | TODO: Add description |\n| NumberOfOnDemandDevices | int | TODO: Add description |\n| NumberOfManagedDevices  | int | TODO: Add description |\n
+| NumberOfDevices         | int | Add description |
+| NumberOfOnlineDevices   | int | Add description |
+| NumberOfOfflineDevices  | int | Add description |
+| NumberOfOnDemandDevices | int | Add description |
+| NumberOfManagedDevices  | int | Add description |
+
 ## METHODS
 
 The DRMMAccountDevicesStatus class provides the following methods:
 
 ### DRMMAccountDevicesStatus()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetOnlinePercentage()
 
-**Returns:** `double`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `double` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

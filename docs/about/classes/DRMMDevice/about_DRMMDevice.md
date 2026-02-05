@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMDevice class used in DattoRMM.Core module.
+Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 ## LONG DESCRIPTION
 
-The DRMMDevice class represents TODO: describe what this class represents and its purpose.
+The DRMMDevice class models a device within the DRMM platform, providing properties that describe the device's attributes and state, as well as methods to retrieve related information such as alerts and to perform actions like opening the device portal.
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,257 +16,311 @@ The DRMMDevice class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id                         | long                      | TODO: Add description |\n| Uid                        | guid                      | TODO: Add description |\n| SiteId                     | long                      | TODO: Add description |\n| SiteUid                    | guid                      | TODO: Add description |\n| SiteName                   | string                    | TODO: Add description |\n| DeviceType                 | DRMMDeviceType            | TODO: Add description |\n| Hostname                   | string                    | TODO: Add description |\n| IntIpAddress               | string                    | TODO: Add description |\n| OperatingSystem            | string                    | TODO: Add description |\n| LastLoggedInUser           | string                    | TODO: Add description |\n| Domain                     | string                    | TODO: Add description |\n| CagVersion                 | string                    | TODO: Add description |\n| DisplayVersion             | string                    | TODO: Add description |\n| ExtIpAddress               | string                    | TODO: Add description |\n| Description                | string                    | TODO: Add description |\n| A64Bit                     | bool                      | TODO: Add description |\n| RebootRequired             | bool                      | TODO: Add description |\n| Online                     | bool                      | TODO: Add description |\n| Suspended                  | bool                      | TODO: Add description |\n| Deleted                    | bool                      | TODO: Add description |\n| LastSeen                   | Nullable[datetime]        | TODO: Add description |\n| LastReboot                 | Nullable[datetime]        | TODO: Add description |\n| LastAuditDate              | Nullable[datetime]        | TODO: Add description |\n| CreationDate               | Nullable[datetime]        | TODO: Add description |\n| Udfs                       | DRMMDeviceUdfs            | TODO: Add description |\n| SnmpEnabled                | bool                      | TODO: Add description |\n| DeviceClass                | string                    | TODO: Add description |\n| PortalUrl                  | string                    | TODO: Add description |\n| WarrantyDate               | string                    | TODO: Add description |\n| Antivirus                  | DRMMDeviceAntivirusInfo   | TODO: Add description |\n| PatchManagement            | DRMMDevicePatchManagement | TODO: Add description |\n| SoftwareStatus             | string                    | TODO: Add description |\n| WebRemoteUrl               | string                    | TODO: Add description |\n| NetworkProbe               | bool                      | TODO: Add description |\n| OnboardedViaNetworkMonitor | bool                      | TODO: Add description |\n| RevealLastLoggedInUser     | bool                      | TODO: Add description |\n
+| Id                         | long                      | Add description |
+| Uid                        | guid                      | Add description |
+| SiteId                     | long                      | Add description |
+| SiteUid                    | guid                      | Add description |
+| SiteName                   | string                    | Add description |
+| DeviceType                 | DRMMDeviceType            | Add description |
+| Hostname                   | string                    | Add description |
+| IntIpAddress               | string                    | Add description |
+| OperatingSystem            | string                    | Add description |
+| LastLoggedInUser           | string                    | Add description |
+| Domain                     | string                    | Add description |
+| CagVersion                 | string                    | Add description |
+| DisplayVersion             | string                    | Add description |
+| ExtIpAddress               | string                    | Add description |
+| Description                | string                    | Add description |
+| A64Bit                     | bool                      | Add description |
+| RebootRequired             | bool                      | Add description |
+| Online                     | bool                      | Add description |
+| Suspended                  | bool                      | Add description |
+| Deleted                    | bool                      | Add description |
+| LastSeen                   | Nullable[datetime]        | Add description |
+| LastReboot                 | Nullable[datetime]        | Add description |
+| LastAuditDate              | Nullable[datetime]        | Add description |
+| CreationDate               | Nullable[datetime]        | Add description |
+| Udfs                       | DRMMDeviceUdfs            | Add description |
+| SnmpEnabled                | bool                      | Add description |
+| DeviceClass                | string                    | Add description |
+| PortalUrl                  | string                    | Add description |
+| WarrantyDate               | string                    | Add description |
+| Antivirus                  | DRMMDeviceAntivirusInfo   | Add description |
+| PatchManagement            | DRMMDevicePatchManagement | Add description |
+| SoftwareStatus             | string                    | Add description |
+| WebRemoteUrl               | string                    | Add description |
+| NetworkProbe               | bool                      | Add description |
+| OnboardedViaNetworkMonitor | bool                      | Add description |
+| RevealLastLoggedInUser     | bool                      | Add description |
+
 ## METHODS
 
 The DRMMDevice class provides the following methods:
 
 ### DRMMDevice()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetAlerts()
 
-**Returns:** `DRMMAlert[]`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMAlert[]` - region DRMMAlert and related classes
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetAlerts([String]$Status)
 
-**Returns:** `DRMMAlert[]`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMAlert[]` - region DRMMAlert and related classes
 
 **Parameters:**
-- `[String]$Status` - TODO: Describe this parameter
+- `[String]$Status` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### OpenPortal()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### OpenWebRemote()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetUdfAsJson([Int32]$UdfNumber)
 
-**Returns:** `object`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `object` - Describe what this method returns
 
 **Parameters:**
-- `[Int32]$UdfNumber` - TODO: Describe this parameter
+- `[Int32]$UdfNumber` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetUdfAsCsv([Int32]$UdfNumber, [String[]]$Headers)
 
-**Returns:** `pscustomobject`
+Parse single row of delimited data with custom headers
 
-TODO: Add method description explaining what this method does.
+**Returns:** `pscustomobject` - Describe what this method returns
 
 **Parameters:**
-- `[Int32]$UdfNumber` - TODO: Describe this parameter
-- `[String[]]$Headers` - TODO: Describe this parameter
+- `[Int32]$UdfNumber` - Describe this parameter
+- `[String[]]$Headers` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetUdfAsCsv([Int32]$UdfNumber, [String]$Delimiter, [String[]]$Headers)
 
-**Returns:** `pscustomobject`
+Parse single row of delimited data with custom headers
 
-TODO: Add method description explaining what this method does.
+**Returns:** `pscustomobject` - Describe what this method returns
 
 **Parameters:**
-- `[Int32]$UdfNumber` - TODO: Describe this parameter
-- `[String]$Delimiter` - TODO: Describe this parameter
-- `[String[]]$Headers` - TODO: Describe this parameter
+- `[Int32]$UdfNumber` - Describe this parameter
+- `[String]$Delimiter` - Describe this parameter
+- `[String[]]$Headers` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### ResolveAllAlerts()
 
-**Returns:** `void`
+Alert Management Methods
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetAudit()
 
-**Returns:** `DRMMDeviceAudit`
+Gets the most recent audit information for this device.
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMDeviceAudit` - Represents a comprehensive audit of a device, including hardware, software, and network information.
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSoftware()
 
-**Returns:** `DRMMDeviceAuditSoftware[]`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMDeviceAuditSoftware[]` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### SetUDF([Hashtable]$UDFFields)
 
-**Returns:** `DRMMDevice`
+Device Management Methods
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[Hashtable]$UDFFields` - TODO: Describe this parameter
+- `[Hashtable]$UDFFields` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### ClearUDF([Int32]$UdfNumber)
 
-**Returns:** `DRMMDevice`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[Int32]$UdfNumber` - TODO: Describe this parameter
+- `[Int32]$UdfNumber` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### ClearUDFs()
 
-**Returns:** `DRMMDevice`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### SetWarranty([DateTime]$WarrantyDate)
 
-**Returns:** `DRMMDevice`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[DateTime]$WarrantyDate` - TODO: Describe this parameter
+- `[DateTime]$WarrantyDate` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### RunQuickJob([Guid]$ComponentUid, [Hashtable]$Variables)
 
-**Returns:** `DRMMJob`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMJob` - region DRMMJob and related classes
 
 **Parameters:**
-- `[Guid]$ComponentUid` - TODO: Describe this parameter
-- `[Hashtable]$Variables` - TODO: Describe this parameter
+- `[Guid]$ComponentUid` - Describe this parameter
+- `[Hashtable]$Variables` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### Move([Guid]$TargetSiteUid)
 
-**Returns:** `DRMMDevice`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[Guid]$TargetSiteUid` - TODO: Describe this parameter
+- `[Guid]$TargetSiteUid` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

@@ -1738,6 +1738,12 @@ class DRMMNetworkInterface : DRMMObject {
 #endregion DRMMNetworkInterface class
 
 #region DRMMDeviceAudit and related classes
+<#
+.SYNOPSIS
+    Represents a comprehensive audit of a device, including hardware, software, and network information.
+.DESCRIPTION
+    The DRMMDeviceAudit class encapsulates detailed information about a device, such as its unique identifier, portal URL, system information, network interfaces, BIOS details, baseboard information, display configurations, logical disks, mobile information, processors, video boards, attached devices, SNMP information, physical memory, and installed software. This class is typically used to represent the results of a device audit operation within the DRMM system.
+#>
 class DRMMDeviceAudit : DRMMObject {
 
     [guid]$DeviceUid
@@ -3092,6 +3098,14 @@ class DRMMJobStdData : DRMMObject {
 #endregion DRMMJob and related classes
 
 #region DRMMDevice and related classes
+<#
+.SYNOPSIS
+    Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
+.DESCRIPTION
+    The DRMMDevice class models a device within the DRMM platform, providing properties that describe the device's 
+    attributes and state, as well as methods to retrieve related information such as alerts and to perform actions 
+    like opening the device portal.
+#>
 class DRMMDevice : DRMMObject {
 
     [long]$Id
@@ -3340,6 +3354,13 @@ class DRMMDevice : DRMMObject {
     }
 
     # Data Retrieval Methods
+    <#
+    .SYNOPSIS
+    Gets the most recent audit information for this device.
+    .DESCRIPTION
+    This method retrieves the latest audit data for the device, which may include system information, hardware details, 
+    and other relevant data collected during the last audit process.
+    #>
     [DRMMDeviceAudit] GetAudit() {
 
         return Get-RMMDeviceAudit -DeviceUid $this.Uid

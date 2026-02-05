@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMEsxiDatastore class used in DattoRMM.Core module.
+region DRMMEsxiHostAudit and related classes
 
 ## LONG DESCRIPTION
 
-The DRMMEsxiDatastore class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,29 @@ The DRMMEsxiDatastore class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DatastoreName       | string         | TODO: Add description |\n| SubscriptionPercent | Nullable[int]  | TODO: Add description |\n| FreeSpace           | Nullable[long] | TODO: Add description |\n| Size                | Nullable[long] | TODO: Add description |\n| FileSystem          | string         | TODO: Add description |\n| Status              | string         | TODO: Add description |\n
+| DatastoreName       | string         | Add description |
+| SubscriptionPercent | Nullable[int]  | Add description |
+| FreeSpace           | Nullable[long] | Add description |
+| Size                | Nullable[long] | Add description |
+| FileSystem          | string         | Add description |
+| Status              | string         | Add description |
+
 ## METHODS
 
 The DRMMEsxiDatastore class provides the following methods:
 
 ### DRMMEsxiDatastore()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMDeviceType class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMDeviceType class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,25 @@ The DRMMDeviceType class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Category | string | TODO: Add description |\n| Type     | string | TODO: Add description |\n
+| Category | string | Add description |
+| Type     | string | Add description |
+
 ## METHODS
 
 The DRMMDeviceType class provides the following methods:
 
 ### DRMMDeviceType()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

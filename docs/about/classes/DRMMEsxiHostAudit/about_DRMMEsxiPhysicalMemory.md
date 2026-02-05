@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMEsxiPhysicalMemory class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMEsxiPhysicalMemory class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,30 @@ The DRMMEsxiPhysicalMemory class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Module       | string         | TODO: Add description |\n| Size         | Nullable[long] | TODO: Add description |\n| Type         | string         | TODO: Add description |\n| Speed        | string         | TODO: Add description |\n| SerialNumber | string         | TODO: Add description |\n| PartNumber   | string         | TODO: Add description |\n| Bank         | string         | TODO: Add description |\n
+| Module       | string         | Add description |
+| Size         | Nullable[long] | Add description |
+| Type         | string         | Add description |
+| Speed        | string         | Add description |
+| SerialNumber | string         | Add description |
+| PartNumber   | string         | Add description |
+| Bank         | string         | Add description |
+
 ## METHODS
 
 The DRMMEsxiPhysicalMemory class provides the following methods:
 
 ### DRMMEsxiPhysicalMemory()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

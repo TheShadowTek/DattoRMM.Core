@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMAlertContextPatch class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMAlertContextPatch class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMAlertContext](about_DRMMAlertContext.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,27 @@ The DRMMAlertContextPatch class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| PatchUid  | string | TODO: Add description |\n| PolicyUid | string | TODO: Add description |\n| Result    | string | TODO: Add description |\n| Info      | string | TODO: Add description |\n
+| PatchUid  | string | Add description |
+| PolicyUid | string | Add description |
+| Result    | string | Add description |
+| Info      | string | Add description |
+
 ## METHODS
 
 The DRMMAlertContextPatch class provides the following methods:
 
 ### DRMMAlertContextPatch()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

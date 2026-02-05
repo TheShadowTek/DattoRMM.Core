@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMVariable class used in DattoRMM.Core module.
+region DRMMVariable class
 
 ## LONG DESCRIPTION
 
-The DRMMVariable class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,58 +16,68 @@ The DRMMVariable class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id       | long           | TODO: Add description |\n| Name     | string         | TODO: Add description |\n| Value    | object         | TODO: Add description |\n| Scope    | string         | TODO: Add description |\n| SiteUid  | Nullable[guid] | TODO: Add description |\n| IsSecret | bool           | TODO: Add description |\n
+| Id       | long           | Add description |
+| Name     | string         | Add description |
+| Value    | object         | Add description |
+| Scope    | string         | Add description |
+| SiteUid  | Nullable[guid] | Add description |
+| IsSecret | bool           | Add description |
+
 ## METHODS
 
 The DRMMVariable class provides the following methods:
 
 ### DRMMVariable()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### IsGlobal()
 
-**Returns:** `bool`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `bool` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### IsSite()
 
-**Returns:** `bool`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `bool` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+API already returns masked values for secret variables
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMSiteProxySettings class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMSiteProxySettings class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,34 +16,41 @@ The DRMMSiteProxySettings class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Host     | string       | TODO: Add description |\n| Username | string       | TODO: Add description |\n| Password | securestring | TODO: Add description |\n| Port     | int          | TODO: Add description |\n| Type     | string       | TODO: Add description |\n
+| Host     | string       | Add description |
+| Username | string       | Add description |
+| Password | securestring | Add description |
+| Port     | int          | Add description |
+| Type     | string       | Add description |
+
 ## METHODS
 
 The DRMMSiteProxySettings class provides the following methods:
 
 ### DRMMSiteProxySettings()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

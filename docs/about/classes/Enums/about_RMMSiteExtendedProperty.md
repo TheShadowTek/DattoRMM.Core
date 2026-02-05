@@ -2,13 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Describes the RMMSiteExtendedProperty enumeration used in DattoRMM.Core module.
+region Enums
 
 ## LONG DESCRIPTION
 
-The RMMSiteExtendedProperty enum defines valid values for TODO: describe what this enum represents.
-
-TODO: Add more detailed description of when and how this enum is used.
+The RMMSiteExtendedProperty enum defines valid values for TODO: describe what this enum represents
 
 ## VALUES
 
@@ -26,8 +24,7 @@ The following values are defined for RMMSiteExtendedProperty:
 
 ```powershell
 # TODO: Add example showing how to use this enum
-```
-
+```\n
 ## NOTES
 
 This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
@@ -35,3 +32,4 @@ This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/Enums/about_RMMSiteExtendedProperty.md)
+

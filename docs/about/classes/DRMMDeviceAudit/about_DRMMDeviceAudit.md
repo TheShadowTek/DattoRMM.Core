@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMDeviceAudit class used in DattoRMM.Core module.
+Represents a comprehensive audit of a device, including hardware, software, and network information.
 
 ## LONG DESCRIPTION
 
-The DRMMDeviceAudit class represents TODO: describe what this class represents and its purpose.
+The DRMMDeviceAudit class encapsulates detailed information about a device, such as its unique identifier, portal URL, system information, network interfaces, BIOS details, baseboard information, display configurations, logical disks, mobile information, processors, video boards, attached devices, SNMP information, physical memory, and installed software. This class is typically used to represent the results of a device audit operation within the DRMM system.
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,39 @@ The DRMMDeviceAudit class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DeviceUid       | guid                            | TODO: Add description |\n| PortalUrl       | string                          | TODO: Add description |\n| WebRemoteUrl    | string                          | TODO: Add description |\n| SystemInfo      | DRMMDeviceAuditSystemInfo       | TODO: Add description |\n| Nics            | DRMMNetworkInterface[]          | TODO: Add description |\n| Bios            | DRMMDeviceAuditBios             | TODO: Add description |\n| BaseBoard       | DRMMDeviceAuditBaseBoard        | TODO: Add description |\n| Displays        | DRMMDeviceAuditDisplay[]        | TODO: Add description |\n| LogicalDisks    | DRMMDeviceAuditLogicalDisk[]    | TODO: Add description |\n| MobileInfo      | DRMMDeviceAuditMobileInfo[]     | TODO: Add description |\n| Processors      | DRMMDeviceAuditProcessor[]      | TODO: Add description |\n| VideoBoards     | DRMMDeviceAuditVideoBoard[]     | TODO: Add description |\n| AttachedDevices | DRMMDeviceAuditAttachedDevice[] | TODO: Add description |\n| SnmpInfo        | DRMMDeviceAuditSnmpInfo         | TODO: Add description |\n| PhysicalMemory  | DRMMDeviceAuditPhysicalMemory[] | TODO: Add description |\n| Software        | DRMMDeviceAuditSoftware[]       | TODO: Add description |\n
+| DeviceUid       | guid                            | Add description |
+| PortalUrl       | string                          | Add description |
+| WebRemoteUrl    | string                          | Add description |
+| SystemInfo      | DRMMDeviceAuditSystemInfo       | Add description |
+| Nics            | DRMMNetworkInterface[]          | Add description |
+| Bios            | DRMMDeviceAuditBios             | Add description |
+| BaseBoard       | DRMMDeviceAuditBaseBoard        | Add description |
+| Displays        | DRMMDeviceAuditDisplay[]        | Add description |
+| LogicalDisks    | DRMMDeviceAuditLogicalDisk[]    | Add description |
+| MobileInfo      | DRMMDeviceAuditMobileInfo[]     | Add description |
+| Processors      | DRMMDeviceAuditProcessor[]      | Add description |
+| VideoBoards     | DRMMDeviceAuditVideoBoard[]     | Add description |
+| AttachedDevices | DRMMDeviceAuditAttachedDevice[] | Add description |
+| SnmpInfo        | DRMMDeviceAuditSnmpInfo         | Add description |
+| PhysicalMemory  | DRMMDeviceAuditPhysicalMemory[] | Add description |
+| Software        | DRMMDeviceAuditSoftware[]       | Add description |
+
 ## METHODS
 
 The DRMMDeviceAudit class provides the following methods:
 
 ### DRMMDeviceAudit()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

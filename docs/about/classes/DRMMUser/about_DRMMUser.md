@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMUser class used in DattoRMM.Core module.
+region DRMMUser class
 
 ## LONG DESCRIPTION
 
-The DRMMUser class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,46 +16,58 @@ The DRMMUser class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| FirstName  | string             | TODO: Add description |\n| LastName   | string             | TODO: Add description |\n| Username   | string             | TODO: Add description |\n| Email      | string             | TODO: Add description |\n| Telephone  | string             | TODO: Add description |\n| Status     | string             | TODO: Add description |\n| Created    | Nullable[datetime] | TODO: Add description |\n| LastAccess | Nullable[datetime] | TODO: Add description |\n| Disabled   | bool               | TODO: Add description |\n
+| FirstName  | string             | Add description |
+| LastName   | string             | Add description |
+| Username   | string             | Add description |
+| Email      | string             | Add description |
+| Telephone  | string             | Add description |
+| Status     | string             | Add description |
+| Created    | Nullable[datetime] | Add description |
+| LastAccess | Nullable[datetime] | Add description |
+| Disabled   | bool               | Add description |
+
 ## METHODS
 
 The DRMMUser class provides the following methods:
 
 ### DRMMUser()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetFullName()
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

@@ -1,0 +1,475 @@
+<#
+.SYNOPSIS
+    Generates comprehensive class documentation from Classes.psm1.
+
+.DESCRIPTION
+    Build-ClassDocs.ps1 parses the consolidated Classes.psm1 file and generates
+    detailed markdown documentation for each class, organized by #region folders.
+    
+    This script runs rarely (when class structure changes significantly) and generates
+    comprehensive documentation including:
+    - Class overview and purpose
+    - Properties with types and descriptions (placeholders for manual completion)
+    - Methods with signatures, parameters, return types, and examples (placeholders)
+    - Related links
+    
+    The folder structure mirrors the #region organization in Classes.psm1:
+    - #region Enums -> docs/about/classes/Enums/
+    - #region DRMMDevice and related classes -> docs/about/classes/DRMMDevice/
+    
+    The first word after #region becomes the folder name.
+
+.PARAMETER OutputFolder
+    Root folder for class documentation. Defaults to .\docs\about\classes
+
+.PARAMETER Force
+    Force regeneration of all class documentation.
+
+.EXAMPLE
+    .\Build\Build-ClassDocs.ps1
+    Generates class documentation organized by region.
+
+.EXAMPLE
+    .\Build\Build-ClassDocs.ps1 -Force
+    Regenerates all class documentation.
+
+.NOTES
+    Author: Robert Faddes
+    This script is meant to be run infrequently when class structure changes.
+    Generated files contain TODO placeholders for descriptions and examples.
+#>
+[CmdletBinding()]
+param(
+    [string]$OutputFolder = ".\docs\about\classes",
+    [switch]$Force
+)
+
+$ErrorActionPreference = 'Continue'
+
+# Get module root
+$ModuleRoot = Split-Path $PSScriptRoot -Parent
+Push-Location $ModuleRoot
+
+try {
+    Write-Host "`n=== Build-ClassDocs.ps1 ===" -ForegroundColor Cyan
+    Write-Host "Generating comprehensive class documentation from Classes.psm1..." -ForegroundColor Cyan
+    
+    # Read manifest for DocsBaseUrl
+    Write-Host "`nReading module manifest..." -ForegroundColor Yellow
+    $ManifestPath = Join-Path $ModuleRoot 'DattoRMM.Core.psd1'
+    $Manifest = Import-PowerShellDataFile -Path $ManifestPath
+    $DocsBaseUrl = $Manifest.PrivateData.PSData.DocsBaseUrl
+    if (-not $DocsBaseUrl) {
+        Write-Warning "DocsBaseUrl not found in manifest. Using default."
+        $DocsBaseUrl = 'https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/'
+    }
+    Write-Host "  DocsBaseUrl: $DocsBaseUrl" -ForegroundColor Gray
+    
+    # Parse Classes.psm1
+    Write-Host "`nParsing Classes.psm1..." -ForegroundColor Yellow
+    $ClassesFile = Join-Path $ModuleRoot 'Private\Classes\Classes.psm1'
+    
+    if (-not (Test-Path $ClassesFile)) {
+        Write-Error "Classes.psm1 not found at: $ClassesFile"
+        return
+    }
+    
+    $ClassesContent = Get-Content $ClassesFile -Raw
+    Write-Host "  File size: $([math]::Round($ClassesContent.Length / 1KB, 2)) KB" -ForegroundColor Gray
+    
+    # Parse using AST (Abstract Syntax Tree)
+    Write-Host "`nParsing with PowerShell AST..." -ForegroundColor Yellow
+    $AST = [System.Management.Automation.Language.Parser]::ParseInput(
+        $ClassesContent,
+        [ref]$null,
+        [ref]$null
+    )
+    
+    # Extract #region information
+    Write-Host "`nExtracting region structure..." -ForegroundColor Yellow
+    $Regions = @()
+    $Lines = $ClassesContent -split "`r?`n"
+    
+    for ($i = 0; $i -lt $Lines.Count; $i++) {
+        $Line = $Lines[$i]
+        if ($Line -match '^\s*#region\s+(.+)') {
+            $RegionText = $matches[1].Trim()
+            # First word becomes folder name
+            $FolderName = ($RegionText -split '\s+')[0]
+            $Regions += [PSCustomObject]@{
+                Name = $RegionText
+                FolderName = $FolderName
+                StartLine = $i + 1  # 1-based
+                Classes = @()
+            }
+            Write-Host "  Found region: $RegionText -> Folder: $FolderName" -ForegroundColor Gray
+        }
+    }
+    
+    Write-Host "  Found $($Regions.Count) regions" -ForegroundColor Gray
+    
+    # Find all class and enum definitions
+    Write-Host "`nExtracting class definitions..." -ForegroundColor Yellow
+    $TypeDefinitions = $AST.FindAll({
+        param($node)
+        $node -is [System.Management.Automation.Language.TypeDefinitionAst]
+    }, $true)
+    
+    Write-Host "  Found $($TypeDefinitions.Count) type definitions (classes/enums)" -ForegroundColor Gray
+    
+    # Associate classes with regions based on line numbers
+    foreach ($TypeDef in $TypeDefinitions) {
+        $TypeName = $TypeDef.Name
+        $TypeLine = $TypeDef.Extent.StartLineNumber
+        $IsEnum = $TypeDef.IsEnum
+        $IsClass = $TypeDef.IsClass
+        
+        # Find which region this type belongs to
+        $AssignedRegion = $null
+        for ($i = $Regions.Count - 1; $i -ge 0; $i--) {
+            if ($TypeLine -ge $Regions[$i].StartLine) {
+                $AssignedRegion = $Regions[$i]
+                break
+            }
+        }
+        
+        if ($AssignedRegion) {
+            Write-Host "    $TypeName ($(if($IsEnum){'enum'}else{'class'})) -> $($AssignedRegion.FolderName)" -ForegroundColor Gray
+            
+            # Extract detailed information
+            $TypeInfo = [PSCustomObject]@{
+                Name = $TypeName
+                IsEnum = $IsEnum
+                IsClass = $IsClass
+                Properties = @()
+                Methods = @()
+                EnumValues = @()
+                BaseType = $null
+            }
+            
+            if ($IsEnum) {
+                # Extract enum values
+                $TypeInfo.EnumValues = $TypeDef.Members | ForEach-Object {
+                    $_.Name
+                }
+            } elseif ($IsClass) {
+                # Extract base type if any
+                if ($TypeDef.BaseTypes.Count -gt 0) {
+                    $TypeInfo.BaseType = $TypeDef.BaseTypes[0].TypeName.Name
+                }
+                
+                # Extract properties
+                $Properties = $TypeDef.Members | Where-Object { 
+                    $_ -is [System.Management.Automation.Language.PropertyMemberAst] 
+                }
+                
+                $TypeInfo.Properties = foreach ($Prop in $Properties) {
+                    [PSCustomObject]@{
+                        Name = $Prop.Name
+                        Type = $Prop.PropertyType.TypeName.FullName
+                        IsHidden = $Prop.IsHidden
+                    }
+                }
+                
+                # Extract methods (excluding static FromAPIMethod)
+                $Methods = $TypeDef.Members | Where-Object { 
+                    $_ -is [System.Management.Automation.Language.FunctionMemberAst] 
+                }
+                
+                $TypeInfo.Methods = foreach ($Method in $Methods) {
+                    # Skip static FromAPIMethod (internal constructor)
+                    if ($Method.IsStatic -and $Method.Name -eq 'FromAPIMethod') {
+                        continue
+                    }
+                    
+                    # Get parameters
+                    $Params = $Method.Parameters | ForEach-Object {
+                        $ParamType = if ($_.StaticType) { 
+                            $_.StaticType.Name 
+                        } else { 
+                            'object' 
+                        }
+                        $ParamName = $_.Name.VariablePath.UserPath
+                        [PSCustomObject]@{
+                            Name = $ParamName
+                            Type = $ParamType
+                        }
+                    }
+                    
+                    $ReturnType = if ($Method.ReturnType) { 
+                        $Method.ReturnType.TypeName.FullName 
+                    } else { 
+                        'void' 
+                    }
+                    
+                    [PSCustomObject]@{
+                        Name = $Method.Name
+                        IsStatic = $Method.IsStatic
+                        Parameters = $Params
+                        ReturnType = $ReturnType
+                        IsHidden = $Method.IsHidden
+                    }
+                }
+            }
+            
+            $AssignedRegion.Classes += $TypeInfo
+        }
+    }
+        # Build class-to-folder lookup for inheritance links
+    Write-Host "\nBuilding class-to-folder lookup..." -ForegroundColor Yellow
+    $ClassFolderMap = @{}
+    foreach ($Region in $Regions) {
+        foreach ($TypeInfo in $Region.Classes) {
+            $ClassFolderMap[$TypeInfo.Name] = $Region.FolderName
+            Write-Host "  $($TypeInfo.Name) -> $($Region.FolderName)" -ForegroundColor Gray
+        }
+    }
+    Write-Host "  Mapped $($ClassFolderMap.Count) classes to folders" -ForegroundColor Gray
+        # Generate markdown files organized by region
+    Write-Host "`nGenerating markdown documentation..." -ForegroundColor Yellow
+    
+    $TotalGenerated = 0
+    $TotalSkipped = 0
+    
+    foreach ($Region in $Regions) {
+        if ($Region.Classes.Count -eq 0) {
+            Write-Host "`n  Region '$($Region.FolderName)' has no classes, skipping..." -ForegroundColor Yellow
+            continue
+        }
+        
+        Write-Host "`n  Region: $($Region.Name)" -ForegroundColor Cyan
+        Write-Host "  Folder: $($Region.FolderName)" -ForegroundColor Gray
+        
+        # Create region folder
+        $RegionFolder = Join-Path $OutputFolder $Region.FolderName
+        if (-not (Test-Path $RegionFolder)) {
+            New-Item -Path $RegionFolder -ItemType Directory -Force | Out-Null
+            Write-Host "    Created folder: $RegionFolder" -ForegroundColor Gray
+        }
+        
+        foreach ($TypeInfo in $Region.Classes) {
+            $TypeName = $TypeInfo.Name
+            $MarkdownFile = Join-Path $RegionFolder "about_$TypeName.md"
+            
+            # Check if regeneration needed
+            $ShouldGenerate = $Force
+            if (-not $ShouldGenerate) {
+                if (-not (Test-Path $MarkdownFile)) {
+                    $ShouldGenerate = $true
+                    $Reason = "new file"
+                } elseif ((Get-Item $ClassesFile).LastWriteTime -gt (Get-Item $MarkdownFile).LastWriteTime) {
+                    $ShouldGenerate = $true
+                    $Reason = "source modified"
+                }
+            } else {
+                $Reason = "forced"
+            }
+            
+            if ($ShouldGenerate) {
+                Write-Host "    Generating: about_$TypeName.md ($Reason)" -ForegroundColor Green
+                
+                # Build markdown content based on type
+                if ($TypeInfo.IsEnum) {
+                    # === ENUM DOCUMENTATION ===
+                    $Content = @"
+# about_$TypeName
+
+## SHORT DESCRIPTION
+
+Describes the $TypeName enumeration used in DattoRMM.Core module.
+
+## LONG DESCRIPTION
+
+The $TypeName enum defines valid values for TODO: describe what this enum represents.
+
+TODO: Add more detailed description of when and how this enum is used.
+
+## VALUES
+
+The following values are defined for $TypeName`:
+
+| Value | Description |
+|-------|-------------|
+"@
+                    foreach ($Value in $TypeInfo.EnumValues) {
+                        $Content += "`n| ``$Value`` | TODO: Describe this value |"
+                    }
+                    
+                    $Content += @"
+
+
+## USAGE EXAMPLES
+
+### Example 1: Basic usage
+
+``````powershell
+# TODO: Add example showing how to use this enum
+``````
+
+## NOTES
+
+This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+## RELATED LINKS
+
+- [Online Documentation]($DocsBaseUrl/about/classes/$($Region.FolderName)/about_$TypeName.md)
+
+"@
+                } else {
+                    # === CLASS DOCUMENTATION ===
+                    $BaseTypeText = if ($TypeInfo.BaseType) {
+                        # Look up the folder for the base class
+                        $BaseFolder = $ClassFolderMap[$TypeInfo.BaseType]
+                        if ($BaseFolder) {
+                            "This class inherits from [$($TypeInfo.BaseType)]($DocsBaseUrl/about/classes/$BaseFolder/about_$($TypeInfo.BaseType).md)."
+                        } else {
+                            # Fallback if base class not found in map
+                            "This class inherits from $($TypeInfo.BaseType)."
+                        }
+                    } else {
+                        ""
+                    }
+                    
+                    $Content = @"
+# about_$TypeName
+
+## SHORT DESCRIPTION
+
+Describes the $TypeName class used in DattoRMM.Core module.
+
+## LONG DESCRIPTION
+
+The $TypeName class represents TODO: describe what this class represents and its purpose.
+
+$BaseTypeText
+
+Objects of this type are typically returned by TODO: list relevant cmdlets.
+
+TODO: Add more detailed description of the class's role and usage patterns.
+
+## PROPERTIES
+
+The $TypeName class exposes the following properties:
+
+"@
+                    if ($TypeInfo.Properties.Count -gt 0) {
+                        $Content += @"
+
+| Property | Type | Description |
+|----------|------|-------------|
+
+"@
+                        # Calculate consistent column widths (property name column)
+                        $MaxPropNameLen = ($TypeInfo.Properties | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
+                        $MaxTypeLen = ($TypeInfo.Properties | ForEach-Object { $_.Type.Length } | Measure-Object -Maximum).Maximum
+                        
+                        foreach ($Prop in $TypeInfo.Properties | Where-Object { -not $_.IsHidden }) {
+                            $PropName = $Prop.Name.PadRight($MaxPropNameLen)
+                            $PropType = $Prop.Type.PadRight($MaxTypeLen)
+                            $Content += "| $PropName | $PropType | TODO: Add description |\n"
+                        }
+                    } else {
+                        $Content += "`nNo public properties defined.\n"
+                    }
+                    
+                    $Content += @"
+
+## METHODS
+
+The $TypeName class provides the following methods:
+
+"@
+                    
+                    if ($TypeInfo.Methods.Count -gt 0) {
+                        foreach ($Method in $TypeInfo.Methods | Where-Object { -not $_.IsHidden }) {
+                            $ParamList = ($Method.Parameters | ForEach-Object {
+                                "[$($_.Type)]`$$($_.Name)"
+                            }) -join ', '
+                            
+                            $StaticText = if ($Method.IsStatic) { "static " } else { "" }
+                            $Signature = "$StaticText$($Method.Name)($ParamList)"
+                            
+                            $Content += @"
+
+### $Signature
+
+**Returns:** ``$($Method.ReturnType)``
+
+TODO: Add method description explaining what this method does.
+
+"@
+                            if ($Method.Parameters.Count -gt 0) {
+                                $Content += "`n**Parameters:**`n"
+                                foreach ($Param in $Method.Parameters) {
+                                    $Content += "- ``[$($Param.Type)]`$$($Param.Name)`` - TODO: Describe this parameter`n"
+                                }
+                            }
+                            
+                            $Content += @"
+
+**Example:**
+
+``````powershell
+# TODO: Add usage example for this method
+``````
+
+"@
+                        }
+                    } else {
+                        $Content += "`nNo public methods defined.\n"
+                    }
+                    
+                    $Content += @"
+
+## USAGE EXAMPLES
+
+### Example 1: Basic usage
+
+``````powershell
+# TODO: Add comprehensive usage example
+``````
+
+### Example 2: Advanced usage
+
+``````powershell
+# TODO: Add advanced usage example
+``````
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+TODO: Add any additional notes about this class.
+
+## RELATED LINKS
+
+- [Online Documentation]($DocsBaseUrl/about/classes/$($Region.FolderName)/about_$TypeName.md)
+
+"@
+                }
+                
+                # Save markdown file
+                Set-Content -Path $MarkdownFile -Value $Content -NoNewline
+                $TotalGenerated++
+                
+            } else {
+                Write-Host "    Skipped: about_$TypeName.md (up to date)" -ForegroundColor Yellow
+                $TotalSkipped++
+            }
+        }
+    }
+    
+    # Summary
+    Write-Host "`n=== Summary ===" -ForegroundColor Cyan
+    Write-Host "  Regions:   $($Regions.Count)" -ForegroundColor Gray
+    Write-Host "  Generated: $TotalGenerated" -ForegroundColor Green
+    Write-Host "  Skipped:   $TotalSkipped" -ForegroundColor Yellow
+    Write-Host "  Total:     $($TotalGenerated + $TotalSkipped)" -ForegroundColor Gray
+    
+    Write-Host "`nNOTE: Generated files contain TODO placeholders." -ForegroundColor Yellow
+    Write-Host "      Review and complete descriptions and examples manually." -ForegroundColor Yellow
+    Write-Host "`n=== Complete ===" -ForegroundColor Cyan
+    
+} finally {
+    Pop-Location
+}

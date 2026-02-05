@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMDeviceAuditMobileInfo class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMDeviceAuditMobileInfo class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,27 @@ The DRMMDeviceAuditMobileInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Iccid    | string | TODO: Add description |\n| Imei     | string | TODO: Add description |\n| Number   | string | TODO: Add description |\n| Operator | string | TODO: Add description |\n
+| Iccid    | string | Add description |
+| Imei     | string | Add description |
+| Number   | string | Add description |
+| Operator | string | Add description |
+
 ## METHODS
 
 The DRMMDeviceAuditMobileInfo class provides the following methods:
 
 ### DRMMDeviceAuditMobileInfo()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

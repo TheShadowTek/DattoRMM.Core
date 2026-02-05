@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMEsxiSystemInfo class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMEsxiSystemInfo class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,28 @@ The DRMMEsxiSystemInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Manufacturer      | string        | TODO: Add description |\n| Model             | string        | TODO: Add description |\n| Name              | string        | TODO: Add description |\n| NumberOfSnapshots | Nullable[int] | TODO: Add description |\n| ServiceTag        | string        | TODO: Add description |\n
+| Manufacturer      | string        | Add description |
+| Model             | string        | Add description |
+| Name              | string        | Add description |
+| NumberOfSnapshots | Nullable[int] | Add description |
+| ServiceTag        | string        | Add description |
+
 ## METHODS
 
 The DRMMEsxiSystemInfo class provides the following methods:
 
 ### DRMMEsxiSystemInfo()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

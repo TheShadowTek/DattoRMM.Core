@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMNetMapping class used in DattoRMM.Core module.
+region DRMMNetMapping class
 
 ## LONG DESCRIPTION
 
-The DRMMNetMapping class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,34 +16,43 @@ The DRMMNetMapping class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id                         | long   | TODO: Add description |\n| Uid                        | guid   | TODO: Add description |\n| AccountUid                 | string | TODO: Add description |\n| Name                       | string | TODO: Add description |\n| Description                | string | TODO: Add description |\n| DatatoNetworkingNetworkIds | long[] | TODO: Add description |\n| PortalUrl                  | string | TODO: Add description |\n
+| Id                         | long   | Add description |
+| Uid                        | guid   | Add description |
+| AccountUid                 | string | Add description |
+| Name                       | string | Add description |
+| Description                | string | Add description |
+| DatatoNetworkingNetworkIds | long[] | Add description |
+| PortalUrl                  | string | Add description |
+
 ## METHODS
 
 The DRMMNetMapping class provides the following methods:
 
 ### DRMMNetMapping()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### OpenPortal()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

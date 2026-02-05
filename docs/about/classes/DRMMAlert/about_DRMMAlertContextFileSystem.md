@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMAlertContextFileSystem class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMAlertContextFileSystem class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMAlertContext](about_DRMMAlertContext.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,28 @@ The DRMMAlertContextFileSystem class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Sample     | float  | TODO: Add description |\n| Threshold  | float  | TODO: Add description |\n| Path       | string | TODO: Add description |\n| ObjectType | string | TODO: Add description |\n| Condition  | string | TODO: Add description |\n
+| Sample     | float  | Add description |
+| Threshold  | float  | Add description |
+| Path       | string | Add description |
+| ObjectType | string | Add description |
+| Condition  | string | Add description |
+
 ## METHODS
 
 The DRMMAlertContextFileSystem class provides the following methods:
 
 ### DRMMAlertContextFileSystem()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMJobStdData class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMJobStdData class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,28 @@ The DRMMJobStdData class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| JobUid        | guid   | TODO: Add description |\n| DeviceUid     | guid   | TODO: Add description |\n| ComponentUid  | guid   | TODO: Add description |\n| ComponentName | string | TODO: Add description |\n| StdData       | string | TODO: Add description |\n
+| JobUid        | guid   | Add description |
+| DeviceUid     | guid   | Add description |
+| ComponentUid  | guid   | Add description |
+| ComponentName | string | Add description |
+| StdData       | string | Add description |
+
 ## METHODS
 
 The DRMMJobStdData class provides the following methods:
 
 ### DRMMJobStdData()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

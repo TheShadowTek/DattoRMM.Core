@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMPrinter class used in DattoRMM.Core module.
+region DRMMPrinterAudit and related classes
 
 ## LONG DESCRIPTION
 
-The DRMMPrinter class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,24 @@ The DRMMPrinter class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| PrintedPageCount | Nullable[long] | TODO: Add description |\n
+| PrintedPageCount | Nullable[long] | Add description |
+
 ## METHODS
 
 The DRMMPrinter class provides the following methods:
 
 ### DRMMPrinter()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

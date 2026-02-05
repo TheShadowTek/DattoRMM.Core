@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMDeviceUdfs class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMDeviceUdfs class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,53 @@ The DRMMDeviceUdfs class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Udf1  | string | TODO: Add description |\n| Udf2  | string | TODO: Add description |\n| Udf3  | string | TODO: Add description |\n| Udf4  | string | TODO: Add description |\n| Udf5  | string | TODO: Add description |\n| Udf6  | string | TODO: Add description |\n| Udf7  | string | TODO: Add description |\n| Udf8  | string | TODO: Add description |\n| Udf9  | string | TODO: Add description |\n| Udf10 | string | TODO: Add description |\n| Udf11 | string | TODO: Add description |\n| Udf12 | string | TODO: Add description |\n| Udf13 | string | TODO: Add description |\n| Udf14 | string | TODO: Add description |\n| Udf15 | string | TODO: Add description |\n| Udf16 | string | TODO: Add description |\n| Udf17 | string | TODO: Add description |\n| Udf18 | string | TODO: Add description |\n| Udf19 | string | TODO: Add description |\n| Udf20 | string | TODO: Add description |\n| Udf21 | string | TODO: Add description |\n| Udf22 | string | TODO: Add description |\n| Udf23 | string | TODO: Add description |\n| Udf24 | string | TODO: Add description |\n| Udf25 | string | TODO: Add description |\n| Udf26 | string | TODO: Add description |\n| Udf27 | string | TODO: Add description |\n| Udf28 | string | TODO: Add description |\n| Udf29 | string | TODO: Add description |\n| Udf30 | string | TODO: Add description |\n
+| Udf1  | string | Add description |
+| Udf2  | string | Add description |
+| Udf3  | string | Add description |
+| Udf4  | string | Add description |
+| Udf5  | string | Add description |
+| Udf6  | string | Add description |
+| Udf7  | string | Add description |
+| Udf8  | string | Add description |
+| Udf9  | string | Add description |
+| Udf10 | string | Add description |
+| Udf11 | string | Add description |
+| Udf12 | string | Add description |
+| Udf13 | string | Add description |
+| Udf14 | string | Add description |
+| Udf15 | string | Add description |
+| Udf16 | string | Add description |
+| Udf17 | string | Add description |
+| Udf18 | string | Add description |
+| Udf19 | string | Add description |
+| Udf20 | string | Add description |
+| Udf21 | string | Add description |
+| Udf22 | string | Add description |
+| Udf23 | string | Add description |
+| Udf24 | string | Add description |
+| Udf25 | string | Add description |
+| Udf26 | string | Add description |
+| Udf27 | string | Add description |
+| Udf28 | string | Add description |
+| Udf29 | string | Add description |
+| Udf30 | string | Add description |
+
 ## METHODS
 
 The DRMMDeviceUdfs class provides the following methods:
 
 ### DRMMDeviceUdfs()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

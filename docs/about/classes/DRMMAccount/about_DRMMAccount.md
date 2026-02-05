@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMAccount class used in DattoRMM.Core module.
+region DRMMAccount and related classes
 
 ## LONG DESCRIPTION
 
-The DRMMAccount class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,34 +16,42 @@ The DRMMAccount class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id            | int                      | TODO: Add description |\n| Uid           | string                   | TODO: Add description |\n| Name          | string                   | TODO: Add description |\n| Currency      | string                   | TODO: Add description |\n| Descriptor    | DRMMAccountDescriptor    | TODO: Add description |\n| DevicesStatus | DRMMAccountDevicesStatus | TODO: Add description |\n
+| Id            | int                      | Add description |
+| Uid           | string                   | Add description |
+| Name          | string                   | Add description |
+| Currency      | string                   | Add description |
+| Descriptor    | DRMMAccountDescriptor    | Add description |
+| DevicesStatus | DRMMAccountDevicesStatus | Add description |
+
 ## METHODS
 
 The DRMMAccount class provides the following methods:
 
 ### DRMMAccount()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

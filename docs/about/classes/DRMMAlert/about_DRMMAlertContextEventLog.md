@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMAlertContextEventLog class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMAlertContextEventLog class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMAlertContext](about_DRMMAlertContext.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,31 @@ The DRMMAlertContextEventLog class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| LogName          | string             | TODO: Add description |\n| Code             | string             | TODO: Add description |\n| Type             | string             | TODO: Add description |\n| Source           | string             | TODO: Add description |\n| Description      | string             | TODO: Add description |\n| TriggerCount     | int                | TODO: Add description |\n| LastTriggered    | Nullable[datetime] | TODO: Add description |\n| CausedSuspension | bool               | TODO: Add description |\n
+| LogName          | string             | Add description |
+| Code             | string             | Add description |
+| Type             | string             | Add description |
+| Source           | string             | Add description |
+| Description      | string             | Add description |
+| TriggerCount     | int                | Add description |
+| LastTriggered    | Nullable[datetime] | Add description |
+| CausedSuspension | bool               | Add description |
+
 ## METHODS
 
 The DRMMAlertContextEventLog class provides the following methods:
 
 ### DRMMAlertContextEventLog()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

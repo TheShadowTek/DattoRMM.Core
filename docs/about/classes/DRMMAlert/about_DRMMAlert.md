@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMAlert class used in DattoRMM.Core module.
+region DRMMAlert and related classes
 
 ## LONG DESCRIPTION
 
-The DRMMAlert class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,82 +16,103 @@ The DRMMAlert class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| AlertUid         | guid                      | TODO: Add description |\n| Priority         | string                    | TODO: Add description |\n| Diagnostics      | string                    | TODO: Add description |\n| Resolved         | bool                      | TODO: Add description |\n| ResolvedBy       | string                    | TODO: Add description |\n| ResolvedOn       | Nullable[datetime]        | TODO: Add description |\n| Muted            | bool                      | TODO: Add description |\n| TicketNumber     | string                    | TODO: Add description |\n| Timestamp        | Nullable[datetime]        | TODO: Add description |\n| AlertMonitorInfo | DRMMAlertMonitorInfo      | TODO: Add description |\n| AlertContext     | DRMMAlertContext          | TODO: Add description |\n| AlertSourceInfo  | DRMMAlertSourceInfo       | TODO: Add description |\n| ResponseActions  | DRMMAlertResponseAction[] | TODO: Add description |\n| AutoresolveMins  | Nullable[int]             | TODO: Add description |\n| SiteUid          | Nullable[guid]            | TODO: Add description |\n
+| AlertUid         | guid                      | Add description |
+| Priority         | string                    | Add description |
+| Diagnostics      | string                    | Add description |
+| Resolved         | bool                      | Add description |
+| ResolvedBy       | string                    | Add description |
+| ResolvedOn       | Nullable[datetime]        | Add description |
+| Muted            | bool                      | Add description |
+| TicketNumber     | string                    | Add description |
+| Timestamp        | Nullable[datetime]        | Add description |
+| AlertMonitorInfo | DRMMAlertMonitorInfo      | Add description |
+| AlertContext     | DRMMAlertContext          | Add description |
+| AlertSourceInfo  | DRMMAlertSourceInfo       | Add description |
+| ResponseActions  | DRMMAlertResponseAction[] | Add description |
+| AutoresolveMins  | Nullable[int]             | Add description |
+| SiteUid          | Nullable[guid]            | Add description |
+
 ## METHODS
 
 The DRMMAlert class provides the following methods:
 
 ### DRMMAlert()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### IsOpen()
 
-**Returns:** `bool`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `bool` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### IsCritical()
 
-**Returns:** `bool`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `bool` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### IsHigh()
 
-**Returns:** `bool`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `bool` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### Resolve()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

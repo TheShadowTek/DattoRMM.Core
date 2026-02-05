@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMComponent class used in DattoRMM.Core module.
+region DRMMComponent and related classes
 
 ## LONG DESCRIPTION
 
-The DRMMComponent class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,73 +16,85 @@ The DRMMComponent class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id                  | int                     | TODO: Add description |\n| Uid                 | string                  | TODO: Add description |\n| Name                | string                  | TODO: Add description |\n| Description         | string                  | TODO: Add description |\n| CategoryCode        | string                  | TODO: Add description |\n| CredentialsRequired | bool                    | TODO: Add description |\n| Variables           | DRMMComponentVariable[] | TODO: Add description |\n
+| Id                  | int                     | Add description |
+| Uid                 | string                  | Add description |
+| Name                | string                  | Add description |
+| Description         | string                  | Add description |
+| CategoryCode        | string                  | Add description |
+| CredentialsRequired | bool                    | Add description |
+| Variables           | DRMMComponentVariable[] | Add description |
+
 ## METHODS
 
 The DRMMComponent class provides the following methods:
 
 ### DRMMComponent()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetVariable([String]$Name)
 
-**Returns:** `DRMMComponentVariable`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMComponentVariable` - Describe what this method returns
 
 **Parameters:**
-- `[String]$Name` - TODO: Describe this parameter
+- `[String]$Name` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetInputVariables()
 
-**Returns:** `DRMMComponentVariable[]`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMComponentVariable[]` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetOutputVariables()
 
-**Returns:** `DRMMComponentVariable[]`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMComponentVariable[]` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

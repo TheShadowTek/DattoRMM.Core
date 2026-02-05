@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMDeviceAuditBios class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMDeviceAuditBios class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,27 @@ The DRMMDeviceAuditBios class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Manufacturer      | string | TODO: Add description |\n| Name              | string | TODO: Add description |\n| SerialNumber      | string | TODO: Add description |\n| SmbiosBiosVersion | string | TODO: Add description |\n
+| Manufacturer      | string | Add description |
+| Name              | string | Add description |
+| SerialNumber      | string | Add description |
+| SmbiosBiosVersion | string | Add description |
+
 ## METHODS
 
 The DRMMDeviceAuditBios class provides the following methods:
 
 ### DRMMDeviceAuditBios()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

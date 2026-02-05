@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMPrinterAudit class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMPrinterAudit class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,30 @@ The DRMMPrinterAudit class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DeviceUid             | guid                      | TODO: Add description |\n| PortalUrl             | string                    | TODO: Add description |\n| SnmpInfo              | DRMMPrinterSnmpInfo       | TODO: Add description |\n| PrinterMarkerSupplies | DRMMPrinterMarkerSupply[] | TODO: Add description |\n| Printer               | DRMMPrinter               | TODO: Add description |\n| SystemInfo            | DRMMPrinterSystemInfo     | TODO: Add description |\n| Nics                  | DRMMNetworkInterface[]    | TODO: Add description |\n
+| DeviceUid             | guid                      | Add description |
+| PortalUrl             | string                    | Add description |
+| SnmpInfo              | DRMMPrinterSnmpInfo       | Add description |
+| PrinterMarkerSupplies | DRMMPrinterMarkerSupply[] | Add description |
+| Printer               | DRMMPrinter               | Add description |
+| SystemInfo            | DRMMPrinterSystemInfo     | Add description |
+| Nics                  | DRMMNetworkInterface[]    | Add description |
+
 ## METHODS
 
 The DRMMPrinterAudit class provides the following methods:
 
 ### DRMMPrinterAudit()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

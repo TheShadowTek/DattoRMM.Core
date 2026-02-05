@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMJob class used in DattoRMM.Core module.
+region DRMMJob and related classes
 
 ## LONG DESCRIPTION
 
-The DRMMJob class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,202 +16,221 @@ The DRMMJob class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id          | long               | TODO: Add description |\n| Uid         | guid               | TODO: Add description |\n| Name        | string             | TODO: Add description |\n| DateCreated | Nullable[datetime] | TODO: Add description |\n| Status      | string             | TODO: Add description |\n
+| Id          | long               | Add description |
+| Uid         | guid               | Add description |
+| Name        | string             | Add description |
+| DateCreated | Nullable[datetime] | Add description |
+| Status      | string             | Add description |
+
 ## METHODS
 
 The DRMMJob class provides the following methods:
 
 ### DRMMJob()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### IsActive()
 
-**Returns:** `bool`
+Status Check Methods
 
-TODO: Add method description explaining what this method does.
+**Returns:** `bool` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### IsCompleted()
 
-**Returns:** `bool`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `bool` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetAge()
 
-**Returns:** `timespan`
+Time-based Methods
 
-TODO: Add method description explaining what this method does.
+**Returns:** `timespan` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetComponents()
 
-**Returns:** `DRMMJobComponent[]`
+API Wrapper Methods
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMJobComponent[]` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetResults([Guid]$DeviceUid)
 
-**Returns:** `DRMMJobResults`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMJobResults` - Describe what this method returns
 
 **Parameters:**
-- `[Guid]$DeviceUid` - TODO: Describe this parameter
+- `[Guid]$DeviceUid` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetStdOut([Guid]$DeviceUid)
 
-**Returns:** `DRMMJobStdData[]`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMJobStdData[]` - Describe what this method returns
 
 **Parameters:**
-- `[Guid]$DeviceUid` - TODO: Describe this parameter
+- `[Guid]$DeviceUid` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetStdErr([Guid]$DeviceUid)
 
-**Returns:** `DRMMJobStdData[]`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMJobStdData[]` - Describe what this method returns
 
 **Parameters:**
-- `[Guid]$DeviceUid` - TODO: Describe this parameter
+- `[Guid]$DeviceUid` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### Refresh()
 
-**Returns:** `void`
+Refresh Method
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+Utility Methods
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetStdOutAsJson([Guid]$DeviceUid)
 
-**Returns:** `pscustomobject[]`
+Combine all stdout lines into single string
 
-TODO: Add method description explaining what this method does.
+**Returns:** `pscustomobject[]` - Describe what this method returns
 
 **Parameters:**
-- `[Guid]$DeviceUid` - TODO: Describe this parameter
+- `[Guid]$DeviceUid` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetStdOutAsCsv([Guid]$DeviceUid)
 
-**Returns:** `pscustomobject[]`
+Combine all stdout lines into single string
 
-TODO: Add method description explaining what this method does.
+**Returns:** `pscustomobject[]` - Describe what this method returns
 
 **Parameters:**
-- `[Guid]$DeviceUid` - TODO: Describe this parameter
+- `[Guid]$DeviceUid` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetStdOutAsCsv([Guid]$DeviceUid, [Boolean]$FirstRowAsHeader)
 
-**Returns:** `pscustomobject[]`
+Combine all stdout lines into single string
 
-TODO: Add method description explaining what this method does.
+**Returns:** `pscustomobject[]` - Describe what this method returns
 
 **Parameters:**
-- `[Guid]$DeviceUid` - TODO: Describe this parameter
-- `[Boolean]$FirstRowAsHeader` - TODO: Describe this parameter
+- `[Guid]$DeviceUid` - Describe this parameter
+- `[Boolean]$FirstRowAsHeader` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetStdOutAsCsv([Guid]$DeviceUid, [Boolean]$FirstRowAsHeader, [String[]]$Headers)
 
-**Returns:** `pscustomobject[]`
+Combine all stdout lines into single string
 
-TODO: Add method description explaining what this method does.
+**Returns:** `pscustomobject[]` - Describe what this method returns
 
 **Parameters:**
-- `[Guid]$DeviceUid` - TODO: Describe this parameter
-- `[Boolean]$FirstRowAsHeader` - TODO: Describe this parameter
-- `[String[]]$Headers` - TODO: Describe this parameter
+- `[Guid]$DeviceUid` - Describe this parameter
+- `[Boolean]$FirstRowAsHeader` - Describe this parameter
+- `[String[]]$Headers` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

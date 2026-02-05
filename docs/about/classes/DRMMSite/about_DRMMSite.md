@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMSite class used in DattoRMM.Core module.
+region DRMMSite and related classes
 
 ## LONG DESCRIPTION
 
-The DRMMSite class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,274 +16,309 @@ The DRMMSite class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id                   | long                  | TODO: Add description |\n| Uid                  | guid                  | TODO: Add description |\n| AccountUid           | string                | TODO: Add description |\n| Name                 | string                | TODO: Add description |\n| Description          | string                | TODO: Add description |\n| Notes                | string                | TODO: Add description |\n| OnDemand             | bool                  | TODO: Add description |\n| SplashtopAutoInstall | bool                  | TODO: Add description |\n| ProxySettings        | DRMMSiteProxySettings | TODO: Add description |\n| DevicesStatus        | DRMMDevicesStatus     | TODO: Add description |\n| SiteSettings         | DRMMSiteSettings      | TODO: Add description |\n| Variables            | DRMMVariable[]        | TODO: Add description |\n| Filters              | DRMMFilter[]          | TODO: Add description |\n| AutotaskCompanyName  | string                | TODO: Add description |\n| AutotaskCompanyId    | string                | TODO: Add description |\n| PortalUrl            | string                | TODO: Add description |\n
+| Id                   | long                  | Add description |
+| Uid                  | guid                  | Add description |
+| AccountUid           | string                | Add description |
+| Name                 | string                | Add description |
+| Description          | string                | Add description |
+| Notes                | string                | Add description |
+| OnDemand             | bool                  | Add description |
+| SplashtopAutoInstall | bool                  | Add description |
+| ProxySettings        | DRMMSiteProxySettings | Add description |
+| DevicesStatus        | DRMMDevicesStatus     | Add description |
+| SiteSettings         | DRMMSiteSettings      | Add description |
+| Variables            | DRMMVariable[]        | Add description |
+| Filters              | DRMMFilter[]          | Add description |
+| AutotaskCompanyName  | string                | Add description |
+| AutotaskCompanyId    | string                | Add description |
+| PortalUrl            | string                | Add description |
+
 ## METHODS
 
 The DRMMSite class provides the following methods:
 
 ### DRMMSite()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### Set([Hashtable]$Properties)
 
-**Returns:** `DRMMSite`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMSite` - region DRMMSite and related classes
 
 **Parameters:**
-- `[Hashtable]$Properties` - TODO: Describe this parameter
+- `[Hashtable]$Properties` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetAlerts()
 
-**Returns:** `DRMMAlert[]`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMAlert[]` - region DRMMAlert and related classes
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetAlerts([String]$Status)
 
-**Returns:** `DRMMAlert[]`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMAlert[]` - region DRMMAlert and related classes
 
 **Parameters:**
-- `[String]$Status` - TODO: Describe this parameter
+- `[String]$Status` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### OpenPortal()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetDevices()
 
-**Returns:** `DRMMDevice[]`
+Device Management Methods
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMDevice[]` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetDevices([Int64]$FilterId)
 
-**Returns:** `DRMMDevice[]`
+Device Management Methods
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMDevice[]` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[Int64]$FilterId` - TODO: Describe this parameter
+- `[Int64]$FilterId` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetDeviceCount()
 
-**Returns:** `int`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `int` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetVariables()
 
-**Returns:** `DRMMVariable[]`
+Variable Management Methods
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMVariable[]` - region DRMMVariable class
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetVariable([String]$Name)
 
-**Returns:** `DRMMVariable`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMVariable` - region DRMMVariable class
 
 **Parameters:**
-- `[String]$Name` - TODO: Describe this parameter
+- `[String]$Name` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### NewVariable([String]$Name, [String]$Value)
 
-**Returns:** `DRMMVariable`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMVariable` - region DRMMVariable class
 
 **Parameters:**
-- `[String]$Name` - TODO: Describe this parameter
-- `[String]$Value` - TODO: Describe this parameter
+- `[String]$Name` - Describe this parameter
+- `[String]$Value` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### NewVariable([String]$Name, [String]$Value, [Boolean]$Masked)
 
-**Returns:** `DRMMVariable`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMVariable` - region DRMMVariable class
 
 **Parameters:**
-- `[String]$Name` - TODO: Describe this parameter
-- `[String]$Value` - TODO: Describe this parameter
-- `[Boolean]$Masked` - TODO: Describe this parameter
+- `[String]$Name` - Describe this parameter
+- `[String]$Value` - Describe this parameter
+- `[Boolean]$Masked` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetFilters()
 
-**Returns:** `DRMMFilter[]`
+Filter Management Methods
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMFilter[]` - region DRMMFilter class
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetFilter([String]$Name)
 
-**Returns:** `DRMMFilter`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMFilter` - region DRMMFilter class
 
 **Parameters:**
-- `[String]$Name` - TODO: Describe this parameter
+- `[String]$Name` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSettings()
 
-**Returns:** `DRMMSiteSettings`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMSiteSettings` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### SetProxy([String]$ProxyHost, [Int32]$Port, [String]$Type)
 
-**Returns:** `DRMMSiteSettings`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMSiteSettings` - Describe what this method returns
 
 **Parameters:**
-- `[String]$ProxyHost` - TODO: Describe this parameter
-- `[Int32]$Port` - TODO: Describe this parameter
-- `[String]$Type` - TODO: Describe this parameter
+- `[String]$ProxyHost` - Describe this parameter
+- `[Int32]$Port` - Describe this parameter
+- `[String]$Type` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### SetProxy([String]$ProxyHost, [Int32]$Port, [String]$Type, [String]$Username, [SecureString]$Password)
 
-**Returns:** `DRMMSiteSettings`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMSiteSettings` - Describe what this method returns
 
 **Parameters:**
-- `[String]$ProxyHost` - TODO: Describe this parameter
-- `[Int32]$Port` - TODO: Describe this parameter
-- `[String]$Type` - TODO: Describe this parameter
-- `[String]$Username` - TODO: Describe this parameter
-- `[SecureString]$Password` - TODO: Describe this parameter
+- `[String]$ProxyHost` - Describe this parameter
+- `[Int32]$Port` - Describe this parameter
+- `[String]$Type` - Describe this parameter
+- `[String]$Username` - Describe this parameter
+- `[SecureString]$Password` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### RemoveProxy()
 
-**Returns:** `DRMMSiteSettings`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `DRMMSiteSettings` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

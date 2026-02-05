@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMAlertContextSecurityManagement class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMAlertContextSecurityManagement class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMAlertContext](about_DRMMAlertContext.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,31 @@ The DRMMAlertContextSecurityManagement class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Status                        | int      | TODO: Add description |\n| ProductName                   | string   | TODO: Add description |\n| InfoTime                      | int      | TODO: Add description |\n| VirusName                     | string   | TODO: Add description |\n| InfectedFiles                 | string[] | TODO: Add description |\n| ProductNotUpdatedForDays      | int      | TODO: Add description |\n| SystemRemainsInfectedForHours | int      | TODO: Add description |\n| ExpiryLicenseForDays          | int      | TODO: Add description |\n
+| Status                        | int      | Add description |
+| ProductName                   | string   | Add description |
+| InfoTime                      | int      | Add description |
+| VirusName                     | string   | Add description |
+| InfectedFiles                 | string[] | Add description |
+| ProductNotUpdatedForDays      | int      | Add description |
+| SystemRemainsInfectedForHours | int      | Add description |
+| ExpiryLicenseForDays          | int      | Add description |
+
 ## METHODS
 
 The DRMMAlertContextSecurityManagement class provides the following methods:
 
 ### DRMMAlertContextSecurityManagement()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

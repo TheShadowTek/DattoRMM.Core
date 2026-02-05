@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMDeviceAuditSystemInfo class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMDeviceAuditSystemInfo class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,29 @@ The DRMMDeviceAuditSystemInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Manufacturer        | string | TODO: Add description |\n| Model               | string | TODO: Add description |\n| TotalPhysicalMemory | long   | TODO: Add description |\n| Username            | string | TODO: Add description |\n| DotNetVersion       | string | TODO: Add description |\n| TotalCpuCores       | int    | TODO: Add description |\n
+| Manufacturer        | string | Add description |
+| Model               | string | Add description |
+| TotalPhysicalMemory | long   | Add description |
+| Username            | string | Add description |
+| DotNetVersion       | string | Add description |
+| TotalCpuCores       | int    | Add description |
+
 ## METHODS
 
 The DRMMDeviceAuditSystemInfo class provides the following methods:
 
 ### DRMMDeviceAuditSystemInfo()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

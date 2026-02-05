@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMAlertContextCustomSNMP class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMAlertContextCustomSNMP class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMAlertContext](about_DRMMAlertContext.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,26 @@ The DRMMAlertContextCustomSNMP class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DisplayName     | string | TODO: Add description |\n| CurrentValue    | string | TODO: Add description |\n| MonitorInstance | string | TODO: Add description |\n
+| DisplayName     | string | Add description |
+| CurrentValue    | string | Add description |
+| MonitorInstance | string | Add description |
+
 ## METHODS
 
 The DRMMAlertContextCustomSNMP class provides the following methods:
 
 ### DRMMAlertContextCustomSNMP()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

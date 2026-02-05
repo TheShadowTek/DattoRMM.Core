@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMPrinterSnmpInfo class used in DattoRMM.Core module.
+Add a brief description of this class
 
 ## LONG DESCRIPTION
 
-The DRMMPrinterSnmpInfo class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,31 @@ The DRMMPrinterSnmpInfo class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| SnmpName        | string | TODO: Add description |\n| SnmpContact     | string | TODO: Add description |\n| SnmpDescription | string | TODO: Add description |\n| SnmpLocation    | string | TODO: Add description |\n| SnmpUptime      | string | TODO: Add description |\n| NicManufacturer | string | TODO: Add description |\n| ObjectId        | string | TODO: Add description |\n| SnmpSerial      | string | TODO: Add description |\n
+| SnmpName        | string | Add description |
+| SnmpContact     | string | Add description |
+| SnmpDescription | string | Add description |
+| SnmpLocation    | string | Add description |
+| SnmpUptime      | string | Add description |
+| NicManufacturer | string | Add description |
+| ObjectId        | string | Add description |
+| SnmpSerial      | string | Add description |
+
 ## METHODS
 
 The DRMMPrinterSnmpInfo class provides the following methods:
 
 ### DRMMPrinterSnmpInfo()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

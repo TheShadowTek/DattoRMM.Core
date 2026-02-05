@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMObject class used in DattoRMM.Core module.
+region DRMMObject - Base Class
 
 ## LONG DESCRIPTION
 
-The DRMMObject class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
 
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
 
 ## PROPERTIES
 
@@ -25,94 +21,100 @@ The DRMMObject class provides the following methods:
 
 ### DRMMObject()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### static GetValue([PSObject]$InputObject, [String]$Key)
 
-**Returns:** `object`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `object` - Describe what this method returns
 
 **Parameters:**
-- `[PSObject]$InputObject` - TODO: Describe this parameter
-- `[String]$Key` - TODO: Describe this parameter
+- `[PSObject]$InputObject` - Describe this parameter
+- `[String]$Key` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### static ValidateShape([PSObject]$Sample, [String[]]$RequiredProperties)
 
-**Returns:** `bool`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `bool` - Describe what this method returns
 
 **Parameters:**
-- `[PSObject]$Sample` - TODO: Describe this parameter
-- `[String[]]$RequiredProperties` - TODO: Describe this parameter
+- `[PSObject]$Sample` - Describe this parameter
+- `[String[]]$RequiredProperties` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### static ConvertEpochToDateTime([Int64]$Epoch)
 
-**Returns:** `datetime`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `datetime` - Describe what this method returns
 
 **Parameters:**
-- `[Int64]$Epoch` - TODO: Describe this parameter
+- `[Int64]$Epoch` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### static ParseApiDate([Object]$Value)
 
-**Returns:** `hashtable`
+Handle numeric epoch timestamps (int, long, double, or numeric strings)
 
-TODO: Add method description explaining what this method does.
+**Returns:** `hashtable` - Describe what this method returns
 
 **Parameters:**
-- `[Object]$Value` - TODO: Describe this parameter
+- `[Object]$Value` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### static MaskString([String]$Value, [Int32]$VisibleChars, [String]$MaskChar)
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Parameters:**
-- `[String]$Value` - TODO: Describe this parameter
-- `[Int32]$VisibleChars` - TODO: Describe this parameter
-- `[String]$MaskChar` - TODO: Describe this parameter
+- `[String]$Value` - Describe this parameter
+- `[Int32]$VisibleChars` - Describe this parameter
+- `[String]$MaskChar` - Describe this parameter
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

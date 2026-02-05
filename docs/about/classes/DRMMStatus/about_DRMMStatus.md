@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMStatus class used in DattoRMM.Core module.
+region DRMMStatus class
 
 ## LONG DESCRIPTION
 
-The DRMMStatus class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,22 +16,26 @@ The DRMMStatus class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Version | string             | TODO: Add description |\n| Status  | string             | TODO: Add description |\n| Started | Nullable[datetime] | TODO: Add description |\n
+| Version | string             | Add description |
+| Status  | string             | Add description |
+| Started | Nullable[datetime] | Add description |
+
 ## METHODS
 
 The DRMMStatus class provides the following methods:
 
 ### DRMMStatus()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 

@@ -2,17 +2,13 @@
 
 ## SHORT DESCRIPTION
 
-Describes the DRMMActivityLog class used in DattoRMM.Core module.
+region DRMMActivityLog and related classes
 
 ## LONG DESCRIPTION
 
-The DRMMActivityLog class represents TODO: describe what this class represents and its purpose.
+Add a detailed description of what this class represents and its purpose
 
-This class inherits from [DRMMObject](about_DRMMObject.md).
-
-Objects of this type are typically returned by TODO: list relevant cmdlets.
-
-TODO: Add more detailed description of the class's role and usage patterns.
+This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -20,34 +16,48 @@ The DRMMActivityLog class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Id        | string              | TODO: Add description |\n| Entity    | string              | TODO: Add description |\n| Category  | string              | TODO: Add description |\n| Action    | string              | TODO: Add description |\n| Date      | Nullable[datetime]  | TODO: Add description |\n| Site      | DRMMActivityLogSite | TODO: Add description |\n| DeviceId  | Nullable[long]      | TODO: Add description |\n| Hostname  | string              | TODO: Add description |\n| User      | DRMMActivityLogUser | TODO: Add description |\n| Details   | PSCustomObject      | TODO: Add description |\n| HasStdOut | bool                | TODO: Add description |\n| HasStdErr | bool                | TODO: Add description |\n
+| Id        | string              | Add description |
+| Entity    | string              | Add description |
+| Category  | string              | Add description |
+| Action    | string              | Add description |
+| Date      | Nullable[datetime]  | Add description |
+| Site      | DRMMActivityLogSite | Add description |
+| DeviceId  | Nullable[long]      | Add description |
+| Hostname  | string              | Add description |
+| User      | DRMMActivityLogUser | Add description |
+| Details   | PSCustomObject      | Add description |
+| HasStdOut | bool                | Add description |
+| HasStdErr | bool                | Add description |
+
 ## METHODS
 
 The DRMMActivityLog class provides the following methods:
 
 ### DRMMActivityLog()
 
-**Returns:** `void`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `void` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ### GetSummary()
 
-**Returns:** `string`
+Add method description explaining what this method does
 
-TODO: Add method description explaining what this method does.
+**Returns:** `string` - Describe what this method returns
 
 **Example:**
 
 ```powershell
 # TODO: Add usage example for this method
 ```
+
 
 ## USAGE EXAMPLES
 
