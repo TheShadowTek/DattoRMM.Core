@@ -5,46 +5,52 @@ SHORT DESCRIPTION
     Describes the enum types used in the Datto RMM PowerShell module for type safety and clarity.
 
 LONG DESCRIPTION
-    Enum types in Datto RMM provide named constants for common values, improving code readability and reducing errors. These enums are used for site properties, scoping, and platform identification throughout the module. 
- 
-## ENUMS 
- 
-### RMMSiteExtendedProperty 
-Represents extended property types for a site. 
- 
-- `Settings` 
-- `Variables` 
-- `Filters` 
- 
-### RMMScope 
-Defines the scope for operations or objects. 
- 
-- `Global` 
-- `Site` 
- 
-### RMMPlatform 
-Identifies the platform type. 
- 
-- `Pinotage` 
-- `Concord` 
-- `Vidal` 
-- `Merlot` 
-- `Zinfandel` 
-- `Syrah` 
- 
-## USAGE EXAMPLES 
- 
-```powershell 
-# Example: Using RMMScope enum 
-$siteScope = [RMMScope]::Site 
- 
-# Example: Checking platform type 
-if ($device.Platform -eq [RMMPlatform]::Merlot) { 
-    Write-Host "Device is Merlot platform" 
-} 
-``` 
- 
-## NOTES 
- 
-- Enums are used for type safety and to avoid magic strings in scripts. 
+Enum types in Datto RMM provide named constants for common values, improving code readability and reducing errors. These enums are used for site properties, scoping, and platform identification throughout the module.
+
+## ENUMS
+
+### RMMSiteExtendedProperty
+Represents extended property types for a site.
+
+- `Settings`
+- `Variables`
+- `Filters`
+
+### RMMScope
+Defines the scope for operations or objects.
+
+- `Global`
+- `Site`
+
+### RMMPlatform
+Identifies the platform type.
+
+- `Pinotage`
+- `Concord`
+- `Vidal`
+- `Merlot`
+- `Zinfandel`
+- `Syrah`
+
+## USAGE EXAMPLES
+
+```powershell
+# Example: Using RMMScope enum
+$siteScope = [RMMScope]::Site
+
+# Example: Checking platform type
+if ($device.Platform -eq [RMMPlatform]::Merlot) {
+    Write-Host "Device is Merlot platform"
+}
+```
+
+## NOTES
+
+- Enums are used for type safety and to avoid magic strings in scripts.
 - You can reference enum values using `[EnumType]::Value` syntax in PowerShell.
+
+## SEE ALSO
+- about_DattoRMM.Core
+- about_DRMMSite
+SEE ALSO
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMEnums.md

@@ -5,16 +5,18 @@ SHORT DESCRIPTION
     
 
 LONG DESCRIPTION
-    
 
-PROPERTIES (from class)
 
-METHODS (from class)
-    static GetValue([pscustomobject]$InputObject, [string]$Key) object
-    static ValidateShape([pscustomobject]$Sample, [string[]]$RequiredProperties) bool
-    static ConvertEpochToDateTime([long]$Epoch) datetime
-    static ParseApiDate([object]$Value) hashtable
-    static MaskString([string]$Value, [int]$VisibleChars = 1, [string]$MaskChar = '*') string
+PROPERTIES
+    No public properties.
+
+METHODS
+    DRMMObject() : void
+    static GetValue([PSObject]$InputObject, [String]$Key) : object
+    static ValidateShape([PSObject]$Sample, [String[]]$RequiredProperties) : bool
+    static ConvertEpochToDateTime([Int64]$Epoch) : datetime
+    static ParseApiDate([Object]$Value) : hashtable
+    static MaskString([String]$Value, [Int32]$VisibleChars, [String]$MaskChar) : string
 
 SEE ALSO
-    about_DRMMObject.md
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMObject.md

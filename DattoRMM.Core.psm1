@@ -6,7 +6,13 @@
 # Main module file for Datto RMM API v2 PowerShell module
 
 # Load class definitions
-using module '.\Private\Classes.psm1'
+using module '.\Private\Classes\Classes.psm1'
+
+# Load throttle profile defaults from data file
+$Script:ThrottleProfileDefaults = Import-PowerShellDataFile -Path "$PSScriptRoot\Private\Data\ThrottleProfiles.psd1"
+
+# Load API method retry configuration from data file
+$Script:APIMethodRetry = Import-PowerShellDataFile -Path "$PSScriptRoot\Private\Data\RetryDefaults.psd1"
 
 # Initialize script-scoped auth object
 $Script:RMMAuth = $null
@@ -21,41 +27,6 @@ $Script:ConfigAPIRetryIntervalSeconds = $null
 $Script:ConfigAPITimeoutSeconds = $null
 $Script:TokenExpireHours = 100
 $Script:MaxPageSize = $null
-
-# Throttle profile defaults
-$Script:ThrottleProfileDefaults = @{
-    'Cautious' = @{
-        DelayMultiplier = 1250
-        LowUtilCheckInterval = 25
-        ThrottleUtilisationThreshold = 0.3
-        ThrottleCutOffOverhead = 0.1
-    }
-    'Medium' = @{
-        DelayMultiplier = 750
-        LowUtilCheckInterval = 25
-        ThrottleUtilisationThreshold = 0.5
-        ThrottleCutOffOverhead = 0.05
-    }
-    'Aggressive' = @{
-        DelayMultiplier = 500
-        LowUtilCheckInterval = 50
-        ThrottleUtilisationThreshold = 0.5
-        ThrottleCutOffOverhead = 0.04
-    }
-    'DefaultProfile' = @{
-        DelayMultiplier = 750
-        LowUtilCheckInterval = 25
-        ThrottleUtilisationThreshold = 0.5
-        ThrottleCutOffOverhead = 0.05
-    }
-}
-
-# Retry settings
-$Script:APIMethodRetry = @{
-    MaxRetries = 5
-    RetryIntervalSeconds = 10
-    TimeoutSeconds = 60
-}
 
 # Initialize throttle state variable, and set safe defaults
 $Script:RMMThrottle = [ordered]@{
@@ -104,38 +75,38 @@ if ($null -ne $SavedConfig) {
             'Platform' {
                 $Script:ConfigPlatform = $SavedConfig.Platform
                 $Script:SessionPlatform = $SavedConfig.Platform
-                Write-Verbose "`tPlatform: $($Script:ConfigPlatform)"
+                Write-Verbose "Platform: $($Script:ConfigPlatform)"
             }
 
             'PageSize' {
                 $Script:ConfigPageSize = $SavedConfig.PageSize
                 $Script:SessionPageSize = $SavedConfig.PageSize
-                Write-Verbose "`tPageSize: $($Script:ConfigPageSize)"
+                Write-Verbose "PageSize: $($Script:ConfigPageSize)"
             }
 
             'TokenExpireHours' {
                 $Script:TokenExpireHours = $SavedConfig.TokenExpireHours
                 $Script:ConfigTokenExpireHours = $SavedConfig.TokenExpireHours
 
-                Write-Verbose "`tTokenExpireHours: $($Script:TokenExpireHours)"
+                Write-Verbose "TokenExpireHours: $($Script:TokenExpireHours)"
             }
 
             'APIMaxRetries' {
                 $Script:APIMethodRetry.MaxRetries = $SavedConfig.APIMaxRetries
                 $Script:ConfigAPIMaxRetries = $SavedConfig.APIMaxRetries
-                Write-Verbose "`tAPIMaxRetries: $($Script:APIMethodRetry.MaxRetries)"
+                Write-Verbose "APIMaxRetries: $($Script:APIMethodRetry.MaxRetries)"
             }
 
             'APIRetryIntervalSeconds' {
                 $Script:APIMethodRetry.RetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
                 $Script:ConfigAPIRetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
-                Write-Verbose "`tAPIRetryIntervalSeconds: $($Script:APIMethodRetry.RetryIntervalSeconds)"
+                Write-Verbose "APIRetryIntervalSeconds: $($Script:APIMethodRetry.RetryIntervalSeconds)"
             }
 
             'APITimeoutSeconds' {
                 $Script:APIMethodRetry.TimeoutSeconds = $SavedConfig.APITimeoutSeconds
                 $Script:ConfigAPITimeoutSeconds = $SavedConfig.APITimeoutSeconds
-                Write-Verbose "`tAPITimeoutSeconds: $($Script:APIMethodRetry.TimeoutSeconds)"
+                Write-Verbose "APITimeoutSeconds: $($Script:APIMethodRetry.TimeoutSeconds)"
             }
             'ThrottleProfile' {
 
@@ -145,7 +116,6 @@ if ($null -ne $SavedConfig) {
                     $Script:RMMThrottle.Profile = $SavedConfig.ThrottleProfile
                     $Script:ConfigThrottleProfile = $SavedConfig.ThrottleProfile
                     $Script:SessionThrottleProfile = $SavedConfig.ThrottleProfile
-                    Write-Verbose "`tThrottleProfile: $($SavedConfig.ThrottleProfile)"
 
                 } else {
 
@@ -214,10 +184,9 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 
     }
     
-    # Remove throttle state variable
-    if ($Script:RMMThrottle) {
-
-        Remove-Variable -Name RMMThrottle -Scope Script -ErrorAction SilentlyContinue
-
-    }
+    # Remove throttle state and module defaults
+    Remove-Variable -Name RMMThrottle -Scope Script -ErrorAction SilentlyContinue
+    Remove-Variable -Name APIMethodRetry -Scope Script -ErrorAction SilentlyContinue
+    Remove-Variable -Name ThrottleProfileDefaults -Scope Script -ErrorAction SilentlyContinue
+    
 }
