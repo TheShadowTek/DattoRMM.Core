@@ -8,7 +8,7 @@ Represents the context of a security management alert in the DRMM system, includ
 
 The DRMMAlertContextSecurityManagement class models the context information specific to security management alerts in the DRMM platform. It encapsulates properties such as status, product name, information time, virus name, infected files, and other related properties that provide detailed context about the security management alert.
 
-This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
+This class inherits from [DRMMAlertContext](./about_DRMMAlertContext.md).
 
 ## PROPERTIES
 
@@ -31,25 +31,9 @@ The DRMMAlertContextSecurityManagement class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

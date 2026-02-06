@@ -39,5 +39,6 @@ Current session values are not changed by Reset-RMMConfig.
 ## RELATED LINKS
 
 
-- [Reset-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Reset-RMMConfig.md)
-- [Get-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMConfig.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Save-RMMConfig.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Save-RMMConfig.md))
+- [Reset-RMMConfig](../Reset-RMMConfig.md)
+- [Get-RMMConfig](./Get-RMMConfig.md)

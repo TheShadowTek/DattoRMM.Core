@@ -198,6 +198,7 @@ The device must exist and the target site must exist in your account.
 ## RELATED LINKS
 
 
-- [about_DRMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMDevice.md)
-- [Get-RMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMDevice.md)
-- [Get-RMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMSite.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Move-RMMDevice.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Move-RMMDevice.md))
+- [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
+- [Get-RMMDevice](./Get-RMMDevice.md)
+- [Get-RMMSite](../Sites/Get-RMMSite.md)

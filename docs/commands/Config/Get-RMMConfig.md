@@ -50,5 +50,6 @@ The output shows:
 ## RELATED LINKS
 
 
-- [ReSave-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/ReSave-RMMConfig.md)
-- [Set-RMMPageSize](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Set-RMMPageSize.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Get-RMMConfig.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Get-RMMConfig.md))
+- [ReSave-RMMConfig](../ReSave-RMMConfig.md)
+- [Set-RMMPageSize](../Set-RMMPageSize.md)

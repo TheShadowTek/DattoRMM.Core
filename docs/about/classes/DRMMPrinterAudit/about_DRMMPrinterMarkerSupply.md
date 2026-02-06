@@ -8,7 +8,7 @@ Represents the marker supply information of a printer, including description, ma
 
 The DRMMPrinterMarkerSupply class models the information about the marker supplies of a printer. It includes properties such as Description, MaxCapacity, and SuppliesLevel, which provide details about the printer's consumable supplies (e
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -26,25 +26,9 @@ The DRMMPrinterMarkerSupply class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

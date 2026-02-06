@@ -1,0 +1,66 @@
+TOPIC
+    about_DRMMDeviceAudit
+
+SHORT DESCRIPTION
+    Represents a comprehensive audit of a device, including hardware, software, and network information.
+
+LONG DESCRIPTION
+The DRMMDeviceAudit class encapsulates detailed information about a device, such as its unique identifier, portal URL, system information, network interfaces, BIOS details, baseboard information, display configurations, logical disks, mobile information, processors, video boards, attached devices, SNMP information, physical memory, and installed software. This class is typically used to represent the results of a device audit operation within the DRMM system.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMDeviceAudit class exposes the following properties:
+
+    Property        Type                            Description                             
+    --------------- ------------------------------- ----------------------------------------
+    DeviceUid       guid                            The unique identifier of the audited ...
+    PortalUrl       string                          The portal URL associated with the au...
+    WebRemoteUrl    string                          The web remote URL associated with th...
+    SystemInfo      DRMMDeviceAuditSystemInfo       Information about the system of the a...
+    Nics            DRMMNetworkInterface[]          Information about the network interfa...
+    Bios            DRMMDeviceAuditBios             Information about the BIOS of the aud...
+    BaseBoard       DRMMDeviceAuditBaseBoard        Information about the baseboard (moth...
+    Displays        DRMMDeviceAuditDisplay[]        Information about the display configu...
+    LogicalDisks    DRMMDeviceAuditLogicalDisk[]    Information about the logical disks o...
+    MobileInfo      DRMMDeviceAuditMobileInfo[]     Information about the mobile aspects ...
+    Processors      DRMMDeviceAuditProcessor[]      Information about the processors of t...
+    VideoBoards     DRMMDeviceAuditVideoBoard[]     Information about the video boards of...
+    AttachedDevices DRMMDeviceAuditAttachedDevice[] Information about devices attached to...
+    SnmpInfo        DRMMDeviceAuditSnmpInfo         Information about the SNMP configurat...
+    PhysicalMemory  DRMMDeviceAuditPhysicalMemory[] Information about the physical memory...
+    Software        DRMMDeviceAuditSoftware[]       Information about the software instal...
+## METHODS
+
+The DRMMDeviceAudit class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    DeviceUid [guid]
+    PortalUrl [string]
+    WebRemoteUrl [string]
+    SystemInfo [DRMMDeviceAuditSystemInfo]
+    Nics [DRMMNetworkInterface[]]
+    Bios [DRMMDeviceAuditBios]
+    BaseBoard [DRMMDeviceAuditBaseBoard]
+    Displays [DRMMDeviceAuditDisplay[]]
+    LogicalDisks [DRMMDeviceAuditLogicalDisk[]]
+    MobileInfo [DRMMDeviceAuditMobileInfo[]]
+    Processors [DRMMDeviceAuditProcessor[]]
+    VideoBoards [DRMMDeviceAuditVideoBoard[]]
+    AttachedDevices [DRMMDeviceAuditAttachedDevice[]]
+    SnmpInfo [DRMMDeviceAuditSnmpInfo]
+    PhysicalMemory [DRMMDeviceAuditPhysicalMemory[]]
+    Software [DRMMDeviceAuditSoftware[]]
+
+METHODS
+    DRMMDeviceAudit() : void
+
+SEE ALSO
+    Online Documentation

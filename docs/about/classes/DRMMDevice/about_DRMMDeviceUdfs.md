@@ -8,7 +8,7 @@ Represents user-defined fields (UDFs) associated with a device in the DRMM syste
 
 The DRMMDeviceUdfs class models the user-defined fields (UDFs) for a device in the DRMM platform. It includes properties for Udf1 through Udf30, which can store custom data defined by the user. The class provides a constructor and a static method to create an instance from API response data, populating the UDF properties based on the response.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -53,25 +53,9 @@ The DRMMDeviceUdfs class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

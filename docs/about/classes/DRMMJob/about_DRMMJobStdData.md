@@ -8,7 +8,7 @@ Represents standard output or error data associated with a DRMM job component, i
 
 The DRMMJobStdData class models the standard output or error data produced by a component during the execution of a DRMM job. It includes properties such as JobUid, DeviceUid, ComponentUid, ComponentName, and StdData, which provide details about the source and content of the standard data. The class also includes a static method to create an instance of DRMMJobStdData from API response data.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -28,25 +28,9 @@ The DRMMJobStdData class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

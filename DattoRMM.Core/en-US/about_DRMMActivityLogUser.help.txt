@@ -1,0 +1,47 @@
+TOPIC
+    about_DRMMActivityLogUser
+
+SHORT DESCRIPTION
+    Represents user information associated with a DRMM activity log entry, including user ID, username, and name details.
+
+LONG DESCRIPTION
+The DRMMActivityLogUser class models the user information related to an activity log entry in the DRMM platform. It encapsulates properties such as the user ID, username, first name, and last name. The class provides a static method to create an instance of the class from a typical API response object that contains these user details. Additionally, it includes a method to generate a summary string that combines the user's first name, last name, and username for easy display in contexts where user information is relevant.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMActivityLogUser class exposes the following properties:
+
+    Property   Type       Description                             
+    ---------- ---------- ----------------------------------------
+    Id         long       The unique identifier for the user as...
+    UserName   string     The username of the user associated w...
+    FirstName  string     The first name of the user associated...
+    LastName   string     The last name of the user associated ...
+## METHODS
+
+The DRMMActivityLogUser class provides the following methods:
+
+### GetSummary()
+
+Generates a summary string for the user, including their first name, last name, and username.
+
+**Returns:** `string` - A summary string combining the user's first name, last name, and username.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Id [long]
+    UserName [string]
+    FirstName [string]
+    LastName [string]
+
+METHODS
+    DRMMActivityLogUser() : void
+    GetSummary() : string
+
+SEE ALSO
+    Online Documentation

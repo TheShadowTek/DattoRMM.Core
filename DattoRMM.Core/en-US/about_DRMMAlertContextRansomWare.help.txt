@@ -1,0 +1,48 @@
+TOPIC
+    about_DRMMAlertContextRansomWare
+
+SHORT DESCRIPTION
+    Represents the context of a ransomware alert in the DRMM system, including state, confidence factor, affected directories, watch paths, ransomware extension, and alert times.
+
+LONG DESCRIPTION
+The DRMMAlertContextRansomWare class models the context information specific to ransomware alerts in the DRMM platform. It encapsulates properties such as state, confidence factor, affected directories, watch paths, ransomware extension, and alert times that provide detailed context about the ransomware alert.
+
+This class inherits from DRMMAlertContext.
+
+## PROPERTIES
+
+The DRMMAlertContextRansomWare class exposes the following properties:
+
+    Property            Type               Description                             
+    ------------------- ------------------ ----------------------------------------
+    State               int                The current state of the ransomware a...
+    ConfidenceFactor    int                The confidence factor indicating the ...
+    AffectedDirectories string[]           The directories affected by the ranso...
+    WatchPaths          string[]           The paths being watched for ransomwar...
+    Rwextension         string             The ransomware extension associated w...
+    MetaAlertTime       Nullable[datetime] The time when the meta alert related ...
+    AlertTime           Nullable[datetime] The time when the ransomware alert wa...
+## METHODS
+
+The DRMMAlertContextRansomWare class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    State [int]
+    ConfidenceFactor [int]
+    AffectedDirectories [string[]]
+    WatchPaths [string[]]
+    Rwextension [string]
+    MetaAlertTime [Nullable[datetime]]
+    AlertTime [Nullable[datetime]]
+
+METHODS
+    DRMMAlertContextRansomWare() : void
+
+SEE ALSO
+    Online Documentation

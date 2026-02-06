@@ -256,10 +256,11 @@ Best practices:
 ## RELATED LINKS
 
 
-- [about_DRMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMDevice.md)
-- [Get-RMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMDevice.md)
-- [Get-RMMComponent](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMComponent.md)
-- [Get-RMMJob](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMJob.md)
-- [about_DRMMJob](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMJob.md)
-- [Get-RMMComponent](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMComponent.md)
-- [about_DRMMComponent](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMComponent.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/New-RMMQuickJob.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/New-RMMQuickJob.md))
+- [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
+- [Get-RMMDevice](../Devices/Get-RMMDevice.md)
+- [Get-RMMComponent](../Component/Get-RMMComponent.md)
+- [Get-RMMJob](./Get-RMMJob.md)
+- [about_DRMMJob](../../about/classes/DRMMJob/about_DRMMJob.md)
+- [Get-RMMComponent](../Component/Get-RMMComponent.md)
+- [about_DRMMComponent](../../about/classes/DRMMComponent/about_DRMMComponent.md)

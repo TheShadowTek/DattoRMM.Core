@@ -8,7 +8,7 @@ Represents the context of an SNMP probe alert in the DRMM system, including IP a
 
 The DRMMAlertContextSNMPProbe class models the context information specific to SNMP probe alerts in the DRMM platform. It encapsulates properties such as IP address, OID, rule name, response value, device name, and monitor name that provide detailed context about the SNMP probe alert.
 
-This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
+This class inherits from [DRMMAlertContext](./about_DRMMAlertContext.md).
 
 ## PROPERTIES
 
@@ -29,25 +29,9 @@ The DRMMAlertContextSNMPProbe class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

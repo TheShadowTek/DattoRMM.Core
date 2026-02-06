@@ -209,5 +209,6 @@ Best practices for warranty management:
 ## RELATED LINKS
 
 
-- [about_DRMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMDevice.md)
-- [Get-RMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMDevice.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceWarranty.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceWarranty.md))
+- [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
+- [Get-RMMDevice](./Get-RMMDevice.md)

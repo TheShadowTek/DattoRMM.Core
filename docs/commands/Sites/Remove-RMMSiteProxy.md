@@ -147,6 +147,7 @@ proxy configuration.
 ## RELATED LINKS
 
 
-- [about_DRMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMSite.md)
-- [Get-RMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMSite.md)
-- [Set-RMMSiteProxy](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Set-RMMSiteProxy.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Remove-RMMSiteProxy.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Remove-RMMSiteProxy.md))
+- [about_DRMMSite](../../about/classes/DRMMSite/about_DRMMSite.md)
+- [Get-RMMSite](./Get-RMMSite.md)
+- [Set-RMMSiteProxy](./Set-RMMSiteProxy.md)

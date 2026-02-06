@@ -141,3 +141,6 @@ Best practices:
 - Update all automation scripts with new keys after reset
 
 ## RELATED LINKS
+
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMAPIKeys.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMAPIKeys.md))

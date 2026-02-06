@@ -8,7 +8,7 @@ Represents the proxy settings for a site in the DRMM system, including propertie
 
 The DRMMSiteProxySettings class models the proxy settings for a site within the DRMM platform. It includes properties such as Host, Port, Type, Username, and Password. The class provides a constructor and a static method to create an instance from API response data. Additionally, it includes a method to generate a summary string of the proxy settings information. The class handles the conversion of password data from the API response, ensuring that it is stored as a secure string when appropriate.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -32,25 +32,9 @@ Generates a summary string for the proxy settings, including the type, host, and
 
 **Returns:** `string` - A summary string that includes the type, host, and port information of the site's proxy settings.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

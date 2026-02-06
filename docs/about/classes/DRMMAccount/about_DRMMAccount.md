@@ -8,7 +8,7 @@ Represents an account in the DRMM system, including its properties and related i
 
 The DRMMAccount class models an account within the DRMM platform, encapsulating properties such as the account ID, unique identifier, name, currency, and related descriptors and device status. It provides a static method to create an instance of the class from a typical API response object that contains account information. The class also includes a method to generate a summary string that combines the account name with its device status for easy display. The DRMMAccountDescriptor and DRMMAccountDevicesStatus classes represent related information about the account, such as billing details and device status, respectively.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -33,26 +33,12 @@ Generates a summary string for the account, including its name and device status
 
 **Returns:** `string` - A summary string combining the account name and device status.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
-TODO: Add any additional notes about this class.
-
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAccount/about_DRMMAccount.md)
+- [Get-RMMAccount](../../../commands/Account/Get-RMMAccount.md)
+

@@ -1,0 +1,63 @@
+TOPIC
+    about_DRMMActivityLog
+
+SHORT DESCRIPTION
+    Represents an activity log entry in the DRMM system, including details about the activity, associated site and user information, and related context.
+
+LONG DESCRIPTION
+The DRMMActivityLog class models an activity log entry within the DRMM platform, encapsulating properties such as the log ID, entity, category, action, date, site information, device ID, hostname, user information, activity details, and flags indicating the presence of standard output and error. It provides a static method to create an instance of the class from a typical API response object that contains activity log information. The class also includes a method to generate a summary string that combines key properties of the activity log for easy display. The related classes DRMMActivityLogSite and DRMMActivityLogUser represent nested information about the site and user associated with the activity log entry.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMActivityLog class exposes the following properties:
+
+    Property   Type                Description                             
+    ---------- ------------------- ----------------------------------------
+    Id         string              The unique identifier for the activit...
+    Entity     string              The entity associated with the activity.
+    Category   string              The category of the activity log entry. 
+    Action     string              The action performed in the activity ...
+    Date       Nullable[datetime]  The date and time when the activity o...
+    Site       DRMMActivityLogSite An instance of the DRMMActivityLogSit...
+    DeviceId   Nullable[long]      The identifier of the device involved...
+    Hostname   string              The hostname of the device involved i...
+    User       DRMMActivityLogUser An instance of the DRMMActivityLogUse...
+    Details    PSCustomObject      Additional details about the activity.  
+    HasStdOut  bool                Indicates whether the activity log en...
+    HasStdErr  bool                Indicates whether the activity log en...
+## METHODS
+
+The DRMMActivityLog class provides the following methods:
+
+### GetSummary()
+
+Generates a summary string for the activity log entry, including key details about the activity.
+
+**Returns:** `string` - A summary string combining key details of the activity log entry.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Id [string]
+    Entity [string]
+    Category [string]
+    Action [string]
+    Date [Nullable[datetime]]
+    Site [DRMMActivityLogSite]
+    DeviceId [Nullable[long]]
+    Hostname [string]
+    User [DRMMActivityLogUser]
+    Details [PSCustomObject]
+    HasStdOut [bool]
+    HasStdErr [bool]
+
+METHODS
+    DRMMActivityLog() : void
+    GetSummary() : string
+
+SEE ALSO
+    Online Documentation

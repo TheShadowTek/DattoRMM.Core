@@ -8,7 +8,7 @@ Represents the context of an endpoint security threat alert in the DRMM system, 
 
 The DRMMAlertContextEndpointSecurityThreat class models the context information specific to endpoint security threat alerts in the DRMM platform. It encapsulates properties such as the alert ID and a description of the threat, providing detailed information about the security event that triggered the alert.
 
-This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
+This class inherits from [DRMMAlertContext](./about_DRMMAlertContext.md).
 
 ## PROPERTIES
 
@@ -25,25 +25,9 @@ The DRMMAlertContextEndpointSecurityThreat class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

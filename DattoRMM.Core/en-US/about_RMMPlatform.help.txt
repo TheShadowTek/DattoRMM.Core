@@ -1,0 +1,25 @@
+TOPIC
+    about_RMMPlatform
+
+SHORT DESCRIPTION
+    Describes the RMMPlatform enumeration used in DattoRMM.Core module
+
+LONG DESCRIPTION
+The RMMPlatform enum defines valid values for TODO: describe what this enum represents
+
+## VALUES
+
+The following values are defined for RMMPlatform:
+
+    Value       Description              
+    ----------- -------------------------
+    `Pinotage`  TODO: Describe this value
+    `Concord`   TODO: Describe this value
+    `Vidal`     TODO: Describe this value
+    `Merlot`    TODO: Describe this value
+    `Zinfandel` TODO: Describe this value
+    `Syrah`     TODO: Describe this value## NOTES
+
+This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
+SEE ALSO
+    Online Documentation

@@ -1,0 +1,50 @@
+TOPIC
+    about_DRMMPrinterSnmpInfo
+
+SHORT DESCRIPTION
+    Represents the SNMP information of a printer, including SNMP name, contact, description, location, uptime, NIC manufacturer, object ID, and serial number.
+
+LONG DESCRIPTION
+The DRMMPrinterSnmpInfo class models the SNMP-related information of a printer. It includes properties such as SnmpName, SnmpContact, SnmpDescription, SnmpLocation, SnmpUptime, NicManufacturer, ObjectId, and SnmpSerial. This class is typically used as part of the DRMMPrinterAudit to represent the SNMP details of the printer.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMPrinterSnmpInfo class exposes the following properties:
+
+    Property        Type       Description                             
+    --------------- ---------- ----------------------------------------
+    SnmpName        string     The name of the printer as reported b...
+    SnmpContact     string     The contact information for SNMP comm...
+    SnmpDescription string     The description of the SNMP configura...
+    SnmpLocation    string     The physical location of the printer ...
+    SnmpUptime      string     The uptime of the printer as reported...
+    NicManufacturer string     The manufacturer of the network inter...
+    ObjectId        string     The SNMP object identifier (OID) asso...
+    SnmpSerial      string     The serial number of the printer as r...
+## METHODS
+
+The DRMMPrinterSnmpInfo class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    SnmpName [string]
+    SnmpContact [string]
+    SnmpDescription [string]
+    SnmpLocation [string]
+    SnmpUptime [string]
+    NicManufacturer [string]
+    ObjectId [string]
+    SnmpSerial [string]
+
+METHODS
+    DRMMPrinterSnmpInfo() : void
+
+SEE ALSO
+    Online Documentation

@@ -8,7 +8,7 @@ Represents a site in the DRMM system, including its properties, settings, and as
 
 The DRMMSite class models a site within the DRMM platform, encapsulating properties such as Id, Uid, AccountUid, Name, Description, Notes, OnDemand status, SplashtopAutoInstall setting, ProxySettings, DevicesStatus, SiteSettings, Variables, Filters, AutotaskCompanyName, AutotaskCompanyId, and PortalUrl. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to generate a summary string of the site's information, update site properties, retrieve associated alerts and devices, and open the site's portal URL in a web browser.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -181,25 +181,9 @@ Removes the proxy settings for the site.
 
 **Returns:** `DRMMSiteSettings` - This method does not return a value. It performs an action to remove the proxy settings for the site.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

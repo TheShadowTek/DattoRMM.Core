@@ -1,0 +1,254 @@
+TOPIC
+    about_DRMMDevice
+
+SHORT DESCRIPTION
+    Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
+
+LONG DESCRIPTION
+The DRMMDevice class models a device within the DRMM platform, providing properties that describe the device's attributes and state, as well as methods to retrieve related information such as alerts and to perform actions like opening the device portal.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMDevice class exposes the following properties:
+
+    Property                   Type                      Description                             
+    -------------------------- ------------------------- ----------------------------------------
+    Id                         long                      The unique identifier of the device.    
+    Uid                        guid                      The unique identifier (UID) of the de...
+    SiteId                     long                      The unique identifier of the site to ...
+    SiteUid                    guid                      The unique identifier (UID) of the si...
+    SiteName                   string                    The name of the site to which the dev...
+    DeviceType                 DRMMDeviceType            The type of the device.                 
+    Hostname                   string                    The hostname of the device.             
+    IntIpAddress               string                    The internal IP address of the device.  
+    OperatingSystem            string                    The operating system running on the d...
+    LastLoggedInUser           string                    The user who last logged into the dev...
+    Domain                     string                    The domain to which the device belongs. 
+    CagVersion                 string                    The version of the CAG agent installe...
+    DisplayVersion             string                    The display version of the device.      
+    ExtIpAddress               string                    The external IP address of the device.  
+    Description                string                    The device's description.               
+    A64Bit                     bool                      Indicates whether the device is runni...
+    RebootRequired             bool                      Indicates whether the device requires...
+    Online                     bool                      Indicates whether the device is curre...
+    Suspended                  bool                      Indicates whether the device is curre...
+    Deleted                    bool                      Indicates whether the device has been...
+    LastSeen                   Nullable[datetime]        The last time the device was seen onl...
+    LastReboot                 Nullable[datetime]        The date and time when the device was...
+    LastAuditDate              Nullable[datetime]        The date when the device was last aud...
+    CreationDate               Nullable[datetime]        The date when the device was created ...
+    Udfs                       DRMMDeviceUdfs            User-defined fields associated with t...
+    SnmpEnabled                bool                      Indicates whether SNMP is enabled on ...
+    DeviceClass                string                    The class of the device, which may in...
+    PortalUrl                  string                    The URL to access the device's portal...
+    WarrantyDate               string                    The date when the device's warranty e...
+    Antivirus                  DRMMDeviceAntivirusInfo   Information about the device's antivi...
+    PatchManagement            DRMMDevicePatchManagement Information about the device's patch ...
+    SoftwareStatus             string                    Information about the device's softwa...
+    WebRemoteUrl               string                    The URL for web remote access to the ...
+    NetworkProbe               bool                      Information about the device's networ...
+    OnboardedViaNetworkMonitor bool                      Indicates whether the device was onbo...
+    RevealLastLoggedInUser     bool                      Indicates whether the last logged in ...
+## METHODS
+
+The DRMMDevice class provides the following methods:
+
+### GetAlerts()
+
+Retrieves the alerts associated with the device, filtered by a specified status.
+
+**Returns:** `DRMMAlert[]` - An array of alerts associated with the device that match the specified status.
+
+### GetAlerts([String]$Status)
+
+Retrieves the alerts associated with the device, filtered by a specified status.
+
+**Returns:** `DRMMAlert[]` - An array of alerts associated with the device that match the specified status.
+
+**Parameters:**
+- `[String]$Status` - The status to filter alerts by.
+
+### OpenPortal()
+
+Opens the device's portal URL in the default web browser.
+
+**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
+
+### OpenWebRemote()
+
+Opens the device's web remote URL in the default web browser.
+
+**Returns:** `void` - This method does not return a value. It performs an action to open the web remote URL in the default web browser.
+
+### GetUdfAsJson([Int32]$UdfNumber)
+
+Retrieves the value of a specified User-Defined Field (UDF) as a JSON object.
+
+**Returns:** `object` - A JSON object containing the value of the specified UDF.
+
+**Parameters:**
+- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to retrieve as JSON.
+
+### GetUdfAsCsv([Int32]$UdfNumber, [String[]]$Headers)
+
+Retrieves the value of a specified User-Defined Field (UDF) as a CSV object with a custom delimiter and headers.
+
+**Returns:** `pscustomobject` - A CSV object containing the value of the specified UDF, formatted with the provided delimiter and headers.
+
+**Parameters:**
+- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to retrieve as CSV.
+- `[String[]]$Headers` - An array of headers to include in the CSV output.
+
+### GetUdfAsCsv([Int32]$UdfNumber, [String]$Delimiter, [String[]]$Headers)
+
+Retrieves the value of a specified User-Defined Field (UDF) as a CSV object with a custom delimiter and headers.
+
+**Returns:** `pscustomobject` - A CSV object containing the value of the specified UDF, formatted with the provided delimiter and headers.
+
+**Parameters:**
+- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to retrieve as CSV.
+- `[String]$Delimiter` - The delimiter to use in the CSV output (e.g., comma, semicolon).
+- `[String[]]$Headers` - An array of headers to include in the CSV output.
+
+### GetSummary()
+
+Generates a summary string for the device, including its hostname and device type.
+
+**Returns:** `string` - A summary string for the device, including its hostname and device type.
+
+### ResolveAllAlerts()
+
+Resolves all open alerts associated with the device.
+
+**Returns:** `void` - This method does not return a value. It performs an action to resolve all open alerts associated with the device.
+
+### GetAudit()
+
+Gets the most recent audit information for this device.
+
+**Returns:** `DRMMDeviceAudit` - The most recent audit information for this device.
+
+### GetSoftware()
+
+Gets the software information for this device.
+
+**Returns:** `DRMMDeviceAuditSoftware[]` - The software information for this device.
+
+### SetUDF([Hashtable]$UDFFields)
+
+Sets the value of one or more User-Defined Fields (UDFs) for the device.
+
+**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to set the specified UDFs for the device.
+
+**Parameters:**
+- `[Hashtable]$UDFFields` - A hashtable of User-Defined Fields (UDFs) to set for the device.
+
+### ClearUDF([Int32]$UdfNumber)
+
+Clears the value of a specified User-Defined Field (UDF) for the device.
+
+**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to clear the specified UDF.
+
+**Parameters:**
+- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to clear.
+
+### ClearUDFs()
+
+Clears the values of all User-Defined Fields (UDFs) for the device.
+
+**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to clear all UDFs.
+
+### SetWarranty([DateTime]$WarrantyDate)
+
+Sets the warranty date for the device.
+
+**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to set the warranty date for the device.
+
+**Parameters:**
+- `[DateTime]$WarrantyDate` - The warranty date to set for the device.
+
+### RunQuickJob([Guid]$ComponentUid, [Hashtable]$Variables)
+
+Runs a quick job on the device for a specified job component and variables.
+
+**Returns:** `DRMMJob` - A DRMMJob object representing the job that was run on the device.
+
+**Parameters:**
+- `[Guid]$ComponentUid` - The unique identifier of the job component to run.
+- `[Hashtable]$Variables` - A hashtable of variables to pass to the job component.
+
+### Move([Guid]$TargetSiteUid)
+
+Moves the device to a different site within the DRMM system.
+
+**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to move the device to the specified site.
+
+**Parameters:**
+- `[Guid]$TargetSiteUid` - The unique identifier of the target site to move the device to.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Id [long]
+    Uid [guid]
+    SiteId [long]
+    SiteUid [guid]
+    SiteName [string]
+    DeviceType [DRMMDeviceType]
+    Hostname [string]
+    IntIpAddress [string]
+    OperatingSystem [string]
+    LastLoggedInUser [string]
+    Domain [string]
+    CagVersion [string]
+    DisplayVersion [string]
+    ExtIpAddress [string]
+    Description [string]
+    A64Bit [bool]
+    RebootRequired [bool]
+    Online [bool]
+    Suspended [bool]
+    Deleted [bool]
+    LastSeen [Nullable[datetime]]
+    LastReboot [Nullable[datetime]]
+    LastAuditDate [Nullable[datetime]]
+    CreationDate [Nullable[datetime]]
+    Udfs [DRMMDeviceUdfs]
+    SnmpEnabled [bool]
+    DeviceClass [string]
+    PortalUrl [string]
+    WarrantyDate [string]
+    Antivirus [DRMMDeviceAntivirusInfo]
+    PatchManagement [DRMMDevicePatchManagement]
+    SoftwareStatus [string]
+    WebRemoteUrl [string]
+    NetworkProbe [bool]
+    OnboardedViaNetworkMonitor [bool]
+    RevealLastLoggedInUser [bool]
+
+METHODS
+    DRMMDevice() : void
+    GetAlerts() : DRMMAlert[]
+    GetAlerts([String]$Status) : DRMMAlert[]
+    OpenPortal() : void
+    OpenWebRemote() : void
+    GetUdfAsJson([Int32]$UdfNumber) : object
+    GetUdfAsCsv([Int32]$UdfNumber, [String[]]$Headers) : pscustomobject
+    GetUdfAsCsv([Int32]$UdfNumber, [String]$Delimiter, [String[]]$Headers) : pscustomobject
+    GetSummary() : string
+    ResolveAllAlerts() : void
+    GetAudit() : DRMMDeviceAudit
+    GetSoftware() : DRMMDeviceAuditSoftware[]
+    SetUDF([Hashtable]$UDFFields) : DRMMDevice
+    ClearUDF([Int32]$UdfNumber) : DRMMDevice
+    ClearUDFs() : DRMMDevice
+    SetWarranty([DateTime]$WarrantyDate) : DRMMDevice
+    RunQuickJob([Guid]$ComponentUid, [Hashtable]$Variables) : DRMMJob
+    Move([Guid]$TargetSiteUid) : DRMMDevice
+
+SEE ALSO
+    Online Documentation

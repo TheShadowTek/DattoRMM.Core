@@ -8,7 +8,7 @@ Represents the logical disk information of a device in a device audit, including
 
 The DRMMDeviceAuditLogicalDisk class models the information about the logical disks of the audited system. It includes properties such as Description, DiskIdentifier, Freespace, and Size, which provide details about each logical disk. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -27,25 +27,9 @@ The DRMMDeviceAuditLogicalDisk class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

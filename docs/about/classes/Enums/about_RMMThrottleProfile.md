@@ -18,14 +18,6 @@ The following values are defined for RMMThrottleProfile:
 | `Aggressive` | TODO: Describe this value |
 | `Cautious` | TODO: Describe this value |
 | `DefaultProfile` | TODO: Describe this value |
-
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add example showing how to use this enum
-```\n
 ## NOTES
 
 This enum is defined in the DattoRMM.Core module's Classes.psm1 file.

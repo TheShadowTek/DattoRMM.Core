@@ -251,3 +251,6 @@ If a DRMMVariable object is piped in, the function checks for staleness and prom
 the user if the object is out of date compared to the current platform value.
 
 ## RELATED LINKS
+
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Set-RMMVariable.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Set-RMMVariable.md))

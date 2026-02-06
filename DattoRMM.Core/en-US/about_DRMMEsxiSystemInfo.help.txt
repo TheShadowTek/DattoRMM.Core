@@ -1,0 +1,44 @@
+TOPIC
+    about_DRMMEsxiSystemInfo
+
+SHORT DESCRIPTION
+    Represents the system information of an ESXi host, including manufacturer, model, name, number of snapshots, and service tag.
+
+LONG DESCRIPTION
+The DRMMEsxiSystemInfo class models the information about the ESXi host system. It includes properties such as Manufacturer, Model, Name, NumberOfSnapshots, and ServiceTag, which provide details about the ESXi host's hardware and configuration. This class is typically used as part of the DRMMEsxiHostAudit to represent the overall system information of the ESXi host being audited.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMEsxiSystemInfo class exposes the following properties:
+
+    Property          Type          Description                             
+    ----------------- ------------- ----------------------------------------
+    Manufacturer      string        The manufacturer of the ESXi host.      
+    Model             string        The model of the ESXi host.             
+    Name              string        The name of the ESXi host.              
+    NumberOfSnapshots Nullable[int] The number of snapshots on the ESXi h...
+    ServiceTag        string        The service tag of the ESXi host.       
+## METHODS
+
+The DRMMEsxiSystemInfo class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Manufacturer [string]
+    Model [string]
+    Name [string]
+    NumberOfSnapshots [Nullable[int]]
+    ServiceTag [string]
+
+METHODS
+    DRMMEsxiSystemInfo() : void
+
+SEE ALSO
+    Online Documentation

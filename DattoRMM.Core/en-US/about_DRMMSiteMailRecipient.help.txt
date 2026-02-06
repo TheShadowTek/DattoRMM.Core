@@ -1,0 +1,40 @@
+TOPIC
+    about_DRMMSiteMailRecipient
+
+SHORT DESCRIPTION
+    Represents a mail recipient for site notifications in the DRMM system, including properties such as name, email, and type.
+
+LONG DESCRIPTION
+The DRMMSiteMailRecipient class models a mail recipient for site notifications within the DRMM platform. It includes properties such as Name, Email, and Type. The class provides a constructor and a static method to create an instance from API response data. Additionally, it includes a method to generate a summary string of the mail recipient's information.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMSiteMailRecipient class exposes the following properties:
+
+    Property   Type       Description                             
+    ---------- ---------- ----------------------------------------
+    Name       string     The name of the mail recipient.         
+    Email      string     The email address of the mail recipient.
+    Type       string     The type of the mail recipient (e.g.,...
+## METHODS
+
+The DRMMSiteMailRecipient class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Name [string]
+    Email [string]
+    Type [string]
+
+METHODS
+    DRMMSiteMailRecipient() : void
+
+SEE ALSO
+    Online Documentation

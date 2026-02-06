@@ -126,5 +126,6 @@ The function will throw an error if:
 ## RELATED LINKS
 
 
-- [about_DRMMAlert](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMAlert.md)
-- [Get-RMMAlert](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMAlert.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Resolve-RMMAlert.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Resolve-RMMAlert.md))
+- [about_DRMMAlert](../../about/classes/DRMMAlert/about_DRMMAlert.md)
+- [Get-RMMAlert](./Get-RMMAlert.md)

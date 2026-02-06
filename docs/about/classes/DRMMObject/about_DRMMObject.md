@@ -68,25 +68,9 @@ Add method description explaining what this method does
 - `[Int32]$VisibleChars` - The number of characters to leave visible at the start of the string.
 - `[String]$MaskChar` - The character to use for masking the string (e.g., "*").
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

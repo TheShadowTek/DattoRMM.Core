@@ -8,7 +8,7 @@ Represents the software information of a device in a device audit, including its
 
 The DRMMDeviceAuditSoftware class models the information about the software installed on the audited system. It includes properties such as Name and Version, which provide details about each software application. This class is typically used as part of the DRMMDeviceAudit to represent the software inventory of the system being audited.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -25,25 +25,9 @@ The DRMMDeviceAuditSoftware class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

@@ -1,0 +1,36 @@
+TOPIC
+    about_DRMMAlertContextOnlineOfflineStatus
+
+SHORT DESCRIPTION
+    Represents the context of an online/offline status alert in the DRMM system, including the current status.
+
+LONG DESCRIPTION
+The DRMMAlertContextOnlineOfflineStatus class models the context information specific to online/offline status alerts in the DRMM platform. It encapsulates a status property that indicates the current online or offline state associated with the alert.
+
+This class inherits from DRMMAlertContext.
+
+## PROPERTIES
+
+The DRMMAlertContextOnlineOfflineStatus class exposes the following properties:
+
+    Property   Type       Description                             
+    ---------- ---------- ----------------------------------------
+    Status     string     The current online or offline status ...
+## METHODS
+
+The DRMMAlertContextOnlineOfflineStatus class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Status [string]
+
+METHODS
+    DRMMAlertContextOnlineOfflineStatus() : void
+
+SEE ALSO
+    Online Documentation

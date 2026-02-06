@@ -1,0 +1,97 @@
+TOPIC
+    about_DRMMAlert
+
+SHORT DESCRIPTION
+    Represents an alert in the DRMM system, including its properties, context, source information, and response actions.
+
+LONG DESCRIPTION
+The DRMMAlert class models an alert within the DRMM platform, encapsulating properties such as the alert's unique identifier, priority, diagnostics, resolution status, ticket number, timestamp, and related information about the alert monitor, context, source, and response actions. It provides a static method to create an instance of the class from a typical API response object that contains alert information. The class also includes methods to determine if the alert is open or of certain priority levels, to resolve the alert, and to generate a summary string that combines key properties of the alert for easy display. The related classes DRMMAlertContext, DRMMAlertMonitorInfo, DRMMAlertSourceInfo, and DRMMAlertResponseAction represent nested information about the alert's context, monitoring configuration, source details, and response actions taken, respectively.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMAlert class exposes the following properties:
+
+    Property         Type                      Description                             
+    ---------------- ------------------------- ----------------------------------------
+    AlertUid         guid                      Unique identifier for the alert.        
+    Priority         string                    Priority level of the alert.            
+    Diagnostics      string                    Diagnostic information related to the...
+    Resolved         bool                      Indicates whether the alert has been ...
+    ResolvedBy       string                    Identifier of the user who resolved t...
+    ResolvedOn       Nullable[datetime]        Timestamp when the alert was resolved.  
+    Muted            bool                      Indicates whether the alert is muted.   
+    TicketNumber     string                    Ticket number associated with the alert.
+    Timestamp        Nullable[datetime]        Timestamp when the alert was created.   
+    AlertMonitorInfo DRMMAlertMonitorInfo      AlertMonitorInfo of the DRMMAlert obj...
+    AlertContext     DRMMAlertContext          AlertContext of the DRMMAlert object,...
+    AlertSourceInfo  DRMMAlertSourceInfo       AlertSourceInfo of the DRMMAlert obje...
+    ResponseActions  DRMMAlertResponseAction[] Actions taken in response to the alert. 
+    AutoresolveMins  Nullable[int]             The number of minutes after which the...
+    SiteUid          Nullable[guid]            Unique identifier for the site associ...
+## METHODS
+
+The DRMMAlert class provides the following methods:
+
+### IsOpen()
+
+Determines if the alert is currently open (not resolved).
+
+**Returns:** `bool` - True if the alert is currently open (not resolved), otherwise false.
+
+### IsCritical()
+
+Determines if the alert is of priority level "Critical".
+
+**Returns:** `bool` - True if the alert is of priority level "Critical", otherwise false.
+
+### IsHigh()
+
+Determines if the alert is of priority level "High".
+
+**Returns:** `bool` - True if the alert is of priority level "High", otherwise false.
+
+### Resolve()
+
+Resolves the alert.
+
+**Returns:** `void` - An updated instance of the DRMMAlert class with the alert marked as resolved.
+
+### GetSummary()
+
+Gets a summary of the alert.
+
+**Returns:** `string` - A summary string combining key properties of the alert for easy display.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    AlertUid [guid]
+    Priority [string]
+    Diagnostics [string]
+    Resolved [bool]
+    ResolvedBy [string]
+    ResolvedOn [Nullable[datetime]]
+    Muted [bool]
+    TicketNumber [string]
+    Timestamp [Nullable[datetime]]
+    AlertMonitorInfo [DRMMAlertMonitorInfo]
+    AlertContext [DRMMAlertContext]
+    AlertSourceInfo [DRMMAlertSourceInfo]
+    ResponseActions [DRMMAlertResponseAction[]]
+    AutoresolveMins [Nullable[int]]
+    SiteUid [Nullable[guid]]
+
+METHODS
+    DRMMAlert() : void
+    IsOpen() : bool
+    IsCritical() : bool
+    IsHigh() : bool
+    Resolve() : void
+    GetSummary() : string
+
+SEE ALSO
+    Online Documentation

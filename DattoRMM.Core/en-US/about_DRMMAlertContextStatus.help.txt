@@ -1,0 +1,38 @@
+TOPIC
+    about_DRMMAlertContextStatus
+
+SHORT DESCRIPTION
+    Represents the context of a status alert in the DRMM system, including process name and status information.
+
+LONG DESCRIPTION
+The DRMMAlertContextStatus class models the context information specific to status alerts in the DRMM platform. It encapsulates properties such as process name and status that provide detailed context about the status alert.
+
+This class inherits from DRMMAlertContext.
+
+## PROPERTIES
+
+The DRMMAlertContextStatus class exposes the following properties:
+
+    Property    Type       Description                             
+    ----------- ---------- ----------------------------------------
+    ProcessName string     The name of the process associated wi...
+    Status      string     The current status of the process.      
+## METHODS
+
+The DRMMAlertContextStatus class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    ProcessName [string]
+    Status [string]
+
+METHODS
+    DRMMAlertContextStatus() : void
+
+SEE ALSO
+    Online Documentation

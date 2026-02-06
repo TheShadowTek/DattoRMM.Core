@@ -8,7 +8,7 @@ Represents the general settings for a site in the DRMM system, including propert
 
 The DRMMSiteGeneralSettings class models the general settings for a site within the DRMM platform. It includes properties such as Name, Uid, Description, and OnDemand status. The class provides a constructor and a static method to create an instance from API response data. Additionally, it includes a method to generate a summary string of the general settings information.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -31,25 +31,9 @@ Generates a summary string for the general settings, including the on-demand sta
 
 **Returns:** `string` - A summary string that includes the on-demand status of the site's general settings.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

@@ -1,0 +1,47 @@
+TOPIC
+    about_DRMMAlertSourceInfo
+
+SHORT DESCRIPTION
+    Represents the source information for an alert in the DRMM system, including device and site details.
+
+LONG DESCRIPTION
+The DRMMAlertSourceInfo class models the source information specific to alerts in the DRMM platform. It encapsulates properties such as DeviceUid, DeviceName, SiteUid, and SiteName that provide detailed context about the alert's source.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMAlertSourceInfo class exposes the following properties:
+
+    Property   Type       Description                             
+    ---------- ---------- ----------------------------------------
+    DeviceUid  string     The unique identifier of the device a...
+    DeviceName string     The name of the device associated wit...
+    SiteUid    string     The unique identifier of the site ass...
+    SiteName   string     The name of the site associated with ...
+## METHODS
+
+The DRMMAlertSourceInfo class provides the following methods:
+
+### GetSummary()
+
+Generates a summary string for the alert source information, including device and site details.
+
+**Returns:** `string` - A summary string for the alert source information, including device and site details.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    DeviceUid [string]
+    DeviceName [string]
+    SiteUid [string]
+    SiteName [string]
+
+METHODS
+    DRMMAlertSourceInfo() : void
+    GetSummary() : string
+
+SEE ALSO
+    Online Documentation

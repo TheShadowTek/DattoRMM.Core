@@ -63,3 +63,6 @@ Accept wildcard characters: False
 This command requires confirmation and has ConfirmImpact set to Low.
 
 ## RELATED LINKS
+
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Show-RMMToken.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Show-RMMToken.md))

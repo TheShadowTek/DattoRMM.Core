@@ -220,9 +220,10 @@ Job output (stdout/stderr) is typically used for troubleshooting component execu
 ## RELATED LINKS
 
 
-- [about_DRMMJob](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMJob.md)
-- [New-RMMQuickJob](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/New-RMMQuickJob.md)
-- [Get-RMMComponent](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMComponent.md)
-- [about_DRMMJob](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMJob.md)
-- [New-RMMQuickJob](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/New-RMMQuickJob.md)
-- [Get-RMMComponent](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMComponent.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJob.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJob.md))
+- [about_DRMMJob](../../about/classes/DRMMJob/about_DRMMJob.md)
+- [New-RMMQuickJob](./New-RMMQuickJob.md)
+- [Get-RMMComponent](../Component/Get-RMMComponent.md)
+- [about_DRMMJob](../../about/classes/DRMMJob/about_DRMMJob.md)
+- [New-RMMQuickJob](./New-RMMQuickJob.md)
+- [Get-RMMComponent](../Component/Get-RMMComponent.md)

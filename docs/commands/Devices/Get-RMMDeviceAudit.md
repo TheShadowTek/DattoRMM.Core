@@ -155,6 +155,7 @@ Use Get-RMMDeviceSoftware if you only need software inventory.
 ## RELATED LINKS
 
 
-- [about_DRMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMDevice.md)
-- [Get-RMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMDevice.md)
-- [Get-RMMDeviceSoftware](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMDeviceSoftware.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDeviceAudit.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDeviceAudit.md))
+- [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
+- [Get-RMMDevice](./Get-RMMDevice.md)
+- [Get-RMMDeviceSoftware](./Get-RMMDeviceSoftware.md)

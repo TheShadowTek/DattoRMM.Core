@@ -1,0 +1,48 @@
+TOPIC
+    about_DRMMEsxiPhysicalMemory
+
+SHORT DESCRIPTION
+    Represents the physical memory information of an ESXi host, including module, size, type, speed, serial number, part number, and bank.
+
+LONG DESCRIPTION
+The DRMMEsxiPhysicalMemory class models the information about the physical memory modules of an ESXi host. It includes properties such as Module, Size, Type, Speed, SerialNumber, PartNumber, and Bank, which provide details about each physical memory module installed on the ESXi host. This class is typically used as part of the DRMMEsxiHostAudit to represent the memory configuration of the ESXi host being audited.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMEsxiPhysicalMemory class exposes the following properties:
+
+    Property     Type           Description                             
+    ------------ -------------- ----------------------------------------
+    Module       string         The identifier or name of the physica...
+    Size         Nullable[long] The size of the physical memory module. 
+    Type         string         The type of the physical memory module. 
+    Speed        string         The speed of the physical memory module.
+    SerialNumber string         The serial number of the physical mem...
+    PartNumber   string         The part number of the physical memor...
+    Bank         string         The bank location of the physical mem...
+## METHODS
+
+The DRMMEsxiPhysicalMemory class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Module [string]
+    Size [Nullable[long]]
+    Type [string]
+    Speed [string]
+    SerialNumber [string]
+    PartNumber [string]
+    Bank [string]
+
+METHODS
+    DRMMEsxiPhysicalMemory() : void
+
+SEE ALSO
+    Online Documentation

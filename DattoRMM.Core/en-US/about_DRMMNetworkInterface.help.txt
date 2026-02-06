@@ -1,0 +1,44 @@
+TOPIC
+    about_DRMMNetworkInterface
+
+SHORT DESCRIPTION
+    region DRMMNetworkInterface class
+
+LONG DESCRIPTION
+Add a detailed description of what this class represents and its purpose
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMNetworkInterface class exposes the following properties:
+
+    Property   Type       Description                             
+    ---------- ---------- ----------------------------------------
+    Instance   string     region DRMMNetworkInterface class       
+    Ipv4       string     The IPv4 address of the network inter...
+    Ipv6       string     The IPv6 address of the network inter...
+    MacAddress string     The MAC address of the network interf...
+    Type       string     The type of the network interface.      
+## METHODS
+
+The DRMMNetworkInterface class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Instance [string]
+    Ipv4 [string]
+    Ipv6 [string]
+    MacAddress [string]
+    Type [string]
+
+METHODS
+    DRMMNetworkInterface() : void
+
+SEE ALSO
+    Online Documentation

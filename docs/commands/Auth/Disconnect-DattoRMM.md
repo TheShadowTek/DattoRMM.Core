@@ -50,4 +50,5 @@ from the session.
 ## RELATED LINKS
 
 
-- [Connect-DattoRMM](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Connect-DattoRMM.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Disconnect-DattoRMM.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Disconnect-DattoRMM.md))
+- [Connect-DattoRMM](./Connect-DattoRMM.md)

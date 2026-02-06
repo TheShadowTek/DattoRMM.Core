@@ -227,6 +227,5 @@ You can still override these defaults by explicitly specifying the -Platform par
 
 ## RELATED LINKS
 
-[Disconnect-DattoRMM
-Save-RMMConfig]()
 
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Connect-DattoRMM.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Connect-DattoRMM.md))

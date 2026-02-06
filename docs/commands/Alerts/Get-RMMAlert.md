@@ -197,8 +197,9 @@ The function retrieves alerts in batches and automatically handles pagination.
 ## RELATED LINKS
 
 
-- [about_DRMMAlert](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMAlert.md)
-- [Connect-DattoRMM](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Connect-DattoRMM.md)
-- [Get-RMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMDevice.md)
-- [Get-RMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMSite.md)
-- [Resolve-RMMAlert](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Resolve-RMMAlert.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md))
+- [about_DRMMAlert](../../about/classes/DRMMAlert/about_DRMMAlert.md)
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
+- [Get-RMMDevice](../Devices/Get-RMMDevice.md)
+- [Get-RMMSite](../Sites/Get-RMMSite.md)
+- [Resolve-RMMAlert](./Resolve-RMMAlert.md)

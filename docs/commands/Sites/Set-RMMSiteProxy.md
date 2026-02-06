@@ -227,6 +227,7 @@ Use Remove-RMMSiteProxy to delete proxy settings entirely.
 ## RELATED LINKS
 
 
-- [about_DRMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMSite.md)
-- [Get-RMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMSite.md)
-- [Remove-RMMSiteProxy](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Remove-RMMSiteProxy.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Set-RMMSiteProxy.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Set-RMMSiteProxy.md))
+- [about_DRMMSite](../../about/classes/DRMMSite/about_DRMMSite.md)
+- [Get-RMMSite](./Get-RMMSite.md)
+- [Remove-RMMSiteProxy](./Remove-RMMSiteProxy.md)

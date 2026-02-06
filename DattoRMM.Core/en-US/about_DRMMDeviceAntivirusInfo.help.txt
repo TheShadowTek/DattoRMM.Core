@@ -1,0 +1,57 @@
+TOPIC
+    about_DRMMDeviceAntivirusInfo
+
+SHORT DESCRIPTION
+    Represents antivirus information for a device in the DRMM system, including the antivirus product name and its status.
+
+LONG DESCRIPTION
+The DRMMDeviceAntivirusInfo class models the antivirus information associated with a device in the DRMM platform. It includes properties such as AntivirusProduct and AntivirusStatus, which provide details about the antivirus software installed on the device and its current status. The class also includes methods to determine if the antivirus is running and up to date, as well as a method to generate a summary string of the antivirus information.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMDeviceAntivirusInfo class exposes the following properties:
+
+    Property         Type       Description                             
+    ---------------- ---------- ----------------------------------------
+    AntivirusProduct string     The name of the antivirus product ins...
+    AntivirusStatus  string     The current status of the antivirus p...
+## METHODS
+
+The DRMMDeviceAntivirusInfo class provides the following methods:
+
+### IsRunning()
+
+Determines if the antivirus is currently running on the device.
+
+**Returns:** `bool` - A boolean value indicating whether the antivirus is currently running on the device.
+
+### IsUpToDate()
+
+Determines if the antivirus is running and up to date on the device.
+
+**Returns:** `bool` - A boolean value indicating whether the antivirus is running and up to date on the device.
+
+### GetSummary()
+
+Generates a summary string of the antivirus product and its status.
+
+**Returns:** `string` - A summary string of the antivirus product and its status.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    AntivirusProduct [string]
+    AntivirusStatus [string]
+
+METHODS
+    DRMMDeviceAntivirusInfo() : void
+    IsRunning() : bool
+    IsUpToDate() : bool
+    GetSummary() : string
+
+SEE ALSO
+    Online Documentation

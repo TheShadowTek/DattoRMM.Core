@@ -1,0 +1,42 @@
+TOPIC
+    about_DRMMDeviceAuditBios
+
+SHORT DESCRIPTION
+    Represents the BIOS information of a device in a device audit, including manufacturer, name, serial number, and SMBIOS BIOS version.
+
+LONG DESCRIPTION
+The DRMMDeviceAuditBios class models the information about the BIOS of the audited system. It includes properties such as Manufacturer, Name, SerialNumber, and SmbiosBiosVersion, which provide details about the BIOS. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMDeviceAuditBios class exposes the following properties:
+
+    Property          Type       Description                   
+    ----------------- ---------- ------------------------------
+    Manufacturer      string     The manufacturer of the BIOS. 
+    Name              string     The name of the BIOS.         
+    SerialNumber      string     The serial number of the BIOS.
+    SmbiosBiosVersion string     The SMBIOS BIOS version.      
+## METHODS
+
+The DRMMDeviceAuditBios class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Manufacturer [string]
+    Name [string]
+    SerialNumber [string]
+    SmbiosBiosVersion [string]
+
+METHODS
+    DRMMDeviceAuditBios() : void
+
+SEE ALSO
+    Online Documentation

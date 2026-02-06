@@ -8,7 +8,7 @@ Represents a response action taken for an alert in the DRMM system, including ac
 
 The DRMMAlertResponseAction class models the response actions specific to alerts in the DRMM platform. It encapsulates properties such as ActionTime, ActionType, Description, ActionReference, and ActionReferenceInt that provide detailed context about the response actions taken for an alert.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -32,25 +32,9 @@ Generates a summary string for the alert response action, including action type 
 
 **Returns:** `string` - A summary string for the alert response action, including action type and description.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

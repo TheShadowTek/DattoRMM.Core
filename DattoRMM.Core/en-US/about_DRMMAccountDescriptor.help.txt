@@ -1,0 +1,40 @@
+TOPIC
+    about_DRMMAccountDescriptor
+
+SHORT DESCRIPTION
+    Represents the descriptor information for a DRMM account, including billing and timezone details.
+
+LONG DESCRIPTION
+The DRMMAccountDescriptor class encapsulates details about a DRMM account's billing email, device limit, and time zone. It provides a static method to create an instance of the class from a typical API response object that contains these descriptor details. This class is used as a property within the DRMMAccount class to provide additional information about the account's configuration and limitations.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMAccountDescriptor class exposes the following properties:
+
+    Property     Type       Description                             
+    ------------ ---------- ----------------------------------------
+    BillingEmail string     The billing email address associated ...
+    DeviceLimit  int        The maximum number of devices allowed...
+    TimeZone     string     The time zone setting for the account.  
+## METHODS
+
+The DRMMAccountDescriptor class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    BillingEmail [string]
+    DeviceLimit [int]
+    TimeZone [string]
+
+METHODS
+    DRMMAccountDescriptor() : void
+
+SEE ALSO
+    Online Documentation

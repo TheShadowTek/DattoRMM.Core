@@ -1,0 +1,50 @@
+TOPIC
+    about_DRMMAlertContextSecurityManagement
+
+SHORT DESCRIPTION
+    Represents the context of a security management alert in the DRMM system, including status, product name, information time, virus name, infected files, and other related properties.
+
+LONG DESCRIPTION
+The DRMMAlertContextSecurityManagement class models the context information specific to security management alerts in the DRMM platform. It encapsulates properties such as status, product name, information time, virus name, infected files, and other related properties that provide detailed context about the security management alert.
+
+This class inherits from DRMMAlertContext.
+
+## PROPERTIES
+
+The DRMMAlertContextSecurityManagement class exposes the following properties:
+
+    Property                      Type       Description                             
+    ----------------------------- ---------- ----------------------------------------
+    Status                        int        The current status of the security ma...
+    ProductName                   string     The name of the product generating th...
+    InfoTime                      int        The time when the information was rec...
+    VirusName                     string     The name of the virus associated with...
+    InfectedFiles                 string[]   The files infected by the security th...
+    ProductNotUpdatedForDays      int        The number of days the product has no...
+    SystemRemainsInfectedForHours int        The number of hours the system remain...
+    ExpiryLicenseForDays          int        The number of days until the license ...
+## METHODS
+
+The DRMMAlertContextSecurityManagement class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Status [int]
+    ProductName [string]
+    InfoTime [int]
+    VirusName [string]
+    InfectedFiles [string[]]
+    ProductNotUpdatedForDays [int]
+    SystemRemainsInfectedForHours [int]
+    ExpiryLicenseForDays [int]
+
+METHODS
+    DRMMAlertContextSecurityManagement() : void
+
+SEE ALSO
+    Online Documentation

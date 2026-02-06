@@ -1,0 +1,38 @@
+TOPIC
+    about_DRMMAlertContextBackupManagement
+
+SHORT DESCRIPTION
+    Represents the context of a backup management alert in the DRMM system, including error messages and timeout information.
+
+LONG DESCRIPTION
+The DRMMAlertContextBackupManagement class models the context information specific to backup management alerts in the DRMM platform. It encapsulates properties such as error messages and timeout values that are relevant to backup management scenarios.
+
+This class inherits from DRMMAlertContext.
+
+## PROPERTIES
+
+The DRMMAlertContextBackupManagement class exposes the following properties:
+
+    Property     Type       Description                             
+    ------------ ---------- ----------------------------------------
+    ErrorMessage string     The error message associated with the...
+    Timeout      int        The timeout value related to the back...
+## METHODS
+
+The DRMMAlertContextBackupManagement class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    ErrorMessage [string]
+    Timeout [int]
+
+METHODS
+    DRMMAlertContextBackupManagement() : void
+
+SEE ALSO
+    Online Documentation

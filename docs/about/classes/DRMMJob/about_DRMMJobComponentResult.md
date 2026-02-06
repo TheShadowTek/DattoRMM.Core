@@ -8,7 +8,7 @@ Represents the result of a DRMM job component, including its unique identifier, 
 
 The DRMMJobComponentResult class models the result of a component within a DRMM job. It includes properties such as ComponentUid, ComponentName, ComponentStatus, NumberOfWarnings, HasStdOut, and HasStdErr, which provide details about the outcome of the component's execution. The class also includes a static method to create an instance of DRMMJobComponentResult from API response data.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -29,25 +29,9 @@ The DRMMJobComponentResult class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

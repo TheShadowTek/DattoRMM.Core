@@ -1,0 +1,44 @@
+TOPIC
+    about_DRMMAlertContextDiskUsage
+
+SHORT DESCRIPTION
+    Represents the context of a disk usage alert in the DRMM system, including details about the disk, total volume, free space, and unit of measure.
+
+LONG DESCRIPTION
+The DRMMAlertContextDiskUsage class models the context information specific to disk usage alerts in the DRMM platform. It encapsulates properties such as the name of the disk, total volume, free space, unit of measure, and disk name designation. This information provides insights into the disk usage conditions that triggered the alert, allowing for better understanding and response to disk-related issues.
+
+This class inherits from DRMMAlertContext.
+
+## PROPERTIES
+
+The DRMMAlertContextDiskUsage class exposes the following properties:
+
+    Property            Type       Description                             
+    ------------------- ---------- ----------------------------------------
+    DiskName            string     The name of the disk associated with ...
+    TotalVolume         float      The total volume or capacity of the d...
+    FreeSpace           float      The amount of free space available on...
+    UnitOfMeasure       string     The unit of measure used for disk spa...
+    DiskNameDesignation string     The designation or label of the disk ...
+## METHODS
+
+The DRMMAlertContextDiskUsage class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    DiskName [string]
+    TotalVolume [float]
+    FreeSpace [float]
+    UnitOfMeasure [string]
+    DiskNameDesignation [string]
+
+METHODS
+    DRMMAlertContextDiskUsage() : void
+
+SEE ALSO
+    Online Documentation

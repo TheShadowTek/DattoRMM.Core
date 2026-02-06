@@ -8,7 +8,7 @@ Represents a component of a DRMM job, including its unique identifier, name, and
 
 The DRMMJobComponent class models a component within a DRMM job. It includes properties such as Uid, Name, and Variables, which provide details about the component's identity and configuration. The class also includes a static method to create an instance of DRMMJobComponent from API response data.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -26,25 +26,9 @@ The DRMMJobComponent class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

@@ -390,7 +390,8 @@ Use -Force to bypass the confirmation prompt.
 ## RELATED LINKS
 
 
-- [about_DRMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMDevice.md)
-- [about_DRMMFilter](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMFilter.md)
-- [Get-RMMFilter](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMFilter.md)
-- [Get-RMMSite](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMSite.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDevice.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDevice.md))
+- [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
+- [about_DRMMFilter](../../about/classes/DRMMFilter/about_DRMMFilter.md)
+- [Get-RMMFilter](../Filter/Get-RMMFilter.md)
+- [Get-RMMSite](../Sites/Get-RMMSite.md)

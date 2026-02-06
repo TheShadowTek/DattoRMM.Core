@@ -1,0 +1,56 @@
+TOPIC
+    about_DRMMAccountDevicesStatus
+
+SHORT DESCRIPTION
+    Represents the device status information for a DRMM account, including counts of devices in various states.
+
+LONG DESCRIPTION
+The DRMMAccountDevicesStatus class encapsulates information about the number of devices associated with a DRMM account, including the total number of devices, the number of online devices, offline devices, on-demand devices, and managed devices. It provides a static method to create an instance of the class from a typical API response object that contains these device status details. The class also includes methods to calculate the percentage of online devices and to generate a summary string that combines this information for easy display. This class is used as a property within the DRMMAccount class to provide insights into the account's device status.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMAccountDevicesStatus class exposes the following properties:
+
+    Property                Type       Description                             
+    ----------------------- ---------- ----------------------------------------
+    NumberOfDevices         int        The total number of devices associate...
+    NumberOfOnlineDevices   int        The number of devices that are curren...
+    NumberOfOfflineDevices  int        The number of devices that are curren...
+    NumberOfOnDemandDevices int        The number of devices that are on-dem...
+    NumberOfManagedDevices  int        The number of devices that are manage...
+## METHODS
+
+The DRMMAccountDevicesStatus class provides the following methods:
+
+### GetOnlinePercentage()
+
+Calculates the percentage of online devices for the account.
+
+**Returns:** `double` - The percentage of online devices as a double value.
+
+### GetSummary()
+
+Generates a summary string for the device status, including the count of online devices and total devices.
+
+**Returns:** `string` - A summary string combining the count of online devices and total devices.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    NumberOfDevices [int]
+    NumberOfOnlineDevices [int]
+    NumberOfOfflineDevices [int]
+    NumberOfOnDemandDevices [int]
+    NumberOfManagedDevices [int]
+
+METHODS
+    DRMMAccountDevicesStatus() : void
+    GetOnlinePercentage() : double
+    GetSummary() : string
+
+SEE ALSO
+    Online Documentation

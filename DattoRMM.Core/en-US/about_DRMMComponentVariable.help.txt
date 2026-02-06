@@ -1,0 +1,51 @@
+TOPIC
+    about_DRMMComponentVariable
+
+SHORT DESCRIPTION
+    Represents a variable associated with a DRMM component, including its name, type, direction, and other metadata.
+
+LONG DESCRIPTION
+The DRMMComponentVariable class models a variable that can be used as input or output for a DRMM component. It includes properties for the variable's name, default value, type, direction (input/output), description, and index within the component's variable list. Methods allow for instantiation from API responses and for generating a summary string describing the variable.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMComponentVariable class exposes the following properties:
+
+    Property     Type       Description                             
+    ------------ ---------- ----------------------------------------
+    Name         string     The name of the variable.               
+    DefaultValue string     The default value of the variable.      
+    Type         string     The data type of the variable.          
+    Direction    bool       The direction of the variable (input ...
+    Description  string     A description of the variable.          
+    Index        int        The index of the variable within the ...
+## METHODS
+
+The DRMMComponentVariable class provides the following methods:
+
+### GetSummary()
+
+Generates a summary string for the component variable.
+
+**Returns:** `string` - A summary string for the component variable.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Name [string]
+    DefaultValue [string]
+    Type [string]
+    Direction [bool]
+    Description [string]
+    Index [int]
+
+METHODS
+    DRMMComponentVariable() : void
+    GetSummary() : string
+
+SEE ALSO
+    Online Documentation

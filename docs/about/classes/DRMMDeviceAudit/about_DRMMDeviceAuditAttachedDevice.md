@@ -8,7 +8,7 @@ Represents an attached device in a device audit, including its description and i
 
 The DRMMDeviceAuditAttachedDevice class models the information about a device that is attached to the audited system. It includes properties such as Description and Instance, which provide details about the attached device. This class is typically used as part of the DRMMDeviceAudit to represent the various devices connected to the system being audited.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -25,25 +25,9 @@ The DRMMDeviceAuditAttachedDevice class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

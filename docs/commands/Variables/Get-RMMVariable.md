@@ -207,3 +207,6 @@ Variables can be referenced in components using the variable name.
 Site-level variables override global variables with the same name.
 
 ## RELATED LINKS
+
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Get-RMMVariable.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Get-RMMVariable.md))

@@ -12,7 +12,7 @@ $Header = @"
 "@
 
 # File to exclude
-$ExcludedFile = Join-Path -Path $RootFolder -ChildPath "Private\howtothrottle.ps1"
+$ExcludedFile = Join-Path -Path $RootFolder -ChildPath "DattoRMM.Core\Private\howtothrottle.ps1"
 
 # Allowed file extensions
 $AllowedExtensions = @(

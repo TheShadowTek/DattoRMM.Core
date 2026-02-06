@@ -8,7 +8,7 @@ Represents the context of a printer alert in the DRMM system, including IP addre
 
 The DRMMAlertContextPrinter class models the context information specific to printer alerts in the DRMM platform. It encapsulates properties such as IP address, MAC address, marker supply index, and current level that provide detailed context about the printer alert.
 
-This class inherits from [DRMMAlertContext](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContext.md).
+This class inherits from [DRMMAlertContext](./about_DRMMAlertContext.md).
 
 ## PROPERTIES
 
@@ -27,25 +27,9 @@ The DRMMAlertContextPrinter class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

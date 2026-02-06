@@ -8,7 +8,7 @@ Represents a guest virtual machine on an ESXi host, including its name, processo
 
 The DRMMEsxiGuest class models the information about a guest virtual machine running on an ESXi host. It includes properties such as GuestName, ProcessorSpeedTotal, MemorySizeTotal, NumberOfSnapshots, and Datastores, which provide details about the virtual machine's configuration and resource usage. This class is typically used as part of the DRMMEsxiHostAudit to represent the virtual machines running on the ESXi host being audited.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -28,25 +28,9 @@ The DRMMEsxiGuest class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

@@ -40,8 +40,8 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$OutputFolder = ".\docs\about\classes",
-    [switch]$Force = $true
+    [string]$OutputFolder = "$PSScriptRoot\..\docs\about\classes",
+    [switch]$Force
 )
 
 $ErrorActionPreference = 'Continue'
@@ -49,7 +49,8 @@ $ErrorActionPreference = 'Continue'
 # Get module root
 $ModuleRoot = Split-Path $PSScriptRoot -Parent
 Push-Location $ModuleRoot
-
+# Resolve OutputFolder to absolute path
+$OutputFolder = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputFolder)
 try {
     Write-Host "`n=== Build-ClassDocs.ps1 ===" -ForegroundColor Cyan
     Write-Host "Generating comprehensive class documentation from Classes.psm1..." -ForegroundColor Cyan
@@ -71,7 +72,7 @@ try {
     }
         # Read manifest for DocsBaseUrl
     Write-Host "`nReading module manifest..." -ForegroundColor Yellow
-    $ManifestPath = Join-Path $ModuleRoot 'DattoRMM.Core.psd1'
+    $ManifestPath = Join-Path $ModuleRoot 'DattoRMM.Core\DattoRMM.Core.psd1'
     $Manifest = Import-PowerShellDataFile -Path $ManifestPath
     $DocsBaseUrl = $Manifest.PrivateData.PSData.DocsBaseUrl
     if (-not $DocsBaseUrl) {
@@ -208,7 +209,7 @@ try {
     }
         # Parse Classes.psm1
     Write-Host "`nParsing Classes.psm1..." -ForegroundColor Yellow
-    $ClassesFile = Join-Path $ModuleRoot 'Private\Classes\Classes.psm1'
+    $ClassesFile = Join-Path $ModuleRoot 'DattoRMM.Core\Private\Classes\Classes.psm1'
     
     if (-not (Test-Path $ClassesFile)) {
         Write-Error "Classes.psm1 not found at: $ClassesFile"
@@ -382,6 +383,21 @@ try {
         }
     }
     Write-Host "  Mapped $($ClassFolderMap.Count) classes to folders" -ForegroundColor Gray
+    
+    # Build function-to-subfolder lookup for command links
+    Write-Host "\nBuilding function-to-subfolder lookup..." -ForegroundColor Yellow
+    $FunctionLookup = @{}
+    $PublicPath = Join-Path $ModuleRoot 'DattoRMM.Core\Public'
+    if (Test-Path $PublicPath) {
+        $PublicFunctions = Get-ChildItem -Path $PublicPath -Filter *.ps1 -Recurse | 
+            Where-Object { $_.Name -notlike '*.Tests.ps1' }
+        foreach ($FuncFile in $PublicFunctions) {
+            $FuncName = $FuncFile.BaseName
+            $RelPath = $FuncFile.DirectoryName.Replace((Join-Path $ModuleRoot 'DattoRMM.Core\Public'), '').TrimStart('\','/')
+            $FunctionLookup[$FuncName] = if ($RelPath) { $RelPath } else { '' }
+        }
+    }
+    Write-Host "  Mapped $($FunctionLookup.Count) functions to subfolders" -ForegroundColor Gray
     
     # Initialize/update documentation content for all classes
     Write-Host "\nInitializing/updating documentation content structure..." -ForegroundColor Yellow
@@ -610,8 +626,9 @@ The following values are defined for $TypeName`:
                         $Content += "`n| ``$Value`` | $ValueDesc |"
                     }
                     
-                    $Content += "`n`n## USAGE EXAMPLES`n`n"
+                    # USAGE EXAMPLES - only write if examples exist
                     if ($EnumDoc.Examples.Count -gt 0) {
+                        $Content += "`n`n## USAGE EXAMPLES`n`n"
                         $ExampleNum = 1
                         foreach ($ExampleKey in ($EnumDoc.Examples.Keys | Sort-Object)) {
                             $Example = $EnumDoc.Examples[$ExampleKey]
@@ -620,11 +637,9 @@ The following values are defined for $TypeName`:
                             $Content += "### $Title`n`n``````powershell`n$Code`n``````\n`n"
                             $ExampleNum++
                         }
-                    } else {
-                        $Content += "### Example 1: Basic usage`n`n``````powershell`n# TODO: Add example showing how to use this enum`n``````\n`n"
                     }
                     
-                    $Content += "## NOTES`n`n"
+                    $Content += "`n## NOTES`n`n"
                     if ($EnumDoc.Notes.Count -gt 0) {
                         foreach ($Note in $EnumDoc.Notes) {
                             $NoteText = Get-DocContent $Note "Add a note"
@@ -634,11 +649,80 @@ The following values are defined for $TypeName`:
                         $Content += "This enum is defined in the DattoRMM.Core module's Classes.psm1 file.`n`n"
                     }
                     
-                    $Content += "## RELATED LINKS`n`n- [Online Documentation]($DocsBaseUrl/about/classes/$($Region.FolderName)/about_$TypeName.md)`n"
+                    # RELATED LINKS - process and convert to relative paths, capture GitHub URL
+                    $RelatedLinkLines = @()
+                    
+                    # Automatically add Online Documentation link
+                    $OnlineDocUrl = "$DocsBaseUrl/about/classes/$($Region.FolderName)/about_$TypeName.md"
+                    
                     if ($EnumDoc.RelatedLinks.Count -gt 0) {
                         foreach ($Link in $EnumDoc.RelatedLinks) {
-                            $Content += "- $Link`n"
+                            # Skip GitHub URLs - we generate Online Documentation automatically
+                            if ($Link -match 'https?://') {
+                                continue
+                            }
+                            
+                            # Skip if it's a self-reference
+                            if ($Link -match "about_$TypeName") {
+                                continue
+                            }
+                            
+                            # Parse link name from various formats
+                            $LinkName = $null
+                            if ($Link -match '^\[([^\]]+)\]') {
+                                $LinkName = $matches[1]
+                            } elseif ($Link -match '^[\-\*]\s*(.+)') {
+                                $LinkName = $matches[1].Trim()
+                            } elseif ($Link -match '^([A-Za-z0-9\-_]+)$') {
+                                $LinkName = $matches[1]
+                            }
+                            
+                            if ($LinkName) {
+                                # Generate relative path based on link type
+                                if ($LinkName -match '^about_') {
+                                    # Another about doc - find its folder
+                                    $TargetFolder = $null
+                                    foreach ($R in $Regions) {
+                                        if ($R.Classes | Where-Object { $_.Name -eq ($LinkName -replace '^about_', '') }) {
+                                            $TargetFolder = $R.FolderName
+                                            break
+                                        }
+                                    }
+                                    if ($TargetFolder) {
+                                        if ($TargetFolder -eq $Region.FolderName) {
+                                            # Same folder
+                                            $RelatedLinkLines += "- [$LinkName](./$LinkName.md)"
+                                        } else {
+                                            # Different folder
+                                            $RelatedLinkLines += "- [$LinkName](../$TargetFolder/$LinkName.md)"
+                                        }
+                                    } else {
+                                        # Not found, use root about path
+                                        $RelatedLinkLines += "- [$LinkName](../../$LinkName.md)"
+                                    }
+                                } else {
+                                    # Command function - use lookup to get subfolder
+                                    if ($FunctionLookup.ContainsKey($LinkName)) {
+                                        $FuncSubPath = $FunctionLookup[$LinkName] -replace '\\', '/'
+                                        if ($FuncSubPath) {
+                                            $RelatedLinkLines += "- [$LinkName](../../../commands/$FuncSubPath/$LinkName.md)"
+                                        } else {
+                                            $RelatedLinkLines += "- [$LinkName](../../../commands/$LinkName.md)"
+                                        }
+                                    } else {
+                                        # Fallback if not found in lookup
+                                        $RelatedLinkLines += "- [$LinkName](../../../commands/$LinkName.md)"
+                                    }
+                                }
+                            }
                         }
+                    }
+                    
+                    # Always write RELATED LINKS with Online Documentation
+                    $Content += "## RELATED LINKS`n`n"
+                    $Content += "- [Online Documentation]($OnlineDocUrl)`n"
+                    if ($RelatedLinkLines.Count -gt 0) {
+                        $Content += ($RelatedLinkLines -join "`n") + "`n"
                     }
                     $Content += "`n"
                 } else {
@@ -653,7 +737,14 @@ The following values are defined for $TypeName`:
                         # Look up the folder for the base class
                         $BaseFolder = $ClassFolderMap[$TypeInfo.BaseType]
                         if ($BaseFolder) {
-                            "This class inherits from [$($TypeInfo.BaseType)]($DocsBaseUrl/about/classes/$BaseFolder/about_$($TypeInfo.BaseType).md)."
+                            # Generate relative path to base class
+                            if ($BaseFolder -eq $Region.FolderName) {
+                                # Same folder - use relative path
+                                "This class inherits from [$($TypeInfo.BaseType)](./about_$($TypeInfo.BaseType).md)."
+                            } else {
+                                # Different folder - go up one level then into target folder
+                                "This class inherits from [$($TypeInfo.BaseType)](../$BaseFolder/about_$($TypeInfo.BaseType).md)."
+                            }
                         } else {
                             # Fallback if base class not found in map
                             "This class inherits from $($TypeInfo.BaseType)."
@@ -763,33 +854,106 @@ The $TypeName class provides the following methods:
                         $Content += "`nNo public methods defined.`n"
                     }
                     
-                    $Content += @"
-
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-``````powershell
-# TODO: Add comprehensive usage example
-``````
-
-### Example 2: Advanced usage
-
-``````powershell
-# TODO: Add advanced usage example
-``````
-
-## NOTES
-
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
-
-## RELATED LINKS
-
-- [Online Documentation]($DocsBaseUrl/about/classes/$($Region.FolderName)/about_$TypeName.md)
-
-"@
+                    # USAGE EXAMPLES - only write if examples exist
+                    if ($ClassDoc.Examples.Count -gt 0) {
+                        $Content += "`n`n## USAGE EXAMPLES`n`n"
+                        $ExampleNum = 1
+                        foreach ($ExampleKey in ($ClassDoc.Examples.Keys | Sort-Object)) {
+                            $Example = $ClassDoc.Examples[$ExampleKey]
+                            $Title = if ($Example.Title) { $Example.Title } else { "Example $ExampleNum" }
+                            $Code = if ($Example.Code) { $Example.Code } else { "# TODO: Add example code" }
+                            $Content += "### $Title`n`n``````powershell`n$Code`n``````
+`n"
+                            $ExampleNum++
+                        }
+                    }
+                    
+                    # NOTES section
+                    $Content += "`n## NOTES`n`n"
+                    if ($ClassDoc.Notes.Count -gt 0) {
+                        foreach ($Note in $ClassDoc.Notes) {
+                            $NoteText = Get-DocContent $Note "Add a note"
+                            $Content += "$NoteText`n`n"
+                        }
+                    } else {
+                        $Content += "This class is defined in the DattoRMM.Core module's Classes.psm1 file.`n`n"
+                    }
+                    
+                    # RELATED LINKS - process and convert to relative paths, capture GitHub URL
+                    $RelatedLinkLines = @()
+                    
+                    # Automatically add Online Documentation link
+                    $OnlineDocUrl = "$DocsBaseUrl/about/classes/$($Region.FolderName)/about_$TypeName.md"
+                    
+                    if ($ClassDoc.RelatedLinks.Count -gt 0) {
+                        foreach ($Link in $ClassDoc.RelatedLinks) {
+                            # Skip GitHub URLs - we generate Online Documentation automatically
+                            if ($Link -match 'https?://') {
+                                continue
+                            }
+                            
+                            # Skip if it's a self-reference
+                            if ($Link -match "about_$TypeName") {
+                                continue
+                            }
+                            
+                            # Parse link name from various formats
+                            $LinkName = $null
+                            if ($Link -match '^\[([^\]]+)\]') {
+                                $LinkName = $matches[1]
+                            } elseif ($Link -match '^[\-\*]\s*(.+)') {
+                                $LinkName = $matches[1].Trim()
+                            } elseif ($Link -match '^([A-Za-z0-9\-_]+)$') {
+                                $LinkName = $matches[1]
+                            }
+                            
+                            if ($LinkName) {
+                                # Generate relative path based on link type
+                                if ($LinkName -match '^about_') {
+                                    # Another about doc - find its folder
+                                    $TargetFolder = $null
+                                    foreach ($R in $Regions) {
+                                        if ($R.Classes | Where-Object { $_.Name -eq ($LinkName -replace '^about_', '') }) {
+                                            $TargetFolder = $R.FolderName
+                                            break
+                                        }
+                                    }
+                                    if ($TargetFolder) {
+                                        if ($TargetFolder -eq $Region.FolderName) {
+                                            # Same folder
+                                            $RelatedLinkLines += "- [$LinkName](./$LinkName.md)"
+                                        } else {
+                                            # Different folder
+                                            $RelatedLinkLines += "- [$LinkName](../$TargetFolder/$LinkName.md)"
+                                        }
+                                    } else {
+                                        # Not found, use root about path
+                                        $RelatedLinkLines += "- [$LinkName](../../$LinkName.md)"
+                                    }
+                                } else {
+                                    # Command function - use lookup to get subfolder
+                                    if ($FunctionLookup.ContainsKey($LinkName)) {
+                                        $FuncSubPath = $FunctionLookup[$LinkName] -replace '\\', '/'
+                                        if ($FuncSubPath) {
+                                            $RelatedLinkLines += "- [$LinkName](../../../commands/$FuncSubPath/$LinkName.md)"
+                                        } else {
+                                            $RelatedLinkLines += "- [$LinkName](../../../commands/$LinkName.md)"
+                                        }
+                                    } else {
+                                        # Fallback if not found in lookup
+                                        $RelatedLinkLines += "- [$LinkName](../../../commands/$LinkName.md)"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    # Always write RELATED LINKS with Online Documentation
+                    $Content += "## RELATED LINKS`n`n"
+                    $Content += "- [Online Documentation]($OnlineDocUrl)`n"
+                    if ($RelatedLinkLines.Count -gt 0) {
+                        $Content += ($RelatedLinkLines -join "`n") + "`n`n"
+                    }
                 }
                 
                 # Save markdown file

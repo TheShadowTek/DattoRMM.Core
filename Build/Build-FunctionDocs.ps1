@@ -39,7 +39,7 @@
 [CmdletBinding()]
 param(
     [switch]$Force,
-    [string]$OutputFolder = ".\docs\commands"
+    [string]$OutputFolder = "$PSScriptRoot\..\docs\commands"
 )
 
 $ErrorActionPreference = 'Continue'
@@ -48,6 +48,9 @@ $ProgressPreference = 'Continue'
 # Get module root (parent of Build folder)
 $ModuleRoot = Split-Path $PSScriptRoot -Parent
 Push-Location $ModuleRoot
+
+# Resolve OutputFolder to absolute path
+$OutputFolder = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputFolder)
 
 try {
     Write-Host "`n=== Build-FunctionDocs.ps1 ===" -ForegroundColor Cyan
@@ -66,7 +69,7 @@ try {
     Write-Host "`nLoading module types and classes..." -ForegroundColor Yellow
     
     # Load consolidated Classes.psm1
-    $ClassesModule = Join-Path $ModuleRoot "Private\Classes\Classes.psm1"
+    $ClassesModule = Join-Path $ModuleRoot "DattoRMM.Core\Private\Classes\Classes.psm1"
     if (Test-Path $ClassesModule) {
         try {
             . $ClassesModule
@@ -81,7 +84,8 @@ try {
     # Import the module to get functions loaded
     Write-Host "`nImporting module..." -ForegroundColor Yellow
     try {
-        Import-Module .\DattoRMM.Core.psd1 -Force -ErrorAction Stop
+        $ModulePath = Join-Path $ModuleRoot 'DattoRMM.Core\DattoRMM.Core.psd1'
+        Import-Module $ModulePath -Force -ErrorAction Stop
         Write-Host "  ✓ Module imported successfully" -ForegroundColor Green
     } catch {
         Write-Error "Failed to import module: $_"
@@ -89,8 +93,9 @@ try {
     }
 
     # Read DocsBaseUrl from manifest for RELATED LINKS
-    Write-Host "`nReading module manifest..." -ForegroundColor Yellow
-    $Manifest = Import-PowerShellDataFile -Path .\DattoRMM.Core.psd1
+    Write-Host "\nReading module manifest..." -ForegroundColor Yellow
+    $ManifestPath = Join-Path $ModuleRoot 'DattoRMM.Core\DattoRMM.Core.psd1'
+    $Manifest = Import-PowerShellDataFile -Path $ManifestPath
     $DocsBaseUrl = $Manifest.PrivateData.PSData.DocsBaseUrl
     if (-not $DocsBaseUrl) {
         Write-Warning "DocsBaseUrl not found in manifest. Using default './docs/'"
@@ -100,12 +105,33 @@ try {
     
     # Get all public function files
     Write-Host "`nScanning for public functions..." -ForegroundColor Yellow
-    $PublicFunctions = Get-ChildItem -Path .\Public -Filter *.ps1 -Recurse | 
+    $PublicPath = Join-Path $ModuleRoot 'DattoRMM.Core\Public'
+    $PublicFunctions = Get-ChildItem -Path $PublicPath -Filter *.ps1 -Recurse | 
         Where-Object { $_.Name -notlike '*.Tests.ps1' }
     
     Write-Host "  Found $($PublicFunctions.Count) public function files" -ForegroundColor Gray
+        # Build lookup for function -> relative path in docs/commands
+    Write-Host "\nBuilding documentation lookup tables..." -ForegroundColor Yellow
+    $FunctionLookup = @{}
+    foreach ($FuncFile in $PublicFunctions) {
+        $FuncName = $FuncFile.BaseName
+        $RelPath = $FuncFile.DirectoryName.Replace((Join-Path $ModuleRoot 'DattoRMM.Core\Public'), '').TrimStart('\','/')
+        $FunctionLookup[$FuncName] = if ($RelPath) { $RelPath } else { '' }
+    }
     
-    $Generated = 0
+    # Build lookup for about docs -> relative path in docs/about
+    $AboutLookup = @{}
+    $AboutDocsPath = Join-Path $ModuleRoot 'docs\about'
+    if (Test-Path $AboutDocsPath) {
+        $AboutFiles = Get-ChildItem -Path $AboutDocsPath -Filter 'about_*.md' -Recurse
+        foreach ($AboutFile in $AboutFiles) {
+            $AboutName = $AboutFile.BaseName
+            $RelPath = $AboutFile.DirectoryName.Replace($AboutDocsPath, '').TrimStart('\','/')
+            $AboutLookup[$AboutName] = if ($RelPath) { $RelPath } else { '' }
+        }
+    }
+    Write-Host "  Found $($FunctionLookup.Count) functions and $($AboutLookup.Count) about docs" -ForegroundColor Gray
+        $Generated = 0
     $Skipped = 0
     $Failed = 0
     
@@ -113,7 +139,7 @@ try {
         $FunctionName = $FunctionFile.BaseName
         
         # Calculate relative path from Public folder to preserve structure
-        $RelativePath = $FunctionFile.DirectoryName.Replace((Join-Path $ModuleRoot 'Public'), '').TrimStart('\', '/')
+        $RelativePath = $FunctionFile.DirectoryName.Replace((Join-Path $ModuleRoot 'DattoRMM.Core\Public'), '').TrimStart('\','/')
         
         # Create output path preserving folder structure
         $OutputSubFolder = if ($RelativePath) {
@@ -211,16 +237,34 @@ try {
                     $Changes += "Closed unclosed code block"
                 }
                 
-                # Convert RELATED LINKS to markdown links with absolute URIs
+                # Convert RELATED LINKS to markdown links with relative paths
                 $Content = [regex]::Replace($Content, '(?ms)(^## RELATED LINKS\s*)([\s\S]*?)(?=^## |\z)', {
                     param($match)
                     $header = $match.Groups[1].Value
                     $block = $match.Groups[2].Value
                     
-                    # Extract link names from the block
+                    # Extract GitHub URL for "Online Documentation" link
+                    $OnlineDocUrl = $null
+                    foreach ($line in $block -split "`n") {
+                        $line = $line.Trim()
+                        if ($line -match '(https?://[^\s]+)') {
+                            $OnlineDocUrl = $matches[1]
+                            break
+                        }
+                    }
+                    
+                    # Extract link names from the block (skip URLs)
                     $names = @()
                     foreach ($line in $block -split "`n") {
                         $line = $line.Trim()
+                        # Skip empty lines
+                        if ([string]::IsNullOrWhiteSpace($line)) {
+                            continue
+                        }
+                        # Skip full URLs
+                        if ($line -match 'https?://') {
+                            continue
+                        }
                         # Match various formats: [Name], - Name, Name
                         if ($line -match '^\[([^\]]+)\]') { 
                             $names += $matches[1] 
@@ -231,19 +275,60 @@ try {
                         }
                     }
                     
+                    # Calculate relative path from current function location
+                    $CurrentRelPath = if ($RelativePath) { $RelativePath } else { '' }
+                    $DepthFromCommands = if ($CurrentRelPath) { ($CurrentRelPath -split '[\\\\/]').Count } else { 0 }
+                    $BackToCommands = if ($DepthFromCommands -gt 0) { ('../' * $DepthFromCommands) } else { './' }
+                    
+                    $linkLines = @()
+                    
+                    # Add Online Documentation link first if found
+                    if ($OnlineDocUrl) {
+                        $linkLines += "- [Online Documentation]($OnlineDocUrl)"
+                    }
+                    
+                    # Add relative links for other docs
                     if ($names.Count -gt 0) {
-                        $linkLines = foreach ($name in $names) {
+                        foreach ($name in $names) {
                             if ($name -match '^about_') {
-                                # About topics go to about folder
-                                "- [$name]($DocsBaseUrl/about/$name.md)"
+                                # About topics - need to go up to docs root, then into about
+                                if ($AboutLookup.ContainsKey($name)) {
+                                    $AboutSubPath = $AboutLookup[$name] -replace '\\', '/'  # Normalize to forward slashes
+                                    $AboutPath = if ($AboutSubPath) { "about/$AboutSubPath/$name.md" } else { "about/$name.md" }
+                                    $RelPath = "$BackToCommands../$AboutPath"
+                                } else {
+                                    # Fallback if not found in lookup
+                                    $RelPath = "$BackToCommands../about/$name.md"
+                                }
+                                $linkLines += "- [$name]($RelPath)"
                             } else {
-                                # Commands go to commands folder - use absolute URI
-                                "- [$name]($DocsBaseUrl/commands/$name.md)"
+                                # Commands - calculate relative path from current function to linked function
+                                if ($FunctionLookup.ContainsKey($name)) {
+                                    $TargetSubPath = $FunctionLookup[$name] -replace '\\', '/'  # Normalize to forward slashes
+                                    if ($CurrentRelPath -eq $TargetSubPath) {
+                                        # Same subfolder
+                                        $RelPath = "./$name.md"
+                                    } elseif ($TargetSubPath) {
+                                        # Different subfolder
+                                        $RelPath = "$BackToCommands$TargetSubPath/$name.md"
+                                    } else {
+                                        # Target is in root commands folder
+                                        $RelPath = "$BackToCommands$name.md"
+                                    }
+                                } else {
+                                    # Fallback if not found in lookup
+                                    $RelPath = "$BackToCommands$name.md"
+                                }
+                                $linkLines += "- [$name]($RelPath)"
                             }
                         }
+                    }
+                    
+                    if ($linkLines.Count -gt 0) {
                         return $header + "`n" + ($linkLines -join "`n") + "`n"
                     } else {
-                        return $match.Value
+                        # No links at all - remove the entire RELATED LINKS section
+                        return ""
                     }
                 })
                 

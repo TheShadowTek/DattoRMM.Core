@@ -1,0 +1,52 @@
+TOPIC
+    about_DRMMAccount
+
+SHORT DESCRIPTION
+    Represents an account in the DRMM system, including its properties and related information.
+
+LONG DESCRIPTION
+The DRMMAccount class models an account within the DRMM platform, encapsulating properties such as the account ID, unique identifier, name, currency, and related descriptors and device status. It provides a static method to create an instance of the class from a typical API response object that contains account information. The class also includes a method to generate a summary string that combines the account name with its device status for easy display. The DRMMAccountDescriptor and DRMMAccountDevicesStatus classes represent related information about the account, such as billing details and device status, respectively.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMAccount class exposes the following properties:
+
+    Property      Type                     Description                             
+    ------------- ------------------------ ----------------------------------------
+    Id            int                      The unique identifier for the account.  
+    Uid           string                   The unique identifier string for the ...
+    Name          string                   The name of the account.                
+    Currency      string                   The currency associated with the acco...
+    Descriptor    DRMMAccountDescriptor    An instance of the DRMMAccountDescrip...
+    DevicesStatus DRMMAccountDevicesStatus An instance of the DRMMAccountDevices...
+## METHODS
+
+The DRMMAccount class provides the following methods:
+
+### GetSummary()
+
+Generates a summary string for the account, including its name and device status.
+
+**Returns:** `string` - A summary string combining the account name and device status.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Id [int]
+    Uid [string]
+    Name [string]
+    Currency [string]
+    Descriptor [DRMMAccountDescriptor]
+    DevicesStatus [DRMMAccountDevicesStatus]
+
+METHODS
+    DRMMAccount() : void
+    GetSummary() : string
+
+SEE ALSO
+    Online Documentation
+    Get-RMMAccount

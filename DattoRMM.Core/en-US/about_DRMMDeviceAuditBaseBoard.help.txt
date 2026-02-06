@@ -1,0 +1,40 @@
+TOPIC
+    about_DRMMDeviceAuditBaseBoard
+
+SHORT DESCRIPTION
+    Represents the baseboard information of a device in a device audit, including manufacturer, product, and serial number.
+
+LONG DESCRIPTION
+The DRMMDeviceAuditBaseBoard class models the information about the baseboard (motherboard) of the audited system. It includes properties such as Manufacturer, Product, and SerialNumber, which provide details about the baseboard. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMDeviceAuditBaseBoard class exposes the following properties:
+
+    Property     Type       Description                             
+    ------------ ---------- ----------------------------------------
+    Manufacturer string     The manufacturer of the baseboard.      
+    Product      string     The product name or model of the base...
+    SerialNumber string     The serial number of the baseboard.     
+## METHODS
+
+The DRMMDeviceAuditBaseBoard class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Manufacturer [string]
+    Product [string]
+    SerialNumber [string]
+
+METHODS
+    DRMMDeviceAuditBaseBoard() : void
+
+SEE ALSO
+    Online Documentation

@@ -221,3 +221,6 @@ API Behavior: The Datto API does not return the created variable object, so this
 function fetches it using Get-RMMVariable by name.
 
 ## RELATED LINKS
+
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/New-RMMVariable.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/New-RMMVariable.md))

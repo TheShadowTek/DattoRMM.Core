@@ -130,3 +130,6 @@ This function retrieves PII and requires high-impact confirmation by default.
 Handle user data in compliance with your organisation's privacy policies.
 
 ## RELATED LINKS
+
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMUser.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMUser.md))

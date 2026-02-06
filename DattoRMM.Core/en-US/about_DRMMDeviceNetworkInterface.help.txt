@@ -1,0 +1,54 @@
+TOPIC
+    about_DRMMDeviceNetworkInterface
+
+SHORT DESCRIPTION
+    Represents a network interface associated with a device in the DRMM system.
+
+LONG DESCRIPTION
+The DRMMDeviceNetworkInterface class models the network interface information for a device in the DRMM platform. It includes properties such as Id, Uid, SiteId, SiteUid, SiteName, DeviceType, Hostname, IntIpAddress, ExtIpAddress, and an array of network interfaces (Nics). The class provides a constructor and a static method to create an instance from API response data.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMDeviceNetworkInterface class exposes the following properties:
+
+    Property     Type                   Description                             
+    ------------ ---------------------- ----------------------------------------
+    Id           long                   The unique identifier of the network ...
+    Uid          guid                   The unique identifier (UID) of the ne...
+    SiteId       long                   The unique identifier of the site to ...
+    SiteUid      guid                   The unique identifier (UID) of the si...
+    SiteName     string                 The name of the site to which the net...
+    DeviceType   DRMMDeviceType         The type of the network device.         
+    Hostname     string                 The hostname associated with the netw...
+    IntIpAddress string                 The internal IP address of the networ...
+    ExtIpAddress string                 The external IP address of the networ...
+    Nics         DRMMNetworkInterface[] The network interface cards associate...
+## METHODS
+
+The DRMMDeviceNetworkInterface class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Id [long]
+    Uid [guid]
+    SiteId [long]
+    SiteUid [guid]
+    SiteName [string]
+    DeviceType [DRMMDeviceType]
+    Hostname [string]
+    IntIpAddress [string]
+    ExtIpAddress [string]
+    Nics [DRMMNetworkInterface[]]
+
+METHODS
+    DRMMDeviceNetworkInterface() : void
+
+SEE ALSO
+    Online Documentation

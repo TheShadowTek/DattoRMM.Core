@@ -101,6 +101,7 @@ Results may not be real-time if the device is offline or hasn't reported recentl
 ## RELATED LINKS
 
 
-- [about_DRMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DRMMDevice.md)
-- [Get-RMMDevice](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMDevice.md)
-- [Get-RMMDeviceAudit](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMDeviceAudit.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDeviceSoftware.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDeviceSoftware.md))
+- [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
+- [Get-RMMDevice](./Get-RMMDevice.md)
+- [Get-RMMDeviceAudit](./Get-RMMDeviceAudit.md)

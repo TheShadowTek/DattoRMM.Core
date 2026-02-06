@@ -1,0 +1,42 @@
+TOPIC
+    about_DRMMDevicePatchManagement
+
+SHORT DESCRIPTION
+    Represents patch management information for a device in the DRMM system.
+
+LONG DESCRIPTION
+The DRMMDevicePatchManagement class models the patch management status for a device in the DRMM platform. It includes properties such as PatchStatus, PatchesApprovedPending, PatchesNotApproved, and PatchesInstalled, which provide insights into the device's patch management state. The class provides a constructor and a static method to create an instance from API response data.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMDevicePatchManagement class exposes the following properties:
+
+    Property               Type           Description                             
+    ---------------------- -------------- ----------------------------------------
+    PatchStatus            string         The current status of patch managemen...
+    PatchesApprovedPending Nullable[long] The number of patches that are approv...
+    PatchesNotApproved     Nullable[long] The number of patches that are not ap...
+    PatchesInstalled       Nullable[long] The number of patches that have been ...
+## METHODS
+
+The DRMMDevicePatchManagement class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    PatchStatus [string]
+    PatchesApprovedPending [Nullable[long]]
+    PatchesNotApproved [Nullable[long]]
+    PatchesInstalled [Nullable[long]]
+
+METHODS
+    DRMMDevicePatchManagement() : void
+
+SEE ALSO
+    Online Documentation

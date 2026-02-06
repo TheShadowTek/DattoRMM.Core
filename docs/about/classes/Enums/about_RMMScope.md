@@ -16,14 +16,6 @@ The following values are defined for RMMScope:
 |-------|-------------|
 | `Global` | TODO: Describe this value |
 | `Site` | TODO: Describe this value |
-
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add example showing how to use this enum
-```\n
 ## NOTES
 
 This enum is defined in the DattoRMM.Core module's Classes.psm1 file.

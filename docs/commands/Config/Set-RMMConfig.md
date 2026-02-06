@@ -283,7 +283,8 @@ Use -Persist to save for future sessions.
 ## RELATED LINKS
 
 
-- [Save-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Save-RMMConfig.md)
-- [Get-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Get-RMMConfig.md)
-- [Reset-RMMConfig](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Reset-RMMConfig.md)
-- [Set-RMMPageSize](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//commands/Set-RMMPageSize.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Set-RMMConfig.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Set-RMMConfig.md))
+- [Save-RMMConfig](./Save-RMMConfig.md)
+- [Get-RMMConfig](./Get-RMMConfig.md)
+- [Reset-RMMConfig](../Reset-RMMConfig.md)
+- [Set-RMMPageSize](../Set-RMMPageSize.md)

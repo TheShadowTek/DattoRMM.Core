@@ -107,3 +107,6 @@ ESXi audit data is only available for devices identified as VMware ESXi hosts.
 The Datto RMM agent must have appropriate permissions to query the ESXi host.
 
 ## RELATED LINKS
+
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMEsxiHostAudit.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMEsxiHostAudit.md))

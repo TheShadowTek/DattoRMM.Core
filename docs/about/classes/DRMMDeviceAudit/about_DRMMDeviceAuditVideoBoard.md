@@ -8,7 +8,7 @@ Represents the video board information of a device in a device audit, including 
 
 The DRMMDeviceAuditVideoBoard class models the information about the video board (graphics card) of the audited system. It includes a property for the DisplayAdapter, which provides details about the graphics hardware. This class is typically used as part of the DRMMDeviceAudit to represent the hardware information of the system being audited.
 
-This class inherits from [DRMMObject](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md).
+This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
 ## PROPERTIES
 
@@ -24,25 +24,9 @@ The DRMMDeviceAuditVideoBoard class provides the following methods:
 
 No public methods defined.
 
-## USAGE EXAMPLES
-
-### Example 1: Basic usage
-
-```powershell
-# TODO: Add comprehensive usage example
-```
-
-### Example 2: Advanced usage
-
-```powershell
-# TODO: Add advanced usage example
-```
-
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-TODO: Add any additional notes about this class.
 
 ## RELATED LINKS
 

@@ -1,0 +1,36 @@
+TOPIC
+    about_DRMMAlertContextWindowsPerformance
+
+SHORT DESCRIPTION
+    Represents the context of a Windows performance alert in the DRMM system, including a value that indicates the performance metric.
+
+LONG DESCRIPTION
+The DRMMAlertContextWindowsPerformance class models the context information specific to Windows performance alerts in the DRMM platform. It encapsulates properties such as value that provide detailed context about the Windows performance alert.
+
+This class inherits from DRMMAlertContext.
+
+## PROPERTIES
+
+The DRMMAlertContextWindowsPerformance class exposes the following properties:
+
+    Property   Type       Description                             
+    ---------- ---------- ----------------------------------------
+    Value      float      The value that indicates the Windows ...
+## METHODS
+
+The DRMMAlertContextWindowsPerformance class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Value [float]
+
+METHODS
+    DRMMAlertContextWindowsPerformance() : void
+
+SEE ALSO
+    Online Documentation
