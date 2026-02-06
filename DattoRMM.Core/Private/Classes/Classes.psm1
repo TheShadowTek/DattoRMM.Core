@@ -615,12 +615,13 @@ class DRMMAlert : DRMMObject {
     [DRMMAlertResponseAction[]]$ResponseActions
     [Nullable[int]]$AutoresolveMins
     [Nullable[guid]]$SiteUid
+    [string]$PortalUrl
 
     DRMMAlert() : base() {
 
     }
 
-    static [DRMMAlert] FromAPIMethod([pscustomobject]$Response, [Nullable[guid]]$SiteUid) {
+    static [DRMMAlert] FromAPIMethod([pscustomobject]$Response, [Nullable[guid]]$SiteUid, [string]$Platform) {
 
         if ($null -eq $Response) {
 
@@ -638,6 +639,7 @@ class DRMMAlert : DRMMObject {
         $Alert.TicketNumber = $Response.ticketNumber
         $Alert.AutoresolveMins = $Response.autoresolveMins
         $Alert.SiteUid = $SiteUid
+        $Alert.PortalUrl = "https://$($Platform.ToLower()).rmm.datto.com/alert/$($Alert.AlertUid)"
 
         $Alert.AlertMonitorInfo = [DRMMAlertMonitorInfo]::FromAPIMethod($Response.alertMonitorInfo)
         $Alert.AlertContext = [DRMMAlertContext]::FromAPIMethod($Response.alertContext)
@@ -719,6 +721,25 @@ class DRMMAlert : DRMMObject {
 
         return "[$StatusValue$MutedValue] $($this.Priority) - $DeviceName - $MonitorCategory`: $MonitorDesc"
 
+    }
+
+    <#
+    .SYNOPSIS
+        Opens the alert's portal URL in the default web browser.
+    .DESCRIPTION
+        The OpenPortal method launches the portal URL associated with the alert using the default web browser.
+    #>
+    [void] OpenPortal() {
+
+        if ($this.PortalUrl) {
+        
+            Start-Process $this.PortalUrl
+
+        } else {
+        
+            throw "Alert does not have a valid PortalUrl"
+
+        }
     }
 }
 
@@ -1942,12 +1963,13 @@ class DRMMComponent : DRMMObject {
     [string]$CategoryCode
     [bool]$CredentialsRequired
     [DRMMComponentVariable[]]$Variables
+    [string]$PortalUrl
 
     DRMMComponent() : base() {
 
     }
 
-    static [DRMMComponent] FromAPIMethod([pscustomobject]$Response) {
+    static [DRMMComponent] FromAPIMethod([pscustomobject]$Response, [string]$Platform) {
 
         $Component = [DRMMComponent]::new()
 
@@ -1957,6 +1979,7 @@ class DRMMComponent : DRMMObject {
         $Component.Description = $Response.description
         $Component.CategoryCode = $Response.categoryCode
         $Component.CredentialsRequired = $Response.credentialsRequired
+        $Component.PortalUrl = "https://$($Platform.ToLower()).rmm.datto.com/component/$($Component.Id)"
 
         # Parse variables array
         $Component.Variables = @()
@@ -2008,6 +2031,25 @@ class DRMMComponent : DRMMObject {
 
         return $this.Variables | Where-Object {$_.Direction -eq $false}
 
+    }
+
+    <#
+    .SYNOPSIS
+        Opens the component's portal URL in the default web browser.
+    .DESCRIPTION
+        The OpenPortal method of the DRMMComponent class checks if the PortalUrl property is set and, if so, opens it in the default web browser using Start-Process. If the PortalUrl is not available, it writes a warning message to the console indicating that the portal URL is not available for the component's site.
+    #>
+    [void] OpenPortal() {
+
+        if ($this.PortalUrl) {
+
+            Start-Process $this.PortalUrl
+
+        } else {
+
+            Write-Warning "Portal URL is not available for site $($this.Name)"
+
+        }
     }
 
     <#
@@ -4487,7 +4529,9 @@ class DRMMVariable : DRMMObject {
 .SYNOPSIS
     Represents a filter in the DRMM system, including its name, description, type, scope, and associated site.
 .DESCRIPTION
-    The DRMMFilter class models a filter within the DRMM platform, encapsulating properties such as Id, FilterId, Name, Description, Type, Scope, SiteUid, DateCreate, and LastUpdated. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to determine if the filter is global or site-specific, as well as a method to generate a summary string of the filter's information. Additionally, it includes methods to retrieve devices and alerts associated with the filter.
+    The DRMMFilter class models a filter within the DRMM platform, encapsulating properties such as Id, FilterId, Name, Description, Type, Scope, Site (for site-scoped filters), SiteUid, DateCreate, LastUpdated, and PortalUrl. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to determine if the filter is global or site-specific, as well as a method to generate a summary string of the filter's information. Additionally, it includes methods to retrieve devices and alerts associated with the filter.
+    
+    For site-scoped filters, the Site property provides full context about the associated site, while SiteUid is maintained for backward compatibility.
 #>
 class DRMMFilter : DRMMObject {
 
@@ -4498,14 +4542,16 @@ class DRMMFilter : DRMMObject {
     [string]$Type
     [string]$Scope
     [Nullable[guid]]$SiteUid
+    [DRMMSite]$Site
     [Nullable[datetime]]$DateCreate
     [Nullable[datetime]]$LastUpdated
+    [string]$PortalUrl
 
     DRMMFilter() : base() {
 
     }
 
-    static [DRMMFilter] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [Nullable[guid]]$SiteUid) {
+    static [DRMMFilter] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [DRMMSite]$Site, [string]$Platform) {
 
         if ($null -eq $Response) {
             
@@ -4520,7 +4566,23 @@ class DRMMFilter : DRMMObject {
         $Filter.Description = $Response.description
         $Filter.Type = $Response.type
         $Filter.Scope = $Scope
-        $Filter.SiteUid = $SiteUid
+        $Filter.Site = $Site
+        
+        # Set SiteUid for backward compatibility and when Site object is available
+        if ($Site) {
+            $Filter.SiteUid = $Site.Uid
+        }
+        
+        # Build PortalUrl with SiteId suffix for site-scoped filters
+        if ($Site -and $Scope -eq 'Site') {
+
+            $Filter.PortalUrl = "https://$($Platform.ToLower()).rmm.datto.com/device-filter-results/$($Filter.Id)-$($Site.Id)"
+
+        } else {
+
+            $Filter.PortalUrl = "https://$($Platform.ToLower()).rmm.datto.com/device-filter-results/$($Filter.Id)"
+
+        }
 
         $CreateDate = [DRMMObject]::ParseApiDate($Response.dateCreate)
         $Filter.DateCreate = $CreateDate.DateTime
@@ -4578,6 +4640,25 @@ class DRMMFilter : DRMMObject {
         
         return ($this.Type -eq 'custom')
     
+    }
+
+    <#
+    .SYNOPSIS
+        Opens the portal URL associated with the filter in the default web browser.
+    .DESCRIPTION
+        The OpenPortal method launches the portal URL associated with the filter using the default web browser. If the portal URL is not available, a warning is displayed.
+    #>
+    [void] OpenPortal() {
+
+        if ($this.PortalUrl) {
+
+            Start-Process $this.PortalUrl
+
+        } else {
+
+            Write-Warning "Portal URL is not available for filter $($this.Name)"
+
+        }
     }
 
     <#
@@ -5001,7 +5082,7 @@ class DRMMSite : DRMMObject {
     #>
     [DRMMFilter[]] GetFilters() {
 
-        $Result = Get-RMMFilter -SiteUid $this.Uid
+        $Result = Get-RMMFilter -Site $this
 
         if ($null -eq $Result) {
 
@@ -5021,7 +5102,7 @@ class DRMMSite : DRMMObject {
     #>
     [DRMMFilter] GetFilter([string]$Name) {
 
-        $Result = Get-RMMFilter -SiteUid $this.Uid -Name $Name
+        $Result = Get-RMMFilter -Site $this -Name $Name
 
         if ($null -eq $Result) {
 

@@ -82,7 +82,7 @@ function Get-RMMComponent {
 
     foreach ($Component in $Components) {
 
-        [DRMMComponent]::FromAPIMethod($Component)
+        [DRMMComponent]::FromAPIMethod($Component, $Script:SessionPlatform)
 
     }
 }

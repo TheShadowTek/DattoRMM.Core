@@ -17,9 +17,6 @@ function Get-RMMFilter {
     .PARAMETER Site
         A DRMMSite object to retrieve filters for. Accepts pipeline input from Get-RMMSite.
 
-    .PARAMETER SiteUid
-        The unique identifier (GUID) of a site to retrieve filters for.
-
     .PARAMETER Id
         Retrieve a specific filter by its numeric ID.
 
@@ -63,7 +60,6 @@ function Get-RMMFilter {
 
     .INPUTS
         DRMMSite. You can pipe site objects from Get-RMMSite.
-        You can also pipe objects with SiteUid properties.
 
     .OUTPUTS
         DRMMFilter. Returns filter objects with the following properties:
@@ -116,31 +112,11 @@ function Get-RMMFilter {
         $Site,
 
         [Parameter(
-            ParameterSetName = 'SiteAllUid',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidById',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidByName',
-            Mandatory = $true
-        )]
-        [Alias('Uid')]
-        [guid]
-        $SiteUid,
-
-        [Parameter(
             ParameterSetName = 'GlobalById',
             Mandatory = $true
         )]
         [Parameter(
             ParameterSetName = 'SiteById',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidById',
             Mandatory = $true
         )]
         [int]
@@ -152,10 +128,6 @@ function Get-RMMFilter {
         )]
         [Parameter(
             ParameterSetName = 'SiteByName',
-            Mandatory = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'SiteUidByName',
             Mandatory = $true
         )]
         [string]
@@ -181,14 +153,8 @@ function Get-RMMFilter {
 
         if ($PSCmdlet.ParameterSetName -match '^Site') {
 
-            if ($Site) {
-
-                $SiteUid = $Site.Uid
-
-            }
-
             $APIMethod = @{
-                Path = "site/$SiteUid/filters"
+                Path = "site/$($Site.Uid)/filters"
                 Method = 'Get'
                 Paginate = $true
                 PageElement = 'filters'
@@ -196,32 +162,32 @@ function Get-RMMFilter {
 
             switch ($PSCmdlet.ParameterSetName) {
 
-                {$_ -in 'SiteAll','SiteAllUid'} {
+                'SiteAll' {
 
-                    Write-Debug "Getting all filters for site UID: $SiteUid"
+                    Write-Debug "Getting all filters for site: $($Site.Name) (UID: $($Site.Uid))"
                     Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                        [DRMMFilter]::FromAPIMethod($_, 'Site', $SiteUid)
+                        [DRMMFilter]::FromAPIMethod($_, 'Site', $Site, $Script:SessionPlatform)
 
                     }
                 }
 
-                {$_ -in 'SiteById','SiteUidById'} {
+                'SiteById' {
 
-                    Write-Debug "Getting site filter by ID: $Id for site UID: $SiteUid"
+                    Write-Debug "Getting site filter by ID: $Id for site: $($Site.Name) (UID: $($Site.Uid))"
                     Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
 
-                        [DRMMFilter]::FromAPIMethod($_, 'Site', $SiteUid)
+                        [DRMMFilter]::FromAPIMethod($_, 'Site', $Site, $Script:SessionPlatform)
 
                     }
                 }
 
-                {$_ -in 'SiteByName','SiteUidByName'} {
+                'SiteByName' {
 
-                    Write-Debug "Getting site filter by Name: $Name for site UID: $SiteUid"
+                    Write-Debug "Getting site filter by Name: $Name for site: $($Site.Name) (UID: $($Site.Uid))"
                     Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
 
-                        [DRMMFilter]::FromAPIMethod($_, 'Site', $SiteUid)
+                        [DRMMFilter]::FromAPIMethod($_, 'Site', $Site, $Script:SessionPlatform)
 
                     }
                 }
@@ -279,7 +245,7 @@ function Get-RMMFilter {
                         Write-Debug "Getting global filters from $($Method.Path)"
                         Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                            [DRMMFilter]::FromAPIMethod($_, $Method.Scope, $null)
+                            [DRMMFilter]::FromAPIMethod($_, $Method.Scope, $null, $Script:SessionPlatform)
 
                         }
                     }
@@ -289,7 +255,7 @@ function Get-RMMFilter {
                         Write-Debug "Getting global filter by ID: $Id from $($Method.Path)"
                         Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
 
-                            [DRMMFilter]::FromAPIMethod($_, $Method.Scope, $null)
+                            [DRMMFilter]::FromAPIMethod($_, $Method.Scope, $null, $Script:SessionPlatform)
 
                         }
                     }
@@ -299,7 +265,7 @@ function Get-RMMFilter {
                         Write-Debug "Getting global filter by Name: $Name from $($Method.Path)"
                         Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
 
-                            [DRMMFilter]::FromAPIMethod($_, $Method.Scope, $null)
+                            [DRMMFilter]::FromAPIMethod($_, $Method.Scope, $null, $Script:SessionPlatform)
 
                         }
                     }
