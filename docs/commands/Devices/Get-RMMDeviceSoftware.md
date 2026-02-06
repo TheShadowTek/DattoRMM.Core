@@ -21,14 +21,14 @@ Get-RMMDevice or Get-RMMDeviceAudit.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMDevice -DeviceId 12345 | Get-RMMDeviceSoftware
 ```
 
 Retrieves all installed software for device 12345.
 
 EXAMPLE 2
-```
+```powershell
 $Device = Get-RMMDevice -Name "SERVER01"
 Get-RMMDeviceSoftware -DeviceUid $Device.Uid
 ```
@@ -36,14 +36,14 @@ Get-RMMDeviceSoftware -DeviceUid $Device.Uid
 Retrieves a device by name and then gets its installed software.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMDevice -FilterId 100 | Get-RMMDeviceSoftware | Where-Object {$_.Name -like "*Microsoft*"}
 ```
 
 Gets all devices matching filter 100 and retrieves their installed Microsoft software.
 
 EXAMPLE 4
-```
+```powershell
 $Software = Get-RMMDevice -DeviceId 12345 | Get-RMMDeviceSoftware
 $Software | Select-Object Name, Version, Publisher | Format-Table
 ```
@@ -51,7 +51,7 @@ $Software | Select-Object Name, Version, Publisher | Format-Table
 Retrieves software and displays it in a formatted table.
 
 EXAMPLE 5
-```
+```powershell
 Get-RMMDevice -DeviceId 12345 | Get-RMMDeviceSoftware | 
     Group-Object Publisher | Select-Object Name, Count | Sort-Object Count -Descending
 ```

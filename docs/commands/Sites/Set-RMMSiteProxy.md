@@ -31,14 +31,14 @@ reach the Datto RMM service.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Set-RMMSiteProxy -SiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -ProxyHost "proxy.contoso.com" -Port 8080 -Type http
 ```
 
 Configures an HTTP proxy without authentication for the specified site.
 
 EXAMPLE 2
-```
+```powershell
 $ProxyPass = Read-Host -Prompt "Enter proxy password" -AsSecureString
 Get-RMMSite -Name "Branch Office" | Set-RMMSiteProxy -ProxyHost "proxy.branch.com" -Port 3128 -Type http -Username "proxyuser" -Password $ProxyPass
 ```
@@ -46,7 +46,7 @@ Get-RMMSite -Name "Branch Office" | Set-RMMSiteProxy -ProxyHost "proxy.branch.co
 Configures an HTTP proxy with authentication via pipeline.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMSite | Where-Object {$_.Name -like "Remote*"} | Set-RMMSiteProxy -ProxyHost "proxy.corp.com" -Port 1080 -Type socks5 -Force
 ```
 

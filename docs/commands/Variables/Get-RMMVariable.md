@@ -64,42 +64,42 @@ entire account or at the site level.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMVariable
 ```
 
 Retrieves all global (account-level) variables.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMVariable -Id 12345
 ```
 
 Retrieves a specific global variable by its ID.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMVariable -Name "CompanyAPIKey"
 ```
 
 Retrieves a global variable by exact name match.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMSite -Name "Contoso" | Get-RMMVariable
 ```
 
 Gets all variables for the "Contoso" site.
 
 EXAMPLE 5
-```
+```powershell
 Get-RMMVariable -SiteUid $SiteUid -Name "ServerPassword"
 ```
 
 Retrieves a specific site variable by name.
 
 EXAMPLE 6
-```
+```powershell
 $Variables = Get-RMMSite | Get-RMMVariable
 $Variables | Group-Object SiteUid | Select-Object Name, Count
 ```
@@ -107,14 +107,14 @@ $Variables | Group-Object SiteUid | Select-Object Name, Count
 Retrieves variables for all sites and groups by site.
 
 EXAMPLE 7
-```
+```powershell
 Get-RMMVariable | Where-Object {$_.Name -like "*Password*"}
 ```
 
 Retrieves all global variables with "Password" in the name.
 
 EXAMPLE 8
-```
+```powershell
 $Var = Get-RMMVariable -Name "ConfigSetting"
 $Var.Value
 ```

@@ -21,14 +21,14 @@ correlate RMM sites with their network infrastructure.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMNetMapping
 ```
 
 Retrieves all Datto Networking site mappings for the account.
 
 EXAMPLE 2
-```
+```powershell
 $Mappings = Get-RMMNetMapping
 $Mappings | Select-Object SiteName, NetworkSiteName
 ```
@@ -36,14 +36,14 @@ $Mappings | Select-Object SiteName, NetworkSiteName
 Retrieves all mappings and displays the site names from both systems.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMNetMapping | Where-Object {$_.SiteUid -eq $MySiteUid}
 ```
 
 Retrieves the Datto Networking mapping for a specific RMM site.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMNetMapping | Format-Table SiteName, NetworkSiteName, Status
 ```
 

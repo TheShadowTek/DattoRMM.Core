@@ -32,21 +32,21 @@ Remove-RMMSiteProxy to manage proxy settings.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Set-RMMSite -SiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -Name "Updated Site Name"
 ```
 
 Updates the name of the specified site.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMSite -Name "Old Name" | Set-RMMSite -Name "New Name" -Description "Updated description"
 ```
 
 Updates the name and description of a site via pipeline.
 
 EXAMPLE 3
-```
+```powershell
 $Site = Get-RMMSite -Name "Test Site"
 Set-RMMSite -Site $Site -Name "Test Site" -OnDemand -Force
 ```
@@ -54,7 +54,7 @@ Set-RMMSite -Site $Site -Name "Test Site" -OnDemand -Force
 Enables on-demand for a site without confirmation prompt.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMSite | Where-Object {$_.Name -like "Branch*"} | Set-RMMSite -SplashtopAutoInstall
 ```
 

@@ -48,42 +48,42 @@ queried to get execution status, results, and output logs.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMJob -JobUid "12067610-8504-48e3-b5de-60e48416aaad"
 ```
 
 Retrieves basic information about a specific job.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMJob -JobUid $JobUid -DeviceUid $DeviceUid -Results
 ```
 
 Retrieves the execution results for a job on a specific device.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMJob -JobUid $JobUid -DeviceUid $DeviceUid -StdOut
 ```
 
 Retrieves the standard output from a job execution on a specific device.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMJob -JobUid $JobUid -DeviceUid $DeviceUid -StdErr
 ```
 
 Retrieves the error output from a job execution on a specific device.
 
 EXAMPLE 5
-```
+```powershell
 Get-RMMJob -JobUid $JobUid -Components
 ```
 
 Retrieves all components that are part of the specified job.
 
 EXAMPLE 6
-```
+```powershell
 $Job = Get-RMMJob -JobUid $JobUid
 if ($Job.Status -eq "Failed") {
     Get-RMMJob -JobUid $JobUid -DeviceUid $Job.DeviceUid -StdErr
@@ -93,7 +93,7 @@ if ($Job.Status -eq "Failed") {
 Retrieves job details and checks for errors if the job failed.
 
 EXAMPLE 7
-```
+```powershell
 $JobUid = "12067610-8504-48e3-b5de-60e48416aaad"
 Get-RMMDevice -FilterId 100 | Get-RMMJob -JobUid $JobUid -StdOut | ConvertFrom-Csv
 ```

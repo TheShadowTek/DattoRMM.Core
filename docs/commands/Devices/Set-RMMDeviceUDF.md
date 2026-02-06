@@ -53,35 +53,35 @@ Important behaviors:
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Set-RMMDeviceUDF -DeviceUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -UDF1 "Department: IT" -UDF2 "Owner: John"
 ```
 
 Sets UDF1 and UDF2 on a device, leaving other UDFs unchanged.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMDevice -Hostname "SERVER01" | Set-RMMDeviceUDF -UDF5 "Production" -UDF10 "Critical"
 ```
 
 Updates UDF5 and UDF10 via pipeline.
 
 EXAMPLE 3
-```
+```powershell
 Set-RMMDeviceUDF -DeviceUid $DeviceUid -UDF1 "" -Force
 ```
 
 Clears UDF1 (sets to null) without confirmation.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMDevice -FilterId 100 | Set-RMMDeviceUDF -UDF3 "Datacenter: East"
 ```
 
 Updates UDF3 for all devices in filter 100.
 
 EXAMPLE 5
-```
+```powershell
 Set-RMMDeviceUDF -DeviceUid $DeviceUid -UDFFields @{udf1='IT Department'; udf2='John Smith'; udf5=''}
 ```
 
@@ -89,7 +89,7 @@ Updates multiple UDF fields using a hashtable.
 UDF5 is cleared.
 
 EXAMPLE 6
-```
+```powershell
 $UDFs = @{udf10='Production'; udf15='Critical'; udf20='Datacenter: West'}
 Get-RMMDevice -Hostname "SERVER*" | Set-RMMDeviceUDF -UDFFields $UDFs -Force
 ```

@@ -61,42 +61,42 @@ Filters are categorized as either "Default" (built-in system filters) or "Custom
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMFilter
 ```
 
 Retrieves all filters at the account level.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMFilter -FilterType Custom
 ```
 
 Retrieves only custom (user-created) filters.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMFilter -Id 12345
 ```
 
 Retrieves a specific filter by its ID.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMFilter -Name "Windows Servers"
 ```
 
 Retrieves a filter by exact name match.
 
 EXAMPLE 5
-```
+```powershell
 Get-RMMSite -Name "Main Office" | Get-RMMFilter
 ```
 
 Gets all filters for the "Main Office" site.
 
 EXAMPLE 6
-```
+```powershell
 $Filter = Get-RMMFilter -Name "Production Servers"
 Get-RMMDevice -FilterId $Filter.Id
 ```

@@ -21,28 +21,28 @@ and whether it requires credentials to run.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMComponent
 ```
 
 Retrieves all components in the account.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMComponent | Where-Object {$_.Name -like "*PowerShell*"}
 ```
 
 Retrieves all components with "PowerShell" in the name.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMComponent | Where-Object {$_.CredentialsRequired -eq $true}
 ```
 
 Retrieves all components that require credentials to execute.
 
 EXAMPLE 4
-```
+```powershell
 $Component = Get-RMMComponent | Where-Object {$_.Name -eq "Get System Info"}
 $Component.GetInputVariables()
 ```
@@ -50,7 +50,7 @@ $Component.GetInputVariables()
 Gets a specific component and displays its input variables.
 
 EXAMPLE 5
-```
+```powershell
 Get-RMMComponent | Select-Object Name, Description, CategoryCode | Format-Table
 ```
 

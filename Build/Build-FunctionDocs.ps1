@@ -230,6 +230,17 @@ try {
                     $Changes += "Removed ProgressAction parameter"
                 }
                 
+                # Update example script blocks to use 'powershell' language identifier
+                # Replace only opening code blocks that follow EXAMPLE headings
+                $Content = [regex]::Replace($Content, '(?ms)(^## EXAMPLES\r?\n)(.*?)(?=^## |\z)', {
+                    param($match)
+                    $header = $match.Groups[1].Value
+                    $examplesSection = $match.Groups[2].Value
+                    # Replace code blocks that immediately follow EXAMPLE N headings
+                    $examplesSection = $examplesSection -replace '(?m)(^EXAMPLE \d+\r?\n)```\r?\n', "`$1``````powershell`n"
+                    return $header + $examplesSection
+                })
+                
                 # Ensure all code blocks are closed
                 $CodeBlockCount = ([regex]::Matches($Content, '```')).Count
                 if ($CodeBlockCount % 2 -ne 0) {

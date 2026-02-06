@@ -17,14 +17,14 @@ This helps verify what defaults are configured and active in the current session
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMConfig
 ```
 
 Displays all current configuration settings.
 
 EXAMPLE 2
-```
+```powershell
 $Config = Get-RMMConfig
 $Config.SessionPageSize
 ```

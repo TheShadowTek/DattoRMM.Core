@@ -51,7 +51,7 @@ This function is useful for security purposes when:
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 $newKeys = Reset-RMMAPIKeys -ReturnNewKey
 ```
 
@@ -59,7 +59,7 @@ Resets the API keys and returns the new key/secret object.
 Capture the output to retrieve the new secret.
 
 EXAMPLE 2
-```
+```powershell
 Reset-RMMAPIKeys
 ```
 

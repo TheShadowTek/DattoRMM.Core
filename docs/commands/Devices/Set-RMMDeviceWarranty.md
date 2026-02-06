@@ -28,28 +28,28 @@ The warranty date can be set to a specific date or cleared by passing $null.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Set-RMMDeviceWarranty -DeviceUid $DeviceUid -WarrantyDate (Get-Date "2027-12-31")
 ```
 
 Sets the warranty expiration date to December 31, 2027.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMDevice -Hostname "SERVER01" | Set-RMMDeviceWarranty -WarrantyDate (Get-Date).AddYears(3)
 ```
 
 Sets the warranty date to 3 years from today via pipeline.
 
 EXAMPLE 3
-```
+```powershell
 Set-RMMDeviceWarranty -DeviceUid $DeviceUid -WarrantyDate $null -Force
 ```
 
 Clears the warranty date without confirmation.
 
 EXAMPLE 4
-```
+```powershell
 $Site = Get-RMMSite -Name "Chicago Office"
 $Filter = Get-RMMFilter -SiteUid $Site.Uid | Where-Object {$_.Name -eq "Dell Latitude 7490"}
 Get-RMMDevice -FilterId $Filter.FilterId | Set-RMMDeviceWarranty -WarrantyDate (Get-Date "2026-06-30")
@@ -58,7 +58,7 @@ Get-RMMDevice -FilterId $Filter.FilterId | Set-RMMDeviceWarranty -WarrantyDate (
 Sets the warranty date for all Dell Latitude 7490 laptops at the Chicago Office site.
 
 EXAMPLE 5
-```
+```powershell
 # Bulk update warranties from a CSV file
 $Warranties = Import-Csv -Path "device_warranties.csv"
 # CSV format: DeviceUid,WarrantyDate
@@ -72,7 +72,7 @@ foreach ($Item in $Warranties) {
 Imports warranty dates from a CSV and updates devices in bulk.
 
 EXAMPLE 6
-```
+```powershell
 # Set warranty dates from CSV using serial number matching
 $Warranties = Import-Csv -Path "warranty_imports.csv"
 # CSV format: SerialNumber,WarrantyDate

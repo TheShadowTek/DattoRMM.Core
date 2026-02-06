@@ -45,7 +45,7 @@ Supports Yes/No/Yes to All/No to All responses for safe handling of PII.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMActivityLog -Start "2024-01-01T00:00:00Z" -End "2024-01-02T00:00:00Z"
 ```
 
@@ -53,7 +53,7 @@ Retrieves activity logs for all sites for January 1st, 2024.
 Prompts for each site.
 
 EXAMPLE 2
-```
+```powershell
 $Start = Get-Date '2024-01-01T00:00:00Z'
 $End = Get-Date '2024-01-02T00:00:00Z'
 Get-RMMSite -SiteName "Main Office" | Get-RMMActivityLog -Start $Start -End $End
@@ -63,7 +63,7 @@ Retrieves activity logs for the "Main Office" site.
 Prompts for confirmation.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMActivityLog -SiteId 1234,5678 -Start (Get-Date '2024-01-01') -End (Get-Date '2024-01-02')
 ```
 
@@ -71,7 +71,7 @@ Retrieves activity logs for sites with IDs 1234 and 5678.
 Prompts for each site.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMSite | Get-RMMActivityLog
 ```
 

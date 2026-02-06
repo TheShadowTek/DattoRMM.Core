@@ -29,42 +29,42 @@ endpoint to retrieve all matching devices.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMDevice -Hostname "SERVER01" | Get-RMMDeviceAudit
 ```
 
 Retrieves audit information for SERVER01.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMDeviceAudit -DeviceUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 ```
 
 Retrieves audit information for a specific device by UID.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMDeviceAudit -DeviceUid $device.Uid -Software
 ```
 
 Retrieves complete audit information including all installed software.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMDeviceAudit -MacAddress "00:11:22:33:44:55"
 ```
 
 Retrieves audit information using the device's MAC address.
 
 EXAMPLE 5
-```
+```powershell
 Get-RMMDevice -FilterId 12345 | Get-RMMDeviceAudit | Where-Object {$_.SystemInfo.TotalPhysicalMemory -lt 8GB}
 ```
 
 Gets audit data for filtered devices and finds those with less than 8GB RAM.
 
 EXAMPLE 6
-```
+```powershell
 $Audit = Get-RMMDeviceAudit -DeviceUid $guid -Software
 $Audit.Software | Where-Object {$_.Name -like "*Office*"}
 ```

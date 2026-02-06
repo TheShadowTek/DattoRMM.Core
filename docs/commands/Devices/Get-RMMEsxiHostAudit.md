@@ -24,21 +24,21 @@ comprehensive information about the virtualization environment, including:
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMDevice -Name "ESXI-HOST-01" | Get-RMMEsxiHostAudit
 ```
 
 Retrieves ESXi audit data for an ESXi host by name.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMEsxiHostAudit -DeviceUid "12067610-8504-48e3-b5de-60e48416aaad"
 ```
 
 Retrieves ESXi audit data using a specific device UID.
 
 EXAMPLE 3
-```
+```powershell
 $Audit = Get-RMMDevice -DeviceId 12345 | Get-RMMEsxiHostAudit
 $Audit.Guests | Select-Object Name, PowerState, GuestOS
 ```
@@ -46,7 +46,7 @@ $Audit.Guests | Select-Object Name, PowerState, GuestOS
 Retrieves ESXi audit data and displays virtual machine information.
 
 EXAMPLE 4
-```
+```powershell
 $EsxiAudit = Get-RMMEsxiHostAudit -DeviceUid $DeviceUid
 $EsxiAudit.Datastores | Where-Object {$_.FreeSpaceGB -lt 100}
 ```
@@ -54,7 +54,7 @@ $EsxiAudit.Datastores | Where-Object {$_.FreeSpaceGB -lt 100}
 Retrieves ESXi audit data and finds datastores with less than 100GB free.
 
 EXAMPLE 5
-```
+```powershell
 Get-RMMDevice -FilterId 300 | Get-RMMEsxiHostAudit | 
     ForEach-Object {
         [PSCustomObject]@{

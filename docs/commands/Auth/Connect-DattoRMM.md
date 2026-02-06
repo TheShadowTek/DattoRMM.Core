@@ -29,7 +29,7 @@ platform regions.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 $Secret = Read-Host -Prompt "Enter API Secret" -AsSecureString
 Connect-DattoRMM -Key "your-api-key" -Secret $Secret
 ```
@@ -37,7 +37,7 @@ Connect-DattoRMM -Key "your-api-key" -Secret $Secret
 Connects to the Datto RMM API using an API key and securely prompted secret.
 
 EXAMPLE 2
-```
+```powershell
 $Secret = Read-Host -AsSecureString -Prompt "Enter API Secret"
 Connect-DattoRMM -Key "your-api-key" -Secret $Secret -AutoRefresh
 ```
@@ -45,7 +45,7 @@ Connect-DattoRMM -Key "your-api-key" -Secret $Secret -AutoRefresh
 Connects to the API with automatic token refresh enabled.
 
 EXAMPLE 3
-```
+```powershell
 $Cred = Get-Credential -Message "Enter API Key as username and API Secret as password"
 Connect-DattoRMM -Credential $Cred
 ```
@@ -53,7 +53,7 @@ Connect-DattoRMM -Credential $Cred
 Connects using a PSCredential object where the username is the API key and password is the secret.
 
 EXAMPLE 4
-```
+```powershell
 $Secret = Read-Host -AsSecureString -Prompt "Enter API Secret"
 Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Platform Merlot
 ```
@@ -61,7 +61,7 @@ Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Platform Merlot
 Connects to the Merlot platform region.
 
 EXAMPLE 5
-```
+```powershell
 $Cred = Get-Credential -Message "Enter Datto RMM API credentials"
 Connect-DattoRMM -Credential $Cred -AutoRefresh -Platform Pinotage
 ```
@@ -69,7 +69,7 @@ Connect-DattoRMM -Credential $Cred -AutoRefresh -Platform Pinotage
 Creates a credential object using Get-Credential and connects with auto-refresh to the Pinotage platform.
 
 EXAMPLE 6
-```
+```powershell
 $Secret = Read-Host -AsSecureString -Prompt "Enter API Secret"
 $ProxyCred = Get-Credential -Message "Enter proxy credentials"
 Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Proxy "http://proxy.company.com:8080" -ProxyCredential $ProxyCred

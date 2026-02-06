@@ -17,7 +17,7 @@ Do not share or publish this information.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Show-RMMToken
 Displays the current API token and related details.
 ```

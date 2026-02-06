@@ -34,28 +34,28 @@ Note: The token is only refreshed locally; the previous token remains valid unti
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Set-RMMConfig -Platform Merlot
 ```
 
 Sets the default platform to Merlot for the current session only.
 
 EXAMPLE 2
-```
+```powershell
 Set-RMMConfig -Platform Pinotage -PageSize 100 -Persist
 ```
 
 Sets both the default platform and page size, and saves them for future sessions.
 
 EXAMPLE 3
-```
+```powershell
 Set-RMMConfig -ThrottleProfile Cautious -TokenExpireHours 50
 ```
 
 Configures advanced throttling and token refresh settings for the current session only.
 
 EXAMPLE 4
-```
+```powershell
 Set-RMMConfig -Default
 ```
 

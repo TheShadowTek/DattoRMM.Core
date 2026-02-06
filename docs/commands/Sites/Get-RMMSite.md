@@ -49,42 +49,42 @@ Extended properties allow you to retrieve related data for sites in a single com
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMSite
 ```
 
 Retrieves all sites in the account (excludes the Deleted Devices system site).
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMSite -SiteUid "12067610-8504-48e3-b5de-60e48416aaad"
 ```
 
 Retrieves a specific site by its unique identifier.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMSite -SiteName "Contoso"
 ```
 
 Searches for sites containing "Contoso" in the name (partial match).
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMSite -SiteName "Production" | Get-RMMDevice
 ```
 
 Searches for sites with "Production" in the name and retrieves all devices from those sites.
 
 EXAMPLE 5
-```
+```powershell
 Get-RMMSite -ExtendedProperties Settings, Variables
 ```
 
 Retrieves all sites and includes their settings and variables.
 
 EXAMPLE 6
-```
+```powershell
 $Site = Get-RMMSite -SiteUid $SiteUid -ExtendedProperties Settings
 $Site.SiteSettings.GeneralSettings
 ```
@@ -92,7 +92,7 @@ $Site.SiteSettings.GeneralSettings
 Retrieves a site with its settings and accesses the general settings.
 
 EXAMPLE 7
-```
+```powershell
 Get-RMMSite -DeletedDevices
 ```
 
@@ -103,14 +103,14 @@ Note that methods like
 GetDevices() will fail due to the invalid GUID.
 
 EXAMPLE 8
-```
+```powershell
 Get-RMMSite | Sort-Object Name | Select-Object Name, Uid
 ```
 
 Retrieves all sites, sorts by name, and displays name and UID.
 
 EXAMPLE 9
-```
+```powershell
 $Sites = Get-RMMSite -ExtendedProperties Filters
 $Sites | ForEach-Object {
     [PSCustomObject]@{

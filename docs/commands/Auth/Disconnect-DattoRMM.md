@@ -17,14 +17,14 @@ This function should be called when you are finished working with the Datto RMM 
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Disconnect-DattoRMM
 ```
 
 Disconnects from the Datto RMM API and clears stored authentication.
 
 EXAMPLE 2
-```
+```powershell
 Connect-DattoRMM -Key "your-api-key" -Secret $Secret
 Get-RMMDevice
 Disconnect-DattoRMM

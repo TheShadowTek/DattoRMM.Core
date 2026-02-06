@@ -25,21 +25,21 @@ This function can accept either a site object from Get-RMMSite or a site UID dir
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMSite -Name "Contoso" | Get-RMMSiteSettings
 ```
 
 Retrieves settings for the "Contoso" site.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMSiteSettings -SiteUid "12067610-8504-48e3-b5de-60e48416aaad"
 ```
 
 Retrieves settings for a site by its unique identifier.
 
 EXAMPLE 3
-```
+```powershell
 $Settings = Get-RMMSite -SiteUid $SiteUid | Get-RMMSiteSettings
 $Settings.GeneralSettings
 ```
@@ -47,14 +47,14 @@ $Settings.GeneralSettings
 Retrieves site settings and displays the general settings section.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMSite | Get-RMMSiteSettings | Select-Object Name, @{N='Timezone';E={$_.GeneralSettings.Timezone}}
 ```
 
 Retrieves settings for all sites and displays site name and timezone.
 
 EXAMPLE 5
-```
+```powershell
 $Settings = Get-RMMSiteSettings -SiteUid $SiteUid
 $Settings.MailSettings
 ```

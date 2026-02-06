@@ -22,21 +22,21 @@ or proxy settings can be configured later using Set-RMMSiteProxy.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 New-RMMSite -Name "Contoso Main Office"
 ```
 
 Creates a new site with the specified name.
 
 EXAMPLE 2
-```
+```powershell
 New-RMMSite -Name "Branch Office" -Description "West Coast Branch" -OnDemand
 ```
 
 Creates an on-demand site with a description.
 
 EXAMPLE 3
-```
+```powershell
 $ProxyPass = Read-Host -Prompt "Enter proxy password" -AsSecureString
 New-RMMSite -Name "Remote Site" -ProxyHost "proxy.contoso.com" -ProxyPort 8080 -ProxyType http -ProxyUsername "proxyuser" -ProxyPassword $ProxyPass
 ```
@@ -44,7 +44,7 @@ New-RMMSite -Name "Remote Site" -ProxyHost "proxy.contoso.com" -ProxyPort 8080 -
 Creates a site with HTTP proxy settings configured.
 
 EXAMPLE 4
-```
+```powershell
 New-RMMSite -Name "Test Site" -SplashtopAutoInstall -Notes "Testing environment"
 ```
 

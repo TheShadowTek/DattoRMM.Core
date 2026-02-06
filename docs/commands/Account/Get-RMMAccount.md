@@ -22,14 +22,14 @@ The returned object includes:
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMAccount
 ```
 
 Retrieves information about the authenticated account.
 
 EXAMPLE 2
-```
+```powershell
 $Account = Get-RMMAccount
 $Account.Name
 $Account.DevicesStatus
@@ -38,7 +38,7 @@ $Account.DevicesStatus
 Retrieves account information and displays specific properties.
 
 EXAMPLE 3
-```
+```powershell
 $Account = Get-RMMAccount
 $Account.GetSummary()
 ```
@@ -46,7 +46,7 @@ $Account.GetSummary()
 Retrieves account information and displays a summary using the built-in method.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMAccount | Select-Object Name, Currency, @{N='OnlineDevices';E={$_.DevicesStatus.NumberOfOnlineDevices}}
 ```
 

@@ -39,28 +39,28 @@ monitoring, policies, and reporting.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMDevice -Id 12345 | Move-RMMDevice -TargetSiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 ```
 
 Moves a device to a different site via pipeline.
 
 EXAMPLE 2
-```
+```powershell
 Move-RMMDevice -DeviceUid "11111111-2222-3333-4444-555555555555" -TargetSiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 ```
 
 Moves a device by specifying both device and target site UIDs.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMDevice -Hostname "SERVER01" | Move-RMMDevice -TargetSite (Get-RMMSite -Name "New Office")
 ```
 
 Moves a device to a new site using site objects.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMSite -Name "Old Site" | Get-RMMDevice | Move-RMMDevice -TargetSiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -Force
 ```
 

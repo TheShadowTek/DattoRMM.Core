@@ -17,28 +17,28 @@ The alert is identified by its unique alert UID (GUID).
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Resolve-RMMAlert -AlertUid '12345678-1234-1234-1234-123456789012'
 ```
 
 Resolves the alert with the specified UID.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMAlert -Scope Global | Where-Object Priority -eq 'Critical' | Resolve-RMMAlert
 ```
 
 Resolves all critical global alerts with confirmation prompts.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMAlert -Scope Global | Where-Object Priority -eq 'Critical' | Resolve-RMMAlert -Force
 ```
 
 Resolves all critical global alerts without confirmation prompts.
 
 EXAMPLE 4
-```
+```powershell
 $Alert.Resolve()
 ```
 

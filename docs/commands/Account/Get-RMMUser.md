@@ -23,35 +23,35 @@ Use -Force to bypass the confirmation prompt.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMUser
 ```
 
 Retrieves all users after confirmation.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMUser -Force
 ```
 
 Retrieves all users without confirmation prompt.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMUser -Force | Where-Object {$_.Role -eq 'Administrator'}
 ```
 
 Retrieves all administrator users.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMUser -Force | Select-Object Name, Email, Role
 ```
 
 Retrieves all users and displays selected properties.
 
 EXAMPLE 5
-```
+```powershell
 $Users = Get-RMMUser -Force
 $Users | Group-Object Role | Select-Object Name, Count
 ```

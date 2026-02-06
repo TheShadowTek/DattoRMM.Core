@@ -34,21 +34,21 @@ Variables can optionally be masked to hide sensitive values in the Datto RMM UI.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 New-RMMVariable -Name "CompanyName" -Value "Contoso Ltd"
 ```
 
 Creates an account-level variable named "CompanyName".
 
 EXAMPLE 2
-```
+```powershell
 New-RMMVariable -Name "APIKey" -Value "secret123" -Masked
 ```
 
 Creates a masked account-level variable for sensitive data.
 
 EXAMPLE 3
-```
+```powershell
 $Secret = Read-Host -AsSecureString -Prompt "Enter API Key"
 New-RMMVariable -Name "APIKey" -Value $Secret -Masked
 ```
@@ -56,14 +56,14 @@ New-RMMVariable -Name "APIKey" -Value $Secret -Masked
 Creates a masked variable using SecureString for secure input and transport.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMSite -Name "Main Office" | New-RMMVariable -Name "SiteCode" -Value "MO001"
 ```
 
 Creates a site-level variable via pipeline.
 
 EXAMPLE 5
-```
+```powershell
 New-RMMVariable -SiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -Name "BackupPath" -Value "\\server\backup"
 ```
 

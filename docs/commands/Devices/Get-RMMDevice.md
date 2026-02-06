@@ -70,63 +70,63 @@ privacy implications unless -Force is specified.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMDevice
 ```
 
 Retrieves all devices in the account.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMDevice -Hostname "SERVER01"
 ```
 
 Retrieves devices with hostname containing "SERVER01".
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMSite -Name "Main Office" | Get-RMMDevice
 ```
 
 Gets all devices for the "Main Office" site.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMDevice -DeviceUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 ```
 
 Retrieves a specific device by its unique identifier.
 
 EXAMPLE 5
-```
+```powershell
 Get-RMMDevice -MacAddress "00:11:22:33:44:55"
 ```
 
 Retrieves a device by its MAC address.
 
 EXAMPLE 6
-```
+```powershell
 Get-RMMDevice -FilterId 12345
 ```
 
 Retrieves all devices matching the specified filter.
 
 EXAMPLE 7
-```
+```powershell
 Get-RMMDevice -DeviceType "Server" -OperatingSystem "Windows Server 2022"
 ```
 
 Retrieves all Windows Server 2022 devices.
 
 EXAMPLE 8
-```
+```powershell
 Get-RMMSite | Get-RMMDevice -NetSummary
 ```
 
 Gets network interface information for devices at all sites.
 
 EXAMPLE 9
-```
+```powershell
 Get-RMMDevice -DeviceUid $guid -IncludeLastLoggedInUser -Force
 ```
 

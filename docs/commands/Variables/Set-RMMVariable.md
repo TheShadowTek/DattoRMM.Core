@@ -39,14 +39,14 @@ Use New-RMMVariable with -Masked to create a masked variable.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMVariable -Name "CompanyName" | Set-RMMVariable -Value "Contoso Corporation"
 ```
 
 Updates the value of an account-level variable via pipeline.
 
 EXAMPLE 2
-```
+```powershell
 $Secret = Read-Host -AsSecureString -Prompt "Enter new password"
 Get-RMMVariable -Name "AdminPassword" | Set-RMMVariable -Value $Secret
 ```
@@ -54,28 +54,28 @@ Get-RMMVariable -Name "AdminPassword" | Set-RMMVariable -Value $Secret
 Updates a masked variable value using SecureString for enhanced security.
 
 EXAMPLE 3
-```
+```powershell
 Set-RMMVariable -VariableId 12345 -NewName "CompanyName" -Value "New Company Ltd"
 ```
 
 Updates both name and value of an account-level variable by ID.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMSite -Name "Main Office" | Get-RMMVariable -Name "SiteCode" | Set-RMMVariable -Value "MO002"
 ```
 
 Updates a site-level variable via pipeline.
 
 EXAMPLE 5
-```
+```powershell
 Set-RMMVariable -SiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -Name "BackupPath" -Value "\\newserver\backup"
 ```
 
 Updates a site-level variable by specifying site UID and variable name.
 
 EXAMPLE 6
-```
+```powershell
 Set-RMMVariable -VariableId 12345 -NewName "NewVarName"
 ```
 

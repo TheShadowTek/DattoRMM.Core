@@ -17,7 +17,7 @@ For removing the config file and resetting to defaults, use Reset-RMMConfig.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Save-RMMConfig
 ```
 

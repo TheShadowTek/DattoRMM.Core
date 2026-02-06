@@ -46,42 +46,42 @@ retrieve alerts for filtered sets of sites or devices.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMAlert
 ```
 
 Retrieves all open alerts at the account level.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMDevice -FilterId 12345 | Get-RMMAlert -Status Resolved
 ```
 
 Gets all devices matching filter 12345 and retrieves their resolved alerts.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMSite -Name "Contoso" | Get-RMMAlert -Status All
 ```
 
 Gets the site named "Contoso" and retrieves all alerts for that site (open and resolved).
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMSite | Where-Object {$_.Name -like "Branch*"} | Get-RMMAlert
 ```
 
 Gets all sites with names starting with "Branch" and retrieves all open alerts.
 
 EXAMPLE 5
-```
+```powershell
 Get-RMMDevice -Hostname "SERVER01" | Get-RMMAlert
 ```
 
 Gets the device named "SERVER01" and retrieves all its open alerts.
 
 EXAMPLE 6
-```
+```powershell
 Get-RMMAlert -AlertUid "0e6cf376-e60a-4dc2-95b3-daa122e74de9"
 ```
 
@@ -91,7 +91,7 @@ Returns the alert regardless of its state
 Useful when the alert's status is unknown but the UID is available.
 
 EXAMPLE 7
-```
+```powershell
 $Site = Get-RMMSite -Name "Main Office"
 Get-RMMAlert -SiteUid $Site.Uid
 ```

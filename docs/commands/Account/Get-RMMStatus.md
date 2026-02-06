@@ -19,14 +19,14 @@ used in automation scripts to check service availability before performing opera
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMStatus
 ```
 
 Retrieves the current Datto RMM system status.
 
 EXAMPLE 2
-```
+```powershell
 $Status = Get-RMMStatus
 if ($Status.IsOperational) {
     Write-Host "System is operational"
@@ -36,7 +36,7 @@ if ($Status.IsOperational) {
 Checks if the system is operational before proceeding.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMStatus | Select-Object Status, Message
 ```
 

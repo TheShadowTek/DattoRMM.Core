@@ -29,21 +29,21 @@ providing the SiteUid parameter directly.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Remove-RMMSiteProxy -SiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 ```
 
 Removes proxy settings from the specified site (with confirmation prompt).
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMSite -Name "Branch Office" | Remove-RMMSiteProxy -Force
 ```
 
 Removes proxy settings from the site via pipeline without confirmation.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMSite | Where-Object {$_.Name -like "Test*"} | Remove-RMMSiteProxy
 ```
 

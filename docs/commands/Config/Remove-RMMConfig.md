@@ -17,14 +17,14 @@ To apply defaults in the current session, use Set-RMMConfig -Default or reload t
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Remove-RMMConfig
 ```
 
 Prompts for confirmation before deleting the configuration file.
 
 EXAMPLE 2
-```
+```powershell
 Remove-RMMConfig -Force
 ```
 

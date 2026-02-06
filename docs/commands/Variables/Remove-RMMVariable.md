@@ -28,28 +28,28 @@ to prompt for confirmation before deleting each variable.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMVariable -Name "OldVariable" | Remove-RMMVariable
 ```
 
 Deletes an account-level variable via pipeline.
 
 EXAMPLE 2
-```
+```powershell
 Remove-RMMVariable -VariableId 12345 -Confirm:$false
 ```
 
 Deletes an account-level variable by ID without prompting for confirmation.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMSite -Name "Closed Office" | Get-RMMVariable | Remove-RMMVariable -Confirm
 ```
 
 Deletes all variables from a site with confirmation prompts.
 
 EXAMPLE 4
-```
+```powershell
 Remove-RMMVariable -SiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -VariableId 67890
 ```
 

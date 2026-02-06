@@ -42,14 +42,14 @@ Only provide variables that the component requires.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 New-RMMQuickJob -DeviceUid $DeviceUid -JobName "Get System Info" -ComponentUid $ComponentUid
 ```
 
 Creates a quick job on a device using a component that requires no variables.
 
 EXAMPLE 2
-```
+```powershell
 $Device = Get-RMMDevice -Hostname "SERVER01"
 $Component = Get-RMMComponent | Where-Object {$_.Name -eq "Restart Service"}
 New-RMMQuickJob -Device $Device -JobName "Restart IIS" -Component $Component -Variables @{serviceName='W3SVC'}
@@ -58,14 +58,14 @@ New-RMMQuickJob -Device $Device -JobName "Restart IIS" -Component $Component -Va
 Creates a quick job to restart a service, passing the service name as a variable.
 
 EXAMPLE 3
-```
+```powershell
 Get-RMMDevice -FilterId 100 | New-RMMQuickJob -JobName "Update Windows" -ComponentUid $CompUid -Force
 ```
 
 Creates quick jobs on all devices in a filter without confirmation.
 
 EXAMPLE 4
-```
+```powershell
 $Vars = @{
     path = 'C:\Logs'
     days = '30'
@@ -77,7 +77,7 @@ New-RMMQuickJob -DeviceUid $DeviceUid -JobName "Clean Old Logs" -ComponentUid $C
 Creates a quick job with multiple variables passed as a hashtable.
 
 EXAMPLE 5
-```
+```powershell
 $Component = Get-RMMComponent | Where-Object {$_.Name -like "*PowerShell*"} | Select-Object -First 1
 $Component.GetInputVariables() | Select-Object Name, Type
 Get-RMMDevice -Hostname "WKS*" | New-RMMQuickJob -JobName "Run PowerShell" -Component $Component

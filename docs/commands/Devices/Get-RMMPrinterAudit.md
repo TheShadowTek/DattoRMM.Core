@@ -21,21 +21,21 @@ useful for proactive printer management.
 ## EXAMPLES
 
 EXAMPLE 1
-```
+```powershell
 Get-RMMDevice -DeviceId 12345 | Get-RMMPrinterAudit
 ```
 
 Retrieves printer audit data for device 12345.
 
 EXAMPLE 2
-```
+```powershell
 Get-RMMPrinterAudit -DeviceUid "12345678-1234-1234-1234-123456789012"
 ```
 
 Retrieves printer audit data using a specific device UID.
 
 EXAMPLE 3
-```
+```powershell
 $Audit = Get-RMMDevice -Name "PRINTER01" | Get-RMMPrinterAudit
 $Audit.Printers | Select-Object Name, Model, SupplyLevels
 ```
@@ -43,7 +43,7 @@ $Audit.Printers | Select-Object Name, Model, SupplyLevels
 Retrieves printer audit data and displays printer names, models, and supply levels.
 
 EXAMPLE 4
-```
+```powershell
 Get-RMMDevice -FilterId 200 | Get-RMMPrinterAudit | 
     ForEach-Object {$_.Printers} | 
     Where-Object {$_.SupplyLevels.Black -lt 20}
@@ -52,7 +52,7 @@ Get-RMMDevice -FilterId 200 | Get-RMMPrinterAudit |
 Gets devices matching filter 200 and finds printers with low black toner (\<20%).
 
 EXAMPLE 5
-```
+```powershell
 $PrinterAudit = Get-RMMPrinterAudit -DeviceUid $DeviceUid
 $PrinterAudit.SnmpInfo
 ```
