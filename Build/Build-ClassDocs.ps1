@@ -678,41 +678,32 @@ The following values are defined for $TypeName`:
                             }
                             
                             if ($LinkName) {
-                                # Generate relative path based on link type
-                                if ($LinkName -match '^about_') {
-                                    # Another about doc - find its folder
-                                    $TargetFolder = $null
-                                    foreach ($R in $Regions) {
-                                        if ($R.Classes | Where-Object { $_.Name -eq ($LinkName -replace '^about_', '') }) {
-                                            $TargetFolder = $R.FolderName
-                                            break
-                                        }
-                                    }
-                                    if ($TargetFolder) {
-                                        if ($TargetFolder -eq $Region.FolderName) {
-                                            # Same folder
-                                            $RelatedLinkLines += "- [$LinkName](./$LinkName.md)"
-                                        } else {
-                                            # Different folder
-                                            $RelatedLinkLines += "- [$LinkName](../$TargetFolder/$LinkName.md)"
-                                        }
+                                # Remove about_ prefix if present for lookup
+                                $ClassNameToCheck = $LinkName -replace '^about_', ''
+                                
+                                # Check if it's a class (with or without about_ prefix)
+                                if ($ClassFolderMap.ContainsKey($ClassNameToCheck)) {
+                                    $TargetFolder = $ClassFolderMap[$ClassNameToCheck]
+                                    $AboutFileName = "about_$ClassNameToCheck"
+                                    
+                                    if ($TargetFolder -eq $Region.FolderName) {
+                                        # Same folder
+                                        $RelatedLinkLines += "- [$ClassNameToCheck](./$AboutFileName.md)"
                                     } else {
-                                        # Not found, use root about path
-                                        $RelatedLinkLines += "- [$LinkName](../../$LinkName.md)"
+                                        # Different folder
+                                        $RelatedLinkLines += "- [$ClassNameToCheck](../$TargetFolder/$AboutFileName.md)"
                                     }
-                                } else {
-                                    # Command function - use lookup to get subfolder
-                                    if ($FunctionLookup.ContainsKey($LinkName)) {
-                                        $FuncSubPath = $FunctionLookup[$LinkName] -replace '\\', '/'
-                                        if ($FuncSubPath) {
-                                            $RelatedLinkLines += "- [$LinkName](../../../commands/$FuncSubPath/$LinkName.md)"
-                                        } else {
-                                            $RelatedLinkLines += "- [$LinkName](../../../commands/$LinkName.md)"
-                                        }
+                                } elseif ($FunctionLookup.ContainsKey($LinkName)) {
+                                    # It's a function - use lookup to get subfolder
+                                    $FuncSubPath = $FunctionLookup[$LinkName] -replace '\\', '/'
+                                    if ($FuncSubPath) {
+                                        $RelatedLinkLines += "- [$LinkName](../../../commands/$FuncSubPath/$LinkName.md)"
                                     } else {
-                                        # Fallback if not found in lookup
                                         $RelatedLinkLines += "- [$LinkName](../../../commands/$LinkName.md)"
                                     }
+                                } else {
+                                    # Fallback - assume it's a function in root commands folder
+                                    $RelatedLinkLines += "- [$LinkName](../../../commands/$LinkName.md)"
                                 }
                             }
                         }
@@ -908,41 +899,32 @@ The $TypeName class provides the following methods:
                             }
                             
                             if ($LinkName) {
-                                # Generate relative path based on link type
-                                if ($LinkName -match '^about_') {
-                                    # Another about doc - find its folder
-                                    $TargetFolder = $null
-                                    foreach ($R in $Regions) {
-                                        if ($R.Classes | Where-Object { $_.Name -eq ($LinkName -replace '^about_', '') }) {
-                                            $TargetFolder = $R.FolderName
-                                            break
-                                        }
-                                    }
-                                    if ($TargetFolder) {
-                                        if ($TargetFolder -eq $Region.FolderName) {
-                                            # Same folder
-                                            $RelatedLinkLines += "- [$LinkName](./$LinkName.md)"
-                                        } else {
-                                            # Different folder
-                                            $RelatedLinkLines += "- [$LinkName](../$TargetFolder/$LinkName.md)"
-                                        }
+                                # Remove about_ prefix if present for lookup
+                                $ClassNameToCheck = $LinkName -replace '^about_', ''
+                                
+                                # Check if it's a class (with or without about_ prefix)
+                                if ($ClassFolderMap.ContainsKey($ClassNameToCheck)) {
+                                    $TargetFolder = $ClassFolderMap[$ClassNameToCheck]
+                                    $AboutFileName = "about_$ClassNameToCheck"
+                                    
+                                    if ($TargetFolder -eq $Region.FolderName) {
+                                        # Same folder
+                                        $RelatedLinkLines += "- [$ClassNameToCheck](./$AboutFileName.md)"
                                     } else {
-                                        # Not found, use root about path
-                                        $RelatedLinkLines += "- [$LinkName](../../$LinkName.md)"
+                                        # Different folder
+                                        $RelatedLinkLines += "- [$ClassNameToCheck](../$TargetFolder/$AboutFileName.md)"
                                     }
-                                } else {
-                                    # Command function - use lookup to get subfolder
-                                    if ($FunctionLookup.ContainsKey($LinkName)) {
-                                        $FuncSubPath = $FunctionLookup[$LinkName] -replace '\\', '/'
-                                        if ($FuncSubPath) {
-                                            $RelatedLinkLines += "- [$LinkName](../../../commands/$FuncSubPath/$LinkName.md)"
-                                        } else {
-                                            $RelatedLinkLines += "- [$LinkName](../../../commands/$LinkName.md)"
-                                        }
+                                } elseif ($FunctionLookup.ContainsKey($LinkName)) {
+                                    # It's a function - use lookup to get subfolder
+                                    $FuncSubPath = $FunctionLookup[$LinkName] -replace '\\', '/'
+                                    if ($FuncSubPath) {
+                                        $RelatedLinkLines += "- [$LinkName](../../../commands/$FuncSubPath/$LinkName.md)"
                                     } else {
-                                        # Fallback if not found in lookup
                                         $RelatedLinkLines += "- [$LinkName](../../../commands/$LinkName.md)"
                                     }
+                                } else {
+                                    # Fallback - assume it's a function in root commands folder
+                                    $RelatedLinkLines += "- [$LinkName](../../../commands/$LinkName.md)"
                                 }
                             }
                         }

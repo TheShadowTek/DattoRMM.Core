@@ -73,10 +73,10 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlert.md)
-- [DRMMAlertContext](../../../commands/DRMMAlertContext.md)
-- [DRMMAlertMonitorInfo](../../../commands/DRMMAlertMonitorInfo.md)
-- [DRMMAlertSourceInfo](../../../commands/DRMMAlertSourceInfo.md)
-- [DRMMAlertResponseAction](../../../commands/DRMMAlertResponseAction.md)
+- [DRMMAlertContext](./about_DRMMAlertContext.md)
+- [DRMMAlertMonitorInfo](./about_DRMMAlertMonitorInfo.md)
+- [DRMMAlertSourceInfo](./about_DRMMAlertSourceInfo.md)
+- [DRMMAlertResponseAction](./about_DRMMAlertResponseAction.md)
 - [Get-RMMAlert](../../../commands/Alerts/Get-RMMAlert.md)
 - [Resolve-RMMAlert](../../../commands/Alerts/Resolve-RMMAlert.md)
 
