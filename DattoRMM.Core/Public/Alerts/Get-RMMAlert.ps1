@@ -90,19 +90,16 @@ function Get-RMMAlert {
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md
 
     .LINK
-        about_DRMMAlert
+        Resolve-RMMAlert
 
     .LINK
-        Connect-DattoRMM
+        about_DRMMAlert
 
     .LINK
         Get-RMMDevice
 
     .LINK
         Get-RMMSite
-
-    .LINK
-        Resolve-RMMAlert
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]

@@ -62,3 +62,7 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMComponent/about_DRMMComponent.md)
+- [Get-RMMComponent](../../../commands/Component/Get-RMMComponent.md)
+- [New-RMMQuickJob](../../../commands/Jobs/New-RMMQuickJob.md)
+- [DRMMComponentVariable](../../../commands/DRMMComponentVariable.md)
+

@@ -57,10 +57,10 @@ function Resolve-RMMAlert {
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Resolve-RMMAlert.md
 
     .LINK
-        about_DRMMAlert
+        Get-RMMAlert
 
     .LINK
-        Get-RMMAlert
+        about_DRMMAlert
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]

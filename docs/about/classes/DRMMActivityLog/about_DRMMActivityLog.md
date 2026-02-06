@@ -46,3 +46,7 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLog.md)
+- [DRMMActivityLogSite](../../../commands/DRMMActivityLogSite.md)
+- [DRMMActivityLogUser](../../../commands/DRMMActivityLogUser.md)
+- [Get-RMMActivityLog](../../../commands/ActivityLog/Get-RMMActivityLog.md)
+

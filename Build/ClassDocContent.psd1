@@ -29,6 +29,8 @@
                 Uid = 'The unique identifier string for the account.'
             }
             RelatedLinks = @(
+                'DRMMAccountDescriptor'
+                'DRMMAccountDevicesStatus'
                 'Get-RMMAccount'
             )
             ShortDescription = 'Represents an account in the DRMM system, including its properties and related information.'
@@ -45,7 +47,10 @@
                 DeviceLimit = 'The maximum number of devices allowed for the account.'
                 TimeZone = 'The time zone setting for the account.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAccount'
+                'Get-RMMAccount'
+            )
             ShortDescription = 'Represents the descriptor information for a DRMM account, including billing and timezone details.'
         }
         DRMMAccountDevicesStatus = @{
@@ -76,7 +81,10 @@
                 NumberOfOnDemandDevices = 'The number of devices that are on-demand.'
                 NumberOfOnlineDevices = 'The number of devices that are currently online.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAccount'
+                'Get-RMMAccount'
+            )
             ShortDescription = 'Represents the device status information for a DRMM account, including counts of devices in various states.'
         }
     }
@@ -109,7 +117,11 @@
                 Site = 'An instance of the DRMMActivityLogSite class that provides information about the site associated with the activity log entry.'
                 User = 'An instance of the DRMMActivityLogUser class that provides information about the user associated with the activity log entry.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMActivityLogSite'
+                'DRMMActivityLogUser'
+                'Get-RMMActivityLog'
+            )
             ShortDescription = 'Represents an activity log entry in the DRMM system, including details about the activity, associated site and user information, and related context.'
         }
         DRMMActivityLogSite = @{
@@ -123,7 +135,10 @@
                 Id = 'The unique identifier for the site associated with the activity log entry.'
                 Name = 'The name of the site associated with the activity log entry.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMActivityLog'
+                'Get-RMMActivityLog'
+            )
             ShortDescription = 'Represents site information associated with a DRMM activity log entry, including site ID and name.'
         }
         DRMMActivityLogUser = @{
@@ -146,7 +161,10 @@
                 LastName = 'The last name of the user associated with the activity log entry.'
                 UserName = 'The username of the user associated with the activity log entry.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMActivityLog'
+                'Get-RMMActivityLog'
+            )
             ShortDescription = 'Represents user information associated with a DRMM activity log entry, including user ID, username, and name details.'
         }
     }
@@ -210,7 +228,14 @@
                 TicketNumber = 'Ticket number associated with the alert.'
                 Timestamp = 'Timestamp when the alert was created.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlertContext'
+                'DRMMAlertMonitorInfo'
+                'DRMMAlertSourceInfo'
+                'DRMMAlertResponseAction'
+                'Get-RMMAlert'
+                'Resolve-RMMAlert'
+            )
             ShortDescription = 'Represents an alert in the DRMM system, including its properties, context, source information, and response actions.'
         }
         DRMMAlertContext = @{
@@ -230,7 +255,36 @@
             PropertyDescriptions = @{
                 Class = 'The class of the alert context, indicating the type of context information associated with the alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContextAntivirus'
+                'DRMMAlertContextBackupManagement'
+                'DRMMAlertContextCustomSNMP'
+                'DRMMAlertContextDiskHealth'
+                'DRMMAlertContextDiskUsage'
+                'DRMMAlertContextEndpointSecurityThreat'
+                'DRMMAlertContextEndpointSecurityWindowsDefender'
+                'DRMMAlertContextEventLog'
+                'DRMMAlertContextFan'
+                'DRMMAlertContextFileSystem'
+                'DRMMAlertContextGeneric'
+                'DRMMAlertContextNetworkMonitor'
+                'DRMMAlertContextOnlineOfflineStatus'
+                'DRMMAlertContextPatch'
+                'DRMMAlertContextPing'
+                'DRMMAlertContextPrinter'
+                'DRMMAlertContextPsu'
+                'DRMMAlertContextRansomWare'
+                'DRMMAlertContextResourceUsage'
+                'DRMMAlertContextScript'
+                'DRMMAlertContextSecCenter'
+                'DRMMAlertContextSecurityManagement'
+                'DRMMAlertContextSNMPProbe'
+                'DRMMAlertContextStatus'
+                'DRMMAlertContextTemperature'
+                'DRMMAlertContextWindowsPerformance'
+                'DRMMAlertContextWmi'
+            )
             ShortDescription = 'Represents the context of an alert in the DRMM system, including its class and specific details based on the type of alert.'
         }
         DRMMAlertContextAntivirus = @{
@@ -244,7 +298,10 @@
                 ProductName = 'The name of the antivirus product associated with the alert context.'
                 Status = 'The current status of the antivirus alert context.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents a generic alert context in the DRMM system when specific context class information is not available.'
         }
         DRMMAlertContextBackupManagement = @{
@@ -258,7 +315,10 @@
                 ErrorMessage = 'The error message associated with the backup management alert context.'
                 Timeout = 'The timeout value related to the backup management alert context.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a backup management alert in the DRMM system, including error messages and timeout information.'
         }
         DRMMAlertContextCustomSNMP = @{
@@ -273,7 +333,10 @@
                 DisplayName = 'The display name of the custom SNMP alert.'
                 MonitorInstance = 'The monitor instance associated with the custom SNMP alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a custom SNMP alert in the DRMM system, including display name, current value, and monitor instance information.'
         }
         DRMMAlertContextDiskHealth = @{
@@ -287,7 +350,10 @@
                 Reason = 'The reason for the disk health alert.'
                 Type = 'The type of disk health issue detected.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a disk health alert in the DRMM system, including the reason for the alert and the type of issue detected.'
         }
         DRMMAlertContextDiskUsage = @{
@@ -304,7 +370,10 @@
                 TotalVolume = 'The total volume or capacity of the disk.'
                 UnitOfMeasure = 'The unit of measure used for disk space values (e.g., bytes, megabytes).'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a disk usage alert in the DRMM system, including details about the disk, total volume, free space, and unit of measure.'
         }
         DRMMAlertContextEndpointSecurityThreat = @{
@@ -318,7 +387,10 @@
                 Description = 'A description of the endpoint security threat.'
                 EsAlertId = 'The unique identifier for the endpoint security alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of an endpoint security threat alert in the DRMM system, including alert ID and description.'
         }
         DRMMAlertContextEndpointSecurityWindowsDefender = @{
@@ -332,7 +404,10 @@
                 Description = 'A description of the endpoint security Windows Defender threat.'
                 EsAlertId = 'The unique identifier for the endpoint security Windows Defender alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of an endpoint security Windows Defender alert in the DRMM system, including alert ID and description.'
         }
         DRMMAlertContextEventLog = @{
@@ -352,7 +427,10 @@
                 TriggerCount = 'The number of times the event log alert has been triggered.'
                 Type = 'The type of the event log alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of an event log alert in the DRMM system, including log name, code, type, source, description, trigger count, last triggered time, and suspension status.'
         }
         DRMMAlertContextFan = @{
@@ -366,7 +444,10 @@
                 Reason = 'The reason for the fan alert.'
                 Type = 'The type of fan issue detected.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a fan alert in the DRMM system, including reason and type.'
         }
         DRMMAlertContextFileSystem = @{
@@ -383,7 +464,10 @@
                 Sample = 'A sample value that triggered the alert.'
                 Threshold = 'The threshold that was exceeded to trigger the alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a file system alert in the DRMM system, including sample value, threshold, path, object type, and condition.'
         }
         DRMMAlertContextGeneric = @{
@@ -396,7 +480,10 @@
             PropertyDescriptions = @{
                 Properties = 'A hashtable containing properties that provide detailed information about the alert context when specific context class information is not available.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents a generic alert context in the DRMM system when specific context class information is not available.'
         }
         DRMMAlertContextNetworkMonitor = @{
@@ -409,7 +496,10 @@
             PropertyDescriptions = @{
                 Description = 'A description of the network monitor alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a network monitor alert in the DRMM system, including a description of the alert.'
         }
         DRMMAlertContextOnlineOfflineStatus = @{
@@ -422,7 +512,10 @@
             PropertyDescriptions = @{
                 Status = 'The current online or offline status associated with the alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of an online/offline status alert in the DRMM system, including the current status.'
         }
         DRMMAlertContextPatch = @{
@@ -438,7 +531,10 @@
                 PolicyUid = 'The unique identifier for the policy associated with the patch.'
                 Result = 'The result of the patch operation.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a patch alert in the DRMM system, including patch UID, policy UID, result, and additional information.'
         }
         DRMMAlertContextPing = @{
@@ -453,7 +549,10 @@
                 Reasons = 'The reasons for the ping alert.'
                 RoundtripTime = 'The roundtrip time of the ping.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a ping alert in the DRMM system, including instance name, roundtrip time, and reasons for the alert.'
         }
         DRMMAlertContextPrinter = @{
@@ -469,7 +568,10 @@
                 MacAddress = 'The MAC address of the printer.'
                 MarkerSupplyIndex = 'The index of the marker supply in the printer.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a printer alert in the DRMM system, including IP address, MAC address, marker supply index, and current level.'
         }
         DRMMAlertContextPsu = @{
@@ -483,7 +585,10 @@
                 Reason = 'The reason for the PSU alert.'
                 Type = 'The type of PSU alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a PSU (Power Supply Unit) alert in the DRMM system, including reason and type of the alert.'
         }
         DRMMAlertContextRansomWare = @{
@@ -502,7 +607,10 @@
                 State = 'The current state of the ransomware alert.'
                 WatchPaths = 'The paths being watched for ransomware activity.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a ransomware alert in the DRMM system, including state, confidence factor, affected directories, watch paths, ransomware extension, and alert times.'
         }
         DRMMAlertContextResourceUsage = @{
@@ -517,7 +625,10 @@
                 Sample = 'The sample value indicating the resource usage.'
                 Type = 'The type of resource being monitored.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a resource usage alert in the DRMM system, including process name, sample value, and type of resource.'
         }
         DRMMAlertContextScript = @{
@@ -530,7 +641,10 @@
             PropertyDescriptions = @{
                 Samples = 'A hashtable of sample values associated with the script alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a script alert in the DRMM system, including a hashtable of sample values.'
         }
         DRMMAlertContextSecCenter = @{
@@ -544,7 +658,10 @@
                 AlertType = 'The type of the security center alert.'
                 ProductName = 'The name of the product generating the security center alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a security center alert in the DRMM system, including product name and alert type.'
         }
         DRMMAlertContextSecurityManagement = @{
@@ -564,7 +681,10 @@
                 SystemRemainsInfectedForHours = 'The number of hours the system remains infected.'
                 VirusName = 'The name of the virus associated with the alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a security management alert in the DRMM system, including status, product name, information time, virus name, infected files, and other related properties.'
         }
         DRMMAlertContextSNMPProbe = @{
@@ -582,7 +702,10 @@
                 ResponseValue = 'The response value received from the SNMP probe.'
                 RuleName = 'The name of the rule that triggered the SNMP probe alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of an SNMP probe alert in the DRMM system, including IP address, OID, rule name, response value, device name, and monitor name.'
         }
         DRMMAlertContextStatus = @{
@@ -596,7 +719,10 @@
                 ProcessName = 'The name of the process associated with the status alert.'
                 Status = 'The current status of the process.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a status alert in the DRMM system, including process name and status information.'
         }
         DRMMAlertContextTemperature = @{
@@ -610,7 +736,10 @@
                 Degree = 'The degree of the temperature alert.'
                 Type = 'The type of temperature alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a temperature alert in the DRMM system, including degree and type of temperature issue.'
         }
         DRMMAlertContextWindowsPerformance = @{
@@ -623,7 +752,10 @@
             PropertyDescriptions = @{
                 Value = 'The value that indicates the Windows performance metric.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a Windows performance alert in the DRMM system, including a value that indicates the performance metric.'
         }
         DRMMAlertContextWmi = @{
@@ -636,7 +768,10 @@
             PropertyDescriptions = @{
                 Value = 'The value that indicates the WMI metric or status.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+                'DRMMAlertContext'
+            )
             ShortDescription = 'Represents the context of a WMI alert in the DRMM system, including a value that indicates the WMI metric or status.'
         }
         DRMMAlertMonitorInfo = @{
@@ -657,7 +792,9 @@
                 CreatesTicket = 'Indicates whether the alert creates a ticket.'
                 SendsEmails = 'Indicates whether the alert sends emails.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+            )
             ShortDescription = 'Represents the monitor information for an alert in the DRMM system, including whether the alert sends emails and creates tickets.'
         }
         DRMMAlertResponseAction = @{
@@ -681,7 +818,9 @@
                 ActionType = 'The type of action taken.'
                 Description = 'Description of the action taken.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+            )
             ShortDescription = 'Represents a response action taken for an alert in the DRMM system, including action time, type, description, and references.'
         }
         DRMMAlertSourceInfo = @{
@@ -704,7 +843,9 @@
                 SiteName = 'The name of the site associated with the alert.'
                 SiteUid = 'The unique identifier of the site associated with the alert.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMAlert'
+            )
             ShortDescription = 'Represents the source information for an alert in the DRMM system, including device and site details.'
         }
     }
@@ -721,7 +862,9 @@
                 ApiSecret = 'API authentication secret.'
                 Username = 'Username associated with the API key and secret.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'Reset-RMMAPIKeySecret'
+            )
             ShortDescription = 'Represents API key and secret information for authenticating with the DRMM API.'
         }
     }
@@ -771,7 +914,11 @@
                 Uid = 'The unique identifier string of the component.'
                 Variables = 'An array of variables associated with the component.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'Get-RMMComponent'
+                'New-RMMQuickJob'
+                'DRMMComponentVariable'
+            )
             ShortDescription = 'Represents a component in the DRMM system, including its properties and associated variables.'
         }
         DRMMComponentVariable = @{
@@ -796,7 +943,9 @@
                 Name = 'The name of the variable.'
                 Type = 'The data type of the variable.'
             }
-            RelatedLinks = @()
+            RelatedLinks = @(
+                'DRMMComponent'
+            )
             ShortDescription = 'Represents a variable associated with a DRMM component, including its name, type, direction, and other metadata.'
         }
     }

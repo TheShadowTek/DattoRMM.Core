@@ -40,5 +40,7 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAccount/about_DRMMAccount.md)
+- [DRMMAccountDescriptor](../../../commands/DRMMAccountDescriptor.md)
+- [DRMMAccountDevicesStatus](../../../commands/DRMMAccountDevicesStatus.md)
 - [Get-RMMAccount](../../../commands/Account/Get-RMMAccount.md)
 
