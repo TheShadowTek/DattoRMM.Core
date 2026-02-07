@@ -153,10 +153,16 @@ function Get-RMMAlert {
         $Status = 'Open'
     )
 
+    begin {
+
+        Write-Verbose "Getting alerts with parameter set: $($PSCmdlet.ParameterSetName)"
+        
+    }
+
     process {
 
         # Set base alert uri path
-        switch -Regex ($PSBoundParameters.Keys) {
+        switch -Regex ($PSCmdlet.ParameterSetName) {
 
             '^Alert' {
 
@@ -227,10 +233,9 @@ function Get-RMMAlert {
                 PageElement = 'alerts'
             }
 
-            Write-Debug "Getting alerts from $($MethodPath)"
             Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                [DRMMAlert]::FromAPIMethod($_, $SiteUid, $Script:SessionPlatform)
+                [DRMMAlert]::FromAPIMethod($_, $Script:SessionPlatform)
 
             }
         }

@@ -614,14 +614,13 @@ class DRMMAlert : DRMMObject {
     [DRMMAlertSourceInfo]$AlertSourceInfo
     [DRMMAlertResponseAction[]]$ResponseActions
     [Nullable[int]]$AutoresolveMins
-    [Nullable[guid]]$SiteUid
     [string]$PortalUrl
 
     DRMMAlert() : base() {
 
     }
 
-    static [DRMMAlert] FromAPIMethod([pscustomobject]$Response, [Nullable[guid]]$SiteUid, [string]$Platform) {
+    static [DRMMAlert] FromAPIMethod([pscustomobject]$Response, [string]$Platform) {
 
         if ($null -eq $Response) {
 
@@ -638,7 +637,6 @@ class DRMMAlert : DRMMObject {
         $Alert.Muted = $Response.muted
         $Alert.TicketNumber = $Response.ticketNumber
         $Alert.AutoresolveMins = $Response.autoresolveMins
-        $Alert.SiteUid = $SiteUid
         $Alert.PortalUrl = "https://$($Platform.ToLower()).rmm.datto.com/alert/$($Alert.AlertUid)"
 
         $Alert.AlertMonitorInfo = [DRMMAlertMonitorInfo]::FromAPIMethod($Response.alertMonitorInfo)
