@@ -138,77 +138,49 @@ function Get-RMMActivityLog {
 
     begin {
 
-        # Build query parameters (excluding siteIds)
-        $Parameters = @{}
+        # Build query parameters (excluding siteIds), initializing with required date range parameters
+        $Parameters = @{
+            from = $Start.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+            until = $End.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+
+        switch ($PSBoundParameters.Keys) {
+
+            'Entity' {$Parameters['entities'] = ($Entity | ForEach-Object { $_.ToLower() }) -join ','}
+            'Category' {$Parameters['categories'] = ($Category | ForEach-Object { $_.ToLower() }) -join ','}
+            'Action' {$Parameters['actions'] = ($Action | ForEach-Object { $_.ToLower() }) -join ','}
+            'UserId' {$Parameters['userIds'] = $UserId -join ','}
+            'Order' {$Parameters['order'] = $Order}
         
-        if ($Start) {
+        }
+        
+        # Remove duplicate site IDs to limit unnecessary API calls
+        if ($SiteId) {
 
-            $Parameters['from'] = $Start.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+            $SiteID = $SiteId | Sort-Object -Unique
 
         }
 
-        if ($End) {
-
-            $Parameters['until'] = $End.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
-
-        }
-
-        if ($Entity) {
-
-            $Parameters['entities'] = ($Entity | ForEach-Object { $_.ToLower() }) -join ','
-
-        }
-
-        if ($Category) {
-
-            $Parameters['categories'] = ($Category | ForEach-Object { $_.ToLower() }) -join ','
-
-        }
-
-        if ($Action) {
-
-            $Parameters['actions'] = ($Action | ForEach-Object { $_.ToLower() }) -join ','
-
-        }
-
-        if ($UserId) {
-
-            $Parameters['userIds'] = $UserId -join ','
-
-        }
-
-        if ($Order) {
-
-            $Parameters['order'] = $Order
-
-        }
-
-        $AllSites = @()
+        [array]$AllSites = @()
 
     }
 
     process {
 
-        if ($PSCmdlet.ParameterSetName -eq 'Site') {
+        # Collect sites based on parameter set
+        switch ($PSCmdlet.ParameterSetName) {
 
-            $AllSites += $Site
-
-        } elseif ($PSCmdlet.ParameterSetName -eq 'SiteId') {
-            
-            $AllSites = Get-RMMSite | Where-Object {$_.Id -in $SiteId}
+            'Site' {[array]$AllSites += $Site}
+            'SiteId' {[array]$AllSites = Get-RMMSite | Where-Object {$_.Id -in $SiteId}}
+            'Global' {[array]$AllSites = Get-RMMSite}
 
         }
     }
 
     end {
 
-        # If no site(s) specified, treat as global: get all sites
-        if ($PSCmdlet.ParameterSetName -eq 'Global') {
-
-            $AllSites = Get-RMMSite
-
-        }
-
+        # Remove duplicate sites (if any) and confirm processing for each site
+        [array]$AllSites = $AllSites | Sort-Object -Property Id -Unique
         $ProcessSites = @()
 
         foreach ($SiteObject in $AllSites) {
@@ -230,7 +202,7 @@ function Get-RMMActivityLog {
         for ($BatchIndex = 0; $BatchIndex -lt $ProcessSites.Count; $BatchIndex += $BatchSize) {
 
             $BatchSites = $ProcessSites[$BatchIndex..([Math]::Min($BatchIndex+$BatchSize-1, $ProcessSites.Count-1))]
-            $Parameters['siteIds'] = ($BatchSites | ForEach-Object { $_.Id }) -join ','
+            $Parameters['siteIds'] = ($BatchSites | ForEach-Object {$_.Id}) -join ','
             $Path = 'activity-logs'
 
             Invoke-APIMethod -Method 'GET' -Path $Path -Parameters $Parameters -Paginate -PageElement 'activities' | ForEach-Object {
