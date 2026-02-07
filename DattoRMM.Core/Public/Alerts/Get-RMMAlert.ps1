@@ -102,10 +102,10 @@ function Get-RMMAlert {
         Get-RMMSite
     #>
 
-    [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]
+    [CmdletBinding(DefaultParameterSetName = 'Global')]
     param (
         [Parameter(
-            ParameterSetName = 'SiteAll',
+            ParameterSetName = 'Site',
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
@@ -113,228 +113,126 @@ function Get-RMMAlert {
         $Site,
 
         [Parameter(
-            ParameterSetName = 'DeviceAll',
+            ParameterSetName = 'SiteUid',
+            Mandatory = $true
+        )]
+        [guid]
+        $SiteUid,
+        
+        [Parameter(
+            ParameterSetName = 'Device',
+            Mandatory = $true,
+            ValueFromPipeline = $true
+        )]
+        [DRMMDevice]
+        $Device,
+
+        [Parameter(
+            ParameterSetName = 'DeviceUid',
             Mandatory = $true
         )]
         [guid]
         $DeviceUid,
 
         [Parameter(
-            ParameterSetName = 'SiteAllUid',
-            Mandatory = $true
-        )]
-        [guid]
-        $SiteUid,
-
-        [Parameter(
-            ParameterSetName = 'GlobalByUid',
+            ParameterSetName = 'Alert',
             Mandatory = $true
         )]
         [guid]
         $AlertUid,
 
         [Parameter(
-            ParameterSetName = 'GlobalAll'
+            Mandatory = $false
         )]
-        [Parameter(
-            ParameterSetName = 'SiteAll'
+        [ValidateSet(
+            'All',
+            'Open',
+            'Resolved'
         )]
-        [Parameter(
-            ParameterSetName = 'SiteAllUid'
-        )]
-        [Parameter(
-            ParameterSetName = 'DeviceAll'
-        )]
-        [ValidateSet('All', 'Open', 'Resolved')]
         [string]
         $Status = 'Open'
     )
 
     process {
 
-        Write-Debug "Getting RMM alert(s) using parameter set: $($PSCmdlet.ParameterSetName)"
+        # Set base alert uri path
+        switch -Regex ($PSBoundParameters.Keys) {
 
-        if ($PSCmdlet.ParameterSetName -match '^Device') {
+            '^Alert' {
 
-            # Device scope - handle Open, Resolved, or All
-            $Methods = @()
+                $MethodBasePath = "alert/$AlertUid"
+            
+            }
 
-            switch ($Status) {
+            '^Global' {
 
-                {$_ -eq 'All' -or $AlertUid} {
+                $MethodBasePath = "account/alerts"
+            
+            }
 
-                    $Methods += @{
-                        Path = "device/$DeviceUid/alerts/open"
-                        Scope = 'Device'
-                    }
-                    $Methods += @{
-                        Path = "device/$DeviceUid/alerts/resolved"
-                        Scope = 'Device'
-                    }
+            '^Site' {
+
+                if ($Site) {
+
+                    $SiteUid = $Site.Uid
+
                 }
+
+                $MethodBasePath = "site/$($SiteUid)/alerts"
                 
-                'Open' {
-
-                    $Methods += @{
-                        Path = "device/$DeviceUid/alerts/open"
-                        Scope = 'Device'
-                    }
-                }
-
-                'Resolved' {
-
-                    $Methods += @{
-                        Path = "device/$DeviceUid/alerts/resolved"
-                        Scope = 'Device'
-                    }
-                }
             }
 
-            foreach ($Method in $Methods) {
+            '^Device' {
 
-                $APIMethod = @{
-                    Path = $Method.Path
-                    Method = 'Get'
-                    Paginate = $true
-                    PageElement = 'alerts'
-                }
+                if ($Device) {
 
-                Write-Debug "Getting device alerts from $($Method.Path)"
-                Invoke-APIMethod @APIMethod | ForEach-Object {
-
-                    [DRMMAlert]::FromAPIMethod($_, $null, $Script:SessionPlatform)
+                    $DeviceUid = $Device.Uid
 
                 }
-            }
 
-        } elseif ($PSCmdlet.ParameterSetName -match '^Site') {
-
-            if ($Site) {
-
-                $SiteUid = $Site.Uid
+                $MethodBasePath = "device/$($DeviceUid)/alerts"
 
             }
+        }
 
-            # Site scope - handle Open, Resolved, or All
-            $Methods = @()
+        # Set method paths based on parameter set and status
+        [array]$MethodPaths = @()
 
-            switch ($Status) {
+        if ($PSCmdlet.ParameterSetName -ne 'Alert') {
 
-                'Open' {
+            if ($Status -eq 'All') {
 
-                    $Methods += @{
-                        Path = "site/$SiteUid/alerts/open"
-                        Scope = 'Site'
-                    }
-                }
+                $MethodPaths += "$MethodBasePath/open"
+                $MethodPaths += "$MethodBasePath/resolved"
 
-                'Resolved' {
+            } else {
 
-                    $Methods += @{
-                        Path = "site/$SiteUid/alerts/resolved"
-                        Scope = 'Site'
-                    }
-                }
+                $MethodPaths += "$MethodBasePath/$($Status.ToLower())"
 
-                'All' {
-
-                    $Methods += @{
-                        Path = "site/$SiteUid/alerts/open"
-                        Scope = 'Site'
-                    }
-                    $Methods += @{
-                        Path = "site/$SiteUid/alerts/resolved"
-                        Scope = 'Site'
-                    }
-                }
-            }
-
-            foreach ($Method in $Methods) {
-
-                $APIMethod = @{
-                    Path = $Method.Path
-                    Method = 'Get'
-                    Paginate = $true
-                    PageElement = 'alerts'
-                }
-
-                Write-Debug "Getting site alerts from $($Method.Path)"
-                Invoke-APIMethod @APIMethod | ForEach-Object {
-
-                    [DRMMAlert]::FromAPIMethod($_, $SiteUid, $Script:SessionPlatform)
-
-                }
             }
 
         } else {
 
-            # Global scope - handle Open, Resolved, or All
-            $Methods = @()
+            $MethodPaths += $MethodBasePath
 
-            switch ($Status) {
+        }
 
-                'Open' {
+        # Iterate method paths and get alerts
+        foreach ($MethodPath in $MethodPaths) {
 
-                    $Methods += @{
-                        Path = 'account/alerts/open'
-                        Scope = 'Global'
-                    }
-                }
-
-                'Resolved' {
-
-                    $Methods += @{
-                        Path = 'account/alerts/resolved'
-                        Scope = 'Global'
-                    }
-                }
-
-                'All' {
-
-                    $Methods += @{
-                        Path = 'account/alerts/open'
-                        Scope = 'Global'
-                    }
-                    $Methods += @{
-                        Path = 'account/alerts/resolved'
-                        Scope = 'Global'
-                    }
-                }
+            $APIMethod = @{
+                Path = $MethodPath
+                Method = 'Get'
+                Paginate = $true
+                PageElement = 'alerts'
             }
 
-            foreach ($Method in $Methods) {
+            Write-Debug "Getting alerts from $($MethodPath)"
+            Invoke-APIMethod @APIMethod | ForEach-Object {
 
-                $APIMethod = @{
-                    Path = $Method.Path
-                    Method = 'Get'
-                    Paginate = $true
-                    PageElement = 'alerts'
-                }
+                [DRMMAlert]::FromAPIMethod($_, $SiteUid, $Script:SessionPlatform)
 
-                switch ($PSCmdlet.ParameterSetName) {
-
-                    'GlobalAll' {
-
-                        Write-Debug "Getting global alerts from $($Method.Path)"
-                        Invoke-APIMethod @APIMethod | ForEach-Object {
-
-                            [DRMMAlert]::FromAPIMethod($_, $null, $Script:SessionPlatform)
-
-                        }
-                    }
-
-                    'GlobalByUid' {
-
-                        Write-Debug "Getting global alert by UID: $AlertUid from $($Method.Path)"
-                        Invoke-APIMethod @APIMethod | Where-Object {$_.alertUid -eq $AlertUid} | ForEach-Object {
-
-                            [DRMMAlert]::FromAPIMethod($_, $null, $Script:SessionPlatform)
-
-                        }
-                    }
-                }
             }
         }
     }
 }
-
