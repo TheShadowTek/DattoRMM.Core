@@ -407,6 +407,12 @@ class DRMMActivityLog : DRMMObject {
 
     static [DRMMActivityLog] FromAPIMethod([pscustomobject]$Response) {
 
+        return [DRMMActivityLog]::FromAPIMethod($Response, $false)
+
+    }
+
+    static [DRMMActivityLog] FromAPIMethod([pscustomobject]$Response, [bool]$UseExperimentalDetailClasses) {
+
         if ($null -eq $Response) {
 
             return $null
@@ -423,9 +429,9 @@ class DRMMActivityLog : DRMMObject {
         $Log.HasStdOut = $Response.hasStdOut
         $Log.HasStdErr = $Response.hasStdErr
 
-        # Type ACtivityLogDetails by Entity_Category_Action if possible, otherwise use generic details class.
+        # Type ActivityLogDetails by Entity_Category_Action if experimental classes enabled, otherwise use generic details class.
         $LogContext = "$($Log.Entity)_$($Log.Category)_$($Log.Action)"
-        $Log.Details = [DRMMActivityLogDetails]::FromAPIMethod($Response.details, $LogContext)
+        $Log.Details = [DRMMActivityLogDetails]::FromAPIMethod($Response.details, $LogContext, $UseExperimentalDetailClasses)
 
         # Parse the date
         $DateValue = [DRMMObject]::ParseApiDate($Response.date)
@@ -481,8 +487,22 @@ class DRMMActivityLogDetails : DRMMObject {
 
     static [object] FromAPIMethod([pscustomobject]$Response, [string]$LogContext) {
 
+        return [DRMMActivityLogDetails]::FromAPIMethod($Response, $LogContext, $false)
+
+    }
+
+    static [object] FromAPIMethod([pscustomobject]$Response, [string]$LogContext, [bool]$UseExperimentalDetailClasses) {
+
         $DetailsHashtable = $Response | ConvertFrom-Json -AsHashtable
 
+        # If experimental detail classes are not enabled, always use generic
+        if (-not $UseExperimentalDetailClasses) {
+
+            return [DRMMActivityLogDetailsGeneric]::FromActivityLogDetail($DetailsHashtable)
+
+        }
+
+        # Use experimental entity/category-specific detail classes
         $Result = switch ($LogContext) {
 
             'DEVICE_job_deployment' {[DRMMActivityLogDetailsDeviceJobDeployment]::FromActivityLogDetail($DetailsHashtable); break}

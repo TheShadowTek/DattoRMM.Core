@@ -53,6 +53,12 @@ function Get-RMMActivityLog {
         Specifies the order in which records are returned by creation date. Valid values: 'asc', 'desc'.
         Default is 'desc'.
 
+    .PARAMETER UseExperimentalDetailClasses
+        Enables experimental entity/category-specific detail classes for activity logs. When specified,
+        details are parsed into strongly-typed classes based on entity, category, and action combinations
+        (e.g., DRMMActivityLogDetailsDeviceJob for DEVICE/job activities). When not specified (default),
+        all details use the generic DRMMActivityLogDetailsGeneric class with dynamic properties.
+
     .EXAMPLE
         Get-RMMActivityLog -Start "2024-01-01T00:00:00Z" -End "2024-01-02T00:00:00Z"
 
@@ -133,7 +139,10 @@ function Get-RMMActivityLog {
 
         [Parameter()]
         [ValidateSet('asc', 'desc')]
-        [string]$Order = 'desc'
+        [string]$Order = 'desc',
+
+        [Parameter()]
+        [switch]$UseExperimentalDetailClasses
     )
 
     begin {
@@ -207,7 +216,7 @@ function Get-RMMActivityLog {
 
             Invoke-APIMethod -Method 'GET' -Path $Path -Parameters $Parameters -Paginate -PageElement 'activities' | ForEach-Object {
 
-                [DRMMActivityLog]::FromAPIMethod($_)
+                [DRMMActivityLog]::FromAPIMethod($_, $UseExperimentalDetailClasses.IsPresent)
 
             }
         }
