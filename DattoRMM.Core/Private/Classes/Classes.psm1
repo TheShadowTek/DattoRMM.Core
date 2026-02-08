@@ -485,8 +485,9 @@ class DRMMActivityLogDetails : DRMMObject {
 
         $Result = switch ($LogContext) {
 
-            'DEVICE_job_deployment' {[DRMMActivityLogDetailsDeviceJobDeployment]::FromActivityLogDetail($DetailsHashtable)}
-            'DEVICE_job_create' {[DRMMActivityLogDetailsDeviceJobCreate]::FromActivityLogDetail($DetailsHashtable)}
+            'DEVICE_job_deployment' {[DRMMActivityLogDetailsDeviceJobDeployment]::FromActivityLogDetail($DetailsHashtable); break}
+            'DEVICE_job_create' {[DRMMActivityLogDetailsDeviceJobCreate]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^DEVICE_job_'} {[DRMMActivityLogDetailsDeviceJobGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             default {[DRMMActivityLogDetailsGeneric]::FromActivityLogDetail($DetailsHashtable)}
 
         }
@@ -542,7 +543,114 @@ class DRMMActivityLogDetailsGeneric : DRMMActivityLogDetails {
 
             }
 
-            $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for DEVICE job-related activity log details, containing properties common to all job actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDeviceJob class serves as a base class for DEVICE entity job category activity logs. It encapsulates properties that are common across different job actions (deployment, create, etc.), including device information, event metadata, job identifiers, and site information. Specific job action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsDeviceJob : DRMMActivityLogDetails {
+
+    [string]$DeviceHostname
+    [guid]$DeviceUid
+    [string]$Entity
+    [string]$EventAction
+    [string]$EventCategory
+    [long]$JobId
+    [string]$JobName
+    [string]$JobStatus
+    [guid]$JobUid
+    [string]$SiteName
+    [guid]$Uid
+
+    DRMMActivityLogDetailsDeviceJob() : base() {
+
+    }
+
+    static [void] PopulateBaseProperties([DRMMActivityLogDetailsDeviceJob]$Details, [hashtable]$ActivityLogDetail) {
+
+        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
+        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
+        $Details.Entity = $ActivityLogDetail.'entity'
+        $Details.EventAction = $ActivityLogDetail.'event.action'
+        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        $Details.JobId = $ActivityLogDetail.'job.id'
+        $Details.JobName = $ActivityLogDetail.'job.name'
+        $Details.JobStatus = $ActivityLogDetail.'job.status'
+        $Details.JobUid = $ActivityLogDetail.'job.uid'
+        $Details.SiteName = $ActivityLogDetail.'site.name'
+        $Details.Uid = $ActivityLogDetail.'uid'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic DEVICE job activity log details for unknown job actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDeviceJobGeneric class is used for DEVICE entity job category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 11 base properties common to all DEVICE job activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsDeviceJobGeneric : DRMMActivityLogDetailsDeviceJob {
+
+    DRMMActivityLogDetailsDeviceJobGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDeviceJobGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsDeviceJobGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsDeviceJob]::PopulateBaseProperties($Details, $ActivityLogDetail)
+
+        # Define base property keys to exclude from dynamic properties
+        $BasePropertyKeys = @(
+            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category',
+            'job.id', 'job.name', 'job.status', 'job.uid', 'site.name', 'uid'
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($BasePropertyKeys -contains $Key) {
+
+                continue
+
+            }
+
+            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
 
         }
 
@@ -555,26 +663,14 @@ class DRMMActivityLogDetailsGeneric : DRMMActivityLogDetails {
 .SYNOPSIS
     Represents an activity log of entity DEVICE, category job, and action deployment, which includes specific properties related to job deployment activities.
 .DESCRIPTION
-
+    The DRMMActivityLogDetailsDeviceJobDeployment class models the details of a job deployment activity log entry. It inherits common job properties from DRMMActivityLogDetailsDeviceJob and adds deployment-specific properties such as deployment ID, scheduled job information, and notes.
 #>
-class DRMMActivityLogDetailsDeviceJobDeployment : DRMMActivityLogDetails {
+class DRMMActivityLogDetailsDeviceJobDeployment : DRMMActivityLogDetailsDeviceJob {
 
-    [string]$DeviceHostname
-    [guid]$DeviceUid
-    [string]$Entity
-    [string]$EventAction
-    [string]$EventCategory
     [long]$JobDeploymentId
-    [long]$JobId
-    [string]$JobName
     [long]$JobScheduledJobId
     [guid]$JobScheduledJobUid
-    [string]$JobStatus
-    [guid]$JobUid
     [string]$Note
-    [string]$SiteName
-    [guid]$Uid
-
 
     DRMMActivityLogDetailsDeviceJobDeployment() : base() {
 
@@ -584,21 +680,14 @@ class DRMMActivityLogDetailsDeviceJobDeployment : DRMMActivityLogDetails {
 
         $Details = [DRMMActivityLogDetailsDeviceJobDeployment]::new()
 
-        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
-        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
-        $Details.Entity = $ActivityLogDetail.'entity'
-        $Details.EventAction = $ActivityLogDetail.'event.action'
-        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        # Populate base properties
+        [DRMMActivityLogDetailsDeviceJob]::PopulateBaseProperties($Details, $ActivityLogDetail)
+
+        # Populate deployment-specific properties
         $Details.JobDeploymentId = $ActivityLogDetail.'job.deployment_id'
-        $Details.JobId = $ActivityLogDetail.'job.id'
-        $Details.JobName = $ActivityLogDetail.'job.name'
         $Details.JobScheduledJobId = $ActivityLogDetail.'job.scheduled_job_id'
         $Details.JobScheduledJobUid = $ActivityLogDetail.'job.scheduled_job_uid'
-        $Details.JobStatus = $ActivityLogDetail.'job.status'
-        $Details.JobUid = $ActivityLogDetail.'job.uid'
         $Details.Note = $ActivityLogDetail.'note'
-        $Details.SiteName = $ActivityLogDetail.'site.name'
-        $Details.Uid = $ActivityLogDetail.'uid'
 
         return $Details
 
@@ -609,23 +698,11 @@ class DRMMActivityLogDetailsDeviceJobDeployment : DRMMActivityLogDetails {
 .SYNOPSIS
     Represents an activity log of entity DEVICE, category job, and action create, which includes specific properties related to job creation activities.
 .DESCRIPTION
-
+    The DRMMActivityLogDetailsDeviceJobCreate class models the details of a job creation activity log entry. It inherits common job properties from DRMMActivityLogDetailsDeviceJob and adds creation-specific properties such as the job creation date and user information (email, first name, last name, username, user ID).
 #>
+class DRMMActivityLogDetailsDeviceJobCreate : DRMMActivityLogDetailsDeviceJob {
 
-class DRMMActivityLogDetailsDeviceJobCreate : DRMMActivityLogDetails {
-
-    [string]$DeviceHostname
-    [guid]$DeviceUid
-    [string]$Entity
-    [string]$EventAction
-    [string]$EventCategory
     [nullable[datetime]]$JobDateCreated
-    [long]$JobId
-    [string]$JobName
-    [string]$JobStatus
-    [guid]$JobUid
-    [string]$SiteName
-    [guid]$Uid
     [string]$UserEmail
     [string]$UserFirstName
     [long]$UserId
@@ -640,23 +717,15 @@ class DRMMActivityLogDetailsDeviceJobCreate : DRMMActivityLogDetails {
 
         $Details = [DRMMActivityLogDetailsDeviceJobCreate]::new()
 
-        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
-        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
-        $Details.Entity = $ActivityLogDetail.'entity'
-        $Details.EventAction = $ActivityLogDetail.'event.action'
-        $Details.EventCategory = $ActivityLogDetail.'event.category'
-        $Details.JobId = $ActivityLogDetail.'job.id'
-        $Details.JobName = $ActivityLogDetail.'job.name'
-        $Details.JobStatus = $ActivityLogDetail.'job.status'
-        $Details.JobUid = $ActivityLogDetail.'job.uid'
-        $Details.SiteName = $ActivityLogDetail.'site.name'
-        $Details.Uid = $ActivityLogDetail.'uid'
+        # Populate base properties
+        [DRMMActivityLogDetailsDeviceJob]::PopulateBaseProperties($Details, $ActivityLogDetail)
+
+        # Populate create-specific properties
         $Details.UserEmail = $ActivityLogDetail.'user.email'
         $Details.UserFirstName = $ActivityLogDetail.'user.firstName'
         $Details.UserId = $ActivityLogDetail.'user.id'
         $Details.UserLastName = $ActivityLogDetail.'user.lastName'
         $Details.UserUsername = $ActivityLogDetail.'user.username'
-        #$Details.JobDateCreated = $ActivityLogDetail.'job.date_created'
 
         if ($null -ne $ActivityLogDetail.'job.date_created') {
 
