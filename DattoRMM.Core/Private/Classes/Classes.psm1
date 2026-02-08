@@ -423,42 +423,9 @@ class DRMMActivityLog : DRMMObject {
         $Log.HasStdOut = $Response.hasStdOut
         $Log.HasStdErr = $Response.hasStdErr
 
-        # Parse details from JSON
-        if ($null -ne $Response.details -and $Response.details -ne '') {
-
-            try {
-
-                $ParsedDetail = $Response.details | ConvertFrom-Json
-
-                # Check for date properties and parse them
-                foreach ($Property in $ParsedDetail.PSObject.Properties) {
-
-                    if ($Property.Name -match 'date' -and $null -ne $Property.Value) {
-
-                        try {
-
-                            $DateResult = [DRMMObject]::ParseApiDate($Property.Value)
-                            $ParsedDetail.$($Property.Name) = $DateResult.DateTime
-
-                        } catch {
-
-                            # Leave the original value if date parsing fails
-                            Write-Debug "Failed to parse date property '$($Property.Name)' with value '$($Property.Value)'"
-
-                        }
-                    }
-                }
-
-                $Log.Details = @($ParsedDetail)
-
-            } catch {
-
-                # If JSON parsing fails, store as a PSCustomObject with the raw string
-                $Log.Details = @([PSCustomObject]@{ RawDetails = $Response.details })
-
-            }
-
-        }
+        # Type ACtivityLogDetails by Entity_Category_Action if possible, otherwise use generic details class.
+        $LogContext = "$($Log.Entity)_$($Log.Category)_$($Log.Action)"
+        $Log.Details = [DRMMActivityLogDetails]::FromAPIMethod($Response.details, $LogContext)
 
         # Parse the date
         $DateValue = [DRMMObject]::ParseApiDate($Response.date)
@@ -495,6 +462,213 @@ class DRMMActivityLog : DRMMObject {
         $TargetStr = if ($this.Hostname) { $this.Hostname } elseif ($this.User) { $this.User.UserName } else { '' }
 
         return "[$EntityStr] ${CategoryStr}: ${ActionStr} - $TargetStr"
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents the 'Details' Property of a DRMMActivityLog entry, which can contain arbitrary key-value pairs with additional information about the activity.
+.DESCRIPTION
+    The 'Details' property of a DRMMActivityLog entry is designed to hold additional information about the activity in a flexible format. 
+
+#>
+class DRMMActivityLogDetails : DRMMObject {
+
+    DRMMActivityLogDetails() : base() {
+
+    }
+
+    static [object] FromAPIMethod([pscustomobject]$Response, [string]$LogContext) {
+
+        $DetailsHashtable = $Response | ConvertFrom-Json -AsHashtable
+
+        $Result = switch ($LogContext) {
+
+            'DEVICE_job_deployment' {[DRMMActivityLogDetailsDeviceJobDeployment]::FromActivityLogDetail($DetailsHashtable)}
+            'DEVICE_job_create' {[DRMMActivityLogDetailsDeviceJobCreate]::FromActivityLogDetail($DetailsHashtable)}
+            default {[DRMMActivityLogDetailsGeneric]::FromActivityLogDetail($DetailsHashtable)}
+
+        }
+        
+        return $Result
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic implementation of the DRMMActivityLogDetails class, which can handle arbitrary key-value pairs from the API response.
+.DESCRIPTION
+    The DRMMActivityLogDetailsGeneric class is a flexible implementation of the DRMMActivityLogDetails class that can accommodate any structure of details returned by the API. It takes a PSCustomObject as input and dynamically adds its properties to the class instance. The class also includes logic to attempt parsing any properties that contain "date" in their name as date values, while retaining the original value if parsing fails. This allows it to handle a wide variety of detail structures without requiring predefined properties.
+#>
+class DRMMActivityLogDetailsGeneric : DRMMActivityLogDetails {
+
+
+    DRMMActivityLogDetailsGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsGeneric]::new()
+
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+            $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity DEVICE, category job, and action deployment, which includes specific properties related to job deployment activities.
+.DESCRIPTION
+
+#>
+class DRMMActivityLogDetailsDeviceJobDeployment : DRMMActivityLogDetails {
+
+    [string]$DeviceHostname
+    [guid]$DeviceUid
+    [string]$Entity
+    [string]$EventAction
+    [string]$EventCategory
+    [long]$JobDeploymentId
+    [long]$JobId
+    [string]$JobName
+    [long]$JobScheduledJobId
+    [guid]$JobScheduledJobUid
+    [string]$JobStatus
+    [guid]$JobUid
+    [string]$Note
+    [string]$SiteName
+    [guid]$Uid
+
+
+    DRMMActivityLogDetailsDeviceJobDeployment() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDeviceJobDeployment] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsDeviceJobDeployment]::new()
+
+        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
+        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
+        $Details.Entity = $ActivityLogDetail.'entity'
+        $Details.EventAction = $ActivityLogDetail.'event.action'
+        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        $Details.JobDeploymentId = $ActivityLogDetail.'job.deployment_id'
+        $Details.JobId = $ActivityLogDetail.'job.id'
+        $Details.JobName = $ActivityLogDetail.'job.name'
+        $Details.JobScheduledJobId = $ActivityLogDetail.'job.scheduled_job_id'
+        $Details.JobScheduledJobUid = $ActivityLogDetail.'job.scheduled_job_uid'
+        $Details.JobStatus = $ActivityLogDetail.'job.status'
+        $Details.JobUid = $ActivityLogDetail.'job.uid'
+        $Details.Note = $ActivityLogDetail.'note'
+        $Details.SiteName = $ActivityLogDetail.'site.name'
+        $Details.Uid = $ActivityLogDetail.'uid'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity DEVICE, category job, and action create, which includes specific properties related to job creation activities.
+.DESCRIPTION
+
+#>
+
+class DRMMActivityLogDetailsDeviceJobCreate : DRMMActivityLogDetails {
+
+    [string]$DeviceHostname
+    [guid]$DeviceUid
+    [string]$Entity
+    [string]$EventAction
+    [string]$EventCategory
+    [nullable[datetime]]$JobDateCreated
+    [long]$JobId
+    [string]$JobName
+    [string]$JobStatus
+    [guid]$JobUid
+    [string]$SiteName
+    [guid]$Uid
+    [string]$UserEmail
+    [string]$UserFirstName
+    [long]$UserId
+    [string]$UserLastName
+    [string]$UserUsername
+
+    DRMMActivityLogDetailsDeviceJobCreate() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDeviceJobCreate] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsDeviceJobCreate]::new()
+
+        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
+        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
+        $Details.Entity = $ActivityLogDetail.'entity'
+        $Details.EventAction = $ActivityLogDetail.'event.action'
+        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        $Details.JobId = $ActivityLogDetail.'job.id'
+        $Details.JobName = $ActivityLogDetail.'job.name'
+        $Details.JobStatus = $ActivityLogDetail.'job.status'
+        $Details.JobUid = $ActivityLogDetail.'job.uid'
+        $Details.SiteName = $ActivityLogDetail.'site.name'
+        $Details.Uid = $ActivityLogDetail.'uid'
+        $Details.UserEmail = $ActivityLogDetail.'user.email'
+        $Details.UserFirstName = $ActivityLogDetail.'user.firstName'
+        $Details.UserId = $ActivityLogDetail.'user.id'
+        $Details.UserLastName = $ActivityLogDetail.'user.lastName'
+        $Details.UserUsername = $ActivityLogDetail.'user.username'
+        #$Details.JobDateCreated = $ActivityLogDetail.'job.date_created'
+
+        if ($null -ne $ActivityLogDetail.'job.date_created') {
+
+            $Details.JobDateCreated = [DRMMObject]::ParseApiDate($ActivityLogDetail.'job.date_created').DateTime
+
+        } else {
+
+            $Details.JobDateCreated = $null
+
+        }
+
+        return $Details
 
     }
 }
@@ -751,7 +925,7 @@ class DRMMAlertContext : DRMMObject {
 
     [string]$Class
 
-        DRMMAlertContext() : base() {
+    DRMMAlertContext() : base() {
 
     }
 
