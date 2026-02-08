@@ -488,6 +488,9 @@ class DRMMActivityLogDetails : DRMMObject {
             'DEVICE_job_deployment' {[DRMMActivityLogDetailsDeviceJobDeployment]::FromActivityLogDetail($DetailsHashtable); break}
             'DEVICE_job_create' {[DRMMActivityLogDetailsDeviceJobCreate]::FromActivityLogDetail($DetailsHashtable); break}
             {$_ -match '^DEVICE_job_'} {[DRMMActivityLogDetailsDeviceJobGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            'DEVICE_remote_chat' {[DRMMActivityLogDetailsDeviceRemoteChat]::FromActivityLogDetail($DetailsHashtable); break}
+            'DEVICE_remote_jrto' {[DRMMActivityLogDetailsDeviceRemoteJrto]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^DEVICE_remote_'} {[DRMMActivityLogDetailsDeviceRemoteGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             default {[DRMMActivityLogDetailsGeneric]::FromActivityLogDetail($DetailsHashtable)}
 
         }
@@ -736,6 +739,239 @@ class DRMMActivityLogDetailsDeviceJobCreate : DRMMActivityLogDetailsDeviceJob {
             $Details.JobDateCreated = $null
 
         }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a detail item within a remote session activity log, including action, detail text, and name.
+.DESCRIPTION
+    The DRMMActivityLogDetailsRemoteSessionDetail class models individual detail items within the remote_session.details array of a DEVICE remote activity log entry. Each detail item contains an action type, detail text, and name that describe specific events or steps within the remote session.
+#>
+class DRMMActivityLogDetailsRemoteSessionDetail : DRMMObject {
+
+    [string]$Action
+    [string]$Detail
+    [string]$Name
+
+    DRMMActivityLogDetailsRemoteSessionDetail() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsRemoteSessionDetail] FromActivityLogDetail([hashtable]$DetailItem) {
+
+        if ($null -eq $DetailItem) {
+
+            return $null
+
+        }
+
+        $SessionDetail = [DRMMActivityLogDetailsRemoteSessionDetail]::new()
+        $SessionDetail.Action = $DetailItem.'action'
+        $SessionDetail.Detail = $DetailItem.'detail'
+        $SessionDetail.Name = $DetailItem.'name'
+
+        return $SessionDetail
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for DEVICE remote-related activity log details, containing properties common to all remote session actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDeviceRemote class serves as a base class for DEVICE entity remote category activity logs. It encapsulates properties that are common across different remote session actions (chat, jrto, etc.), including device information, event metadata, remote session details, site information, user information, and source forwarding details. Specific remote action types inherit from this class and add their unique properties if needed.
+#>
+class DRMMActivityLogDetailsDeviceRemote : DRMMActivityLogDetails {
+
+    [string]$DeviceHostname
+    [guid]$DeviceUid
+    [string]$Entity
+    [string]$EventAction
+    [string]$EventCategory
+    [DRMMActivityLogDetailsRemoteSessionDetail[]]$RemoteSessionDetails
+    [long]$RemoteSessionId
+    [nullable[datetime]]$RemoteSessionStartDate
+    [string]$RemoteSessionType
+    [string]$SiteName
+    [string]$SourceForwardedIp
+    [guid]$Uid
+    [string]$UserEmail
+    [string]$UserFirstName
+    [long]$UserId
+    [string]$UserLastName
+    [string]$UserUsername
+
+    DRMMActivityLogDetailsDeviceRemote() : base() {
+
+    }
+
+    static [void] PopulateBaseProperties([DRMMActivityLogDetailsDeviceRemote]$Details, [hashtable]$ActivityLogDetail) {
+
+        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
+        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
+        $Details.Entity = $ActivityLogDetail.'entity'
+        $Details.EventAction = $ActivityLogDetail.'event.action'
+        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        $Details.RemoteSessionId = $ActivityLogDetail.'remote_session.id'
+        $Details.RemoteSessionType = $ActivityLogDetail.'remote_session.type'
+        $Details.SiteName = $ActivityLogDetail.'site.name'
+        $Details.SourceForwardedIp = $ActivityLogDetail.'source.forwarded_ip'
+        $Details.Uid = $ActivityLogDetail.'uid'
+        $Details.UserEmail = $ActivityLogDetail.'user.email'
+        $Details.UserFirstName = $ActivityLogDetail.'user.firstname'
+        $Details.UserId = $ActivityLogDetail.'user.id'
+        $Details.UserLastName = $ActivityLogDetail.'user.lastname'
+        $Details.UserUsername = $ActivityLogDetail.'user.username'
+
+        # Parse remote_session.start_date
+        if ($null -ne $ActivityLogDetail.'remote_session.start_date') {
+
+            $Details.RemoteSessionStartDate = [DRMMObject]::ParseApiDate($ActivityLogDetail.'remote_session.start_date').DateTime
+
+        } else {
+
+            $Details.RemoteSessionStartDate = $null
+
+        }
+
+        # Parse remote_session.details array
+        if ($null -ne $ActivityLogDetail.'remote_session.details' -and $ActivityLogDetail.'remote_session.details'.Count -gt 0) {
+
+            $Details.RemoteSessionDetails = @()
+            foreach ($DetailItem in $ActivityLogDetail.'remote_session.details') {
+
+                $Details.RemoteSessionDetails += [DRMMActivityLogDetailsRemoteSessionDetail]::FromActivityLogDetail($DetailItem)
+
+            }
+
+        } else {
+
+            $Details.RemoteSessionDetails = @()
+
+        }
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic DEVICE remote activity log details for unknown remote actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDeviceRemoteGeneric class is used for DEVICE entity remote category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 17 base properties common to all DEVICE remote activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsDeviceRemoteGeneric : DRMMActivityLogDetailsDeviceRemote {
+
+    DRMMActivityLogDetailsDeviceRemoteGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDeviceRemoteGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsDeviceRemoteGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsDeviceRemote]::PopulateBaseProperties($Details, $ActivityLogDetail)
+
+        # Define base property keys to exclude from dynamic properties
+        $BasePropertyKeys = @(
+            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category',
+            'remote_session.details', 'remote_session.id', 'remote_session.start_date', 'remote_session.type',
+            'site.name', 'source.forwarded_ip', 'uid',
+            'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username'
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($BasePropertyKeys -contains $Key) {
+
+                continue
+
+            }
+
+            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity DEVICE, category remote, and action chat, which includes specific properties related to remote chat session activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDeviceRemoteChat class models the details of a remote chat session activity log entry. It inherits common remote session properties from DRMMActivityLogDetailsDeviceRemote. Currently, chat actions share all base properties with no unique properties identified, but this class allows for future expansion if chat-specific properties are discovered.
+#>
+class DRMMActivityLogDetailsDeviceRemoteChat : DRMMActivityLogDetailsDeviceRemote {
+
+    DRMMActivityLogDetailsDeviceRemoteChat() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDeviceRemoteChat] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsDeviceRemoteChat]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsDeviceRemote]::PopulateBaseProperties($Details, $ActivityLogDetail)
+
+        # No chat-specific properties identified yet
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity DEVICE, category remote, and action jrto (Jump Remote Take Over), which includes specific properties related to JRTO session activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDeviceRemoteJrto class models the details of a Jump Remote Take Over (jrto) activity log entry. It inherits common remote session properties from DRMMActivityLogDetailsDeviceRemote. Currently, jrto actions share all base properties with no unique properties identified, but this class allows for future expansion if jrto-specific properties are discovered.
+#>
+class DRMMActivityLogDetailsDeviceRemoteJrto : DRMMActivityLogDetailsDeviceRemote {
+
+    DRMMActivityLogDetailsDeviceRemoteJrto() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDeviceRemoteJrto] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsDeviceRemoteJrto]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsDeviceRemote]::PopulateBaseProperties($Details, $ActivityLogDetail)
+
+        # No jrto-specific properties identified yet
 
         return $Details
 
