@@ -491,6 +491,8 @@ class DRMMActivityLogDetails : DRMMObject {
             'DEVICE_remote_chat' {[DRMMActivityLogDetailsDeviceRemoteChat]::FromActivityLogDetail($DetailsHashtable); break}
             'DEVICE_remote_jrto' {[DRMMActivityLogDetailsDeviceRemoteJrto]::FromActivityLogDetail($DetailsHashtable); break}
             {$_ -match '^DEVICE_remote_'} {[DRMMActivityLogDetailsDeviceRemoteGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            'DEVICE_device_move.device' {[DRMMActivityLogDetailsDeviceDeviceMoveDevice]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^DEVICE_device_'} {[DRMMActivityLogDetailsDeviceDeviceGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             default {[DRMMActivityLogDetailsGeneric]::FromActivityLogDetail($DetailsHashtable)}
 
         }
@@ -972,6 +974,157 @@ class DRMMActivityLogDetailsDeviceRemoteJrto : DRMMActivityLogDetailsDeviceRemot
         [DRMMActivityLogDetailsDeviceRemote]::PopulateBaseProperties($Details, $ActivityLogDetail)
 
         # No jrto-specific properties identified yet
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for DEVICE device-related activity log details, containing properties common to all device actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDeviceDevice class serves as a base class for DEVICE entity device category activity logs. It encapsulates properties that are common across different device actions (move.device, etc.), including device information, event metadata, source forwarding details, and unique identifier. This conservative base class only includes confirmed shared properties to avoid premature abstraction. Specific device action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsDeviceDevice : DRMMActivityLogDetails {
+
+    [string]$DeviceHostname
+    [guid]$DeviceUid
+    [string]$Entity
+    [string]$EventAction
+    [string]$EventCategory
+    [string]$SourceForwardedIp
+    [guid]$Uid
+
+    DRMMActivityLogDetailsDeviceDevice() : base() {
+
+    }
+
+    static [void] PopulateBaseProperties([DRMMActivityLogDetailsDeviceDevice]$Details, [hashtable]$ActivityLogDetail) {
+
+        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
+        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
+        $Details.Entity = $ActivityLogDetail.'entity'
+        $Details.EventAction = $ActivityLogDetail.'event.action'
+        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        $Details.SourceForwardedIp = $ActivityLogDetail.'source.forwarded_ip'
+        $Details.Uid = $ActivityLogDetail.'uid'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic DEVICE device activity log details for unknown device actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDeviceDeviceGeneric class is used for DEVICE entity device category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 7 base properties common to all DEVICE device activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsDeviceDeviceGeneric : DRMMActivityLogDetailsDeviceDevice {
+
+    DRMMActivityLogDetailsDeviceDeviceGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDeviceDeviceGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsDeviceDeviceGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsDeviceDevice]::PopulateBaseProperties($Details, $ActivityLogDetail)
+
+        # Define base property keys to exclude from dynamic properties
+        $BasePropertyKeys = @(
+            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category',
+            'source.forwarded_ip', 'uid'
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($BasePropertyKeys -contains $Key) {
+
+                continue
+
+            }
+
+            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity DEVICE, category device, and action move.device, which includes specific properties related to device site movement activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDeviceDeviceMoveDevice class models the details of a device site movement activity log entry. It inherits common device properties from DRMMActivityLogDetailsDeviceDevice and adds movement-specific properties including source and destination site information (IDs, names, UIDs), site name, and user information (email, first name, last name, username, user ID) related to the device move operation.
+#>
+class DRMMActivityLogDetailsDeviceDeviceMoveDevice : DRMMActivityLogDetailsDeviceDevice {
+
+    [long]$DataFromSiteId
+    [string]$DataFromSiteName
+    [guid]$DataFromSiteUid
+    [long]$DataToSiteId
+    [string]$DataToSiteName
+    [guid]$DataToSiteUid
+    [string]$SiteName
+    [string]$UserEmail
+    [string]$UserFirstName
+    [long]$UserId
+    [string]$UserLastName
+    [string]$UserUsername
+
+    DRMMActivityLogDetailsDeviceDeviceMoveDevice() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDeviceDeviceMoveDevice] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsDeviceDeviceMoveDevice]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsDeviceDevice]::PopulateBaseProperties($Details, $ActivityLogDetail)
+
+        # Populate move.device-specific properties
+        $Details.DataFromSiteId = $ActivityLogDetail.'data.from_site_id'
+        $Details.DataFromSiteName = $ActivityLogDetail.'data.from_site_name'
+        $Details.DataFromSiteUid = $ActivityLogDetail.'data.from_site_uid'
+        $Details.DataToSiteId = $ActivityLogDetail.'data.to_site_id'
+        $Details.DataToSiteName = $ActivityLogDetail.'data.to_site_name'
+        $Details.DataToSiteUid = $ActivityLogDetail.'data.to_site_uid'
+        $Details.SiteName = $ActivityLogDetail.'site.name'
+        $Details.UserEmail = $ActivityLogDetail.'user.email'
+        $Details.UserFirstName = $ActivityLogDetail.'user.firstname'
+        $Details.UserId = $ActivityLogDetail.'user.id'
+        $Details.UserLastName = $ActivityLogDetail.'user.lastname'
+        $Details.UserUsername = $ActivityLogDetail.'user.username'
 
         return $Details
 
