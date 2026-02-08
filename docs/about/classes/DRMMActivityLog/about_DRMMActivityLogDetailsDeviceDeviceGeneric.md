@@ -1,0 +1,30 @@
+# about_DRMMActivityLogDetailsDeviceDeviceGeneric
+
+## SHORT DESCRIPTION
+
+Represents a generic DEVICE device activity log details for unknown device actions, with base properties and dynamic additional properties.
+
+## LONG DESCRIPTION
+
+The DRMMActivityLogDetailsDeviceDeviceGeneric class is used for DEVICE entity device category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 7 base properties common to all DEVICE device activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+
+This class inherits from [DRMMActivityLogDetailsDeviceDevice](./about_DRMMActivityLogDetailsDeviceDevice.md).
+
+## PROPERTIES
+
+The DRMMActivityLogDetailsDeviceDeviceGeneric class exposes the following properties:
+
+No public properties defined.\n
+## METHODS
+
+The DRMMActivityLogDetailsDeviceDeviceGeneric class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+## RELATED LINKS
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceDeviceGeneric.md)

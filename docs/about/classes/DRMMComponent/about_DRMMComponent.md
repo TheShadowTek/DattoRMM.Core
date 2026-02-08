@@ -23,6 +23,7 @@ The DRMMComponent class exposes the following properties:
 | CategoryCode        | string                  | The category code that classifies the component within the DRMM system. |
 | CredentialsRequired | bool                    | Indicates whether the component requires credentials. |
 | Variables           | DRMMComponentVariable[] | An array of variables associated with the component. |
+| PortalUrl           | string                  | Add description |
 
 ## METHODS
 
@@ -48,6 +49,12 @@ Retrieves all input variables associated with the component.
 Retrieves all output variables associated with the component.
 
 **Returns:** `DRMMComponentVariable[]` - An array of DRMMComponentVariable objects that are designated as output variables for the component.
+
+### OpenPortal()
+
+Opens the component's portal URL in the default web browser.
+
+**Returns:** `void` - Describe what this method returns
 
 ### GetSummary()
 

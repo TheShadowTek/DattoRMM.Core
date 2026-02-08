@@ -6,7 +6,7 @@ Represents a filter in the DRMM system, including its name, description, type, s
 
 ## LONG DESCRIPTION
 
-The DRMMFilter class models a filter within the DRMM platform, encapsulating properties such as Id, FilterId, Name, Description, Type, Scope, SiteUid, DateCreate, and LastUpdated. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to determine if the filter is global or site-specific, as well as a method to generate a summary string of the filter's information. Additionally, it includes methods to retrieve devices and alerts associated with the filter.
+The DRMMFilter class models a filter within the DRMM platform, encapsulating properties such as Id, FilterId, Name, Description, Type, Scope, Site (for site-scoped filters), SiteUid, DateCreate, LastUpdated, and PortalUrl. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to determine if the filter is global or site-specific, as well as a method to generate a summary string of the filter's information. Additionally, it includes methods to retrieve devices and alerts associated with the filter. For site-scoped filters, the Site property provides full context about the associated site, while SiteUid is maintained for backward compatibility.
 
 This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
@@ -23,8 +23,10 @@ The DRMMFilter class exposes the following properties:
 | Type        | string             | The type or category of the filter. |
 | Scope       | string             | The scope or context in which the filter is applied. |
 | SiteUid     | Nullable[guid]     | The unique identifier of the site associated with the filter. |
+| Site        | DRMMSite           | Add description |
 | DateCreate  | Nullable[datetime] | The date and time when the filter was created. |
 | LastUpdated | Nullable[datetime] | The date and time when the filter was last updated. |
+| PortalUrl   | string             | Add description |
 
 ## METHODS
 
@@ -53,6 +55,12 @@ Determines if the filter is the default type.
 Determines if the filter is a custom type.
 
 **Returns:** `bool` - A boolean value indicating whether the filter is a custom type.
+
+### OpenPortal()
+
+Opens the portal URL associated with the filter in the default web browser.
+
+**Returns:** `void` - Describe what this method returns
 
 ### GetSummary()
 

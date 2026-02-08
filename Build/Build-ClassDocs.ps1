@@ -328,7 +328,7 @@ try {
                 
                 $TypeInfo.Methods = foreach ($Method in $Methods) {
                     # Skip static FromAPIMethod (internal constructor)
-                    if ($Method.IsStatic -and $Method.Name -eq 'FromAPIMethod') {
+                    if ($Method.IsStatic -and $Method.Name -in 'FromAPIMethod', 'FromActivityLogDetail', 'PopulateEntityProperties', 'PopulateCategoryProperties') {
                         continue
                     }
                     

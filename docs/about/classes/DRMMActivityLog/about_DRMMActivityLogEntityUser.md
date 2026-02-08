@@ -1,0 +1,36 @@
+# about_DRMMActivityLogEntityUser
+
+## SHORT DESCRIPTION
+
+Base class for USER entity activity log details, containing properties common to all USER activities.
+
+## LONG DESCRIPTION
+
+The DRMMActivityLogEntityUser class serves as a base class for all USER entity activity logs. As of this implementation, USER entity activities have not been observed in the wild, so this class is a placeholder for future expansion. It will likely contain properties such as UserId, UserUsername, Entity, EventAction, EventCategory, and Uid once USER activities are documented.
+
+This class inherits from [DRMMActivityLogDetails](./about_DRMMActivityLogDetails.md).
+
+## PROPERTIES
+
+The DRMMActivityLogEntityUser class exposes the following properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| Entity        | string | Add description |
+| EventAction   | string | Add description |
+| EventCategory | string | Add description |
+| Uid           | guid   | Add description |
+
+## METHODS
+
+The DRMMActivityLogEntityUser class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+## RELATED LINKS
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogEntityUser.md)

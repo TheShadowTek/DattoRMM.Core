@@ -30,7 +30,7 @@ The DRMMAlert class exposes the following properties:
 | AlertSourceInfo  | DRMMAlertSourceInfo       | AlertSourceInfo of the DRMMAlert object, including information about the source of the alert such as device and site details. |
 | ResponseActions  | DRMMAlertResponseAction[] | Actions taken in response to the alert. |
 | AutoresolveMins  | Nullable[int]             | The number of minutes after which the alert will be automatically resolved if not resolved manually. |
-| SiteUid          | Nullable[guid]            | Unique identifier for the site associated with the alert. |
+| PortalUrl        | string                    | Add description |
 
 ## METHODS
 
@@ -65,6 +65,12 @@ Resolves the alert.
 Gets a summary of the alert.
 
 **Returns:** `string` - A summary string combining key properties of the alert for easy display.
+
+### OpenPortal()
+
+Opens the alert's portal URL in the default web browser.
+
+**Returns:** `void` - Describe what this method returns
 
 ## NOTES
 

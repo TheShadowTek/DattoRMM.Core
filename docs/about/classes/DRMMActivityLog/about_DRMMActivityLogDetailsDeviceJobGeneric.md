@@ -1,0 +1,30 @@
+# about_DRMMActivityLogDetailsDeviceJobGeneric
+
+## SHORT DESCRIPTION
+
+Represents a generic DEVICE job activity log details for unknown job actions, with base properties and dynamic additional properties.
+
+## LONG DESCRIPTION
+
+The DRMMActivityLogDetailsDeviceJobGeneric class is used for DEVICE entity job category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 11 base properties common to all DEVICE job activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+
+This class inherits from [DRMMActivityLogDetailsDeviceJob](./about_DRMMActivityLogDetailsDeviceJob.md).
+
+## PROPERTIES
+
+The DRMMActivityLogDetailsDeviceJobGeneric class exposes the following properties:
+
+No public properties defined.\n
+## METHODS
+
+The DRMMActivityLogDetailsDeviceJobGeneric class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+## RELATED LINKS
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceJobGeneric.md)
