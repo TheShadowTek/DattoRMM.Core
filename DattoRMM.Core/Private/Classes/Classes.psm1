@@ -505,14 +505,27 @@ class DRMMActivityLogDetails : DRMMObject {
         # Use experimental entity/category-specific detail classes
         $Result = switch ($LogContext) {
 
+            # DEVICE entity - job category
             'DEVICE_job_deployment' {[DRMMActivityLogDetailsDeviceJobDeployment]::FromActivityLogDetail($DetailsHashtable); break}
             'DEVICE_job_create' {[DRMMActivityLogDetailsDeviceJobCreate]::FromActivityLogDetail($DetailsHashtable); break}
             {$_ -match '^DEVICE_job_'} {[DRMMActivityLogDetailsDeviceJobGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # DEVICE entity - remote category
             'DEVICE_remote_chat' {[DRMMActivityLogDetailsDeviceRemoteChat]::FromActivityLogDetail($DetailsHashtable); break}
             'DEVICE_remote_jrto' {[DRMMActivityLogDetailsDeviceRemoteJrto]::FromActivityLogDetail($DetailsHashtable); break}
             {$_ -match '^DEVICE_remote_'} {[DRMMActivityLogDetailsDeviceRemoteGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # DEVICE entity - device category
             'DEVICE_device_move.device' {[DRMMActivityLogDetailsDeviceDeviceMoveDevice]::FromActivityLogDetail($DetailsHashtable); break}
             {$_ -match '^DEVICE_device_'} {[DRMMActivityLogDetailsDeviceDeviceGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # DEVICE entity - unknown category (entity-level fallback)
+            {$_ -match '^DEVICE_'} {[DRMMActivityLogDetailsDeviceGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # USER entity - unknown category (entity-level fallback)
+            {$_ -match '^USER_'} {[DRMMActivityLogDetailsUserGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # Unknown entity (complete fallback)
             default {[DRMMActivityLogDetailsGeneric]::FromActivityLogDetail($DetailsHashtable)}
 
         }
@@ -567,7 +580,196 @@ class DRMMActivityLogDetailsGeneric : DRMMActivityLogDetails {
                 $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
 
             }
+        }
 
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for DEVICE entity activity log details, containing properties common to all DEVICE activities.
+.DESCRIPTION
+    The DRMMActivityLogEntityDevice class serves as a base class for all DEVICE entity activity logs, regardless of category. It encapsulates the 6 core properties that appear in all DEVICE activities: DeviceHostname, DeviceUid, Entity, EventAction, EventCategory, and Uid. Category-specific classes (job, remote, device) inherit from this class and add their category-specific properties.
+#>
+class DRMMActivityLogEntityDevice : DRMMActivityLogDetails {
+
+    [string]$DeviceHostname
+    [guid]$DeviceUid
+    [string]$Entity
+    [string]$EventAction
+    [string]$EventCategory
+    [guid]$Uid
+
+    DRMMActivityLogEntityDevice() : base() {
+
+    }
+
+    static [void] PopulateEntityProperties([DRMMActivityLogEntityDevice]$Details, [hashtable]$ActivityLogDetail) {
+
+        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
+        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
+        $Details.Entity = $ActivityLogDetail.'entity'
+        $Details.EventAction = $ActivityLogDetail.'event.action'
+        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        $Details.Uid = $ActivityLogDetail.'uid'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic DEVICE entity activity log for unknown categories, with entity-level properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDeviceGeneric class is used for DEVICE entity activity logs where the category is not yet mapped to a dedicated class (not job, remote, or device). It inherits the 6 base properties common to all DEVICE activities and dynamically adds any additional properties found in the response. This ensures type safety for known entity-level properties while maintaining flexibility for unknown categories.
+#>
+class DRMMActivityLogDetailsDeviceGeneric : DRMMActivityLogEntityDevice {
+
+    DRMMActivityLogDetailsDeviceGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDeviceGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsDeviceGeneric]::new()
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityDevice]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Define entity property keys to exclude from dynamic properties
+        $EntityPropertyKeys = @(
+            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid'
+        )
+
+        # Add any additional properties not in the entity base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($EntityPropertyKeys -contains $Key) {
+
+                continue
+
+            }
+
+            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER entity activity log details, containing properties common to all USER activities.
+.DESCRIPTION
+    The DRMMActivityLogEntityUser class serves as a base class for all USER entity activity logs. As of this implementation, USER entity activities have not been observed in the wild, so this class is a placeholder for future expansion. It will likely contain properties such as UserId, UserUsername, Entity, EventAction, EventCategory, and Uid once USER activities are documented.
+#>
+class DRMMActivityLogEntityUser : DRMMActivityLogDetails {
+
+    [string]$Entity
+    [string]$EventAction
+    [string]$EventCategory
+    [guid]$Uid
+
+    DRMMActivityLogEntityUser() : base() {
+
+    }
+
+    static [void] PopulateEntityProperties([DRMMActivityLogEntityUser]$Details, [hashtable]$ActivityLogDetail) {
+
+        $Details.Entity = $ActivityLogDetail.'entity'
+        $Details.EventAction = $ActivityLogDetail.'event.action'
+        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        $Details.Uid = $ActivityLogDetail.'uid'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER entity activity log for unknown categories, with entity-level properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserGeneric class is used for USER entity activity logs. As of this implementation, USER entity activities have not been observed in the wild, so this class serves as a placeholder and generic handler. It inherits base properties common to USER activities and dynamically adds any additional properties found in the response. This ensures graceful handling when USER activities are encountered.
+#>
+class DRMMActivityLogDetailsUserGeneric : DRMMActivityLogEntityUser {
+
+    DRMMActivityLogDetailsUserGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserGeneric]::new()
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Define entity property keys to exclude from dynamic properties
+        $EntityPropertyKeys = @(
+            'entity', 'event.action', 'event.category', 'uid'
+        )
+
+        # Add any additional properties not in the entity base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($EntityPropertyKeys -contains $Key) {
+
+                continue
+
+            }
+
+            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
         }
 
         return $Details
@@ -579,39 +781,31 @@ class DRMMActivityLogDetailsGeneric : DRMMActivityLogDetails {
 .SYNOPSIS
     Base class for DEVICE job-related activity log details, containing properties common to all job actions.
 .DESCRIPTION
-    The DRMMActivityLogDetailsDeviceJob class serves as a base class for DEVICE entity job category activity logs. It encapsulates properties that are common across different job actions (deployment, create, etc.), including device information, event metadata, job identifiers, and site information. Specific job action types inherit from this class and add their unique properties.
+    The DRMMActivityLogDetailsDeviceJob class serves as a base class for DEVICE entity job category activity logs. It encapsulates properties that are common across different job actions (deployment, create, etc.), including job identifiers and site information, in addition to the entity-level DEVICE properties inherited from DRMMActivityLogEntityDevice. Specific job action types inherit from this class and add their unique properties.
 #>
-class DRMMActivityLogDetailsDeviceJob : DRMMActivityLogDetails {
+class DRMMActivityLogDetailsDeviceJob : DRMMActivityLogEntityDevice {
 
-    [string]$DeviceHostname
-    [guid]$DeviceUid
-    [string]$Entity
-    [string]$EventAction
-    [string]$EventCategory
     [long]$JobId
     [string]$JobName
     [string]$JobStatus
     [guid]$JobUid
     [string]$SiteName
-    [guid]$Uid
 
     DRMMActivityLogDetailsDeviceJob() : base() {
 
     }
 
-    static [void] PopulateBaseProperties([DRMMActivityLogDetailsDeviceJob]$Details, [hashtable]$ActivityLogDetail) {
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsDeviceJob]$Details, [hashtable]$ActivityLogDetail) {
 
-        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
-        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
-        $Details.Entity = $ActivityLogDetail.'entity'
-        $Details.EventAction = $ActivityLogDetail.'event.action'
-        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        # Populate entity-level properties
+        [DRMMActivityLogEntityDevice]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate job category properties
         $Details.JobId = $ActivityLogDetail.'job.id'
         $Details.JobName = $ActivityLogDetail.'job.name'
         $Details.JobStatus = $ActivityLogDetail.'job.status'
         $Details.JobUid = $ActivityLogDetail.'job.uid'
         $Details.SiteName = $ActivityLogDetail.'site.name'
-        $Details.Uid = $ActivityLogDetail.'uid'
 
     }
 }
@@ -639,12 +833,12 @@ class DRMMActivityLogDetailsDeviceJobGeneric : DRMMActivityLogDetailsDeviceJob {
         $Details = [DRMMActivityLogDetailsDeviceJobGeneric]::new()
 
         # Populate base properties
-        [DRMMActivityLogDetailsDeviceJob]::PopulateBaseProperties($Details, $ActivityLogDetail)
+        [DRMMActivityLogDetailsDeviceJob]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
         # Define base property keys to exclude from dynamic properties
         $BasePropertyKeys = @(
-            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category',
-            'job.id', 'job.name', 'job.status', 'job.uid', 'site.name', 'uid'
+            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid',
+            'job.id', 'job.name', 'job.status', 'job.uid', 'site.name'
         )
 
         # Add any additional properties not in the base class
@@ -706,7 +900,7 @@ class DRMMActivityLogDetailsDeviceJobDeployment : DRMMActivityLogDetailsDeviceJo
         $Details = [DRMMActivityLogDetailsDeviceJobDeployment]::new()
 
         # Populate base properties
-        [DRMMActivityLogDetailsDeviceJob]::PopulateBaseProperties($Details, $ActivityLogDetail)
+        [DRMMActivityLogDetailsDeviceJob]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
         # Populate deployment-specific properties
         $Details.JobDeploymentId = $ActivityLogDetail.'job.deployment_id'
@@ -743,7 +937,7 @@ class DRMMActivityLogDetailsDeviceJobCreate : DRMMActivityLogDetailsDeviceJob {
         $Details = [DRMMActivityLogDetailsDeviceJobCreate]::new()
 
         # Populate base properties
-        [DRMMActivityLogDetailsDeviceJob]::PopulateBaseProperties($Details, $ActivityLogDetail)
+        [DRMMActivityLogDetailsDeviceJob]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
         # Populate create-specific properties
         $Details.UserEmail = $ActivityLogDetail.'user.email'
@@ -805,22 +999,16 @@ class DRMMActivityLogDetailsRemoteSessionDetail : DRMMObject {
 .SYNOPSIS
     Base class for DEVICE remote-related activity log details, containing properties common to all remote session actions.
 .DESCRIPTION
-    The DRMMActivityLogDetailsDeviceRemote class serves as a base class for DEVICE entity remote category activity logs. It encapsulates properties that are common across different remote session actions (chat, jrto, etc.), including device information, event metadata, remote session details, site information, user information, and source forwarding details. Specific remote action types inherit from this class and add their unique properties if needed.
+    The DRMMActivityLogDetailsDeviceRemote class serves as a base class for DEVICE entity remote category activity logs. It encapsulates properties that are common across different remote session actions (chat, jrto, etc.), including remote session details, site information, user information, and source forwarding details, in addition to the entity-level DEVICE properties inherited from DRMMActivityLogEntityDevice. Specific remote action types inherit from this class and add their unique properties if needed.
 #>
-class DRMMActivityLogDetailsDeviceRemote : DRMMActivityLogDetails {
+class DRMMActivityLogDetailsDeviceRemote : DRMMActivityLogEntityDevice {
 
-    [string]$DeviceHostname
-    [guid]$DeviceUid
-    [string]$Entity
-    [string]$EventAction
-    [string]$EventCategory
     [DRMMActivityLogDetailsRemoteSessionDetail[]]$RemoteSessionDetails
     [long]$RemoteSessionId
     [nullable[datetime]]$RemoteSessionStartDate
     [string]$RemoteSessionType
     [string]$SiteName
     [string]$SourceForwardedIp
-    [guid]$Uid
     [string]$UserEmail
     [string]$UserFirstName
     [long]$UserId
@@ -831,18 +1019,16 @@ class DRMMActivityLogDetailsDeviceRemote : DRMMActivityLogDetails {
 
     }
 
-    static [void] PopulateBaseProperties([DRMMActivityLogDetailsDeviceRemote]$Details, [hashtable]$ActivityLogDetail) {
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsDeviceRemote]$Details, [hashtable]$ActivityLogDetail) {
 
-        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
-        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
-        $Details.Entity = $ActivityLogDetail.'entity'
-        $Details.EventAction = $ActivityLogDetail.'event.action'
-        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        # Populate entity-level properties
+        [DRMMActivityLogEntityDevice]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate remote category properties
         $Details.RemoteSessionId = $ActivityLogDetail.'remote_session.id'
         $Details.RemoteSessionType = $ActivityLogDetail.'remote_session.type'
         $Details.SiteName = $ActivityLogDetail.'site.name'
         $Details.SourceForwardedIp = $ActivityLogDetail.'source.forwarded_ip'
-        $Details.Uid = $ActivityLogDetail.'uid'
         $Details.UserEmail = $ActivityLogDetail.'user.email'
         $Details.UserFirstName = $ActivityLogDetail.'user.firstname'
         $Details.UserId = $ActivityLogDetail.'user.id'
@@ -901,13 +1087,13 @@ class DRMMActivityLogDetailsDeviceRemoteGeneric : DRMMActivityLogDetailsDeviceRe
         $Details = [DRMMActivityLogDetailsDeviceRemoteGeneric]::new()
 
         # Populate base properties
-        [DRMMActivityLogDetailsDeviceRemote]::PopulateBaseProperties($Details, $ActivityLogDetail)
+        [DRMMActivityLogDetailsDeviceRemote]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
         # Define base property keys to exclude from dynamic properties
         $BasePropertyKeys = @(
-            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category',
-            'remote_session.details', 'remote_session.id', 'remote_session.start_date', 'remote_session.type',
-            'site.name', 'source.forwarded_ip', 'uid',
+            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid',
+            'remote_session.id', 'remote_session.type', 'remote_session.start_date', 'remote_session.details',
+            'site.name', 'source.forwarded_ip',
             'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username'
         )
 
@@ -965,7 +1151,7 @@ class DRMMActivityLogDetailsDeviceRemoteChat : DRMMActivityLogDetailsDeviceRemot
         $Details = [DRMMActivityLogDetailsDeviceRemoteChat]::new()
 
         # Populate base properties
-        [DRMMActivityLogDetailsDeviceRemote]::PopulateBaseProperties($Details, $ActivityLogDetail)
+        [DRMMActivityLogDetailsDeviceRemote]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
         # No chat-specific properties identified yet
 
@@ -991,7 +1177,7 @@ class DRMMActivityLogDetailsDeviceRemoteJrto : DRMMActivityLogDetailsDeviceRemot
         $Details = [DRMMActivityLogDetailsDeviceRemoteJrto]::new()
 
         # Populate base properties
-        [DRMMActivityLogDetailsDeviceRemote]::PopulateBaseProperties($Details, $ActivityLogDetail)
+        [DRMMActivityLogDetailsDeviceRemote]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
         # No jrto-specific properties identified yet
 
@@ -1004,31 +1190,23 @@ class DRMMActivityLogDetailsDeviceRemoteJrto : DRMMActivityLogDetailsDeviceRemot
 .SYNOPSIS
     Base class for DEVICE device-related activity log details, containing properties common to all device actions.
 .DESCRIPTION
-    The DRMMActivityLogDetailsDeviceDevice class serves as a base class for DEVICE entity device category activity logs. It encapsulates properties that are common across different device actions (move.device, etc.), including device information, event metadata, source forwarding details, and unique identifier. This conservative base class only includes confirmed shared properties to avoid premature abstraction. Specific device action types inherit from this class and add their unique properties.
+    The DRMMActivityLogDetailsDeviceDevice class serves as a base class for DEVICE entity device category activity logs. It encapsulates properties that are common across different device actions (move, etc.), including source forwarding information, in addition to the entity-level DEVICE properties inherited from DRMMActivityLogEntityDevice. Specific device action types inherit from this class and add their unique properties.
 #>
-class DRMMActivityLogDetailsDeviceDevice : DRMMActivityLogDetails {
+class DRMMActivityLogDetailsDeviceDevice : DRMMActivityLogEntityDevice {
 
-    [string]$DeviceHostname
-    [guid]$DeviceUid
-    [string]$Entity
-    [string]$EventAction
-    [string]$EventCategory
     [string]$SourceForwardedIp
-    [guid]$Uid
 
     DRMMActivityLogDetailsDeviceDevice() : base() {
 
     }
 
-    static [void] PopulateBaseProperties([DRMMActivityLogDetailsDeviceDevice]$Details, [hashtable]$ActivityLogDetail) {
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsDeviceDevice]$Details, [hashtable]$ActivityLogDetail) {
 
-        $Details.DeviceHostname = $ActivityLogDetail.'device.hostname'
-        $Details.DeviceUid = $ActivityLogDetail.'device.uid'
-        $Details.Entity = $ActivityLogDetail.'entity'
-        $Details.EventAction = $ActivityLogDetail.'event.action'
-        $Details.EventCategory = $ActivityLogDetail.'event.category'
+        # Populate entity-level properties
+        [DRMMActivityLogEntityDevice]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate device category properties
         $Details.SourceForwardedIp = $ActivityLogDetail.'source.forwarded_ip'
-        $Details.Uid = $ActivityLogDetail.'uid'
 
     }
 }
@@ -1056,12 +1234,12 @@ class DRMMActivityLogDetailsDeviceDeviceGeneric : DRMMActivityLogDetailsDeviceDe
         $Details = [DRMMActivityLogDetailsDeviceDeviceGeneric]::new()
 
         # Populate base properties
-        [DRMMActivityLogDetailsDeviceDevice]::PopulateBaseProperties($Details, $ActivityLogDetail)
+        [DRMMActivityLogDetailsDeviceDevice]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
         # Define base property keys to exclude from dynamic properties
         $BasePropertyKeys = @(
-            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category',
-            'source.forwarded_ip', 'uid'
+            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid',
+            'source.forwarded_ip'
         )
 
         # Add any additional properties not in the base class
@@ -1130,7 +1308,7 @@ class DRMMActivityLogDetailsDeviceDeviceMoveDevice : DRMMActivityLogDetailsDevic
         $Details = [DRMMActivityLogDetailsDeviceDeviceMoveDevice]::new()
 
         # Populate base properties
-        [DRMMActivityLogDetailsDeviceDevice]::PopulateBaseProperties($Details, $ActivityLogDetail)
+        [DRMMActivityLogDetailsDeviceDevice]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
         # Populate move.device-specific properties
         $Details.DataFromSiteId = $ActivityLogDetail.'data.from_site_id'
