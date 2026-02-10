@@ -2,293 +2,115 @@
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
+<#
+.SYNOPSIS
+    Retrieves job information from the Datto RMM API by JobUid or from an ActivityLog object.
+
+.DESCRIPTION
+    Retrieves information about jobs (component executions) in the Datto RMM system. You can specify a JobUid
+    directly, or pipe ActivityLog objects (from Get-RMMActivityLog) to retrieve job details for each log entry.
+    When piping ActivityLog objects, the -UseExperimentalDetailClasses switch must be used with Get-RMMActivityLog
+    to provide the required detail type. Non-job activity logs are safely skipped with a warning. This function
+    supports retrieving jobs for actions such as Deployment (execution), Create (new job), and Generic (unknown action).
+
+.PARAMETER JobUid
+    The unique identifier (GUID) of the job to retrieve.
+
+.PARAMETER ActivityLog
+    An activity log object (from Get-RMMActivityLog -UseExperimentalDetailClasses) containing job details. Can be
+    piped to this function. Non-job activity logs are skipped with a warning.
+
+.EXAMPLE
+    Get-RMMJob -JobUid "12067610-8504-48e3-b5de-60e48416aaad"
+
+    Retrieves basic information about a specific job by its unique identifier.
+
+.EXAMPLE
+    Get-RMMActivityLog -Entity Device -UseExperimentalDetailClasses | Get-RMMJob
+
+    Retrieves job details for all job-related activity logs for devices. The -UseExperimentalDetailClasses switch
+    is required to provide the correct detail type for piping.
+
+.EXAMPLE
+    Get-RMMActivityLog -Entity Device -Category Job -UseExperimentalDetailClasses | Where-Object { $_.Details.JobName -eq 'Patch Critical Servers' } | Get-RMMJob
+
+    Retrieves job details for all jobs named 'Patch Critical Servers' from device activity logs.
+
+.INPUTS
+    System.Guid, DRMMActivityLog. You can pipe ActivityLog objects to this function.
+
+.OUTPUTS
+    DRMMJob. Returns job objects with status, timestamps, and execution details.
+
+.NOTES
+    This function requires an active connection to the Datto RMM API.
+    Use Connect-DattoRMM to authenticate before calling this function.
+    For details on -UseExperimentalDetailClasses, see Get-RMMActivityLog help.
+
+.LINK
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJob.md
+.LINK
+    about_DRMMJob
+.LINK
+    Get-RMMActivityLog
+#>
 function Get-RMMJob {
-    <#
-    .SYNOPSIS
-        Retrieves job information from the Datto RMM API.
-
-    .DESCRIPTION
-        The Get-RMMJob function retrieves information about jobs (component executions) in the
-        Datto RMM system. It supports multiple query modes:
-
-        - Job details by JobUid
-        - Job results for a specific device
-        - Job stdout (standard output) for a specific device
-        - Job stderr (error output) for a specific device
-        - Components associated with a job
-
-        Jobs in Datto RMM represent executions of components (scripts/monitors) and can be
-        queried to get execution status, results, and output logs.
-
-    .PARAMETER JobUid
-        The unique identifier (GUID) of the job to retrieve. Required for all parameter sets.
-
-    .PARAMETER DeviceUid
-        The unique identifier (GUID) of the device. Required when retrieving job results,
-        stdout, or stderr.
-
-    .PARAMETER Results
-        Switch to retrieve job results for a specific device. Requires both JobUid and DeviceUid.
-
-    .PARAMETER StdOut
-        Switch to retrieve job standard output for a specific device. Requires both JobUid
-        and DeviceUid.
-
-    .PARAMETER StdErr
-        Switch to retrieve job error output for a specific device. Requires both JobUid
-        and DeviceUid.
-
-    .PARAMETER Components
-        Switch to retrieve all components associated with a job. Requires JobUid.
-
-    .EXAMPLE
-        Get-RMMJob -JobUid "12067610-8504-48e3-b5de-60e48416aaad"
-
-        Retrieves basic information about a specific job.
-
-    .EXAMPLE
-        Get-RMMJob -JobUid $JobUid -DeviceUid $DeviceUid -Results
-
-        Retrieves the execution results for a job on a specific device.
-
-    .EXAMPLE
-        Get-RMMJob -JobUid $JobUid -DeviceUid $DeviceUid -StdOut
-
-        Retrieves the standard output from a job execution on a specific device.
-
-    .EXAMPLE
-        Get-RMMJob -JobUid $JobUid -DeviceUid $DeviceUid -StdErr
-
-        Retrieves the error output from a job execution on a specific device.
-
-    .EXAMPLE
-        Get-RMMJob -JobUid $JobUid -Components
-
-        Retrieves all components that are part of the specified job.
-
-    .EXAMPLE
-        $Job = Get-RMMJob -JobUid $JobUid
-        PS > if ($Job.Status -eq "Failed") {
-        >>     Get-RMMJob -JobUid $JobUid -DeviceUid $Job.DeviceUid -StdErr
-        >> }
-
-        Retrieves job details and checks for errors if the job failed.
-
-    .EXAMPLE
-        $JobUid = "12067610-8504-48e3-b5de-60e48416aaad"
-        PS > Get-RMMDevice -FilterId 100 | Get-RMMJob -JobUid $JobUid -StdOut | ConvertFrom-Csv
-
-        Gets devices from filter 100, retrieves the stdout from a specific job execution on each device,
-        and parses the output as CSV data for further processing.
-
-    .INPUTS
-        System.Guid. You can pipe JobUid and DeviceUid from other functions.
-
-    .OUTPUTS
-        DRMMJob. Returns job objects with status, timestamps, and execution details.
-        DRMMJobResults. Returns job result objects when using -Results.
-        DRMMJobStdData. Returns standard output/error lines when using -StdOut or -StdErr.
-        DRMMJobComponent. Returns component objects when using -Components.
-
-    .NOTES
-        This function requires an active connection to the Datto RMM API.
-        Use Connect-DattoRMM to authenticate before calling this function.
-
-        Job output (stdout/stderr) is typically used for troubleshooting component execution issues.
-
-    .LINK
-        https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJob.md
-
-    .LINK
-        about_DRMMJob
-
-    .LINK
-        New-RMMQuickJob
-
-    .LINK
-        Get-RMMComponent
-
-    .LINK
-        about_DRMMJob
-
-    .LINK
-        New-RMMQuickJob
-
-    .LINK
-        Get-RMMComponent
-    #>
-    [CmdletBinding(DefaultParameterSetName = 'JobByUid')]
+    [CmdletBinding(DefaultParameterSetName = 'JobUid')]
     param (
+        # Parameter help description
         [Parameter(
-            ParameterSetName = 'JobByUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'JobResults',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'JobStdOut',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'JobStdErr',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'JobComponents',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            ParameterSetName = 'JobUid',
+            Mandatory = $true
         )]
         [guid]
         $JobUid,
 
+        # Parameter help description
         [Parameter(
-            ParameterSetName = 'JobResults',
+            ParameterSetName = 'ActivityLog',
             Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            ValueFromPipeline = $true
         )]
-        [Parameter(
-            ParameterSetName = 'JobStdOut',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [Parameter(
-            ParameterSetName = 'JobStdErr',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
-        )]
-        [guid]
-        $DeviceUid,
-
-        [Parameter(
-            ParameterSetName = 'JobResults',
-            Mandatory = $true
-        )]
-        [switch]
-        $Results,
-
-        [Parameter(
-            ParameterSetName = 'JobStdOut',
-            Mandatory = $true
-        )]
-        [switch]
-        $StdOut,
-
-        [Parameter(
-            ParameterSetName = 'JobStdErr',
-            Mandatory = $true
-        )]
-        [switch]
-        $StdErr,
-
-        [Parameter(
-            ParameterSetName = 'JobComponents',
-            Mandatory = $true
-        )]
-        [switch]
-        $Components
+        [DRMMActivityLog]
+        $ActivityLog
     )
+    begin {
+
+        Write-Debug "Initializing Get-RMMJobV2 with parameter set: $($PSCmdlet.ParameterSetName)"
+    
+    }
 
     process {
 
-        Write-Debug "Getting RMM job data using parameter set: $($PSCmdlet.ParameterSetName)"
-
         switch ($PSCmdlet.ParameterSetName) {
 
-            'JobByUid' {
+            'ActivityLog' {
+                
+                if ($ActivityLog.Details -isnot [DRMMActivityLogDetailsDeviceJob]) {
 
-                $APIMethod = @{
-                    Path = "job/$JobUid"
-                    Method = 'Get'
+                    Write-Warning "The provided ActivityLog object is not of type DRMMActivityLogDetailsDeviceJob. Only job activity logs are supported."
+                    return
+
+                } else {
+
+                    $APIPath = "job/$($ActivityLog.Details.JobUid)"
+
                 }
-
-                Write-Debug "Getting job by UID: $JobUid"
-                $Response = Invoke-APIMethod @APIMethod
-
-                [DRMMJob]::FromAPIMethod($Response)
-
             }
 
-            'JobResults' {
+            'JobUid' {
+                
+                $APIPath = "job/$JobUid"
 
-                $APIMethod = @{
-                    Path = "job/$JobUid/results/$DeviceUid"
-                    Method = 'Get'
-                }
-
-                Write-Debug "Getting job results for job UID: $JobUid, device UID: $DeviceUid"
-                $Response = Invoke-APIMethod @APIMethod
-
-                [DRMMJobResults]::FromAPIMethod($Response)
-
-            }
-
-            'JobStdOut' {
-
-                $APIMethod = @{
-                    Path = "job/$JobUid/results/$DeviceUid/stdout"
-                    Method = 'Get'
-                }
-
-                Write-Debug "Getting job stdout for job UID: $JobUid, device UID: $DeviceUid"
-                $Response = Invoke-APIMethod @APIMethod
-
-                if ($Response) {
-
-                    $Response | ForEach-Object {
-
-                        [DRMMJobStdData]::FromAPIMethod($_, $JobUid, $DeviceUid)
-
-                    }
-
-                }
-
-            }
-
-            'JobStdErr' {
-
-                $APIMethod = @{
-                    Path = "job/$JobUid/results/$DeviceUid/stderr"
-                    Method = 'Get'
-                }
-
-                Write-Debug "Getting job stderr for job UID: $JobUid, device UID: $DeviceUid"
-                $Response = Invoke-APIMethod @APIMethod
-
-                if ($Response) {
-
-                    $Response | ForEach-Object {
-
-                        [DRMMJobStdData]::FromAPIMethod($_, $JobUid, $DeviceUid)
-
-                    }
-
-                }
-
-            }
-
-            'JobComponents' {
-
-                $APIMethod = @{
-                    Path = "job/$JobUid/components"
-                    Method = 'Get'
-                    Paginate = $true
-                    PageElement = 'jobComponents'
-                }
-
-                Write-Debug "Getting job components for job UID: $JobUid"
-                Invoke-APIMethod @APIMethod | ForEach-Object {
-
-                    [DRMMJobComponent]::FromAPIMethod($_)
-
-                }
             }
         }
+
+        $APIMethod = @{
+            Path = $APIPath
+            Method = 'Get'
+        }
+
+        Invoke-APIMethod @APIMethod | ForEach-Object {[DRMMJob]::FromAPIMethod($_)}
+
     }
 }
-

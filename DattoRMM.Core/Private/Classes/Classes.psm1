@@ -4101,21 +4101,7 @@ class DRMMJob : DRMMObject {
         $Job.Uid = $Response.uid
         $Job.Name = $Response.name
         $Job.Status = $Response.status
-
-        $DateCreatedValue = $Response.dateCreated
-
-        if ($null -ne $DateCreatedValue) {
-
-            try {
-
-                $Job.DateCreated = [datetime]::Parse($DateCreatedValue)
-
-            } catch {
-
-                $Job.DateCreated = $null
-
-            }
-        }
+        $Job.DateCreated = [DRMMObject]::ParseApiDate($Response.dateCreated).DateTime
 
         return $Job
 
@@ -4177,63 +4163,6 @@ class DRMMJob : DRMMObject {
 
     <#
     .SYNOPSIS
-        Retrieves the results associated with the job for a specific device.
-    .DESCRIPTION
-        The GetResults method returns a DRMMJobResults object representing the results of the job for the specified device. It uses the Get-RMMJob cmdlet with the -Results parameter to fetch this information.
-    #>
-    [DRMMJobResults] GetResults([guid]$DeviceUid) {
-
-        return (Get-RMMJob -JobUid $this.Uid -DeviceUid $DeviceUid -Results)
-
-    }
-
-    <#
-    .SYNOPSIS
-        Retrieves the standard output data associated with the job for a specific device.
-    .DESCRIPTION
-        The GetStdOut method returns an array of DRMMJobStdData objects representing the standard output data of the job for the specified device. It uses the Get-RMMJob cmdlet with the -StdOut parameter to fetch this information.
-    #>
-    [DRMMJobStdData[]] GetStdOut([guid]$DeviceUid) {
-
-        return (Get-RMMJob -JobUid $this.Uid -DeviceUid $DeviceUid -StdOut)
-
-    }
-
-    <#
-    .SYNOPSIS
-        Retrieves the standard error data associated with the job for a specific device.
-    .DESCRIPTION
-        The GetStdErr method returns an array of DRMMJobStdData objects representing the standard error data of the job for the specified device. It uses the Get-RMMJob cmdlet with the -StdErr parameter to fetch this information.
-    #>
-    [DRMMJobStdData[]] GetStdErr([guid]$DeviceUid) {
-
-        return (Get-RMMJob -JobUid $this.Uid -DeviceUid $DeviceUid -StdErr)
-
-    }
-
-    <#
-    .SYNOPSIS
-        Refreshes the job's data by fetching the latest information from the API.
-    .DESCRIPTION
-        The Refresh method updates the job's properties (Status, Name, DateCreated) by calling the Get-RMMJob cmdlet with the job's unique identifier. This allows the job object to reflect any changes that may have occurred since it was initially created or last refreshed.
-    #>
-    [void] Refresh() {
-
-        $Updated = Get-RMMJob -JobUid $this.Uid
-
-        if ($Updated) {
-
-            $this.Status = $Updated.Status
-            $this.Name = $Updated.Name
-            $this.DateCreated = $Updated.DateCreated
-
-        }
-
-    }
-
-    # Utility Methods
-    <#
-    .SYNOPSIS
         Generates a summary string for the job.
     .DESCRIPTION
         The GetSummary method returns a string summarizing the job's name, status, and age. The age is calculated based on the job's creation date and is formatted to show days, hours, or minutes ago.
@@ -4264,120 +4193,7 @@ class DRMMJob : DRMMObject {
 
         $JobName = if ($this.Name) {$this.Name} else {'Unknown Job'}
 
-        return "$JobName - $($this.Status)$Age"
-
-    }
-
-    <#
-    .SYNOPSIS
-        Retrieves the standard output data associated with the job for a specific device.
-    .DESCRIPTION
-        The GetStdOutAsJson method returns an array of PSCustomObject representing the standard output data of the job for the specified device, parsed from JSON format.
-    #>
-    [pscustomobject[]] GetStdOutAsJson([guid]$DeviceUid) {
-
-        $StdOutData = $this.GetStdOut($DeviceUid)
-
-        if (-not $StdOutData -or $StdOutData.Count -eq 0) {
-
-            return @()
-
-        }
-
-        # Combine all stdout lines into single string
-        $JsonText = ($StdOutData | ForEach-Object {$_.StdData}) -join "`n"
-
-        try {
-
-            return (ConvertFrom-Json -InputObject $JsonText)
-
-        } catch {
-
-            Write-Error "Failed to parse stdout as JSON: $_"
-            return @()
-
-        }
-
-    }
-
-    <#
-    .SYNOPSIS
-        Retrieves the standard output data associated with the job for a specific device.
-    .DESCRIPTION
-        The GetStdOutAsCsv method returns an array of PSCustomObject representing the standard output data of the job for the specified device, parsed from CSV format. First row is treated as header by default.
-    #>
-    [pscustomobject[]] GetStdOutAsCsv([guid]$DeviceUid) {
-
-        # Default: treat first row as header
-        return $this.GetStdOutAsCsv($DeviceUid, $true, $null)
-
-    }
-
-    <#
-    .SYNOPSIS
-        Retrieves the standard output data associated with the job for a specific device.
-    .DESCRIPTION
-        The GetStdOutAsCsv method returns an array of PSCustomObject representing the standard output data of the job for the specified device, parsed from CSV format. It has parameters to specify whether the first row should be treated as a header.
-    #>
-
-    [pscustomobject[]] GetStdOutAsCsv([guid]$DeviceUid, [bool]$FirstRowAsHeader) {
-
-        return $this.GetStdOutAsCsv($DeviceUid, $FirstRowAsHeader, $null)
-
-    }
-
-    <#
-    .SYNOPSIS
-        Retrieves the standard output data associated with the job for a specific device.
-    .DESCRIPTION
-        The GetStdOutAsCsv method returns an array of PSCustomObject representing the standard output data of the job for the specified device, parsed from CSV format. It has parameters to specify whether the first row should be treated as a header and to provide custom headers if needed.
-    #>
-    [pscustomobject[]] GetStdOutAsCsv([guid]$DeviceUid, [bool]$FirstRowAsHeader, [string[]]$Headers) {
-
-        $StdOutData = $this.GetStdOut($DeviceUid)
-
-        if (-not $StdOutData -or $StdOutData.Count -eq 0) {
-
-            return @()
-
-        }
-
-        # Combine all stdout lines into single string
-        $CsvText = ($StdOutData | ForEach-Object {$_.StdData}) -join "`n"
-
-        try {
-
-            if ($Headers -and $Headers.Count -gt 0) {
-
-                # Custom headers provided
-                if ($FirstRowAsHeader) {
-
-                    # Original CSV has headers, skip that first line before parsing
-                    $CsvText = ($CsvText -split "`n" | Select-Object -Skip 1) -join "`n"
-
-                }
-
-                # Parse with custom headers (all remaining rows are data)
-                return (ConvertFrom-Csv -InputObject $CsvText -Header $Headers)
-
-            } elseif ($FirstRowAsHeader) {
-
-                # Standard CSV with header row
-                return (ConvertFrom-Csv -InputObject $CsvText)
-
-            } else {
-
-                # FirstRowAsHeader = false but no custom headers provided
-                throw "When FirstRowAsHeader is false, you must provide custom headers via the Headers parameter"
-
-            }
-
-        } catch {
-
-            Write-Error "Failed to parse stdout as CSV: $_"
-            return @()
-
-        }
+        return "$JobName - $($this.Status)$Age - $($this.Status)"
 
     }
 }
@@ -4509,6 +4325,11 @@ class DRMMJobResults : DRMMObject {
     [Nullable[datetime]]$RanOn
     [string]$JobDeploymentStatus
     [DRMMJobComponentResult[]]$ComponentResults
+    [int]$TotalNumberOfWarnings
+    [bool]$HasStdOut
+    [bool]$HasStdErr
+    [DRMMJobStdData[]]$StdOut
+    [DRMMJobStdData[]]$StdErr
 
     DRMMJobResults() : base() {
 
@@ -4526,9 +4347,9 @@ class DRMMJobResults : DRMMObject {
         $Results.JobUid = $Response.jobUid
         $Results.DeviceUid = $Response.deviceUid
         $Results.JobDeploymentStatus = $Response.jobDeploymentStatus
-
-        $RanOnValue = $Response.ranOn
-        $Results.RanOn = ([DRMMObject]::ParseApiDate($RanOnValue)).DateTime
+        $Results.RanOn = ([DRMMObject]::ParseApiDate($Response.ranOn)).DateTime
+        $Results.StdOut = @()
+        $Results.StdErr = @()
 
         if ($Response.componentResults) {
 
@@ -4537,6 +4358,27 @@ class DRMMJobResults : DRMMObject {
                 [DRMMJobComponentResult]::FromAPIMethod($_)
 
             }
+        }
+
+        $Results.TotalNumberOfWarnings = ($Results.ComponentResults | Measure-Object -Property NumberOfWarnings -Sum).Sum
+
+        if ($Results.ComponentResults.HasStdOut -contains $true) {
+
+            $Results.HasStdOut = $true
+
+        } else {
+
+            $Results.HasStdOut = $false
+
+        }
+
+        if ($Results.ComponentResults.HasStdErr -contains $true) {
+
+            $Results.HasStdErr = $true
+
+        } else {
+
+            $Results.HasStdErr = $false
 
         }
 
@@ -4558,12 +4400,13 @@ class DRMMJobStdData : DRMMObject {
     [guid]$ComponentUid
     [string]$ComponentName
     [string]$StdData
+    [string]$StdType
 
     DRMMJobStdData() : base() {
 
     }
 
-    static [DRMMJobStdData] FromAPIMethod([pscustomobject]$Response, [guid]$JobUid, [guid]$DeviceUid) {
+    static [DRMMJobStdData] FromAPIMethod([pscustomobject]$Response, [guid]$JobUid, [guid]$DeviceUid, [string]$StdType) {
 
         if ($null -eq $Response) {
             
@@ -4577,9 +4420,110 @@ class DRMMJobStdData : DRMMObject {
         $Result.ComponentUid = $Response.componentUid
         $Result.ComponentName = $Response.componentName
         $Result.StdData = $Response.stdData
+        $Result.StdType = $StdType
 
         return $Result
 
+    }
+
+    <#
+    .SYNOPSIS
+        Retrieves the standard data associated with a completed job component, parsed from JSON format.
+    .DESCRIPTION
+        The GetStdDataAsJson method returns a PSCustomObject representing the standard data of the job component, parsed from JSON format. This method is only applicable if the StdType is 'StdOut' and there is standard data available.
+    #>
+    [pscustomobject] GetStdDataAsJson() {
+
+        if ($this.StdType -ne 'StdOut' -or -not $this.StdData) {
+
+            return $null
+
+        }
+
+        try {
+
+            return (ConvertFrom-Json -InputObject $this.StdData)
+
+        } catch {
+
+            Write-Error "Failed to parse standard data as JSON: $_"
+            return $null
+
+        }
+    }
+
+    <#
+    .SYNOPSIS
+        Retrieves the standard data associated with a completed job component, parsed from CSV format.
+    .DESCRIPTION
+        The GetStdDataAsCsv method returns an array of PSCustomObject representing the standard data of the job component, parsed from CSV format. The first row is treated as a header by default. This method is only applicable if the StdType is 'StdOut' and there is standard data available.
+    #>
+    [pscustomobject[]] GetStdDataAsCsv() {
+
+        return $this.GetStdDataAsCsv($null, $false)
+
+    }
+
+    <#
+    .SYNOPSIS
+        Retrieves the standard data associated with a completed job component, parsed from CSV format.
+    .DESCRIPTION
+        The GetStdDataAsCsv method returns an array of PSCustomObject representing the standard data of the job component, parsed from CSV format. Csv header values must be provided as a parameter. This method is only applicable if the StdType is 'StdOut' and there is standard data available.
+    #>
+    [pscustomobject[]] GetStdDataAsCsv([string[]]$Headers) {
+
+        return $this.GetStdDataAsCsv($Headers, $false)
+
+    }
+
+    <#
+    .SYNOPSIS
+        Retrieves the standard data associated with a completed job component, parsed from CSV format.
+    .DESCRIPTION
+        The GetStdDataAsCsv method returns an array of PSCustomObject representing the standard data of the job component, parsed from CSV format. It has parameters to specify custom headers and whether to remove the first row. This method is only applicable if the StdType is 'StdOut' and there is standard data available.
+    #>
+    [pscustomobject[]] GetStdDataAsCsv([string[]]$Headers, [bool]$RemoveFirstRow) {
+
+        if ($this.StdType -ne 'StdOut' -or -not $this.StdData) {
+
+            return @()
+
+        }
+
+        try {
+
+            if ($Headers) {
+
+                if ($Headers.Count -eq 0) {
+
+                    throw "Headers array cannot be empty when provided"
+
+                }
+
+                if ($RemoveFirstRow) {
+
+                    $CsvText = ($this.StdData -split "`n" | Select-Object -Skip 1) -join "`n"
+
+                } else {
+
+                    $CsvText = $this.StdData
+
+                }
+
+                return (ConvertFrom-Csv -InputObject $CsvText -Header $Headers)
+
+            } else {
+
+                return (ConvertFrom-Csv -InputObject $this.StdData)
+
+            }
+
+        } catch {
+
+            Write-Error "Failed to parse standard data as CSV: $_"
+            return @()
+
+        }
     }
 }
 #endregion DRMMJob and related classes
@@ -4589,9 +4533,7 @@ class DRMMJobStdData : DRMMObject {
 .SYNOPSIS
     Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 .DESCRIPTION
-    The DRMMDevice class models a device within the DRMM platform, providing properties that describe the device's 
-    attributes and state, as well as methods to retrieve related information such as alerts and to perform actions 
-    like opening the device portal.
+    The DRMMDevice class models a device within the DRMM platform, providing properties that describe the device's attributes and state, as well as methods to retrieve related information such as alerts and to perform actions like opening the device portal.
 #>
 class DRMMDevice : DRMMObject {
 
