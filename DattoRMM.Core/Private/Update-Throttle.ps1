@@ -2,6 +2,13 @@
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
+<#
+.SYNOPSIS
+    Updates the API request throttling parameters based on current utilization.
+.DESCRIPTION
+    This function retrieves the current API request rate and calculates the utilization. It then updates the throttling
+    parameters, including delay and pause settings, to ensure that API requests do not exceed the defined rate limits.
+#>
 function Update-Throttle {
     param ()
     

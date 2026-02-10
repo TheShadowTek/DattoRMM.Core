@@ -2,6 +2,15 @@
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
+<#
+.SYNOPSIS
+    Invokes an API method, building the request parameters and handling authentication, and pagination as needed.
+.DESCRIPTION
+    This function constructs the necessary parameters for an API request, including authentication headers and query
+    parameters. It checks for token expiration and refreshes the token if auto-refresh is enabled. It also supports 
+    paginated requests by automatically fetching subsequent pages until all data is retrieved.
+
+#>
 function Invoke-APIMethod {
     [CmdletBinding(DefaultParameterSetName = 'Default')]
 
@@ -37,160 +46,7 @@ function Invoke-APIMethod {
         $PageElement
     )
     
-    # Local function to handle retries for Invoke-RestMethod
-    function InvokeRestMethod {
-        param(
-            [hashtable]
-            $Parameters
-        )
-
-        $Attempt      = 0
-        $Success      = $false
-        $LastError    = $null
-
-        # Retry loop
-        while (-not $Success -and $Attempt -le $Script:APIMethodRetry.MaxRetries) {
-
-            try {
-
-                $Response = Invoke-RestMethod @Parameters -ErrorAction Stop
-                $Success  = $true
-
-            } catch {
-
-                $Attempt++
-                $LastError = $_
-                $StatusCode = $LastError.Exception.Response.StatusCode.value__
-                
-                # Try to get the actual API error message from the response body
-                if ($LastError.ErrorDetails.Message) {
-
-                    $ApiMessage = $LastError.ErrorDetails.Message
-
-                } else {
-
-                    $ApiMessage = $LastError.Exception.Response.StatusDescription
-
-                }
-
-                # Determine if we should retry based on status code, with generic messages, and termination conditions - based on documented API behaviour
-                switch ($StatusCode) {
-
-                    500 {
-
-                        # Terminating condition after max retries
-                        $Generic = "Internal server error. Please try again later or contact support."
-                        $ShouldRetry = $true
-
-                    }
-
-                    400 {
-
-                        # Non-terminating condition no retry
-                        $Generic = "Invalid request. Please check your parameters and data."
-                        Write-Warning "$Generic`nAPI Response: $ApiMessage"
-                        return $null
-
-                    }
-
-                    401 {
-
-                        # Terminating condition no retry
-                        $Generic = "Authorization failed. Please check your credentials."
-                        $ShouldRetry = $false
-
-                    }
-
-                    403 {
-
-                        # Terminating condition no retry
-                        $Generic = "Access denied. You do not have permission to access this resource."
-                        $ShouldRetry = $false
-
-                    }
-
-                    404 {
-                        
-                        # Non-terminating condition no retry
-                        $Generic = "Resource not found. Please check the resource identifier."
-                        Write-Warning "$Generic`nAPI Response: $ApiMessage"
-                        return $null
-
-                    }
-
-                    409 {
-
-                        # Non-terminating condition after max retries
-                        $Generic = "Conflict detected. The resource is being modified elsewhere or there is a data conflict."
-
-                        if ($Attempt -lt $Script:APIMethodRetry.MaxRetries) {
-
-                            $ShouldRetry = $true
-
-                        } else {
-
-                            Write-Warning "$Generic`nAPI Response: $ApiMessage"
-                            return $null
-
-                        }
-                    }
-
-                    429 {
-
-                        # Non-terminating condition after max retries
-                        $Generic = "Rate limit exceeded. Too many requests have been made in a short period."
-                        
-                        # Hardcoded 429 2 minute wait in addition to retry interval
-                        Write-Warning "Rate limit exceeded. Waiting 2 minutes before retrying @ $((Get-Date).AddSeconds(120).ToString("HH:mm:ss"))..."
-                        Start-Sleep -Seconds 120
-                        $ShouldRetry = $true
-
-                    }
-
-                    default {
-
-                        # Non-terminating condition after max retries - uncertain if this should be terminating
-                        $Generic = "Unexpected error occurred."
-                        $ShouldRetry = $true
-
-                        if ($Attempt -lt $Script:APIMethodRetry.MaxRetries) {
-
-                            $ShouldRetry = $true
-
-                        } else {
-
-                            Write-Warning "$Generic`nAPI Response: $ApiMessage"
-                            return $null
-
-                        }
-                    }
-                }
-
-
-                if ($ShouldRetry -and $Attempt -le $Script:APIMethodRetry.MaxRetries) {
-
-                    Write-Warning "Retry in $($Script:APIMethodRetry.RetryIntervalSeconds) seconds. Attempt $Attempt of $($Script:APIMethodRetry.MaxRetries)..."
-                    Start-Sleep -Seconds $Script:APIMethodRetry.RetryIntervalSeconds
-
-                } else {
-
-                    break
-
-                }
-            }
-        }
-
-        if ($Success) {
-
-            return $Response
-
-        } else {
-
-            throw "Failed to invoke API method after $($Script:APIMethodRetry.MaxRetries) attempts. Last error: $($LastError.Exception.Message)"
-
-        }
-    }
-
+    # Ensure we are connected and have a valid token before making the API call
     if (-not $script:RMMAuth) {
 
         throw "Not connected. Use Connect-DattoRMM first."
@@ -227,40 +83,7 @@ function Invoke-APIMethod {
         }
     }
 
-    # Throttle review
-    if ($Script:RMMThrottle.CheckCount -ge $Script:RMMThrottle.CheckInterval) {
-
-        $Script:RMMThrottle.CheckCount = 1
-        Write-Debug "Updating request rate status from Datto RMM API."
-        Update-Throttle
-
-    } else {
-
-        $script:RMMThrottle.CheckCount++
-
-    }
-
-    # Apply throttling if required
-    if ($Script:RMMThrottle.Throttle) {
-
-        while ($Script:RMMThrottle.Pause) {
-
-            Write-Warning "High API Utilisation detected ($([math]::Round($Script:RMMThrottle.Utilisation * 100, 2))%). Pausing requests to avoid throttling."
-            Start-Sleep -Seconds 60
-            Update-Throttle
-            
-        }
-
-        if ($Script:RMMThrottle.DelayMS -gt 0) {
-
-            Write-Debug "Delaying next request by $($Script:RMMThrottle.DelayMS) ms to avoid throttling."
-            Start-Sleep -Milliseconds $Script:RMMThrottle.DelayMS
-
-        }
-    }
-
-    # Invoke the API method
-
+    # Build the request parameters for Invoke-RestMethod, including authentication headers and any query parameters
     $RequestParams = @{
         Uri = "$API/$Path"
         Method = $Method
@@ -319,7 +142,7 @@ function Invoke-APIMethod {
 
         if ($Paginate) {
 
-            $Result = InvokeRestMethod -Parameters $RequestParams
+            $Result = Invoke-APIRestMethod -Parameters $RequestParams
 
             # Parse the original URI to extract query parameters (excluding max and page)
             $OriginalUri = [System.Uri]$RequestParams.Uri
@@ -390,47 +213,15 @@ function Invoke-APIMethod {
                 }
 
                 Write-Debug "Fetching next page: $NextUrl"
-
-                # Apply throttling for each page request
-                if ($Script:RMMThrottle.CheckCount -ge $Script:RMMThrottle.CheckInterval) {
-
-                    $Script:RMMThrottle.CheckCount = 1
-                    Write-Debug "Updating request rate status from Datto RMM API."
-                    Update-Throttle
-
-                } else {
-
-                    $script:RMMThrottle.CheckCount++
-
-                }
-
-                if ($Script:RMMThrottle.Throttle) {
-
-                    while ($Script:RMMThrottle.Pause) {
-
-                        Write-Warning "High API Utilisation detected ($([math]::Round($Script:RMMThrottle.Utilisation * 100, 2))%). Pausing requests to avoid throttling."
-                        Start-Sleep -Seconds 60
-                        Update-Throttle
-                        
-                    }
-
-                    if ($Script:RMMThrottle.DelayMS -gt 0) {
-
-                        Write-Debug "Delaying next request by $($Script:RMMThrottle.DelayMS) ms to avoid throttling."
-                        Start-Sleep -Milliseconds $Script:RMMThrottle.DelayMS
-
-                    }
-                }
-
                 $RequestParams.Uri = $NextUrl
-                $Result = InvokeRestMethod -Parameters $RequestParams
+                $Result = Invoke-APIRestMethod -Parameters $RequestParams
                 $Result.$PageElement
 
             }
 
         } else {
             
-            InvokeRestMethod -Parameters $RequestParams
+            Invoke-APIRestMethod -Parameters $RequestParams
 
         }
 
