@@ -194,12 +194,10 @@ function New-RMMVariable {
             
         } catch {
 
-            Write-Warning "Failed to create variable '$Name' at $Scope scope."
+            Write-Warning "Failed to create variable '$Name' at $Scope scope.$(if ($Scope -eq 'Site') {" Site UID: $SiteUid."})"
             return
 
         }
-
-        Invoke-APIMethod @APIMethod #| Out-Null
 
         # API doesn't return the created variable, so fetch it by name
         $GetParams = @{

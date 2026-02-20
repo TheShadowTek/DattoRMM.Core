@@ -169,7 +169,7 @@ function Set-RMMConfig {
 
     # Ensure at least one parameter is provided
 
-    if (($PSBoundParameters.Keys | Where-Object {$_ -ne 'Persist'}).Count -lt 1) {
+    if (($PSBoundParameters.Keys | Where-Object {$_ -notin 'Persist', 'Default', 'Force'}).Count -lt 1) {
 
         throw "At least one configuration parameter must be specified."
         
