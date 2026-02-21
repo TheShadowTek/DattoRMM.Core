@@ -1,4 +1,7 @@
-.vscode/
+.vscode/*
+!.vscode/
+!.vscode/settings.shared.json
+
 ToDo.md
 Issues/
 Backup/

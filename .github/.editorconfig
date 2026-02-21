@@ -1,0 +1,91 @@
+# .editorconfig — TheShadowTek's repo defaults
+# Style notes:
+# - Indent with tabs, width 4.
+# - Line endings: CRLF (Windows).
+# - Trim trailing whitespace globally, except in Markdown where trailing spaces are meaningful.
+# - Insert final newline in all files.
+# - Comment/help width: 120 chars (applies to Markdown and docs). Code lines are not constrained here.
+# - PowerShell brace style: same-line opening brace.
+#   Example:
+#     if ($x) {
+#
+#         <code>
+#
+#     }
+#
+#     switch ($v) {
+#
+#         'case' {
+#             <code>
+#         }
+#
+#     }
+
+root = true
+
+[*]
+indent_style = tab
+indent_size = 4
+end_of_line = crlf
+charset = utf-8-bom
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = off
+
+# PowerShell files — preserve intentional blank lines (do not trim trailing whitespace)
+[*.ps1]
+charset = utf-8-bom
+trim_trailing_whitespace = false
+insert_final_newline = true
+max_line_length = off
+
+[*.psm1]
+charset = utf-8-bom
+trim_trailing_whitespace = false
+insert_final_newline = true
+max_line_length = off
+
+[*.psd1]
+charset = utf-8-bom
+trim_trailing_whitespace = false
+insert_final_newline = true
+max_line_length = off
+
+# Markdown — preserve trailing spaces, enforce comment/help width
+[*.md]
+indent_style = tab
+indent_size = 4
+end_of_line = crlf
+charset = utf-8
+trim_trailing_whitespace = false
+insert_final_newline = true
+max_line_length = 120
+
+# JSON and YAML — tabs, no max width
+[*.json]
+indent_style = tab
+indent_size = 4
+end_of_line = crlf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = off
+
+[*.yml]
+indent_style = tab
+indent_size = 4
+end_of_line = crlf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = off
+
+# GitHub workflow and config files
+[.github/**]
+indent_style = tab
+indent_size = 4
+end_of_line = crlf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = off
