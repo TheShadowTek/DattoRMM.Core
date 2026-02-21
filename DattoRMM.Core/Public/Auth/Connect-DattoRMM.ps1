@@ -8,12 +8,18 @@ function Connect-DattoRMM {
         Connects to the Datto RMM API and authenticates using API credentials.
 
     .DESCRIPTION
-        The Connect-DattoRMM function establishes a connection to the Datto RMM API using either
-        an API key and secret combination or a PSCredential object. Upon successful authentication,
-        an access token is obtained and stored for subsequent API requests.
+        The Connect-DattoRMM function establishes a connection to the Datto RMM API using one of three
+        authentication methods:
+        
+        1. API Key and Secret: Generates a new access token via OAuth
+        2. PSCredential: Uses username as key, password as secret to generate a new token
+        3. API Token: Uses an existing access token (no token generation or refresh)
+        
+        Methods 1 and 2 support automatic token refresh when enabled. Method 3 is a stateless
+        "bring your own token" mode intended for scenarios where token lifecycle is managed externally
+        (e.g., Azure Key Vault, CI/CD pipelines).
 
-        The function supports automatic token refresh and allows selection of different Datto RMM
-        platform regions.
+        The function allows selection of different Datto RMM platform regions.
 
     .PARAMETER Key
         The API key for authentication. Used in conjunction with the Secret parameter.
@@ -26,9 +32,18 @@ function Connect-DattoRMM {
         A PSCredential object containing the API key as the username and the API secret as the password.
         This provides an alternative authentication method to using Key and Secret parameters separately.
 
+    .PARAMETER ApiToken
+        An existing Datto RMM API access token as a SecureString. When using this parameter, the function
+        will NOT generate a new token and will NOT refresh the token automatically. This is intended for
+        scenarios where token lifecycle is managed externally (e.g., Azure Key Vault, CI/CD).
+        
+        Cannot be used with AutoRefresh. The token must be valid for the duration of your session.
+
     .PARAMETER AutoRefresh
         When specified, the function will store credentials and automatically refresh the access token
         when it expires during subsequent API calls.
+        
+        Only valid with Key/Secret or Credential authentication. Cannot be used with ApiToken.
 
     .PARAMETER Platform
         Specifies the Datto RMM platform region to connect to.
@@ -80,6 +95,20 @@ function Connect-DattoRMM {
         Creates a credential object using Get-Credential and connects with auto-refresh to the Pinotage platform.
 
     .EXAMPLE
+        $Token = Read-Host -AsSecureString -Prompt "Enter API Token"
+        PS > Connect-DattoRMM -ApiToken $Token
+
+        Connects using an existing API token. The token will not be refreshed automatically.
+        Useful for automation scenarios where tokens are managed externally.
+
+    .EXAMPLE
+        # Retrieve token from Azure Key Vault
+        PS > $Token = (Get-AzKeyVaultSecret -VaultName 'MyVault' -Name 'DattoRMMToken').SecretValue
+        PS > Connect-DattoRMM -ApiToken $Token -Platform Merlot
+
+        Connects using a token retrieved from Azure Key Vault.
+
+    .EXAMPLE
         $Secret = Read-Host -AsSecureString -Prompt "Enter API Secret"
         PS > $ProxyCred = Get-Credential -Message "Enter proxy credentials"
         PS > Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Proxy "http://proxy.company.com:8080" -ProxyCredential $ProxyCred
@@ -96,8 +125,12 @@ function Connect-DattoRMM {
         The function stores the authentication token in the module's script scope. This token is used by all
         subsequent API calls made through the module.
 
-        When AutoRefresh is enabled, credentials are stored securely and the token will be automatically
-        refreshed when it expires.
+        Authentication Methods:
+        - Key/Secret and Credential methods generate new tokens and support AutoRefresh
+        - ApiToken method uses existing tokens and does NOT support AutoRefresh
+        - When AutoRefresh is enabled (Key/Secret or Credential only), credentials are stored securely
+          and the token will be automatically refreshed when it expires
+        - ApiToken mode is stateless and does not store credentials or track token expiry
 
         On module removal, the authentication information is cleared from memory.
 
@@ -141,6 +174,19 @@ function Connect-DattoRMM {
         [pscredential]
         $Credential,
 
+        [Parameter(
+            ParameterSetName = 'ApiToken',
+            Mandatory = $true
+        )]
+        [securestring]
+        $ApiToken,
+
+        [Parameter(
+            ParameterSetName = 'Key'
+        )]
+        [Parameter(
+            ParameterSetName = 'Cred'
+        )]
         [switch]
         $AutoRefresh,
 
@@ -192,143 +238,111 @@ function Connect-DattoRMM {
 
     }
 
-    # Build the request body
+    # Build token request parameters and set script-level variables for API URL and platform
     $APIServer = "$($Platform.ToString().ToLower())-api"
     $Script:SessionPlatform = $Platform
     $Script:APIUrl = "https://$APIServer.centrastage.net"
     $Script:API = "$APIUrl/api/v2"
 
-    switch ($PSCmdlet.ParameterSetName) {
+    # Generate new token for Key/Cred parameter sets, or use provided token for ApiToken set
+    if ($PSCmdlet.ParameterSetName -in @('Key', 'Cred')) {
 
-        'Cred' {
+        # Build request parameters based on authentication method
+        $TokenRequestParams = @{
+            APIUrl = $APIUrl
+        }
 
-            $AuthKey = $Credential.UserName
-            $AuthSecret = ConvertFrom-SecureStringToPlaintext -SecureString $Credential.Password
+        switch ($PSCmdlet.ParameterSetName) {
+
+            'Cred' {
+
+                $TokenRequestParams.Key = $Credential.UserName
+                $TokenRequestParams.Secret = $Credential.Password
+
+            }
+
+            'Key' {
+
+                $TokenRequestParams.Key = $Key
+                $TokenRequestParams.Secret = $Secret
+
+            }
+        }
+
+
+
+        switch ($PSBoundParameters.Keys) {
+
+            'Proxy' {$TokenRequestParams.Proxy = $Proxy}
+            'ProxyCredential' {$TokenRequestParams.ProxyCredential = $ProxyCredential}
 
         }
 
-        'Key' {
+        # Request new OAuth token
+        $ResponseToken = Request-APIToken @TokenRequestParams
 
-            $AuthKey = $Key.ToString()
-            $AuthSecret = ConvertFrom-SecureStringToPlaintext -SecureString $Secret
-
+        # Build the auth hashtable
+        $Script:RMMAuth = @{
+            AccessToken = $ResponseToken.access_token
+            TokenType = $ResponseToken.token_type
+            ExpiresAt = (Get-Date).AddSeconds($ResponseToken.expires_in)
+            AutoRefresh = $AutoRefresh.IsPresent
+            AuthHeader = @{Authorization = "$($ResponseToken.token_type) $($ResponseToken.access_token)"}
         }
-    }
 
-    # Make the request
-    $PublicCredential = [PSCredential]::new('public-client', ('public' | ConvertTo-SecureString -AsPlainText -Force))
-    $TokenRequest = @{
-        Credential = $PublicCredential
-        Uri = "$APIUrl/auth/oauth/token"
-        Method = 'Post'
-        Body = "grant_type=password&username=$AuthKey&password=$AuthSecret"
-        ContentType = 'application/x-www-form-urlencoded'
-        TimeoutSec = $Script:APIMethodRetry.TimeoutSeconds
-    }
+    } elseif ($PSCmdlet.ParameterSetName -eq 'ApiToken') {
 
-    if ($PSBoundParameters.ContainsKey('Proxy')) {
+        # Using provided token - assume Bearer type, no expiry tracking
+        Write-Verbose "Using provided API token."
 
-        $TokenRequest.Proxy = $Proxy
-
-    }
-
-    if ($PSBoundParameters.ContainsKey('ProxyCredential')) {
-
-        $TokenRequest.ProxyCredential = $ProxyCredential
+        $ProvidedToken = ConvertFrom-SecureStringToPlaintext -SecureString $ApiToken
         
-    }
+        $Script:RMMAuth = @{
+            AccessToken = $ProvidedToken
+            TokenType = 'Bearer'
+            ExpiresAt = [DateTime]::MaxValue
+            AutoRefresh = $false
+            AuthHeader = @{Authorization = "Bearer $ProvidedToken"}
+        }
 
-    try {
-
-        $Response = Invoke-RestMethod @TokenRequest
-        Write-Verbose "Successfully authenticated to Datto RMM API."
-
-    } catch {
-
-        throw $_
-
-    } finally {
-
-        # Clear plaintext credentials from memory
-        $AuthKey = $null
-        $AuthSecret = $null
+        # Clear plaintext token from memory
+        $ProvidedToken = $null
 
     }
 
-    # Build the auth hashtable
-    $Script:RMMAuth = @{
-        AccessToken = $Response.access_token
-        TokenType = $Response.token_type
-        ExpiresAt = (Get-Date).AddSeconds($Response.expires_in)
-        AutoRefresh = $AutoRefresh.IsPresent
-        AuthHeader = @{ Authorization = "$($Response.token_type) $($Response.access_token)" }
-    }
+    # Set proxy settings if provided
+    switch ($PSBoundParameters.Keys) {
 
-    if ($PSBoundParameters.ContainsKey('Proxy')) {
-
-        $Script:RMMAuth.Proxy = $Proxy
+        'Proxy' {$Script:RMMAuth.Proxy = $Proxy}
+        'ProxyCredential' {$Script:RMMAuth.ProxyCredential = $ProxyCredential}
 
     }
 
-    if ($PSBoundParameters.ContainsKey('ProxyCredential')) {
-
-        $Script:RMMAuth.ProxyCredential = $ProxyCredential
-        
-    }
-
+    # Store credentials for AutoRefresh (only for Key/Cred parameter sets)
     if ($AutoRefresh) {
 
-        if ($PSCmdlet.ParameterSetName -eq 'Cred') {
+        switch ($PSCmdlet.ParameterSetName) {
 
-            $Script:RMMAuth.Key = $Credential.UserName
-            $Script:RMMAuth.Secret = $Credential.Password
+            'cred' {
 
-        } else {
+                $Script:RMMAuth.Key = $Credential.UserName
+                $Script:RMMAuth.Secret = $Credential.Password
 
-            $Script:RMMAuth.Key = $Key
-            $Script:RMMAuth.Secret = $Secret
+            }
 
+            'Key' {
+
+                $Script:RMMAuth.Key = $Key
+                $Script:RMMAuth.Secret = $Secret
+
+            }
         }
     }
 
     # Test connection and set page size
-    Write-Debug "Testing connection to Datto RMM API & setting maxpage size."
-    $PageSizeMethod = @{
-        Path = "system/pagination"
-        Method = 'Get'
-    }
-
     try {
 
-            #$AccountMaxPageSize = (Invoke-APIMethod @PageSizeMethod -ErrorAction Stop).max
-            $AccountMaxPageSize = (Invoke-APIMethod @PageSizeMethod).max
-            $Script:MaxPageSize = $AccountMaxPageSize
-
-            # Check if there's a configured default page size
-            If ($null -ne $Script:SessionPageSize -and $Script:SessionPageSize -le $AccountMaxPageSize) {
-
-                $Script:PageSize = $Script:SessionPageSize
-                Write-Verbose "Set page size to existing session value: $($Script:PageSize)."
-
-            } elseif ($null -ne $Script:ConfigPageSize -and $Script:ConfigPageSize -le $AccountMaxPageSize) {
-
-                $Script:PageSize = $Script:ConfigPageSize
-                Write-Verbose "Set page size to configured default: $($Script:PageSize)."
-
-            } elseif ($null -ne $Script:PageSize -and $Script:PageSize -le $AccountMaxPageSize) {
-
-                # If PageSize was previously set in this session and is within limits, keep it
-                Write-Verbose "Retaining previously set page size: $($Script:PageSize)."
-
-            } else {
-
-                $Script:PageSize = $AccountMaxPageSize
-                Write-Verbose "Set page size to account maximum: $($Script:PageSize)."
-
-            }
-
-            $Script:SessionPageSize = $Script:PageSize
-            Write-Verbose "Using page size: $($Script:PageSize)."
+        Initialize-PageSize
 
     } catch {
 

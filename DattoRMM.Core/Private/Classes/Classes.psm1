@@ -182,6 +182,47 @@ class DRMMObject {
 }
 #endregion DRMMObject - Base Class
 
+#region DRMMToken class
+<#
+.SYNOPSIS
+    Represents an OAuth access token response from the Datto RMM API.
+.DESCRIPTION
+    The DRMMToken class encapsulates the OAuth token information returned by the Datto RMM authentication endpoint. It includes the access token (stored as a secure string), token type, expiration date, scope, and JWT identifier. This class provides a static method to create an instance from the API response object, ensuring the access token is securely stored and the expires_in value is converted to a DateTime for easier time-based operations.
+#>
+class DRMMToken : DRMMObject {
+
+    [securestring]$AccessToken
+    [string]$TokenType
+    [datetime]$Expires
+    [string]$Scope
+    [string]$Jti
+
+    DRMMToken() : base() {
+
+    }
+
+    static [DRMMToken] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Token = [DRMMToken]::new()
+        $Token.AccessToken = ConvertTo-SecureString -String $Response.access_token -AsPlainText -Force
+        $Response.access_token = $null # Clear plain text token from memory
+        $Token.TokenType = $Response.token_type
+        $Token.Expires = [datetime]::UtcNow.AddSeconds($Response.expires_in)
+        $Token.Scope = $Response.scope
+        $Token.Jti = $Response.jti
+
+        return $Token
+
+    }
+}
+#endregion DRMMToken class
+
 #region DRMMAPIKeySecret class
 <#
 .SYNOPSIS
