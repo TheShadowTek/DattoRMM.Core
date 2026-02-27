@@ -1,59 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DattoRMM.Core v2 Types - Comprehensive ToString and alias definitions for all user-facing classes -->
+<!-- Load with: Update-TypeData -PrependPath .\DattoRMM.Core.v2.Types.ps1xml -->
 <Types>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Account Domain                                                        -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
   <Type>
-    <Name>DRMMPrinterAudit</Name>
+    <Name>DRMMAccount</Name>
     <Members>
       <ScriptMethod>
         <Name>ToString</Name>
-        <Script>$this.DeviceUid</Script>
-      </ScriptMethod>
-    </Members>
-  </Type>
-  <Type>
-    <Name>DRMMPrinter</Name>
-    <Members>
-      <ScriptMethod>
-        <Name>ToString</Name>
-        <Script>if ($this.Name) { $this.Name } elseif ($this.Id) { $this.Id } elseif
-          ($this.PrintedPageCount) { $this.PrintedPageCount } else { $this.ToString() }</Script>
-      </ScriptMethod>
-    </Members>
-  </Type>
-  <Type>
-    <Name>DRMMPrinterSystemInfo</Name>
-    <Members>
-      <ScriptMethod>
-        <Name>ToString</Name>
-        <Script>if ($this.Manufacturer) { $this.Manufacturer } elseif ($this.Model) { $this.Model }
-          else { $this.ToString() }</Script>
-      </ScriptMethod>
-    </Members>
-  </Type>
-  <Type>
-    <Name>DRMMPrinterSnmpInfo</Name>
-    <Members>
-      <ScriptMethod>
-        <Name>ToString</Name>
-        <Script>if ($this.SnmpName) { $this.SnmpName } elseif ($this.ObjectId) { $this.ObjectId }
-          else { $this.ToString() }</Script>
-      </ScriptMethod>
-    </Members>
-  </Type>
-  <Type>
-    <Name>DRMMPrinterMarkerSupply</Name>
-    <Members>
-      <ScriptMethod>
-        <Name>ToString</Name>
-        <Script>if ($this.Description) { $this.Description } elseif ($this.MaxCapacity) {
-          $this.MaxCapacity } else { $this.ToString() }</Script>
+        <Script>$this.GetSummary()</Script>
       </ScriptMethod>
     </Members>
   </Type>
 
+  <Type>
+    <Name>DRMMAccountDescriptor</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $Parts = @()
+          if ($this.BillingEmail) {$Parts += $this.BillingEmail}
+          if ($this.DeviceLimit) {$Parts += "Limit: $($this.DeviceLimit)"}
+          if ($this.TimeZone) {$Parts += $this.TimeZone}
+          if ($Parts.Count -gt 0) {$Parts -join ' | '} else {'DRMMAccountDescriptor'}
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
 
   <Type>
-    <Name>DRMMDevicesStatus</Name>
+    <Name>DRMMAccountDevicesStatus</Name>
     <Members>
       <ScriptMethod>
         <Name>ToString</Name>
@@ -61,8 +43,13 @@
       </ScriptMethod>
     </Members>
   </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Activity Log Domain                                                   -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
   <Type>
-    <Name>DRMMProxySettings</Name>
+    <Name>DRMMActivityLog</Name>
     <Members>
       <ScriptMethod>
         <Name>ToString</Name>
@@ -70,17 +57,19 @@
       </ScriptMethod>
     </Members>
   </Type>
+
   <Type>
-    <Name>DRMMSiteSettings</Name>
+    <Name>DRMMActivityLogSite</Name>
     <Members>
       <ScriptMethod>
         <Name>ToString</Name>
-        <Script>$this.GetSummary()</Script>
+        <Script>if ($this.Name) {$this.Name} else {"Site $($this.Id)"}</Script>
       </ScriptMethod>
     </Members>
   </Type>
+
   <Type>
-    <Name>DRMMGeneralSettings</Name>
+    <Name>DRMMActivityLogUser</Name>
     <Members>
       <ScriptMethod>
         <Name>ToString</Name>
@@ -88,6 +77,21 @@
       </ScriptMethod>
     </Members>
   </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Alert Domain                                                          -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMAlert</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
   <Type>
     <Name>DRMMAlertContext</Name>
     <Members>
@@ -97,6 +101,7 @@
       </ScriptMethod>
     </Members>
   </Type>
+
   <Type>
     <Name>DRMMAlertMonitorInfo</Name>
     <Members>
@@ -106,6 +111,7 @@
       </ScriptMethod>
     </Members>
   </Type>
+
   <Type>
     <Name>DRMMAlertSourceInfo</Name>
     <Members>
@@ -115,6 +121,7 @@
       </ScriptMethod>
     </Members>
   </Type>
+
   <Type>
     <Name>DRMMAlertResponseAction</Name>
     <Members>
@@ -124,23 +131,310 @@
       </ScriptMethod>
     </Members>
   </Type>
+
+  <!-- Alert Context Subclasses - inherit GetSummary() from DRMMAlertContext base -->
+  <!-- PS7 resolves ToString from the most-specific type first, so we define for each -->
   <Type>
-    <Name>DRMMSite</Name>
+    <Name>DRMMAlertContextGeneric</Name>
     <Members>
-      <AliasProperty>
-        <Name>SiteUid</Name>
-        <ReferencedMemberName>Uid</ReferencedMemberName>
-      </AliasProperty>
-      <AliasProperty>
-        <Name>SiteId</Name>
-        <ReferencedMemberName>Id</ReferencedMemberName>
-      </AliasProperty>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Class) {"[$($this.Class)]"} else {'Generic AlertContext'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextAntivirus</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"AV: $($this.ProductName) - $($this.Status)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextDiskUsage</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Disk: $($this.DiskName) $($this.FreeSpace)$($this.UnitOfMeasure) free / $($this.TotalVolume)$($this.UnitOfMeasure)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextEventLog</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"EventLog: $($this.LogName) [$($this.Source)] $($this.Code)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextOnlineOfflineStatus</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Status: $($this.Status)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextRansomWare</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Ransomware: State=$($this.State) Confidence=$($this.ConfidenceFactor)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextResourceUsage</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Resource: $($this.Type) $($this.ProcessName) ($($this.Sample))"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextScript</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $SampleCount = if ($this.Samples) {$this.Samples.Count} else {0}
+          "Script: $SampleCount sample(s)"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextPatch</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Patch: $($this.Result) $($this.Info)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextDiskHealth</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"DiskHealth: $($this.Type) - $($this.Reason)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextBackupManagement</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Backup: $($this.ErrorMessage)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextCustomSNMP</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"SNMP: $($this.DisplayName) = $($this.CurrentValue)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextEndpointSecurityThreat</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"ES Threat: $($this.Description)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextEndpointSecurityWindowsDefender</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Defender: $($this.Description)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextFan</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Fan: $($this.Type) - $($this.Reason)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextFileSystem</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"FileSystem: $($this.Path) [$($this.ObjectType)] $($this.Condition)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextNetworkMonitor</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"NetMon: $($this.Description)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextPing</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Ping: $($this.InstanceName) RTT=$($this.RoundtripTime)ms"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextPrinter</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Printer: $($this.IpAddress) Supply[$($this.MarkerSupplyIndex)]=$($this.CurrentLevel)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextPsu</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"PSU: $($this.Type) - $($this.Reason)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextSecCenter</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"SecCenter: $($this.ProductName) [$($this.AlertType)]"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextSecurityManagement</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Security: $($this.ProductName) Status=$($this.Status)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextSNMPProbe</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"SNMPProbe: $($this.MonitorName) $($this.DeviceName) = $($this.ResponseValue)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextStatus</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Status: $($this.ProcessName) - $($this.Status)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextTemperature</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"Temp: $($this.Type) $($this.Degree)°"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextWindowsPerformance</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"WinPerf: $($this.Value)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAlertContextWmi</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"WMI: $($this.Value)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Component Domain                                                      -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMComponent</Name>
+    <Members>
       <ScriptMethod>
         <Name>ToString</Name>
         <Script>$this.GetSummary()</Script>
       </ScriptMethod>
     </Members>
   </Type>
+
+  <Type>
+    <Name>DRMMComponentVariable</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Device Domain                                                         -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
   <Type>
     <Name>DRMMDevice</Name>
     <Members>
@@ -158,4 +452,602 @@
       </ScriptMethod>
     </Members>
   </Type>
+
+  <Type>
+    <Name>DRMMDeviceAntivirusInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceNetworkInterface</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Hostname) ($($this.IntIpAddress))"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDevicePatchManagement</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $Status = if ($this.PatchStatus) {$this.PatchStatus} else {'Unknown'}
+          $Pending = if ($null -ne $this.PatchesApprovedPending) {" Pending:$($this.PatchesApprovedPending)"} else {''}
+          $Installed = if ($null -ne $this.PatchesInstalled) {" Installed:$($this.PatchesInstalled)"} else {''}
+          "$Status$Pending$Installed"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceType</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Category)/$($this.Type)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceUdfs</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $Set = 0
+          for ($i = 1; $i -le 30; $i++) {
+            $Val = $this."Udf$i"
+            if (-not [string]::IsNullOrWhiteSpace($Val)) {$Set++}
+          }
+          "$Set of 30 UDFs set"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Device Audit Domain                                                   -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMDeviceAudit</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $Sys = if ($this.SystemInfo) {"$($this.SystemInfo.Manufacturer) $($this.SystemInfo.Model)"} else {''}
+          if ($Sys) {"$($this.DeviceUid) - $Sys"} else {"$($this.DeviceUid)"}
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditSystemInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Manufacturer) $($this.Model)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditBios</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Manufacturer) $($this.Name)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditBaseBoard</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Manufacturer) $($this.Product)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditDisplay</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Instance) ($($this.ScreenWidth)x$($this.ScreenHeight))"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditLogicalDisk</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $FreeGb = [math]::Round($this.Freespace / 1GB, 1)
+          $SizeGb = [math]::Round($this.Size / 1GB, 1)
+          "$($this.DiskIdentifier) ${FreeGb}GB free / ${SizeGb}GB"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditMobileInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Number) {$this.Number} elseif ($this.Imei) {$this.Imei} else {'Mobile'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditPhysicalMemory</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $CapGb = if ($this.Capacity -gt 0) {[math]::Round($this.Capacity / 1GB, 1)} else {0}
+          "$($this.Manufacturer) $($this.BankLabel) ${CapGb}GB"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditProcessor</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Name) {$this.Name} else {'Processor'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditSnmpInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Name) {$this.Name} elseif ($this.Description) {$this.Description} else {'SNMP'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditSoftware</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Name) $($this.Version)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditVideoBoard</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.DisplayAdapter) {$this.DisplayAdapter} else {'VideoBoard'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditAttachedDevice</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Description) {$this.Description} elseif ($this.Instance) {$this.Instance} else {'AttachedDevice'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- ESXi Host Audit Domain                                                -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMEsxiHostAudit</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $Sys = if ($this.SystemInfo) {"$($this.SystemInfo.Manufacturer) $($this.SystemInfo.Model)"} else {''}
+          if ($Sys) {"$($this.DeviceUid) - $Sys"} else {"$($this.DeviceUid)"}
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiSystemInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Manufacturer) $($this.Model)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiGuest</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.GuestName) {$this.GuestName} else {'Guest'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiDatastore</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $Name = if ($this.DatastoreName) {$this.DatastoreName} else {'Datastore'}
+          $Status = if ($this.Status) {" [$($this.Status)]"} else {''}
+          "$Name$Status"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiNic</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $NicName = if ($this.Name) {$this.Name} else {'NIC'}
+          $Ip = if ($this.Ipv4) {" ($($this.Ipv4))"} else {''}
+          "$NicName$Ip"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiPhysicalMemory</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $Mod = if ($this.Module) {$this.Module} else {'Memory'}
+          $SizeGb = if ($this.Size -and $this.Size -gt 0) {" $([math]::Round($this.Size / 1GB, 1))GB"} else {''}
+          "$Mod$SizeGb"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiProcessor</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $ProcName = if ($this.Name) {$this.Name} else {'Processor'}
+          $Cores = if ($this.NumberOfCores) {" ($($this.NumberOfCores) cores)"} else {''}
+          "$ProcName$Cores"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Filter Domain                                                         -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMFilter</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Job Domain                                                            -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMJob</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMJobComponent</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Name) {$this.Name} else {"$($this.Uid)"}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMJobComponentResult</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.ComponentName) - $($this.ComponentStatus)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMJobComponentVariable</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Name) = $($this.Value)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMJobResults</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.JobUid) [$($this.JobDeploymentStatus)] Warnings:$($this.TotalNumberOfWarnings)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMJobStdData</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.ComponentName) [$($this.StdType)]"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Network Domain                                                        -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMNetworkInterface</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $Inst = if ($this.Instance) {$this.Instance} else {'NIC'}
+          $Ip = if ($this.Ipv4) {" ($($this.Ipv4))"} else {''}
+          "$Inst$Ip"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMNetMapping</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Name) {$this.Name} else {"NetMapping $($this.Uid)"}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Printer Audit Domain                                                  -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMPrinterAudit</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $Info = if ($this.SystemInfo) {"$($this.SystemInfo.Manufacturer) $($this.SystemInfo.Model)"} else {$null}
+          if ($Info) {"$($this.DeviceUid) - $Info"} else {"$($this.DeviceUid)"}
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMPrinter</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($null -ne $this.PrintedPageCount) {"Pages: $($this.PrintedPageCount)"} else {'Printer'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMPrinterSystemInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Manufacturer) $($this.Model)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMPrinterSnmpInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.SnmpName) {$this.SnmpName} elseif ($this.ObjectId) {$this.ObjectId} else {'SNMP'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMPrinterMarkerSupply</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $Desc = if ($this.Description) {$this.Description} else {'Supply'}
+          $Level = if ($this.SuppliesLevel) {" [$($this.SuppliesLevel)]"} else {''}
+          "$Desc$Level"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Site Domain                                                           -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMSite</Name>
+    <Members>
+      <AliasProperty>
+        <Name>SiteUid</Name>
+        <ReferencedMemberName>Uid</ReferencedMemberName>
+      </AliasProperty>
+      <AliasProperty>
+        <Name>SiteId</Name>
+        <ReferencedMemberName>Id</ReferencedMemberName>
+      </AliasProperty>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeletedDevicesSite</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $SiteName = if ($this.Name) {$this.Name} else {'Deleted Site'}
+          "$SiteName (Deleted)"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMSiteSettings</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMSiteGeneralSettings</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMSiteProxySettings</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMSiteMailRecipient</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+          $RecipName = if ($this.Name) {$this.Name} else {'Recipient'}
+          $Email = if ($this.Email) {" &lt;$($this.Email)&gt;"} else {''}
+          "$RecipName$Email"
+        </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDevicesStatus</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Status Domain                                                         -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMStatus</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Status) v$($this.Version)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- User Domain                                                           -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMUser</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- Variable Domain                                                       -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+
+  <Type>
+    <Name>DRMMVariable</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
 </Types>

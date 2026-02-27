@@ -8,7 +8,7 @@
 RootModule = 'DattoRMM.Core.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.5.36'
+ModuleVersion = '0.5.37'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -56,10 +56,10 @@ PowerShellVersion = '7.0'
 # ScriptsToProcess = @()
 
 # Type files (.ps1xml) to be loaded when importing this module
-TypesToProcess = @('DattoRMM.Core.Types.ps1xml')
+TypesToProcess = @('DattoRMM.Core.v2.Types.ps1xml')
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = @('DattoRMM.Core.Format.ps1xml')
+FormatsToProcess = @('DattoRMM.Core.v2.Format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 #NestedModules = @('Private\Classes\DRMMObject.psm1')
