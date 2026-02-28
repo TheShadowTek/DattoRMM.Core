@@ -5,8 +5,14 @@ Retrieves ESXi host audit data for a specific device.
 
 ## SYNTAX
 
+DeviceUid (Default)
 ```
-Get-RMMEsxiHostAudit [-DeviceUid] <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMEsxiHostAudit -DeviceUid <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+Device
+```
+Get-RMMEsxiHostAudit -Device <DRMMDevice> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -20,6 +26,11 @@ comprehensive information about the virtualization environment, including:
 - Processor and memory details
 - Network adapters and configuration
 - Datastore information and capacity
+
+This function is called automatically by Get-RMMDeviceAudit when a piped DRMMDevice
+object has a DeviceClass of 'esxihost'.
+It can also be called directly with a Device
+object or DeviceUid.
 
 ## EXAMPLES
 
@@ -69,25 +80,40 @@ Gets ESXi hosts and creates a summary showing host names and VM counts.
 
 ## PARAMETERS
 
+### -Device
+A DRMMDevice object to retrieve ESXi audit data for.
+Accepts pipeline input from
+Get-RMMDevice.
+
+```yaml
+Type: DRMMDevice
+Parameter Sets: Device
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -DeviceUid
 The unique identifier (GUID) of the ESXi host device to retrieve audit data for.
-Accepts pipeline input from Get-RMMDevice.
 
 ```yaml
 Type: Guid
-Parameter Sets: (All)
-Aliases: Uid
+Parameter Sets: DeviceUid
+Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ## INPUTS
 
-System.Guid. You can pipe DeviceUid from Get-RMMDevice.
 DRMMDevice. You can pipe device objects from Get-RMMDevice.
 ## OUTPUTS
 
@@ -106,7 +132,13 @@ Use Connect-DattoRMM to authenticate before calling this function.
 ESXi audit data is only available for devices identified as VMware ESXi hosts.
 The Datto RMM agent must have appropriate permissions to query the ESXi host.
 
+When piping a DRMMDevice object to Get-RMMDeviceAudit, devices with DeviceClass
+'esxihost' are automatically routed to this function.
+
 ## RELATED LINKS
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMEsxiHostAudit.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMEsxiHostAudit.md))
+- [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
+- [Get-RMMDevice](./Get-RMMDevice.md)
+- [Get-RMMDeviceAudit](./Get-RMMDeviceAudit.md)

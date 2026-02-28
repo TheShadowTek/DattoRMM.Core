@@ -19,9 +19,16 @@ function Get-RMMEsxiHostAudit {
         - Network adapters and configuration
         - Datastore information and capacity
 
+        This function is called automatically by Get-RMMDeviceAudit when a piped DRMMDevice
+        object has a DeviceClass of 'esxihost'. It can also be called directly with a Device
+        object or DeviceUid.
+
+    .PARAMETER Device
+        A DRMMDevice object to retrieve ESXi audit data for. Accepts pipeline input from
+        Get-RMMDevice.
+
     .PARAMETER DeviceUid
         The unique identifier (GUID) of the ESXi host device to retrieve audit data for.
-        Accepts pipeline input from Get-RMMDevice.
 
     .EXAMPLE
         Get-RMMDevice -Name "ESXI-HOST-01" | Get-RMMEsxiHostAudit
@@ -58,7 +65,6 @@ function Get-RMMEsxiHostAudit {
         Gets ESXi hosts and creates a summary showing host names and VM counts.
 
     .INPUTS
-        System.Guid. You can pipe DeviceUid from Get-RMMDevice.
         DRMMDevice. You can pipe device objects from Get-RMMDevice.
 
     .OUTPUTS
@@ -78,23 +84,60 @@ function Get-RMMEsxiHostAudit {
         ESXi audit data is only available for devices identified as VMware ESXi hosts.
         The Datto RMM agent must have appropriate permissions to query the ESXi host.
 
+        When piping a DRMMDevice object to Get-RMMDeviceAudit, devices with DeviceClass
+        'esxihost' are automatically routed to this function.
+
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMEsxiHostAudit.md
+
+    .LINK
+        about_DRMMDevice
+
+    .LINK
+        Get-RMMDevice
+
+    .LINK
+        Get-RMMDeviceAudit
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'DeviceUid')]
     param (
         [Parameter(
+            ParameterSetName = 'Device',
             Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            ValueFromPipeline = $true
         )]
-        [Alias('Uid')]
+        [DRMMDevice]
+        $Device,
+
+        [Parameter(
+            ParameterSetName = 'DeviceUid',
+            Mandatory = $true
+        )]
         [guid]
         $DeviceUid
     )
 
     process {
 
-        Write-Debug "Getting ESXi host audit for device UID: $DeviceUid"
+        Write-Verbose "Getting ESXi host audit with parameter set: $($PSCmdlet.ParameterSetName)"
+
+        switch ($PSCmdlet.ParameterSetName) {
+
+            'Device' {
+
+                if ($Device.DeviceClass -ne 'esxihost') {
+
+                    Write-Warning "Device '$($Device.Hostname)' has device class '$($Device.DeviceClass)', not 'esxihost'. Use Get-RMMDeviceAudit to route to the correct audit endpoint."
+                    return
+
+                }
+
+                $DeviceUid = $Device.Uid
+
+            }
+        }
+
+        Write-Debug "Getting ESXi host audit for DeviceUid: $DeviceUid"
 
         $APIMethod = @{
             Path = "audit/esxihost/$DeviceUid"

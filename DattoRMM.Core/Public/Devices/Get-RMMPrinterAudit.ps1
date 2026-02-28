@@ -15,9 +15,16 @@ function Get-RMMPrinterAudit {
         or locally connected printers. It provides inventory and supply status information
         useful for proactive printer management.
 
+        This function is called automatically by Get-RMMDeviceAudit when a piped DRMMDevice
+        object has a DeviceClass of 'printer'. It can also be called directly with a Device
+        object or DeviceUid.
+
+    .PARAMETER Device
+        A DRMMDevice object to retrieve printer audit data for. Accepts pipeline input from
+        Get-RMMDevice.
+
     .PARAMETER DeviceUid
         The unique identifier (GUID) of the device to retrieve printer audit data for.
-        Accepts pipeline input from Get-RMMDevice.
 
     .EXAMPLE
         Get-RMMDevice -DeviceId 12345 | Get-RMMPrinterAudit
@@ -49,7 +56,6 @@ function Get-RMMPrinterAudit {
         Retrieves printer audit data and displays SNMP information.
 
     .INPUTS
-        System.Guid. You can pipe DeviceUid from Get-RMMDevice.
         DRMMDevice. You can pipe device objects from Get-RMMDevice.
 
     .OUTPUTS
@@ -67,23 +73,60 @@ function Get-RMMPrinterAudit {
         Printer audit data is only available for devices with printers detected by the agent.
         SNMP must be enabled on network printers for complete data collection.
 
+        When piping a DRMMDevice object to Get-RMMDeviceAudit, devices with DeviceClass
+        'printer' are automatically routed to this function.
+
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMPrinterAudit.md
+
+    .LINK
+        about_DRMMDevice
+
+    .LINK
+        Get-RMMDevice
+
+    .LINK
+        Get-RMMDeviceAudit
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'DeviceUid')]
     param (
         [Parameter(
+            ParameterSetName = 'Device',
             Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            ValueFromPipeline = $true
         )]
-        [Alias('Uid')]
+        [DRMMDevice]
+        $Device,
+
+        [Parameter(
+            ParameterSetName = 'DeviceUid',
+            Mandatory = $true
+        )]
         [guid]
         $DeviceUid
     )
 
     process {
 
-        Write-Debug "Getting printer audit for device UID: $DeviceUid"
+        Write-Verbose "Getting printer audit with parameter set: $($PSCmdlet.ParameterSetName)"
+
+        switch ($PSCmdlet.ParameterSetName) {
+
+            'Device' {
+
+                if ($Device.DeviceClass -ne 'printer') {
+
+                    Write-Warning "Device '$($Device.Hostname)' has device class '$($Device.DeviceClass)', not 'printer'. Use Get-RMMDeviceAudit to route to the correct audit endpoint."
+                    return
+
+                }
+
+                $DeviceUid = $Device.Uid
+
+            }
+        }
+
+        Write-Debug "Getting printer audit for DeviceUid: $DeviceUid"
 
         $APIMethod = @{
             Path = "audit/printer/$DeviceUid"

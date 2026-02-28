@@ -5,8 +5,14 @@ Retrieves printer audit data for a specific device.
 
 ## SYNTAX
 
+DeviceUid (Default)
 ```
-Get-RMMPrinterAudit [-DeviceUid] <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMPrinterAudit -DeviceUid <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+Device
+```
+Get-RMMPrinterAudit -Device <DRMMDevice> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -17,6 +23,11 @@ This audit data is collected by the Datto RMM agent from SNMP-enabled network pr
 or locally connected printers.
 It provides inventory and supply status information
 useful for proactive printer management.
+
+This function is called automatically by Get-RMMDeviceAudit when a piped DRMMDevice
+object has a DeviceClass of 'printer'.
+It can also be called directly with a Device
+object or DeviceUid.
 
 ## EXAMPLES
 
@@ -61,25 +72,40 @@ Retrieves printer audit data and displays SNMP information.
 
 ## PARAMETERS
 
+### -Device
+A DRMMDevice object to retrieve printer audit data for.
+Accepts pipeline input from
+Get-RMMDevice.
+
+```yaml
+Type: DRMMDevice
+Parameter Sets: Device
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -DeviceUid
 The unique identifier (GUID) of the device to retrieve printer audit data for.
-Accepts pipeline input from Get-RMMDevice.
 
 ```yaml
 Type: Guid
-Parameter Sets: (All)
-Aliases: Uid
+Parameter Sets: DeviceUid
+Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ## INPUTS
 
-System.Guid. You can pipe DeviceUid from Get-RMMDevice.
 DRMMDevice. You can pipe device objects from Get-RMMDevice.
 ## OUTPUTS
 
@@ -96,7 +122,13 @@ Use Connect-DattoRMM to authenticate before calling this function.
 Printer audit data is only available for devices with printers detected by the agent.
 SNMP must be enabled on network printers for complete data collection.
 
+When piping a DRMMDevice object to Get-RMMDeviceAudit, devices with DeviceClass
+'printer' are automatically routed to this function.
+
 ## RELATED LINKS
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMPrinterAudit.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMPrinterAudit.md))
+- [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
+- [Get-RMMDevice](./Get-RMMDevice.md)
+- [Get-RMMDeviceAudit](./Get-RMMDeviceAudit.md)
