@@ -17,14 +17,29 @@ Connect-DattoRMM -Credential <PSCredential> [-AutoRefresh] [-Platform <RMMPlatfo
  [-ProxyCredential <PSCredential>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-## DESCRIPTION
-The Connect-DattoRMM function establishes a connection to the Datto RMM API using either
-an API key and secret combination or a PSCredential object.
-Upon successful authentication,
-an access token is obtained and stored for subsequent API requests.
+ApiToken
+```
+Connect-DattoRMM -ApiToken <SecureString> [-Platform <RMMPlatform>] [-Proxy <Uri>]
+ [-ProxyCredential <PSCredential>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
 
-The function supports automatic token refresh and allows selection of different Datto RMM
-platform regions.
+## DESCRIPTION
+The Connect-DattoRMM function establishes a connection to the Datto RMM API using one of three
+authentication methods:
+
+1.
+API Key and Secret: Generates a new access token via OAuth
+2.
+PSCredential: Uses username as key, password as secret to generate a new token
+3.
+API Token: Uses an existing access token (no token generation or refresh)
+
+Methods 1 and 2 support automatic token refresh when enabled.
+Method 3 is a stateless
+"bring your own token" mode intended for scenarios where token lifecycle is managed externally
+(e.g., Azure Key Vault, CI/CD pipelines).
+
+The function allows selection of different Datto RMM platform regions.
 
 ## EXAMPLES
 
@@ -69,6 +84,25 @@ Connect-DattoRMM -Credential $Cred -AutoRefresh -Platform Pinotage
 Creates a credential object using Get-Credential and connects with auto-refresh to the Pinotage platform.
 
 EXAMPLE 6
+```powershell
+$Token = Read-Host -AsSecureString -Prompt "Enter API Token"
+Connect-DattoRMM -ApiToken $Token
+```
+
+Connects using an existing API token.
+The token will not be refreshed automatically.
+Useful for automation scenarios where tokens are managed externally.
+
+EXAMPLE 7
+```powershell
+# Retrieve token from Azure Key Vault
+$Token = (Get-AzKeyVaultSecret -VaultName 'MyVault' -Name 'DattoRMMToken').SecretValue
+Connect-DattoRMM -ApiToken $Token -Platform Merlot
+```
+
+Connects using a token retrieved from Azure Key Vault.
+
+EXAMPLE 8
 ```powershell
 $Secret = Read-Host -AsSecureString -Prompt "Enter API Secret"
 $ProxyCred = Get-Credential -Message "Enter proxy credentials"
@@ -128,13 +162,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ApiToken
+An existing Datto RMM API access token as a SecureString.
+When using this parameter, the function
+will NOT generate a new token and will NOT refresh the token automatically.
+This is intended for
+scenarios where token lifecycle is managed externally (e.g., Azure Key Vault, CI/CD).
+
+Cannot be used with AutoRefresh.
+The token must be valid for the duration of your session.
+
+```yaml
+Type: SecureString
+Parameter Sets: ApiToken
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -AutoRefresh
 When specified, the function will store credentials and automatically refresh the access token
 when it expires during subsequent API calls.
 
+Only valid with Key/Secret or Credential authentication.
+Cannot be used with ApiToken.
+
 ```yaml
 Type: SwitchParameter
-Parameter Sets: (All)
+Parameter Sets: Key, Cred
 Aliases:
 
 Required: False
@@ -212,8 +271,12 @@ The function stores the authentication token in the module's script scope.
 This token is used by all
 subsequent API calls made through the module.
 
-When AutoRefresh is enabled, credentials are stored securely and the token will be automatically
-refreshed when it expires.
+Authentication Methods:
+- Key/Secret and Credential methods generate new tokens and support AutoRefresh
+- ApiToken method uses existing tokens and does NOT support AutoRefresh
+- When AutoRefresh is enabled (Key/Secret or Credential only), credentials are stored securely
+  and the token will be automatically refreshed when it expires
+- ApiToken mode is stateless and does not store credentials or track token expiry
 
 On module removal, the authentication information is cleared from memory.
 

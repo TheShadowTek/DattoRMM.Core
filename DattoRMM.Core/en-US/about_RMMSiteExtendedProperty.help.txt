@@ -5,17 +5,17 @@ SHORT DESCRIPTION
     region Enums
 
 LONG DESCRIPTION
-The RMMSiteExtendedProperty enum defines valid values for TODO: describe what this enum represents
+The RMMSiteExtendedProperty enum defines the types of extended properties that can be retrieved for a site in the Datto RMM platform. These extended properties allow callers to request additional related data when fetching site information, such as the site's settings, variables, or filters.
 
 ## VALUES
 
 The following values are defined for RMMSiteExtendedProperty:
 
-    Value       Description              
-    ----------- -------------------------
-    `Settings`  TODO: Describe this value
-    `Variables` TODO: Describe this value
-    `Filters`   TODO: Describe this value## NOTES
+    Value       Description                             
+    ----------- ----------------------------------------
+    `Settings`  Include the settings associated with ...
+    `Variables` Include the variables associated with...
+    `Filters`   Include the filters associated with t...## NOTES
 
 This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
 SEE ALSO

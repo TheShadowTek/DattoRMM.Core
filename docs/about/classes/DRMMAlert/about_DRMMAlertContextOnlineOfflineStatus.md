@@ -30,7 +30,7 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlertContextOnlineOfflineStatus.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertContextOnlineOfflineStatus.md)
 - [DRMMAlert](./about_DRMMAlert.md)
 - [DRMMAlertContext](./about_DRMMAlertContext.md)
 

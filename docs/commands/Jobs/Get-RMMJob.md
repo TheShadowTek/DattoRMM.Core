@@ -1,229 +1,70 @@
 # Get-RMMJob
 
 ## SYNOPSIS
-Retrieves job information from the Datto RMM API.
+{{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-JobByUid (Default)
+JobUid (Default)
 ```
 Get-RMMJob -JobUid <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-JobComponents
+ActivityLog
 ```
-Get-RMMJob -JobUid <Guid> [-Components] [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-JobStdErr
-```
-Get-RMMJob -JobUid <Guid> -DeviceUid <Guid> [-StdErr] [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-JobStdOut
-```
-Get-RMMJob -JobUid <Guid> -DeviceUid <Guid> [-StdOut] [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-JobResults
-```
-Get-RMMJob -JobUid <Guid> -DeviceUid <Guid> [-Results] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-RMMJob -ActivityLog <DRMMActivityLog> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-RMMJob function retrieves information about jobs (component executions) in the
-Datto RMM system.
-It supports multiple query modes:
-
-- Job details by JobUid
-- Job results for a specific device
-- Job stdout (standard output) for a specific device
-- Job stderr (error output) for a specific device
-- Components associated with a job
-
-Jobs in Datto RMM represent executions of components (scripts/monitors) and can be
-queried to get execution status, results, and output logs.
+{{ Fill in the Description }}
 
 ## EXAMPLES
 
-EXAMPLE 1
+Example 1
 ```powershell
-Get-RMMJob -JobUid "12067610-8504-48e3-b5de-60e48416aaad"
+PS C:\> {{ Add example code here }}
 ```
 
-Retrieves basic information about a specific job.
-
-EXAMPLE 2
-```powershell
-Get-RMMJob -JobUid $JobUid -DeviceUid $DeviceUid -Results
-```
-
-Retrieves the execution results for a job on a specific device.
-
-EXAMPLE 3
-```powershell
-Get-RMMJob -JobUid $JobUid -DeviceUid $DeviceUid -StdOut
-```
-
-Retrieves the standard output from a job execution on a specific device.
-
-EXAMPLE 4
-```powershell
-Get-RMMJob -JobUid $JobUid -DeviceUid $DeviceUid -StdErr
-```
-
-Retrieves the error output from a job execution on a specific device.
-
-EXAMPLE 5
-```powershell
-Get-RMMJob -JobUid $JobUid -Components
-```
-
-Retrieves all components that are part of the specified job.
-
-EXAMPLE 6
-```powershell
-$Job = Get-RMMJob -JobUid $JobUid
-if ($Job.Status -eq "Failed") {
-    Get-RMMJob -JobUid $JobUid -DeviceUid $Job.DeviceUid -StdErr
-}
-```
-
-Retrieves job details and checks for errors if the job failed.
-
-EXAMPLE 7
-```powershell
-$JobUid = "12067610-8504-48e3-b5de-60e48416aaad"
-Get-RMMDevice -FilterId 100 | Get-RMMJob -JobUid $JobUid -StdOut | ConvertFrom-Csv
-```
-
-Gets devices from filter 100, retrieves the stdout from a specific job execution on each device,
-and parses the output as CSV data for further processing.
+{{ Add example description here }}
 
 ## PARAMETERS
 
+### -ActivityLog
+{{ Fill ActivityLog Description }}
+
+```yaml
+Type: DRMMActivityLog
+Parameter Sets: ActivityLog
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -JobUid
-The unique identifier (GUID) of the job to retrieve.
-Required for all parameter sets.
+{{ Fill JobUid Description }}
 
 ```yaml
 Type: Guid
-Parameter Sets: (All)
+Parameter Sets: JobUid
 Aliases:
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -DeviceUid
-The unique identifier (GUID) of the device.
-Required when retrieving job results,
-stdout, or stderr.
-
-```yaml
-Type: Guid
-Parameter Sets: JobStdErr, JobStdOut, JobResults
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Results
-Switch to retrieve job results for a specific device.
-Requires both JobUid and DeviceUid.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: JobResults
-Aliases:
-
-Required: True
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StdOut
-Switch to retrieve job standard output for a specific device.
-Requires both JobUid
-and DeviceUid.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: JobStdOut
-Aliases:
-
-Required: True
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StdErr
-Switch to retrieve job error output for a specific device.
-Requires both JobUid
-and DeviceUid.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: JobStdErr
-Aliases:
-
-Required: True
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Components
-Switch to retrieve all components associated with a job.
-Requires JobUid.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: JobComponents
-Aliases:
-
-Required: True
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ## INPUTS
 
-System.Guid. You can pipe JobUid and DeviceUid from other functions.
+DRMMActivityLog
+
 ## OUTPUTS
 
-DRMMJob. Returns job objects with status, timestamps, and execution details.
-DRMMJobResults. Returns job result objects when using -Results.
-DRMMJobStdData. Returns standard output/error lines when using -StdOut or -StdErr.
-DRMMJobComponent. Returns component objects when using -Components.
+System.Object
 ## NOTES
-This function requires an active connection to the Datto RMM API.
-Use Connect-DattoRMM to authenticate before calling this function.
 
-Job output (stdout/stderr) is typically used for troubleshooting component execution issues.
-
-## RELATED LINKS
-
-
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJob.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJob.md))
-- [about_DRMMJob](../../about/classes/DRMMJob/about_DRMMJob.md)
-- [New-RMMQuickJob](./New-RMMQuickJob.md)
-- [Get-RMMComponent](../Component/Get-RMMComponent.md)
-- [about_DRMMJob](../../about/classes/DRMMJob/about_DRMMJob.md)
-- [New-RMMQuickJob](./New-RMMQuickJob.md)
-- [Get-RMMComponent](../Component/Get-RMMComponent.md)

@@ -1,0 +1,47 @@
+TOPIC
+    about_DRMMActivityLogEntityDevice
+
+SHORT DESCRIPTION
+    Base class for DEVICE entity activity log details, containing properties common to all DEVICE activities.
+
+LONG DESCRIPTION
+The DRMMActivityLogEntityDevice class serves as a base class for all DEVICE entity activity logs, regardless of category. It encapsulates the 6 core properties that appear in all DEVICE activities: DeviceHostname, DeviceUid, Entity, EventAction, EventCategory, and Uid. Category-specific classes (job, remote, device) inherit from this class and add their category-specific properties.
+
+This class inherits from DRMMActivityLogDetails.
+
+## PROPERTIES
+
+The DRMMActivityLogEntityDevice class exposes the following properties:
+
+    Property       Type       Description                             
+    -------------- ---------- ----------------------------------------
+    DeviceHostname string     The hostname of the device associated...
+    DeviceUid      guid       The unique identifier (UID) of the de...
+    Entity         string     The entity type of the activity log e...
+    EventAction    string     The specific action that was performe...
+    EventCategory  string     The category of the event (e.g., job,...
+    Uid            guid       The unique identifier of the activity...
+## METHODS
+
+The DRMMActivityLogEntityDevice class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    DeviceHostname [string]
+    DeviceUid [guid]
+    Entity [string]
+    EventAction [string]
+    EventCategory [string]
+    Uid [guid]
+
+METHODS
+    DRMMActivityLogEntityDevice() : void
+    static PopulateEntityProperties([Object]$Details, [Hashtable]$ActivityLogDetail) : void
+
+SEE ALSO
+    Online Documentation

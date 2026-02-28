@@ -8,22 +8,22 @@ Retrieves activity logs from the Datto RMM API.
 Global (Default)
 ```
 Get-RMMActivityLog [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>] [-Category <String[]>]
- [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-UseExperimentalDetailClasses]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 Site
 ```
 Get-RMMActivityLog [-Site <DRMMSite[]>] [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
  [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 SiteId
 ```
 Get-RMMActivityLog [-SiteId <Int64[]>] [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
  [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -226,6 +226,26 @@ Aliases:
 Required: False
 Position: Named
 Default value: Desc
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseExperimentalDetailClasses
+Enables experimental entity/category-specific detail classes for activity logs.
+When specified,
+details are parsed into strongly-typed classes based on entity, category, and action combinations
+(e.g., DRMMActivityLogDetailsDeviceJob for DEVICE/job activities).
+When not specified (default),
+all details use the generic DRMMActivityLogDetailsGeneric class with dynamic properties.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

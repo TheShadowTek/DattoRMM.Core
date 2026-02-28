@@ -32,6 +32,6 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAPIKeySecret/about_DRMMAPIKeySecret.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAPIKeySecret/about_DRMMAPIKeySecret.md)
 - [Reset-RMMAPIKeySecret](../../../commands/Reset-RMMAPIKeySecret.md)
 

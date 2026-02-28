@@ -1,0 +1,37 @@
+TOPIC
+    about_DRMMActivityLogDetailsDeviceDevice
+
+SHORT DESCRIPTION
+    Base class for DEVICE device-related activity log details, containing properties common to all device actions.
+
+LONG DESCRIPTION
+The DRMMActivityLogDetailsDeviceDevice class serves as a base class for DEVICE entity device category activity logs. It encapsulates properties that are common across different device actions (move, etc.), including source forwarding information, in addition to the entity-level DEVICE properties inherited from DRMMActivityLogEntityDevice. Specific device action types inherit from this class and add their unique properties.
+
+This class inherits from DRMMActivityLogEntityDevice.
+
+## PROPERTIES
+
+The DRMMActivityLogDetailsDeviceDevice class exposes the following properties:
+
+    Property          Type       Description                             
+    ----------------- ---------- ----------------------------------------
+    SourceForwardedIp string     The forwarded IP address of the sourc...
+## METHODS
+
+The DRMMActivityLogDetailsDeviceDevice class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    SourceForwardedIp [string]
+
+METHODS
+    DRMMActivityLogDetailsDeviceDevice() : void
+    static PopulateCategoryProperties([Object]$Details, [Hashtable]$ActivityLogDetail) : void
+
+SEE ALSO
+    Online Documentation

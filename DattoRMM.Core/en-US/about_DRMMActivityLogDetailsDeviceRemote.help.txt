@@ -1,0 +1,57 @@
+TOPIC
+    about_DRMMActivityLogDetailsDeviceRemote
+
+SHORT DESCRIPTION
+    Base class for DEVICE remote-related activity log details, containing properties common to all remote session actions.
+
+LONG DESCRIPTION
+The DRMMActivityLogDetailsDeviceRemote class serves as a base class for DEVICE entity remote category activity logs. It encapsulates properties that are common across different remote session actions (chat, jrto, etc.), including remote session details, site information, user information, and source forwarding details, in addition to the entity-level DEVICE properties inherited from DRMMActivityLogEntityDevice. Specific remote action types inherit from this class and add their unique properties if needed.
+
+This class inherits from DRMMActivityLogEntityDevice.
+
+## PROPERTIES
+
+The DRMMActivityLogDetailsDeviceRemote class exposes the following properties:
+
+    Property               Type                                     Description                             
+    ---------------------- ---------------------------------------- ----------------------------------------
+    RemoteSessionDetails   DRMMActivityLogDetailsRemoteSessionDe... An array of DRMMActivityLogDetailsRem...
+    RemoteSessionId        long                                     The numeric identifier of the remote ...
+    RemoteSessionStartDate nullable[datetime]                       The date and time when the remote ses...
+    RemoteSessionType      string                                   The type of remote session (e.g., cha...
+    SiteName               string                                   The name of the site associated with ...
+    SourceForwardedIp      string                                   The forwarded IP address of the sourc...
+    UserEmail              string                                   The email address of the user who ini...
+    UserFirstName          string                                   The first name of the user who initia...
+    UserId                 long                                     The identifier of the user who initia...
+    UserLastName           string                                   The last name of the user who initiat...
+    UserUsername           string                                   The username of the user who initiate...
+## METHODS
+
+The DRMMActivityLogDetailsDeviceRemote class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    RemoteSessionDetails [DRMMActivityLogDetailsRemoteSessionDetail[]]
+    RemoteSessionId [long]
+    RemoteSessionStartDate [nullable[datetime]]
+    RemoteSessionType [string]
+    SiteName [string]
+    SourceForwardedIp [string]
+    UserEmail [string]
+    UserFirstName [string]
+    UserId [long]
+    UserLastName [string]
+    UserUsername [string]
+
+METHODS
+    DRMMActivityLogDetailsDeviceRemote() : void
+    static PopulateCategoryProperties([Object]$Details, [Hashtable]$ActivityLogDetail) : void
+
+SEE ALSO
+    Online Documentation

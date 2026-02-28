@@ -48,83 +48,11 @@ Retrieves the components associated with the job.
 
 **Returns:** `DRMMJobComponent[]` - A list of components associated with the job.
 
-### GetResults([Guid]$DeviceUid)
-
-Retrieves the results associated with the job for a specific device.
-
-**Returns:** `DRMMJobResults` - The results associated with the job for the specified device.
-
-**Parameters:**
-- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve job results.
-
-### GetStdOut([Guid]$DeviceUid)
-
-Retrieves the standard output data associated with the job for a specific device.
-
-**Returns:** `DRMMJobStdData[]` - The standard output data associated with the job for the specified device.
-
-**Parameters:**
-- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard output data.
-
-### GetStdErr([Guid]$DeviceUid)
-
-Retrieves the standard error data associated with the job for a specific device.
-
-**Returns:** `DRMMJobStdData[]` - The standard error data associated with the job for the specified device.
-
-**Parameters:**
-- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard error data.
-
-### Refresh()
-
-Refreshes the job's data by fetching the latest information from the API.
-
-**Returns:** `void` - The updated job object with refreshed data.
-
 ### GetSummary()
 
 Generates a summary string for the job.
 
 **Returns:** `string` - A summary string representing the job.
-
-### GetStdOutAsJson([Guid]$DeviceUid)
-
-Retrieves the standard output data associated with the job for a specific device.
-
-**Returns:** `pscustomobject[]` - The standard output data associated with the job for the specified device, parsed from JSON into a PowerShell object.
-
-**Parameters:**
-- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard output data.
-
-### GetStdOutAsCsv([Guid]$DeviceUid)
-
-Retrieves the standard output data associated with the job for a specific device.
-
-**Returns:** `pscustomobject[]` - The standard output data associated with the job for the specified device, parsed from CSV into a PowerShell object.
-
-**Parameters:**
-- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard output data.
-
-### GetStdOutAsCsv([Guid]$DeviceUid, [Boolean]$FirstRowAsHeader)
-
-Retrieves the standard output data associated with the job for a specific device.
-
-**Returns:** `pscustomobject[]` - The standard output data associated with the job for the specified device, parsed from CSV into a PowerShell object.
-
-**Parameters:**
-- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard output data.
-- `[Boolean]$FirstRowAsHeader` - Indicates whether the first row of the output should be treated as a header (true/false).
-
-### GetStdOutAsCsv([Guid]$DeviceUid, [Boolean]$FirstRowAsHeader, [String[]]$Headers)
-
-Retrieves the standard output data associated with the job for a specific device.
-
-**Returns:** `pscustomobject[]` - The standard output data associated with the job for the specified device, parsed from CSV into a PowerShell object.
-
-**Parameters:**
-- `[Guid]$DeviceUid` - The unique identifier of the device for which to retrieve standard output data.
-- `[Boolean]$FirstRowAsHeader` - Indicates whether the first row of the output should be treated as a header (true/false).
-- `[String[]]$Headers` - An optional array of headers to use for the CSV output. If not provided, default headers will be used.
 
 ## NOTES
 
@@ -143,15 +71,7 @@ METHODS
     IsCompleted() : bool
     GetAge() : timespan
     GetComponents() : DRMMJobComponent[]
-    GetResults([Guid]$DeviceUid) : DRMMJobResults
-    GetStdOut([Guid]$DeviceUid) : DRMMJobStdData[]
-    GetStdErr([Guid]$DeviceUid) : DRMMJobStdData[]
-    Refresh() : void
     GetSummary() : string
-    GetStdOutAsJson([Guid]$DeviceUid) : pscustomobject[]
-    GetStdOutAsCsv([Guid]$DeviceUid) : pscustomobject[]
-    GetStdOutAsCsv([Guid]$DeviceUid, [Boolean]$FirstRowAsHeader) : pscustomobject[]
-    GetStdOutAsCsv([Guid]$DeviceUid, [Boolean]$FirstRowAsHeader, [String[]]$Headers) : pscustomobject[]
 
 SEE ALSO
     Online Documentation

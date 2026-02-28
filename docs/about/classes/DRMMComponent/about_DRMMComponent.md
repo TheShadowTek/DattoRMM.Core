@@ -23,7 +23,7 @@ The DRMMComponent class exposes the following properties:
 | CategoryCode        | string                  | The category code that classifies the component within the DRMM system. |
 | CredentialsRequired | bool                    | Indicates whether the component requires credentials. |
 | Variables           | DRMMComponentVariable[] | An array of variables associated with the component. |
-| PortalUrl           | string                  | Add description |
+| PortalUrl           | string                  | The URL to access the component in the Datto RMM web portal. |
 
 ## METHODS
 
@@ -54,7 +54,7 @@ Retrieves all output variables associated with the component.
 
 Opens the component's portal URL in the default web browser.
 
-**Returns:** `void` - Describe what this method returns
+**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
 
 ### GetSummary()
 
@@ -68,7 +68,7 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMComponent/about_DRMMComponent.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMComponent/about_DRMMComponent.md)
 - [Get-RMMComponent](../../../commands/Component/Get-RMMComponent.md)
 - [New-RMMQuickJob](../../../commands/Jobs/New-RMMQuickJob.md)
 - [DRMMComponentVariable](./about_DRMMComponentVariable.md)

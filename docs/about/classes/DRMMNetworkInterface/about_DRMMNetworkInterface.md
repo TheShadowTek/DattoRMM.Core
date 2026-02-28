@@ -6,7 +6,7 @@ region DRMMNetworkInterface class
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMNetworkInterface class models a network interface card (NIC) associated with a device in the Datto RMM platform. It includes properties such as Instance, Ipv4, Ipv6, MacAddress, and Type, which describe the configuration and identity of the network interface. The class provides a constructor and a static method to create an instance from API response data. This class is used as a property within device audit and device network interface classes to represent individual NICs.
 
 This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
@@ -34,4 +34,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMNetworkInterface/about_DRMMNetworkInterface.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMNetworkInterface/about_DRMMNetworkInterface.md)

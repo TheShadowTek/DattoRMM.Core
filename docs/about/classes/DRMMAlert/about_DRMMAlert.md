@@ -30,7 +30,7 @@ The DRMMAlert class exposes the following properties:
 | AlertSourceInfo  | DRMMAlertSourceInfo       | AlertSourceInfo of the DRMMAlert object, including information about the source of the alert such as device and site details. |
 | ResponseActions  | DRMMAlertResponseAction[] | Actions taken in response to the alert. |
 | AutoresolveMins  | Nullable[int]             | The number of minutes after which the alert will be automatically resolved if not resolved manually. |
-| PortalUrl        | string                    | Add description |
+| PortalUrl        | string                    | The URL to access the alert in the Datto RMM web portal. |
 
 ## METHODS
 
@@ -70,7 +70,7 @@ Gets a summary of the alert.
 
 Opens the alert's portal URL in the default web browser.
 
-**Returns:** `void` - Describe what this method returns
+**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
 
 ## NOTES
 
@@ -78,7 +78,7 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMAlert/about_DRMMAlert.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlert.md)
 - [DRMMAlertContext](./about_DRMMAlertContext.md)
 - [DRMMAlertMonitorInfo](./about_DRMMAlertMonitorInfo.md)
 - [DRMMAlertSourceInfo](./about_DRMMAlertSourceInfo.md)

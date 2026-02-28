@@ -1,0 +1,47 @@
+TOPIC
+    about_DRMMActivityLogDetailsDeviceJobCreate
+
+SHORT DESCRIPTION
+    Represents an activity log of entity DEVICE, category job, and action create, which includes specific properties related to job creation activities.
+
+LONG DESCRIPTION
+The DRMMActivityLogDetailsDeviceJobCreate class models the details of a job creation activity log entry. It inherits common job properties from DRMMActivityLogDetailsDeviceJob and adds creation-specific properties such as the job creation date and user information (email, first name, last name, username, user ID).
+
+This class inherits from DRMMActivityLogDetailsDeviceJob.
+
+## PROPERTIES
+
+The DRMMActivityLogDetailsDeviceJobCreate class exposes the following properties:
+
+    Property       Type               Description                             
+    -------------- ------------------ ----------------------------------------
+    JobDateCreated nullable[datetime] The date and time when the job was cr...
+    UserEmail      string             The email address of the user who cre...
+    UserFirstName  string             The first name of the user who create...
+    UserId         long               The identifier of the user who create...
+    UserLastName   string             The last name of the user who created...
+    UserUsername   string             The username of the user who created ...
+## METHODS
+
+The DRMMActivityLogDetailsDeviceJobCreate class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    JobDateCreated [nullable[datetime]]
+    UserEmail [string]
+    UserFirstName [string]
+    UserId [long]
+    UserLastName [string]
+    UserUsername [string]
+
+METHODS
+    DRMMActivityLogDetailsDeviceJobCreate() : void
+    static FromActivityLogDetail([Hashtable]$ActivityLogDetail) : DRMMActivityLogDetailsDeviceJobCreate
+
+SEE ALSO
+    Online Documentation

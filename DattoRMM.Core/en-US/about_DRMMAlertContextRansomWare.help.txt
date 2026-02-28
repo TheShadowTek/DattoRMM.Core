@@ -46,3 +46,5 @@ METHODS
 
 SEE ALSO
     Online Documentation
+    DRMMAlert
+    DRMMAlertContext

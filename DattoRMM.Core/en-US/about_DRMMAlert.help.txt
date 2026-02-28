@@ -29,7 +29,7 @@ The DRMMAlert class exposes the following properties:
     AlertSourceInfo  DRMMAlertSourceInfo       AlertSourceInfo of the DRMMAlert obje...
     ResponseActions  DRMMAlertResponseAction[] Actions taken in response to the alert. 
     AutoresolveMins  Nullable[int]             The number of minutes after which the...
-    SiteUid          Nullable[guid]            Unique identifier for the site associ...
+    PortalUrl        string                    The URL to access the alert in the Da...
 ## METHODS
 
 The DRMMAlert class provides the following methods:
@@ -64,6 +64,12 @@ Gets a summary of the alert.
 
 **Returns:** `string` - A summary string combining key properties of the alert for easy display.
 
+### OpenPortal()
+
+Opens the alert's portal URL in the default web browser.
+
+**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
+
 ## NOTES
 
 This class is defined in the DattoRMM.Core module's Classes.psm1 file.
@@ -83,7 +89,7 @@ PROPERTIES
     AlertSourceInfo [DRMMAlertSourceInfo]
     ResponseActions [DRMMAlertResponseAction[]]
     AutoresolveMins [Nullable[int]]
-    SiteUid [Nullable[guid]]
+    PortalUrl [string]
 
 METHODS
     DRMMAlert() : void
@@ -92,6 +98,13 @@ METHODS
     IsHigh() : bool
     Resolve() : void
     GetSummary() : string
+    OpenPortal() : void
 
 SEE ALSO
     Online Documentation
+    DRMMAlertContext
+    DRMMAlertMonitorInfo
+    DRMMAlertSourceInfo
+    DRMMAlertResponseAction
+    Get-RMMAlert
+    Resolve-RMMAlert

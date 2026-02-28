@@ -1,0 +1,43 @@
+TOPIC
+    about_DRMMActivityLogDetailsDeviceJobDeployment
+
+SHORT DESCRIPTION
+    Represents an activity log of entity DEVICE, category job, and action deployment, which includes specific properties related to job deployment activities.
+
+LONG DESCRIPTION
+The DRMMActivityLogDetailsDeviceJobDeployment class models the details of a job deployment activity log entry. It inherits common job properties from DRMMActivityLogDetailsDeviceJob and adds deployment-specific properties such as deployment ID, scheduled job information, and notes.
+
+This class inherits from DRMMActivityLogDetailsDeviceJob.
+
+## PROPERTIES
+
+The DRMMActivityLogDetailsDeviceJobDeployment class exposes the following properties:
+
+    Property           Type       Description                             
+    ------------------ ---------- ----------------------------------------
+    JobDeploymentId    long       The identifier of the job deployment.   
+    JobScheduledJobId  long       The identifier of the scheduled job a...
+    JobScheduledJobUid guid       The unique identifier (UID) of the sc...
+    Note               string     An optional note or comment associate...
+## METHODS
+
+The DRMMActivityLogDetailsDeviceJobDeployment class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    JobDeploymentId [long]
+    JobScheduledJobId [long]
+    JobScheduledJobUid [guid]
+    Note [string]
+
+METHODS
+    DRMMActivityLogDetailsDeviceJobDeployment() : void
+    static FromActivityLogDetail([Hashtable]$ActivityLogDetail) : DRMMActivityLogDetailsDeviceJobDeployment
+
+SEE ALSO
+    Online Documentation

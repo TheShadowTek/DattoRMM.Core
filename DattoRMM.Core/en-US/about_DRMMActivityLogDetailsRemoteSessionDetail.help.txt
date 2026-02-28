@@ -1,0 +1,41 @@
+TOPIC
+    about_DRMMActivityLogDetailsRemoteSessionDetail
+
+SHORT DESCRIPTION
+    Represents a detail item within a remote session activity log, including action, detail text, and name.
+
+LONG DESCRIPTION
+The DRMMActivityLogDetailsRemoteSessionDetail class models individual detail items within the remote_session
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMActivityLogDetailsRemoteSessionDetail class exposes the following properties:
+
+    Property   Type       Description                             
+    ---------- ---------- ----------------------------------------
+    Action     string     The action type performed during this...
+    Detail     string     The detail text describing the specif...
+    Name       string     The name associated with this detail ...
+## METHODS
+
+The DRMMActivityLogDetailsRemoteSessionDetail class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    Action [string]
+    Detail [string]
+    Name [string]
+
+METHODS
+    DRMMActivityLogDetailsRemoteSessionDetail() : void
+    static FromActivityLogDetail([Hashtable]$DetailItem) : DRMMActivityLogDetailsRemoteSessionDetail
+
+SEE ALSO
+    Online Documentation

@@ -49,3 +49,4 @@ METHODS
 
 SEE ALSO
     Online Documentation
+    DRMMComponent

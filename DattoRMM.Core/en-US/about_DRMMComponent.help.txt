@@ -22,6 +22,7 @@ The DRMMComponent class exposes the following properties:
     CategoryCode        string                  The category code that classifies the...
     CredentialsRequired bool                    Indicates whether the component requi...
     Variables           DRMMComponentVariable[] An array of variables associated with...
+    PortalUrl           string                  The URL to access the component in th...
 ## METHODS
 
 The DRMMComponent class provides the following methods:
@@ -47,6 +48,12 @@ Retrieves all output variables associated with the component.
 
 **Returns:** `DRMMComponentVariable[]` - An array of DRMMComponentVariable objects that are designated as output variables for the component.
 
+### OpenPortal()
+
+Opens the component's portal URL in the default web browser.
+
+**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
+
 ### GetSummary()
 
 Generates a summary string for the component, including its name, variable count, credentials requirement, and category.
@@ -65,13 +72,18 @@ PROPERTIES
     CategoryCode [string]
     CredentialsRequired [bool]
     Variables [DRMMComponentVariable[]]
+    PortalUrl [string]
 
 METHODS
     DRMMComponent() : void
     GetVariable([String]$Name) : DRMMComponentVariable
     GetInputVariables() : DRMMComponentVariable[]
     GetOutputVariables() : DRMMComponentVariable[]
+    OpenPortal() : void
     GetSummary() : string
 
 SEE ALSO
     Online Documentation
+    Get-RMMComponent
+    New-RMMQuickJob
+    DRMMComponentVariable

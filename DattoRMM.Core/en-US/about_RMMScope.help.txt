@@ -2,19 +2,19 @@ TOPIC
     about_RMMScope
 
 SHORT DESCRIPTION
-    Describes the RMMScope enumeration used in DattoRMM.Core module
+    Defines the scope levels for resources in the Datto RMM platform (Global or Site).
 
 LONG DESCRIPTION
-The RMMScope enum defines valid values for TODO: describe what this enum represents
+The RMMScope enum defines the scope levels available within the Datto RMM platform. Scope determines whether a resource such as a variable or filter applies globally across all sites or is restricted to a specific site.
 
 ## VALUES
 
 The following values are defined for RMMScope:
 
-    Value      Description              
-    ---------- -------------------------
-    `Global`   TODO: Describe this value
-    `Site`     TODO: Describe this value## NOTES
+    Value      Description                             
+    ---------- ----------------------------------------
+    `Global`   The resource applies globally across ...
+    `Site`     The resource is scoped to a specific ...## NOTES
 
 This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
 SEE ALSO

@@ -49,4 +49,6 @@ METHODS
 
 SEE ALSO
     Online Documentation
+    DRMMAccountDescriptor
+    DRMMAccountDevicesStatus
     Get-RMMAccount

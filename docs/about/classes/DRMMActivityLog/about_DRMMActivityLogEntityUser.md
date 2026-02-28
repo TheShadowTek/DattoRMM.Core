@@ -16,10 +16,10 @@ The DRMMActivityLogEntityUser class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Entity        | string | Add description |
-| EventAction   | string | Add description |
-| EventCategory | string | Add description |
-| Uid           | guid   | Add description |
+| Entity        | string | The entity type of the activity log entry (e.g., USER). |
+| EventAction   | string | The specific action that was performed in the user activity. |
+| EventCategory | string | The category of the user event. |
+| Uid           | guid   | The unique identifier of the activity log detail entry. |
 
 ## METHODS
 
@@ -33,4 +33,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogEntityUser.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogEntityUser.md)

@@ -16,18 +16,18 @@ The DRMMActivityLogDetailsDeviceDeviceMoveDevice class exposes the following pro
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DataFromSiteId   | long   | Add description |
-| DataFromSiteName | string | Add description |
-| DataFromSiteUid  | guid   | Add description |
-| DataToSiteId     | long   | Add description |
-| DataToSiteName   | string | Add description |
-| DataToSiteUid    | guid   | Add description |
-| SiteName         | string | Add description |
-| UserEmail        | string | Add description |
-| UserFirstName    | string | Add description |
-| UserId           | long   | Add description |
-| UserLastName     | string | Add description |
-| UserUsername     | string | Add description |
+| DataFromSiteId   | long   | The identifier of the site the device was moved from. |
+| DataFromSiteName | string | The name of the site the device was moved from. |
+| DataFromSiteUid  | guid   | The unique identifier (UID) of the site the device was moved from. |
+| DataToSiteId     | long   | The identifier of the site the device was moved to. |
+| DataToSiteName   | string | The name of the site the device was moved to. |
+| DataToSiteUid    | guid   | The unique identifier (UID) of the site the device was moved to. |
+| SiteName         | string | The name of the site associated with the device move operation. |
+| UserEmail        | string | The email address of the user who performed the device move. |
+| UserFirstName    | string | The first name of the user who performed the device move. |
+| UserId           | long   | The identifier of the user who performed the device move. |
+| UserLastName     | string | The last name of the user who performed the device move. |
+| UserUsername     | string | The username of the user who performed the device move. |
 
 ## METHODS
 
@@ -41,4 +41,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceDeviceMoveDevice.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceDeviceMoveDevice.md)

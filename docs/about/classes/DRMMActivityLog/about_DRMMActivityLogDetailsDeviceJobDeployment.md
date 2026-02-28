@@ -16,10 +16,10 @@ The DRMMActivityLogDetailsDeviceJobDeployment class exposes the following proper
 
 | Property | Type | Description |
 |----------|------|-------------|
-| JobDeploymentId    | long   | Add description |
-| JobScheduledJobId  | long   | Add description |
-| JobScheduledJobUid | guid   | Add description |
-| Note               | string | Add description |
+| JobDeploymentId    | long   | The identifier of the job deployment. |
+| JobScheduledJobId  | long   | The identifier of the scheduled job associated with the deployment. |
+| JobScheduledJobUid | guid   | The unique identifier (UID) of the scheduled job associated with the deployment. |
+| Note               | string | An optional note or comment associated with the job deployment. |
 
 ## METHODS
 
@@ -33,4 +33,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceJobDeployment.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceJobDeployment.md)

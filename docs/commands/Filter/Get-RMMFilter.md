@@ -25,21 +25,6 @@ SiteAll
 Get-RMMFilter -Site <DRMMSite> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-SiteUidByName
-```
-Get-RMMFilter -SiteUid <Guid> -Name <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-SiteUidById
-```
-Get-RMMFilter -SiteUid <Guid> -Id <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-SiteAllUid
-```
-Get-RMMFilter -SiteUid <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
 GlobalById
 ```
 Get-RMMFilter -Id <Int32> [-FilterType <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
@@ -121,27 +106,12 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -SiteUid
-The unique identifier (GUID) of a site to retrieve filters for.
-
-```yaml
-Type: Guid
-Parameter Sets: SiteUidByName, SiteUidById, SiteAllUid
-Aliases: Uid
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
 Retrieve a specific filter by its numeric ID.
 
 ```yaml
 Type: Int32
-Parameter Sets: SiteById, SiteUidById, GlobalById
+Parameter Sets: SiteById, GlobalById
 Aliases:
 
 Required: True
@@ -156,7 +126,7 @@ Retrieve a filter by its name (exact match).
 
 ```yaml
 Type: String
-Parameter Sets: SiteByName, SiteUidByName, GlobalByName
+Parameter Sets: SiteByName, GlobalByName
 Aliases:
 
 Required: True
@@ -187,7 +157,6 @@ Accept wildcard characters: False
 ## INPUTS
 
 DRMMSite. You can pipe site objects from Get-RMMSite.
-You can also pipe objects with SiteUid properties.
 ## OUTPUTS
 
 DRMMFilter. Returns filter objects with the following properties:

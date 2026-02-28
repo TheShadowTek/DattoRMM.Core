@@ -1,0 +1,163 @@
+# about_DattoRMM.CoreSecurity
+
+## SHORT DESCRIPTION
+
+Describes the security model of the DattoRMM.Core module, including credential handling, PII protection, SecureString behaviour, and safe automation patterns.
+
+## LONG DESCRIPTION
+
+Security is a core design principle of the DattoRMM.Core module. The module handles API credentials, access tokens, and personally identifiable information (PII) with deliberate safeguards throughout the session lifecycle.
+
+## CREDENTIAL HANDLING
+
+### Secrets in Memory Only
+
+- API secrets are accepted as `SecureString` or `PSCredential` objects — never as plaintext strings.
+- Access tokens are stored in a script-scoped variable (`$Script:RMMAuth`) and are never written to disk.
+- When the module is removed from the session, all authentication state (tokens, proxy credentials) is cleared automatically.
+
+### Credential Lifecycle
+
+**Key/Secret and Credential authentication:**
+
+1. Credentials are supplied via `Connect-DattoRMM`.
+2. The module exchanges them for an API token and stores the token in memory.
+3. If `-AutoRefresh` is enabled, credentials are retained in memory for automatic token renewal.
+4. On `Disconnect-DattoRMM` or module removal, all credentials and tokens are cleared.
+
+**ApiToken authentication (bring your own token):**
+
+1. A pre-existing token is supplied via `Connect-DattoRMM -ApiToken`.
+2. The token is stored in memory. No credentials are stored.
+3. `-AutoRefresh` is not available. The module does not track token expiry.
+4. On `Disconnect-DattoRMM` or module removal, the token is cleared.
+
+This separation means that in ApiToken mode, no credentials capable of generating new tokens are ever present in the module's memory — only the token itself.
+
+**Request-RMMToken (standalone token generation):**
+
+`Request-RMMToken` generates a token from the OAuth endpoint and returns it as a `DRMMToken` object. It does not store anything in the module's authentication state. Credentials are used only for the duration of the token request and are not retained.
+
+### SecureString Cross-Platform Behaviour
+
+The module runs on PowerShell 7+ (Core edition), which supports Windows, Linux, and macOS. SecureString handling differs by platform:
+
+- **Windows** — `SecureString` values are decrypted using secure .NET APIs. Memory is zeroed immediately after use.
+- **Linux/macOS** — `SecureString` is converted via `PSCredential.GetNetworkCredential().Password`. Due to .NET Core limitations, plaintext may persist in managed memory until garbage collection runs.
+
+In all cases, sensitive variables are cleared from scope as soon as they are no longer needed.
+
+> [!NOTE]
+> This is a .NET Core platform limitation, not specific to this module. On non-Windows platforms, `SecureString` provides reduced protection compared to Windows.
+
+## PII PROTECTION
+
+Several API endpoints return personally identifiable information (e.g., usernames, email addresses, last logged-in user). The module applies deliberate safeguards to these operations.
+
+### High-Impact Confirmation
+
+Commands that return PII use PowerShell's `ConfirmImpact` system. By default, these commands prompt for confirmation before executing:
+
+- `Get-RMMUser` — Returns user accounts with names, emails, and phone numbers.
+- `Get-RMMDevice -IncludeLastLoggedInUser` — Includes the last logged-in username for each device.
+- `Get-RMMActivityLog` — Returns activity logs that may include user identifiers.
+
+### Bypassing Confirmation
+
+For automation, use `-Force` to suppress the confirmation prompt:
+
+```powershell
+Get-RMMUser -Force
+Get-RMMDevice -IncludeLastLoggedInUser -Force
+```
+
+Or use `-Confirm:$false` for the same effect:
+
+```powershell
+Get-RMMUser -Confirm:$false
+```
+
+### WhatIf Support
+
+All PII-sensitive and mutating commands support `-WhatIf` to preview what would happen without making changes:
+
+```powershell
+Get-RMMUser -WhatIf
+Move-RMMDevice -DeviceUid "abc-123" -TargetSiteUid "def-456" -WhatIf
+```
+
+## SAFE AUTOMATION PATTERNS
+
+### Force and Confirm
+
+All mutating commands (`Move-RMMDevice`, `Set-RMMDeviceUDF`, `Resolve-RMMAlert`, `New-RMMQuickJob`, etc.) support:
+
+- `-Force` — Suppresses confirmation prompts for unattended execution.
+- `-WhatIf` — Simulates the operation without applying changes.
+- `-Confirm` — Explicitly enables or disables confirmation (`-Confirm:$false`).
+
+### Preference Variables
+
+For bulk automation, you can set `$ConfirmPreference` to control confirmation behaviour at the session level:
+
+```powershell
+$ConfirmPreference = 'None'
+# All commands run without confirmation prompts
+Get-RMMUser
+```
+
+> [!WARNING]
+> Setting `$ConfirmPreference` to `None` disables all confirmation prompts. Use this only in controlled automation scripts where you understand every operation being performed.
+
+## API KEY SECURITY
+
+### Key Regeneration
+
+`Reset-RMMAPIKeys` regenerates the API access key and secret for the authenticated user. This immediately invalidates the current session.
+
+- With `-ReturnNewKey`, the new key/secret pair is returned as a `DRMMAPIKeySecret` object (secret as `SecureString`).
+- Without `-ReturnNewKey`, the new keys are discarded and must be retrieved from the Datto RMM web portal.
+
+```powershell
+$NewKeys = Reset-RMMAPIKeys -ReturnNewKey
+```
+
+### Token Visibility
+
+`Show-RMMToken` displays the current session token and authentication details. This is a security-sensitive operation and supports `-WhatIf` and `-Confirm`.
+
+## PROXY CREDENTIAL SECURITY
+
+When connecting through an authenticated proxy, proxy credentials follow the same lifecycle as API credentials:
+
+- Stored in memory only (`$Script:RMMAuth.ProxyCredential`).
+- Cleared on `Disconnect-DattoRMM` or module removal.
+- Never written to disk.
+
+## EXAMPLES
+
+### Example 1: Safe bulk operation with WhatIf
+
+```powershell
+Get-RMMSite -Name "Staging" | Get-RMMDevice | Move-RMMDevice -Site $TargetSite -WhatIf
+```
+
+### Example 2: Unattended automation with Force
+
+```powershell
+Get-RMMAlert -Status Open | Resolve-RMMAlert -Force
+```
+
+### Example 3: Check PII-sensitive data before committing
+
+```powershell
+Get-RMMUser -WhatIf
+# Review what would be returned, then:
+Get-RMMUser -Force
+```
+
+## SEE ALSO
+
+- [about_DattoRMM.Core](about_DattoRMM.Core.md)
+- [about_DattoRMM.CoreAuthentication](about_DattoRMM.CoreAuthentication.md)
+- [about_DattoRMM.CoreConfiguration](about_DattoRMM.CoreConfiguration.md)

@@ -5,7 +5,7 @@ SHORT DESCRIPTION
     Represents a filter in the DRMM system, including its name, description, type, scope, and associated site.
 
 LONG DESCRIPTION
-The DRMMFilter class models a filter within the DRMM platform, encapsulating properties such as Id, FilterId, Name, Description, Type, Scope, SiteUid, DateCreate, and LastUpdated. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to determine if the filter is global or site-specific, as well as a method to generate a summary string of the filter's information. Additionally, it includes methods to retrieve devices and alerts associated with the filter.
+The DRMMFilter class models a filter within the DRMM platform, encapsulating properties such as Id, FilterId, Name, Description, Type, Scope, Site (for site-scoped filters), SiteUid, DateCreate, LastUpdated, and PortalUrl. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to determine if the filter is global or site-specific, as well as a method to generate a summary string of the filter's information. Additionally, it includes methods to retrieve devices and alerts associated with the filter. For site-scoped filters, the Site property provides full context about the associated site, while SiteUid is maintained for backward compatibility.
 
 This class inherits from DRMMObject.
 
@@ -22,8 +22,10 @@ The DRMMFilter class exposes the following properties:
     Type        string             The type or category of the filter.     
     Scope       string             The scope or context in which the fil...
     SiteUid     Nullable[guid]     The unique identifier of the site ass...
+    Site        DRMMSite           The DRMMSite object associated with t...
     DateCreate  Nullable[datetime] The date and time when the filter was...
     LastUpdated Nullable[datetime] The date and time when the filter was...
+    PortalUrl   string             The URL to access the filter results ...
 ## METHODS
 
 The DRMMFilter class provides the following methods:
@@ -51,6 +53,12 @@ Determines if the filter is the default type.
 Determines if the filter is a custom type.
 
 **Returns:** `bool` - A boolean value indicating whether the filter is a custom type.
+
+### OpenPortal()
+
+Opens the portal URL associated with the filter in the default web browser.
+
+**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
 
 ### GetSummary()
 
@@ -97,8 +105,10 @@ PROPERTIES
     Type [string]
     Scope [string]
     SiteUid [Nullable[guid]]
+    Site [DRMMSite]
     DateCreate [Nullable[datetime]]
     LastUpdated [Nullable[datetime]]
+    PortalUrl [string]
 
 METHODS
     DRMMFilter() : void
@@ -106,6 +116,7 @@ METHODS
     IsSite() : bool
     IsDefault() : bool
     IsCustom() : bool
+    OpenPortal() : void
     GetSummary() : string
     GetDevices() : DRMMDevice[]
     GetDeviceCount() : int

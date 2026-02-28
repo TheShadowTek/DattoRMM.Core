@@ -16,17 +16,17 @@ The DRMMActivityLogDetailsDeviceRemote class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| RemoteSessionDetails   | DRMMActivityLogDetailsRemoteSessionDetail[] | Add description |
-| RemoteSessionId        | long                                        | Add description |
-| RemoteSessionStartDate | nullable[datetime]                          | Add description |
-| RemoteSessionType      | string                                      | Add description |
-| SiteName               | string                                      | Add description |
-| SourceForwardedIp      | string                                      | Add description |
-| UserEmail              | string                                      | Add description |
-| UserFirstName          | string                                      | Add description |
-| UserId                 | long                                        | Add description |
-| UserLastName           | string                                      | Add description |
-| UserUsername           | string                                      | Add description |
+| RemoteSessionDetails   | DRMMActivityLogDetailsRemoteSessionDetail[] | An array of DRMMActivityLogDetailsRemoteSessionDetail objects describing individual events or steps within the remote session. |
+| RemoteSessionId        | long                                        | The numeric identifier of the remote session. |
+| RemoteSessionStartDate | nullable[datetime]                          | The date and time when the remote session started. |
+| RemoteSessionType      | string                                      | The type of remote session (e.g., chat, jrto). |
+| SiteName               | string                                      | The name of the site associated with the remote session. |
+| SourceForwardedIp      | string                                      | The forwarded IP address of the source that initiated the remote session. |
+| UserEmail              | string                                      | The email address of the user who initiated the remote session. |
+| UserFirstName          | string                                      | The first name of the user who initiated the remote session. |
+| UserId                 | long                                        | The identifier of the user who initiated the remote session. |
+| UserLastName           | string                                      | The last name of the user who initiated the remote session. |
+| UserUsername           | string                                      | The username of the user who initiated the remote session. |
 
 ## METHODS
 
@@ -40,4 +40,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceRemote.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceRemote.md)

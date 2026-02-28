@@ -16,9 +16,9 @@ The DRMMActivityLogDetailsRemoteSessionDetail class exposes the following proper
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Action | string | Add description |
-| Detail | string | Add description |
-| Name   | string | Add description |
+| Action | string | The action type performed during this step of the remote session. |
+| Detail | string | The detail text describing the specific event or step within the remote session. |
+| Name   | string | The name associated with this detail item in the remote session. |
 
 ## METHODS
 
@@ -32,4 +32,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsRemoteSessionDetail.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsRemoteSessionDetail.md)

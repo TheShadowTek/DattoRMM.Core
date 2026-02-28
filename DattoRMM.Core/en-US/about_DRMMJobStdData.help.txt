@@ -20,11 +20,41 @@ The DRMMJobStdData class exposes the following properties:
     ComponentUid  guid       The unique identifier (UID) of the jo...
     ComponentName string     The name of the job component.          
     StdData       string     The standard data output of the job c...
+    StdType       string     Add description                         
 ## METHODS
 
 The DRMMJobStdData class provides the following methods:
 
-No public methods defined.
+### GetStdDataAsJson()
+
+Retrieves the standard data associated with a completed job component, parsed from JSON format.
+
+**Returns:** `pscustomobject` - Describe what this method returns
+
+### GetStdDataAsCsv()
+
+Retrieves the standard data associated with a completed job component, parsed from CSV format.
+
+**Returns:** `pscustomobject[]` - Describe what this method returns
+
+### GetStdDataAsCsv([String[]]$Headers)
+
+Retrieves the standard data associated with a completed job component, parsed from CSV format.
+
+**Returns:** `pscustomobject[]` - Describe what this method returns
+
+**Parameters:**
+- `[String[]]$Headers` - Describe this parameter
+
+### GetStdDataAsCsv([String[]]$Headers, [Boolean]$RemoveFirstRow)
+
+Retrieves the standard data associated with a completed job component, parsed from CSV format.
+
+**Returns:** `pscustomobject[]` - Describe what this method returns
+
+**Parameters:**
+- `[String[]]$Headers` - Describe this parameter
+- `[Boolean]$RemoveFirstRow` - Describe this parameter
 
 ## NOTES
 
@@ -36,9 +66,14 @@ PROPERTIES
     ComponentUid [guid]
     ComponentName [string]
     StdData [string]
+    StdType [string]
 
 METHODS
     DRMMJobStdData() : void
+    GetStdDataAsJson() : pscustomobject
+    GetStdDataAsCsv() : pscustomobject[]
+    GetStdDataAsCsv([String[]]$Headers) : pscustomobject[]
+    GetStdDataAsCsv([String[]]$Headers, [Boolean]$RemoveFirstRow) : pscustomobject[]
 
 SEE ALSO
     Online Documentation

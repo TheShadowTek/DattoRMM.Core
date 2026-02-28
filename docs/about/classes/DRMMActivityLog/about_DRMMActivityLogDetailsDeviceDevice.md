@@ -16,7 +16,7 @@ The DRMMActivityLogDetailsDeviceDevice class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| SourceForwardedIp | string | Add description |
+| SourceForwardedIp | string | The forwarded IP address of the source that initiated the device activity. |
 
 ## METHODS
 
@@ -30,4 +30,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceDevice.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceDevice.md)

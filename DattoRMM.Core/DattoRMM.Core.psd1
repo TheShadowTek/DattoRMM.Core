@@ -56,10 +56,10 @@ PowerShellVersion = '7.0'
 # ScriptsToProcess = @()
 
 # Type files (.ps1xml) to be loaded when importing this module
-TypesToProcess = @('DattoRMM.Core.v2.Types.ps1xml')
+TypesToProcess = @('DattoRMM.Core.Types.ps1xml')
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = @('DattoRMM.Core.v2.Format.ps1xml')
+FormatsToProcess = @('DattoRMM.Core.Format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 #NestedModules = @('Private\Classes\DRMMObject.psm1')
@@ -141,7 +141,7 @@ PrivateData = @{
         ProjectUri = 'https://github.com/TheShadowTek/DattoRMM.Core'
 
         # Base URL for the documentation
-        DocsBaseUrl = 'https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/'
+        DocsBaseUrl = 'https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs'
 
         # A URL to an icon representing this module.
         # IconUri = ''

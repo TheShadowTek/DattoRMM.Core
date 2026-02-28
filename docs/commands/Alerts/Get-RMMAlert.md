@@ -5,29 +5,34 @@ Retrieves alerts from the Datto RMM API.
 
 ## SYNTAX
 
-GlobalAll (Default)
+Global (Default)
 ```
 Get-RMMAlert [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-SiteAll
+Site
 ```
 Get-RMMAlert -Site <DRMMSite> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-DeviceAll
-```
-Get-RMMAlert -DeviceUid <Guid> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-SiteAllUid
+SiteUid
 ```
 Get-RMMAlert -SiteUid <Guid> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-GlobalByUid
+Device
 ```
-Get-RMMAlert -AlertUid <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMAlert -Device <DRMMDevice> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+DeviceUid
+```
+Get-RMMAlert -DeviceUid <Guid> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+Alert
+```
+Get-RMMAlert -AlertUid <Guid> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -106,7 +111,37 @@ Accepts pipeline input from Get-RMMSite.
 
 ```yaml
 Type: DRMMSite
-Parameter Sets: SiteAll
+Parameter Sets: Site
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -SiteUid
+The unique identifier (GUID) of a site to retrieve alerts for.
+
+```yaml
+Type: Guid
+Parameter Sets: SiteUid
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Device
+{{ Fill Device Description }}
+
+```yaml
+Type: DRMMDevice
+Parameter Sets: Device
 Aliases:
 
 Required: True
@@ -121,22 +156,7 @@ The unique identifier (GUID) of a device to retrieve alerts for.
 
 ```yaml
 Type: Guid
-Parameter Sets: DeviceAll
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SiteUid
-The unique identifier (GUID) of a site to retrieve alerts for.
-
-```yaml
-Type: Guid
-Parameter Sets: SiteAllUid
+Parameter Sets: DeviceUid
 Aliases:
 
 Required: True
@@ -151,7 +171,7 @@ The unique identifier of a specific alert to retrieve.
 
 ```yaml
 Type: Guid
-Parameter Sets: GlobalByUid
+Parameter Sets: Alert
 Aliases:
 
 Required: True
@@ -169,7 +189,7 @@ Note: When AlertUid is specified, Status is not required.
 
 ```yaml
 Type: String
-Parameter Sets: GlobalAll, SiteAll, DeviceAll, SiteAllUid
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -198,8 +218,7 @@ The function retrieves alerts in batches and automatically handles pagination.
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md))
+- [Resolve-RMMAlert](./Resolve-RMMAlert.md)
 - [about_DRMMAlert](../../about/classes/DRMMAlert/about_DRMMAlert.md)
-- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [Get-RMMDevice](../Devices/Get-RMMDevice.md)
 - [Get-RMMSite](../Sites/Get-RMMSite.md)
-- [Resolve-RMMAlert](./Resolve-RMMAlert.md)

@@ -23,10 +23,10 @@ The DRMMFilter class exposes the following properties:
 | Type        | string             | The type or category of the filter. |
 | Scope       | string             | The scope or context in which the filter is applied. |
 | SiteUid     | Nullable[guid]     | The unique identifier of the site associated with the filter. |
-| Site        | DRMMSite           | Add description |
+| Site        | DRMMSite           | The DRMMSite object associated with the filter when it is site-scoped. Provides full site context for site-specific filters. |
 | DateCreate  | Nullable[datetime] | The date and time when the filter was created. |
 | LastUpdated | Nullable[datetime] | The date and time when the filter was last updated. |
-| PortalUrl   | string             | Add description |
+| PortalUrl   | string             | The URL to access the filter results in the Datto RMM web portal. |
 
 ## METHODS
 
@@ -60,7 +60,7 @@ Determines if the filter is a custom type.
 
 Opens the portal URL associated with the filter in the default web browser.
 
-**Returns:** `void` - Describe what this method returns
+**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
 
 ### GetSummary()
 
@@ -101,4 +101,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMFilter/about_DRMMFilter.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMFilter/about_DRMMFilter.md)

@@ -16,12 +16,12 @@ The DRMMActivityLogEntityDevice class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| DeviceHostname | string | Add description |
-| DeviceUid      | guid   | Add description |
-| Entity         | string | Add description |
-| EventAction    | string | Add description |
-| EventCategory  | string | Add description |
-| Uid            | guid   | Add description |
+| DeviceHostname | string | The hostname of the device associated with the activity. |
+| DeviceUid      | guid   | The unique identifier (UID) of the device associated with the activity. |
+| Entity         | string | The entity type of the activity log entry (e.g., DEVICE). |
+| EventAction    | string | The specific action that was performed (e.g., deployment, create, move.device). |
+| EventCategory  | string | The category of the event (e.g., job, remote, device). |
+| Uid            | guid   | The unique identifier of the activity log detail entry. |
 
 ## METHODS
 
@@ -35,4 +35,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogEntityDevice.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogEntityDevice.md)

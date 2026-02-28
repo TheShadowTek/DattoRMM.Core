@@ -13,13 +13,18 @@ This class inherits from DRMMObject.
 
 The DRMMJobResults class exposes the following properties:
 
-    Property            Type                     Description                             
-    ------------------- ------------------------ ----------------------------------------
-    JobUid              guid                     The unique identifier (UID) of the job. 
-    DeviceUid           guid                     The unique identifier (UID) of the de...
-    RanOn               Nullable[datetime]       The date and time when the job was run. 
-    JobDeploymentStatus string                   The deployment status of the job.       
-    ComponentResults    DRMMJobComponentResult[] The results of the job components.      
+    Property              Type                     Description                             
+    --------------------- ------------------------ ----------------------------------------
+    JobUid                guid                     The unique identifier (UID) of the job. 
+    DeviceUid             guid                     The unique identifier (UID) of the de...
+    RanOn                 Nullable[datetime]       The date and time when the job was run. 
+    JobDeploymentStatus   string                   The deployment status of the job.       
+    ComponentResults      DRMMJobComponentResult[] The results of the job components.      
+    TotalNumberOfWarnings int                      Add description                         
+    HasStdOut             bool                     Add description                         
+    HasStdErr             bool                     Add description                         
+    StdOut                DRMMJobStdData[]         Add description                         
+    StdErr                DRMMJobStdData[]         Add description                         
 ## METHODS
 
 The DRMMJobResults class provides the following methods:
@@ -36,6 +41,11 @@ PROPERTIES
     RanOn [Nullable[datetime]]
     JobDeploymentStatus [string]
     ComponentResults [DRMMJobComponentResult[]]
+    TotalNumberOfWarnings [int]
+    HasStdOut [bool]
+    HasStdErr [bool]
+    StdOut [DRMMJobStdData[]]
+    StdErr [DRMMJobStdData[]]
 
 METHODS
     DRMMJobResults() : void

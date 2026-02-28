@@ -16,12 +16,12 @@ The DRMMActivityLogDetailsDeviceJobCreate class exposes the following properties
 
 | Property | Type | Description |
 |----------|------|-------------|
-| JobDateCreated | nullable[datetime] | Add description |
-| UserEmail      | string             | Add description |
-| UserFirstName  | string             | Add description |
-| UserId         | long               | Add description |
-| UserLastName   | string             | Add description |
-| UserUsername   | string             | Add description |
+| JobDateCreated | nullable[datetime] | The date and time when the job was created. |
+| UserEmail      | string             | The email address of the user who created the job. |
+| UserFirstName  | string             | The first name of the user who created the job. |
+| UserId         | long               | The identifier of the user who created the job. |
+| UserLastName   | string             | The last name of the user who created the job. |
+| UserUsername   | string             | The username of the user who created the job. |
 
 ## METHODS
 
@@ -35,4 +35,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceJobCreate.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceJobCreate.md)

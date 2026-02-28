@@ -1,225 +1,104 @@
-# DattoRMM.Core PowerShell Module
+# DattoRMM.Core
 
-## Overview
+A PowerShell module for the Datto RMM API v2. Provides typed, object-oriented access to devices, sites, alerts, jobs, filters, variables, and account management with built-in adaptive throttling and secure credential handling.
 
-This PowerShell module provides a comprehensive, object-oriented interface for managing and automating tasks with the Datto RMM API v2. It enables secure authentication, robust device and job management, and advanced automation scenarios for Datto RMM environments.
+> **Requires PowerShell 7.0 or later** (Core edition only).
 
 ## Features
 
-- **Secure API Authentication**: Supports both API key/secret and PSCredential authentication, with secure handling of secrets and tokens.
-- **Comprehensive Device Management**: Query, filter, and manage devices with rich object models and class-based methods.
-- **Job and Automation Control**: Create, monitor, and retrieve results from jobs and quick jobs, with detailed status and output access.
-- **Account and Site Management**: Retrieve and manage account, site, and variable information with simple, scriptable commands.
-- **Advanced Filtering and Querying**: Flexible parameter sets for targeting devices, jobs, and sites by multiple criteria.
-- **Rate Limiting and Throttling**: Built-in safeguards to respect Datto RMM API rate limits and prevent accidental lockouts or service disruption.
-- **Extensible and Scriptable**: Designed for automation, reporting, and integration into larger PowerShell workflows.
+- **Typed Object Model** — All API responses are returned as strongly-typed PowerShell classes with properties, methods, and pipeline support.
+- **Full Pipeline Integration** — Chain commands naturally: `Get-RMMSite | Get-RMMDevice | Get-RMMAlert`.
+- **Adaptive Throttling** — Automatic rate-limit management with configurable profiles (Aggressive, Medium, Cautious) for safe single or concurrent use.
+- **Secure by Default** — Credentials handled via `SecureString` and `PSCredential`; tokens held in memory only; PII-sensitive operations require explicit confirmation.
+- **Persistent Configuration** — Platform region, throttle profile, page size, and retry settings saved to a JSON config file for consistent behaviour across sessions.
+- **Comprehensive Coverage** — 40 commands across 11 domains: Account, Activity Log, Alerts, Auth, Components, Config, Devices, Filters, Jobs, Sites, and Variables.
 
-## Security
+## Installation
 
-- All authentication secrets are handled securely using PowerShell's `SecureString` and credential objects.
-- Access tokens are stored only in memory for the session and are never written to disk.
-- Sensitive operations that may expose personally identifiable information (PII)—such as retrieving the last logged-in user—are PII-hardened and use PowerShell's ConfirmImpact system, requiring explicit confirmation or the use of `-Force`. These operations fully support `-Confirm` and `-WhatIf` for safe automation.
-- Configurable token refresh: The module automatically refreshes API tokens before expiry (default 100 hours, configurable), supporting long-running workloads and automation without manual re-authentication.
-
-## Rate Limiting & Throttling
-
-The module automatically detects and respects Datto RMM API rate limits, using built-in throttling logic to prevent exceeding allowed request rates. Throttling is adaptive and configurable, with three preset aggressiveness levels:
-
-- **Cautious**: Maximum safety, checks rate limits frequently, slowest.
-- **Medium**: Balanced for most workloads (default).
-- **Aggressive**: Fastest, checks less often, higher risk of hitting limits.
-
-You can adjust throttling for the current session or persistently:
-
-```powershell
-# Set throttling to Cautious for this session
-Set-RMMThrottle -ThrottleProfile Cautious
-
-# Set throttling to Aggressive and persist for future sessions
-Set-RMMThrottle -ThrottleProfile Aggressive -Persist
-```
-
-All default values are managed centrally and can be tuned in one place. For advanced options, custom settings, and Datto's official API guidance, see:
-
-- [docs/about/about_DattoRMM.CoreThrottling.md](docs/about/about_DattoRMM.CoreThrottling.md)
-
-With this built-in throttling, it is safe to run large parallel workloads (such as data extraction or bulk operations) without risking API lockouts or service disruption.
-
-
-## Platform Support
-
-Datto RMM operates multiple platform regions. The module supports connecting to any supported region using the `-Platform` parameter or by configuring a persistent default.
-
-**Supported Platforms:**
-
-- Pinotage (default)
-- Concord
-- Vidal
-- Merlot
-- Zinfandel
-- Syrah
-
-You can specify the platform region at connection time:
-
-```powershell
-$Secret = Read-Host -Prompt "Enter API Secret" -AsSecureString
-Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Platform Merlot
-```
-
-Or persist your preferred default platform for all sessions:
-
-```powershell
-Set-RMMConfig -Platform Merlot -Persist
-```
-
-If you do not specify a platform, the module will use your configured default (if set), or fall back to Pinotage.
-
-
-### Installation
-
-Copy the module files to your PowerShell module path, or import directly from your working directory:
+Copy the module folder to a path in `$env:PSModulePath`, or import directly:
 
 ```powershell
 Import-Module ./DattoRMM.Core.psd1
 ```
 
-
-
-### Authentication
-
-
-Connect using an API key and secret (shell):
+## Quick Start
 
 ```powershell
+# Connect with API key and secret
 $Secret = Read-Host -Prompt "Enter API Secret" -AsSecureString
 Connect-DattoRMM -Key "your-api-key" -Secret $Secret
+
+# Retrieve all devices
+Get-RMMDevice
+
+# Get alerts for a specific site
+Get-RMMSite -Name "Main Office" | Get-RMMAlert
+
+# Export all sites to CSV
+Get-RMMSite | Export-Csv Sites.csv
 ```
 
-Or with a PSCredential (shell):
+For credential storage options (SecretStore, Azure Automation, Key Vault), see [Authentication](docs/about/about_DattoRMM.CoreAuthentication.md).
 
-```powershell
-$Cred = Get-Credential -Message "Enter API key and secret"
-Connect-DattoRMM -Credential $Cred
-```
+## Examples
 
-Or with PowerShell SecretStore - securley presist between sessions (shell - interactive):
+Resolve all critical-severity alerts for devices in a site filter:
 
-```powershell
-# Requires Microsoft.PowerShell.SecretManagement and Microsoft.PowerShell.SecretStore modules
-Import-Module Microsoft.PowerShell.SecretManagement
-
-# Store credential object in default vault
-$Cred = Get-Credential
-Set-Secret -Name "DattoRMM-API" -Secret $Cred
-
-# Retrieve a PSCredential from SecretStore (including future sessions)
-Connect-DattoRMM -Credential (Get-Secret -Name "DattoRMM-API")
-```
-> [!NOTE]
-> If used in a script with a password protected vault, use a SecureString parameter to provide access to the vault 
-
-#### Using in Azure Automation Runbooks
-
-This module can be used in Azure Automation Runbooks for secure, unattended automation. You can retrieve credentials from the Automation Account credential store or from Azure Key Vault.
-
-
-
-**Example: Using Automation Account Credential**
-
-```powershell
-# Import the module (ensure it is uploaded to the Automation Account)
-Import-Module DattoRMM.Core
-
-# Retrieve credential asset by name
-$Cred = Get-AutomationPSCredential -Name "DattoRMM-API"
-
-# Connect using the credential
-Connect-DattoRMM -Credential $Cred
-```
-
-> [!NOTE]
-> The credential asset must be created in the Automation Account before use.
-
-
-**Example: Using Azure Key Vault**
-
-For Azure-based automation, you can retrieve credentials directly from Azure Key Vault using the Azure PowerShell modules:
-
-```powershell
-# Authenticate to Azure (Managed Identity or Service Principal recommended in Automation)
-Connect-AzAccount
-
-# Retrieve API key and secret from Azure Key Vault
-$ApiKey = Get-AzKeyVaultSecret -VaultName "MyKeyVault" -Name "DattoRMM-API-Key" -AsPlainText
-$Secret = Get-AzKeyVaultSecret -VaultName "MyKeyVault" -Name "DattoRMM-API-Secret"
-
-# Connect using the retrieved key and secret
-Connect-DattoRMM -Key $ApiKey -Secret $Secret
-```
-
-> [!NOTE]
-> The Key Vault and secrets must be created and accessible to the automation context.
-
-
-> [!NOTE]
-> PowerShell SecretManagement vaults (such as SecretStore, KeePass, etc.) are primarily for local shell use. In Azure Automation, credential retrieval methods such as Automation Account Credential and Azure Key Vault are commonly used and recommended. Other methods or third-party PAM modules may work, but compatibility is not guaranteed or verified.
-
-
-
-### Example Usage
-
-Get a device filter by name for a site, then get devices in that filter, and resolve all low alerts:
 ```powershell
 $Filter = Get-RMMSite -Name "Main Office" | Get-RMMFilter -Name "Critical Servers"
-$Devices = Get-RMMDevice -FilterId $Filter.Id
-$Devices | Get-RMMAlert -Status Low | Resolve-RMMAlert
+Get-RMMDevice -FilterId $Filter.Id | Get-RMMAlert | Where-Object {$_.Priority -eq "Critical"} | Resolve-RMMAlert
 ```
 
-Move all devices in a site filter to another site:
+Move devices from one site to another:
+
 ```powershell
-$TargetSite = Get-RMMSite -Name "New Office"
-$SourceFilter = Get-RMMSite -Name "Main Office" | Get-RMMFilter -Name "Production Servers"
-$SourceFilter | Get-RMMDevice | Move-RMMDevice -Site $TargetSite
+$Target = Get-RMMSite -Name "New Office"
+Get-RMMSite -Name "Old Office" | Get-RMMDevice | Move-RMMDevice -Site $Target
 ```
 
-Start a patch job on all devices in the global 'Web Servers' filter:
+Run an ad-hoc job on filtered devices:
+
 ```powershell
-$Filter = Get-RMMFilter -Name "Web Servers" | Where-Object {$_.IsGlobal()}
-$Component = Get-RMMComponent | Where-Object Name -eq "Patch WebServer - URGENT"
-Get-RMMDevice -FilterId $Filter.Id | New-RMMQuickJob -JobName "Patch WebServer - URGENT" -Component $Component -Force
+$Component = Get-RMMComponent | Where-Object Name -eq "Patch WebServer"
+Get-RMMDevice -FilterId 12345 | New-RMMQuickJob -JobName "Emergency Patch" -Component $Component -Force
 ```
 
-### More Examples
+## Commands
 
-See the `docs/` folder and in-module help for detailed usage and advanced scenarios.
+| Domain | Commands |
+|---|---|
+| **Account** | `Get-RMMAccount`, `Get-RMMNetMapping`, `Get-RMMRequestRate`, `Get-RMMStatus`, `Get-RMMUser` |
+| **Activity Log** | `Get-RMMActivityLog` |
+| **Alerts** | `Get-RMMAlert`, `Resolve-RMMAlert` |
+| **Auth** | `Connect-DattoRMM`, `Disconnect-DattoRMM`, `Request-RMMToken`, `Reset-RMMAPIKeys`, `Show-RMMToken` |
+| **Components** | `Get-RMMComponent` |
+| **Config** | `Get-RMMConfig`, `Set-RMMConfig`, `Save-RMMConfig`, `Remove-RMMConfig` |
+| **Devices** | `Get-RMMDevice`, `Get-RMMDeviceAudit`, `Get-RMMDeviceSoftware`, `Get-RMMEsxiHostAudit`, `Get-RMMPrinterAudit`, `Move-RMMDevice`, `Set-RMMDeviceUDF`, `Set-RMMDeviceWarranty` |
+| **Filters** | `Get-RMMFilter` |
+| **Jobs** | `Get-RMMJob`, `Get-RMMJobResult`, `New-RMMQuickJob` |
+| **Sites** | `Get-RMMSite`, `Get-RMMSiteSettings`, `New-RMMSite`, `Set-RMMSite`, `Set-RMMSiteProxy`, `Remove-RMMSiteProxy` |
+| **Variables** | `Get-RMMVariable`, `New-RMMVariable`, `Set-RMMVariable`, `Remove-RMMVariable` |
 
-## SecureString Handling and Cross-Platform Security
+Run `Get-Help <CommandName>` for detailed parameter and usage information, or see the [command reference](docs/commands/).
 
-- On **Windows**, SecureString values are decrypted using secure .NET APIs and memory is immediately zeroed after use.
-- On **Linux/macOS**, SecureString is converted using `PSCredential.GetNetworkCredential().Password`. Due to .NET Core limitations, plaintext may persist in managed memory until garbage collection runs.
-- All sensitive variables are cleared from memory as soon as possible.
-- For high-security scenarios on Linux/macOS, you may call `[GC]::Collect()` after sensitive operations to force memory cleanup.
+## Documentation
 
-**Example:**
+| Topic | Description |
+|---|---|
+| [Module Overview](docs/about/about_DattoRMM.Core.md) | Architecture, design principles, and feature summary |
+| [Authentication](docs/about/about_DattoRMM.CoreAuthentication.md) | All authentication methods, credential storage, and automation scenarios |
+| [Configuration](docs/about/about_DattoRMM.CoreConfiguration.md) | Platform regions, page size, retry settings, and persistent configuration |
+| [Throttling](docs/about/about_DattoRMM.CoreThrottling.md) | Adaptive throttling, profiles, concurrent use, and API rate limit details |
+| [Security](docs/about/about_DattoRMM.CoreSecurity.md) | PII handling, credential lifecycle, SecureString cross-platform behaviour |
+| [Command Reference](docs/commands/) | Per-command documentation with examples |
+| [Class Reference](docs/about/classes/) | Typed output classes and enums |
+
+About topics are also available in-module:
+
 ```powershell
-$secret = Read-Host -AsSecureString
-Connect-DattoRMM -Key "your-api-key" -Secret $secret
-[System.GC]::Collect() # Optional: for extra security on Linux/macOS
+Get-Help about_DattoRMM.Core
+Get-Help about_DattoRMM.CoreThrottling
 ```
-
-### Commands Requiring [GC]::Collect() for Maximum Security (Linux/macOS)
-
-If you are operating in a high-security environment on Linux or macOS, consider running `[System.GC]::Collect()` after using any of the following commands with SecureString input:
-
-- `Connect-DattoRMM` (when using the `-Secret` or `-Credential` parameter)
-- `New-RMMVariable` (when using a SecureString for the `-Value` parameter)
-- `Set-RMMVariable` (when using a SecureString for the `-Value` parameter)
-
-This ensures that any sensitive plaintext temporarily created in memory is more quickly cleaned up by the .NET garbage collector.
-
-## Known Issues
-
-- **Out-GridView crash when sorting AlertContext**: When piping `DRMMAlert` objects to `Out-GridView` and the `AlertContext` property contains mixed types, attempting to sort the `AlertContext` column will cause `Out-GridView` to crash. This is under review for a fix (potentially via custom `Types ToString()` or a Format Table View).
 
 ## Disclaimer
 

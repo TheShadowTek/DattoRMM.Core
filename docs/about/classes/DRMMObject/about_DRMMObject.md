@@ -6,7 +6,7 @@ region DRMMObject - Base Class
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMObject class serves as the base class for all domain model classes in the DattoRMM.Core module. It provides shared utility methods for safely extracting values from API response objects, validating response structures, converting epoch timestamps to DateTime values, parsing various API date formats, and masking sensitive string values. All domain classes inherit from DRMMObject to gain access to these foundational capabilities.
 
 
 
@@ -21,7 +21,7 @@ The DRMMObject class provides the following methods:
 
 ### static GetValue([PSObject]$InputObject, [String]$Key)
 
-Add method description explaining what this method does
+Safely retrieves the value of a specified property from a PSCustomObject, returning null if the property does not exist.
 
 **Returns:** `object` - The value associated with the specified key in the input object, or null if the key does not exist.
 
@@ -31,7 +31,7 @@ Add method description explaining what this method does
 
 ### static ValidateShape([PSObject]$Sample, [String[]]$RequiredProperties)
 
-Add method description explaining what this method does
+Validates that a PSCustomObject contains all specified required properties, used to verify API response structures before processing.
 
 **Returns:** `bool` - A boolean value indicating whether the sample object contains all the required properties.
 
@@ -41,7 +41,7 @@ Add method description explaining what this method does
 
 ### static ConvertEpochToDateTime([Int64]$Epoch)
 
-Add method description explaining what this method does
+Converts a Unix epoch timestamp (in seconds or milliseconds) to a UTC DateTime value.
 
 **Returns:** `datetime` - The DateTime representation of the given epoch timestamp.
 
@@ -59,7 +59,7 @@ Handle numeric epoch timestamps (int, long, double, or numeric strings)
 
 ### static MaskString([String]$Value, [Int32]$VisibleChars, [String]$MaskChar)
 
-Add method description explaining what this method does
+Masks a string value by replacing characters beyond a specified visible count with a mask character, used to obscure sensitive data such as API keys or secrets.
 
 **Returns:** `string` - The masked string with the specified number of visible characters at the start.
 
@@ -74,4 +74,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMObject/about_DRMMObject.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMObject/about_DRMMObject.md)

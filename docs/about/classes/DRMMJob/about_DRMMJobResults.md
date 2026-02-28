@@ -16,11 +16,16 @@ The DRMMJobResults class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| JobUid              | guid                     | The unique identifier (UID) of the job. |
-| DeviceUid           | guid                     | The unique identifier (UID) of the device. |
-| RanOn               | Nullable[datetime]       | The date and time when the job was run. |
-| JobDeploymentStatus | string                   | The deployment status of the job. |
-| ComponentResults    | DRMMJobComponentResult[] | The results of the job components. |
+| JobUid                | guid                     | The unique identifier (UID) of the job. |
+| DeviceUid             | guid                     | The unique identifier (UID) of the device. |
+| RanOn                 | Nullable[datetime]       | The date and time when the job was run. |
+| JobDeploymentStatus   | string                   | The deployment status of the job. |
+| ComponentResults      | DRMMJobComponentResult[] | The results of the job components. |
+| TotalNumberOfWarnings | int                      | The total number of warnings across all component results. |
+| HasStdOut             | bool                     | Indicates whether any component result produced standard output data. |
+| HasStdErr             | bool                     | Indicates whether any component result produced standard error data. |
+| StdOut                | DRMMJobStdData[]         | The standard output data collected from job components that produced output. |
+| StdErr                | DRMMJobStdData[]         | The standard error data collected from job components that produced error output. |
 
 ## METHODS
 
@@ -34,4 +39,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMJob/about_DRMMJobResults.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMJob/about_DRMMJobResults.md)

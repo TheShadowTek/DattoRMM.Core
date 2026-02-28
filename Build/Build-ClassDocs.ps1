@@ -77,7 +77,7 @@ try {
     $DocsBaseUrl = $Manifest.PrivateData.PSData.DocsBaseUrl
     if (-not $DocsBaseUrl) {
         Write-Warning "DocsBaseUrl not found in manifest. Using default."
-        $DocsBaseUrl = 'https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/'
+        $DocsBaseUrl = 'https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs'
     }
     Write-Host "  DocsBaseUrl: $DocsBaseUrl" -ForegroundColor Gray
         # Helper function to extract AST comments (returns synopsis only)
@@ -229,7 +229,7 @@ try {
     
     # Extract #region information
     Write-Host "`nExtracting region structure..." -ForegroundColor Yellow
-    $Regions = @()
+    $Regions = [System.Collections.Generic.List[object]]::new()
     $Lines = $ClassesContent -split "`r?`n"
     
     for ($i = 0; $i -lt $Lines.Count; $i++) {
@@ -238,12 +238,12 @@ try {
             $RegionText = $matches[1].Trim()
             # First word becomes folder name
             $FolderName = ($RegionText -split '\s+')[0]
-            $Regions += [PSCustomObject]@{
+            $Regions.Add([PSCustomObject]@{
                 Name = $RegionText
                 FolderName = $FolderName
                 StartLine = $i + 1  # 1-based
-                Classes = @()
-            }
+                Classes = [System.Collections.Generic.List[object]]::new()
+            })
             Write-Host "  Found region: $RegionText -> Folder: $FolderName" -ForegroundColor Gray
         }
     }
@@ -370,12 +370,16 @@ try {
                 }
             }
             
-            $AssignedRegion.Classes += $TypeInfo
+            $AssignedRegion.Classes.Add($TypeInfo)
         }
     }
         # Build class-to-folder lookup for inheritance links
-    Write-Host "\nBuilding class-to-folder lookup..." -ForegroundColor Yellow
+    Write-Host "`nBuilding class-to-folder lookup..." -ForegroundColor Yellow
     $ClassFolderMap = @{}
+    # Workaround: if $Region was previously bound as [string] in this session (from a prior run using
+    # $Regions += which coerces PSCustomObjects to strings), foreach will silently coerce the loop
+    # variable to that type. Remove-Variable clears the binding so foreach assigns the correct type.
+    Remove-Variable Region -ErrorAction SilentlyContinue
     foreach ($Region in $Regions) {
         foreach ($TypeInfo in $Region.Classes) {
             $ClassFolderMap[$TypeInfo.Name] = $Region.FolderName
@@ -385,7 +389,7 @@ try {
     Write-Host "  Mapped $($ClassFolderMap.Count) classes to folders" -ForegroundColor Gray
     
     # Build function-to-subfolder lookup for command links
-    Write-Host "\nBuilding function-to-subfolder lookup..." -ForegroundColor Yellow
+    Write-Host "`nBuilding function-to-subfolder lookup..." -ForegroundColor Yellow
     $FunctionLookup = @{}
     $PublicPath = Join-Path $ModuleRoot 'DattoRMM.Core\Public'
     if (Test-Path $PublicPath) {
@@ -394,15 +398,32 @@ try {
         foreach ($FuncFile in $PublicFunctions) {
             $FuncName = $FuncFile.BaseName
             $RelPath = $FuncFile.DirectoryName.Replace((Join-Path $ModuleRoot 'DattoRMM.Core\Public'), '').TrimStart('\','/')
-            $FunctionLookup[$FuncName] = if ($RelPath) { $RelPath } else { '' }
+            if ($RelPath) {
+                $FunctionLookup[$FuncName] = $RelPath
+            } else {
+                $FunctionLookup[$FuncName] = ''
+            }
         }
     }
     Write-Host "  Mapped $($FunctionLookup.Count) functions to subfolders" -ForegroundColor Gray
     
     # Initialize/update documentation content for all classes
-    Write-Host "\nInitializing/updating documentation content structure..." -ForegroundColor Yellow
+    Write-Host "`nInitializing/updating documentation content structure..." -ForegroundColor Yellow
+    # Workaround: clear any stale type-binding on $Region from a prior session run. See first instance above.
+    Remove-Variable Region -ErrorAction SilentlyContinue
     foreach ($Region in $Regions) {
+
         $RegionKey = $Region.FolderName
+
+        if (-not $RegionKey) {
+
+            Write-Warning "Skipping region with null/empty FolderName: Name='$($Region.Name)' StartLine=$($Region.StartLine) Type=$($Region.GetType().FullName)"
+            Write-Warning "  Properties: $($Region.PSObject.Properties.Name -join ', ')"
+            continue
+
+        }
+
+        Write-Host "`n  Processing region: $RegionKey" -ForegroundColor Cyan
         
         if (-not $DocContent.ContainsKey($RegionKey)) {
             $DocContent[$RegionKey] = @{}
@@ -556,7 +577,8 @@ try {
     
     $TotalGenerated = 0
     $TotalSkipped = 0
-    
+    # Workaround: clear any stale type-binding on $Region from a prior session run. See first instance above.
+    Remove-Variable Region -ErrorAction SilentlyContinue
     foreach ($Region in $Regions) {
         if ($Region.Classes.Count -eq 0) {
             Write-Host "`n  Region '$($Region.FolderName)' has no classes, skipping..." -ForegroundColor Yellow

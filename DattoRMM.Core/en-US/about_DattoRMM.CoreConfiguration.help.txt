@@ -1,0 +1,181 @@
+TOPIC
+    about_DattoRMM.CoreConfiguration
+
+SHORT DESCRIPTION
+    Describes the configuration system in the DattoRMM.Core module, including platform regions, page size, API resilience settings, and persistent configuration.
+
+LONG DESCRIPTION
+The DattoRMM.Core module uses a layered configuration system. Settings can be applied at the session level (in-memory) or persisted to a JSON config file for future sessions. Persistent settings are loaded automatically when the module is imported.
+
+### Configuration File
+
+Settings are stored in a JSON file at:
+
+```
+$HOME/.DattoRMM.Core/config.json
+```
+
+The module reads this file on import. If it does not exist, built-in defaults are used.
+
+### Viewing Current Configuration
+
+```powershell
+Get-RMMConfig
+```
+
+This displays the active configuration, showing both persisted (file-based) and session-level values, along with the effective defaults.
+
+## CONFIGURATION SETTINGS
+
+### Platform Region
+
+Datto RMM operates across multiple platform regions. Each region has its own API endpoint. The module supports:
+
+    Platform   Description                         
+    ---------- ------------------------------------
+    Pinotage   Default if no platform is configured
+    Concord                                        
+    Vidal                                          
+    Merlot                                         
+    Zinfandel                                      
+    Syrah                                          
+Set the platform for the current session:
+
+```powershell
+Set-RMMConfig -Platform Merlot
+```
+
+Or specify the platform when connecting:
+
+```powershell
+Connect-DattoRMM -Key "your-api-key" -Secret $Secret -Platform Merlot
+```
+
+If no platform is specified at connection time, the module uses the configured default. If no default is configured, it falls back to Pinotage.
+
+### Page Size
+
+Controls the number of results returned per API page for paginated endpoints. Valid range: 1–250.
+
+```powershell
+Set-RMMConfig -PageSize 100
+```
+
+Smaller page sizes increase the number of API requests but can improve pipeline throughput when feeding results into downstream batch processors (e.g., Azure Table Storage with a batch limit of 100).
+
+### Throttle Profile
+
+Controls how aggressively the module manages API request pacing. See about_DattoRMM.CoreThrottling for full details.
+
+```powershell
+Set-RMMConfig -ThrottleProfile Cautious
+```
+
+Available profiles: `Aggressive`, `Medium` (default), `Cautious`.
+
+### Token Expire Hours
+
+Controls how frequently the module refreshes its API token when `-AutoRefresh` is enabled on `Connect-DattoRMM`. Valid range: 1–100. Default: 100.
+
+```powershell
+Set-RMMConfig -TokenExpireHours 48
+```
+
+### API Resilience Settings
+
+The module includes automatic retry logic for transient API failures:
+
+    Setting                   Description                              Range      Default       
+    ------------------------- ---------------------------------------- ---------- --------------
+    `APIMaxRetries`           Maximum retry attempts for failed req... 1–10       Module default
+    `APIRetryIntervalSeconds` Wait time between retries                1–300      Module default
+    `APITimeoutSeconds`       Request timeout                          10–300     Module default
+```powershell
+Set-RMMConfig -APIMaxRetries 5 -APIRetryIntervalSeconds 10 -APITimeoutSeconds 60
+```
+
+## PERSISTING CONFIGURATION
+
+### Using -Persist
+
+Any call to `Set-RMMConfig` with `-Persist` writes the supplied settings to the config file immediately:
+
+```powershell
+Set-RMMConfig -Platform Merlot -ThrottleProfile Cautious -Persist
+```
+
+### Using Save-RMMConfig
+
+To save the current session's entire configuration as it stands:
+
+```powershell
+Set-RMMConfig -Platform Merlot
+Set-RMMConfig -PageSize 100
+Save-RMMConfig
+```
+
+### Resetting to Defaults
+
+To reset the current session to module defaults (does not affect the config file):
+
+```powershell
+Set-RMMConfig -Default
+```
+
+To delete the config file entirely (factory reset for future sessions):
+
+```powershell
+Remove-RMMConfig
+```
+
+> [!NOTE]
+> `Remove-RMMConfig` does not affect the current session. Reload the module or use `Set-RMMConfig -Default` to reset session values.
+
+## CONFIGURATION PRECEDENCE
+
+Settings are resolved in the following order:
+
+1. **Session override** — Values set via `Set-RMMConfig` during the current session.
+2. **Config file** — Values loaded from `config.json` at module import.
+3. **Module defaults** — Built-in fallback values.
+
+Values set at connection time (e.g., `-Platform` on `Connect-DattoRMM`) take effect for the session and override any configured default.
+
+## EXAMPLES
+
+### Example 1: One-time setup for a new environment
+
+```powershell
+Set-RMMConfig -Platform Merlot -PageSize 50 -ThrottleProfile Medium -Persist
+```
+
+### Example 2: Tune API resilience for an unreliable network
+
+```powershell
+Set-RMMConfig -APIMaxRetries 5 -APIRetryIntervalSeconds 30 -APITimeoutSeconds 120 -Persist
+```
+
+### Example 3: Temporary session override without persisting
+
+```powershell
+Set-RMMConfig -ThrottleProfile Aggressive
+# Fast operations for this session only; config file unchanged
+```
+
+### Example 4: View and verify configuration
+
+```powershell
+Get-RMMConfig
+```
+
+## SEE ALSO
+
+- about_DattoRMM.Core
+- about_DattoRMM.CoreThrottling
+- about_DattoRMM.CoreAuthentication
+- Set-RMMConfig
+- Get-RMMConfig
+- Save-RMMConfig
+- Remove-RMMConfig
+SEE ALSO
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DattoRMM.CoreConfiguration.md

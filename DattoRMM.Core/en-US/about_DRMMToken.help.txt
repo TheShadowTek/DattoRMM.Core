@@ -1,0 +1,44 @@
+TOPIC
+    about_DRMMToken
+
+SHORT DESCRIPTION
+    Represents an OAuth access token response from the Datto RMM API.
+
+LONG DESCRIPTION
+The DRMMToken class encapsulates the OAuth token information returned by the Datto RMM authentication endpoint. It includes the access token (stored as a secure string), token type, expiration date, scope, and JWT identifier. This class provides a static method to create an instance from the API response object, ensuring the access token is securely stored and the expires_in value is converted to a DateTime for easier time-based operations.
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMToken class exposes the following properties:
+
+    Property    Type         Description    
+    ----------- ------------ ---------------
+    AccessToken securestring Add description
+    TokenType   string       Add description
+    Expires     datetime     Add description
+    Scope       string       Add description
+    Jti         string       Add description
+## METHODS
+
+The DRMMToken class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    AccessToken [securestring]
+    TokenType [string]
+    Expires [datetime]
+    Scope [string]
+    Jti [string]
+
+METHODS
+    DRMMToken() : void
+
+SEE ALSO
+    Online Documentation

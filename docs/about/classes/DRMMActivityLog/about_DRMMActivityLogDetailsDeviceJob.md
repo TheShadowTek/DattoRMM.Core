@@ -16,11 +16,11 @@ The DRMMActivityLogDetailsDeviceJob class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| JobId     | long   | Add description |
-| JobName   | string | Add description |
-| JobStatus | string | Add description |
-| JobUid    | guid   | Add description |
-| SiteName  | string | Add description |
+| JobId     | long   | The numeric identifier of the job associated with the activity. |
+| JobName   | string | The name of the job associated with the activity. |
+| JobStatus | string | The status of the job at the time of the activity (e.g., completed, failed). |
+| JobUid    | guid   | The unique identifier (UID) of the job associated with the activity. |
+| SiteName  | string | The name of the site where the job was executed. |
 
 ## METHODS
 
@@ -34,4 +34,4 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 ## RELATED LINKS
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceJob.md)
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceJob.md)

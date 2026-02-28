@@ -1,0 +1,59 @@
+TOPIC
+    about_DRMMActivityLogDetailsDeviceDeviceMoveDevice
+
+SHORT DESCRIPTION
+    Represents an activity log of entity DEVICE, category device, and action move
+
+LONG DESCRIPTION
+The DRMMActivityLogDetailsDeviceDeviceMoveDevice class models the details of a device site movement activity log entry. It inherits common device properties from DRMMActivityLogDetailsDeviceDevice and adds movement-specific properties including source and destination site information (IDs, names, UIDs), site name, and user information (email, first name, last name, username, user ID) related to the device move operation.
+
+This class inherits from DRMMActivityLogDetailsDeviceDevice.
+
+## PROPERTIES
+
+The DRMMActivityLogDetailsDeviceDeviceMoveDevice class exposes the following properties:
+
+    Property         Type       Description                             
+    ---------------- ---------- ----------------------------------------
+    DataFromSiteId   long       The identifier of the site the device...
+    DataFromSiteName string     The name of the site the device was m...
+    DataFromSiteUid  guid       The unique identifier (UID) of the si...
+    DataToSiteId     long       The identifier of the site the device...
+    DataToSiteName   string     The name of the site the device was m...
+    DataToSiteUid    guid       The unique identifier (UID) of the si...
+    SiteName         string     The name of the site associated with ...
+    UserEmail        string     The email address of the user who per...
+    UserFirstName    string     The first name of the user who perfor...
+    UserId           long       The identifier of the user who perfor...
+    UserLastName     string     The last name of the user who perform...
+    UserUsername     string     The username of the user who performe...
+## METHODS
+
+The DRMMActivityLogDetailsDeviceDeviceMoveDevice class provides the following methods:
+
+No public methods defined.
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+
+PROPERTIES
+    DataFromSiteId [long]
+    DataFromSiteName [string]
+    DataFromSiteUid [guid]
+    DataToSiteId [long]
+    DataToSiteName [string]
+    DataToSiteUid [guid]
+    SiteName [string]
+    UserEmail [string]
+    UserFirstName [string]
+    UserId [long]
+    UserLastName [string]
+    UserUsername [string]
+
+METHODS
+    DRMMActivityLogDetailsDeviceDeviceMoveDevice() : void
+    static FromActivityLogDetail([Hashtable]$ActivityLogDetail) : DRMMActivityLogDetailsDeviceDeviceMoveDevice
+
+SEE ALSO
+    Online Documentation
