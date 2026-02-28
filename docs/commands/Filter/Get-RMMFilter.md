@@ -82,11 +82,18 @@ Gets all filters for the "Main Office" site.
 
 EXAMPLE 6
 ```powershell
-$Filter = Get-RMMFilter -Name "Production Servers"
-Get-RMMDevice -FilterId $Filter.Id
+Get-RMMFilter -Name "Production Servers" | Get-RMMDevice
 ```
 
-Retrieves a filter and uses it to get matching devices.
+Retrieves a filter by name and pipes it to Get-RMMDevice to retrieve matching devices.
+Site-scoped filters automatically route to the correct site endpoint.
+
+EXAMPLE 7
+```powershell
+Get-RMMFilter -Id 12345 | Get-RMMDevice
+```
+
+Retrieves a filter by ID and pipes it to Get-RMMDevice.
 
 ## PARAMETERS
 
@@ -172,8 +179,9 @@ DRMMFilter. Returns filter objects with the following properties:
 This function requires an active connection to the Datto RMM API.
 Use Connect-DattoRMM to authenticate before calling this function.
 
-Filter IDs can be used with Get-RMMDevice -FilterId to retrieve devices matching
-specific criteria.
+Filter objects can be piped directly to Get-RMMDevice to retrieve matching devices.
+Site-scoped filters automatically route to the correct site endpoint.
+Alternatively, use Get-RMMDevice -FilterId to retrieve devices by numeric filter ID.
 
 ## RELATED LINKS
 

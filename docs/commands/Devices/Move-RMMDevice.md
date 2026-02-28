@@ -40,7 +40,7 @@ monitoring, policies, and reporting.
 
 EXAMPLE 1
 ```powershell
-Get-RMMDevice -Id 12345 | Move-RMMDevice -TargetSiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+Get-RMMDevice -DeviceId 12345 | Move-RMMDevice -TargetSiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 ```
 
 Moves a device to a different site via pipeline.
@@ -179,7 +179,6 @@ Accept wildcard characters: False
 ## INPUTS
 
 DRMMDevice. You can pipe device objects from Get-RMMDevice.
-You can also pipe objects with DeviceUid or Uid properties.
 ## OUTPUTS
 
 None. This function does not return any output.
