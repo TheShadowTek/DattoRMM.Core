@@ -53,8 +53,8 @@ function Invoke-APIMethod {
 
     }
 
-    # Check token expiration
-    $Now = Get-Date
+    # Check token expiration (UTC comparison)
+    $Now = [datetime]::UtcNow
 
     if ($Now -gt $script:RMMAuth.ExpiresAt) {
 

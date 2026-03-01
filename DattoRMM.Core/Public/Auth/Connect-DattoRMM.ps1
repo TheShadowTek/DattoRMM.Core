@@ -285,7 +285,7 @@ function Connect-DattoRMM {
         $Script:RMMAuth = @{
             AccessToken = $ResponseToken.access_token
             TokenType = $ResponseToken.token_type
-            ExpiresAt = (Get-Date).AddSeconds($ResponseToken.expires_in)
+            ExpiresAt = [datetime]::UtcNow.AddSeconds($ResponseToken.expires_in)
             AutoRefresh = $AutoRefresh.IsPresent
             AuthHeader = @{Authorization = "$($ResponseToken.token_type) $($ResponseToken.access_token)"}
         }
@@ -300,7 +300,7 @@ function Connect-DattoRMM {
         $Script:RMMAuth = @{
             AccessToken = $ProvidedToken
             TokenType = 'Bearer'
-            ExpiresAt = [DateTime]::MaxValue
+            ExpiresAt = [datetime]::new([datetime]::MaxValue.Ticks, [System.DateTimeKind]::Utc)
             AutoRefresh = $false
             AuthHeader = @{Authorization = "Bearer $ProvidedToken"}
         }

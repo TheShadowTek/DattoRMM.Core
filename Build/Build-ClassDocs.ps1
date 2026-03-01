@@ -41,7 +41,7 @@
 [CmdletBinding()]
 param(
     [string]$OutputFolder = "$PSScriptRoot\..\docs\about\classes",
-    [switch]$Force
+    [bool]$Force = $true
 )
 
 $ErrorActionPreference = 'Continue'

@@ -6,7 +6,7 @@ region DRMMObject - Base Class
 
 ## LONG DESCRIPTION
 
-The DRMMObject class serves as the base class for all domain model classes in the DattoRMM.Core module. It provides shared utility methods for safely extracting values from API response objects, validating response structures, converting epoch timestamps to DateTime values, parsing various API date formats, and masking sensitive string values. All domain classes inherit from DRMMObject to gain access to these foundational capabilities.
+The DRMMObject class serves as the base class for all domain model classes in the DattoRMM.Core module. It provides shared utility methods for safely extracting values from API response objects, validating response structures, parsing various API date formats, and masking sensitive string values. All domain classes inherit from DRMMObject to gain access to these foundational capabilities.
 
 
 
@@ -38,15 +38,6 @@ Validates that a PSCustomObject contains all specified required properties, used
 **Parameters:**
 - `[PSObject]$Sample` - The sample object to validate against the required properties.
 - `[String[]]$RequiredProperties` - An array of property names that are required to be present in the input object.
-
-### static ConvertEpochToDateTime([Int64]$Epoch)
-
-Converts a Unix epoch timestamp (in seconds or milliseconds) to a UTC DateTime value.
-
-**Returns:** `datetime` - The DateTime representation of the given epoch timestamp.
-
-**Parameters:**
-- `[Int64]$Epoch` - The epoch timestamp to convert, which can be an integer, long, double, or numeric string representing the number of seconds since January 1, 1970.
 
 ### static ParseApiDate([Object]$Value)
 

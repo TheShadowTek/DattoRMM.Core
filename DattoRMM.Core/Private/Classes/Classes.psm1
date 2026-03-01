@@ -76,9 +76,9 @@ enum RMMThrottleProfile {
 .DESCRIPTION
     The DRMMObject class serves as the base class for all domain model classes in the DattoRMM.Core
     module. It provides shared utility methods for safely extracting values from API response objects,
-    validating response structures, converting epoch timestamps to DateTime values, parsing various
-    API date formats, and masking sensitive string values. All domain classes inherit from DRMMObject
-    to gain access to these foundational capabilities.
+    validating response structures, parsing various API date formats, and masking sensitive string
+    values. All domain classes inherit from DRMMObject to gain access to these foundational
+    capabilities.
 #>
 #region DRMMObject - Base Class
 class DRMMObject {
@@ -123,24 +123,6 @@ class DRMMObject {
         }
 
         return $true
-
-    }
-
-    static [datetime] ConvertEpochToDateTime([long]$Epoch) {
-
-        if ($null -eq $Epoch) {
-
-            return $null
-
-        }
-
-        if ($Epoch -gt 9999999999) {
-
-            return [DateTimeOffset]::FromUnixTimeMilliseconds($Epoch).UtcDateTime
-
-        }
-
-        return [DateTimeOffset]::FromUnixTimeSeconds($Epoch).UtcDateTime
 
     }
 
@@ -4224,13 +4206,13 @@ class DRMMJob : DRMMObject {
     .SYNOPSIS
         Calculates the age of the job based on its creation date.
     .DESCRIPTION
-        The GetAge method returns a TimeSpan object representing the age of the job, calculated as the difference between the current date and the job's DateCreated property. If DateCreated is null, it returns a TimeSpan of zero.
+        The GetAge method returns a TimeSpan object representing the age of the job, calculated as the difference between the current UTC time and the job's DateCreated property. If DateCreated is null, it returns a TimeSpan of zero.
     #>
     [timespan] GetAge() {
 
         if ($this.DateCreated) {
 
-            return (Get-Date) - $this.DateCreated
+            return [datetime]::UtcNow - $this.DateCreated
 
         }
 
@@ -6428,20 +6410,7 @@ class DRMMStatus : DRMMObject {
         $Result.Version = $Response.version
         $Result.Status = $Response.status
         
-        $StartedValue = $Response.started
-
-        if ($null -ne $StartedValue) {
-            
-            try {
-
-                $Result.Started = [datetime]::Parse($StartedValue)
-
-            } catch {
-
-                $Result.Started = $null
-
-            }
-        }
+        $Result.Started = ([DRMMObject]::ParseApiDate($Response.started)).DateTime
 
         return $Result
 

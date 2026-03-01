@@ -38,7 +38,15 @@ function Show-RMMToken {
             Write-Host "-----------------------------------------------"
             Write-host "Access Token : $($Script:RMMAuth.AccessToken)"
             Write-host "Token Type : $($Script:RMMAuth.TokenType)"
-            Write-Host "Expires At : $($Script:RMMAuth.ExpiresAt.ToLocalTime())"        
+            if ($Script:RMMAuth.ExpiresAt -eq [datetime]::new([datetime]::MaxValue.Ticks, [System.DateTimeKind]::Utc)) {
+
+                Write-Host "Expires At : No Expiry (API Token)"
+
+            } else {
+
+                Write-Host "Expires At : $($Script:RMMAuth.ExpiresAt.ToLocalTime()) (UTC: $($Script:RMMAuth.ExpiresAt.ToString('HH:mm:ss')))"
+
+            }        
         
         }
     }

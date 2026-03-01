@@ -2212,16 +2212,8 @@
         DRMMObject = @{
             Examples = @{
             }
-            LongDescription = 'The DRMMObject class serves as the base class for all domain model classes in the DattoRMM.Core module. It provides shared utility methods for safely extracting values from API response objects, validating response structures, converting epoch timestamps to DateTime values, parsing various API date formats, and masking sensitive string values. All domain classes inherit from DRMMObject to gain access to these foundational capabilities.'
+            LongDescription = 'The DRMMObject class serves as the base class for all domain model classes in the DattoRMM.Core module. It provides shared utility methods for safely extracting values from API response objects, validating response structures, parsing various API date formats, and masking sensitive string values. All domain classes inherit from DRMMObject to gain access to these foundational capabilities.'
             MethodDescriptions = @{
-                ConvertEpochToDateTime = @{
-                    Description = 'Converts a Unix epoch timestamp (in seconds or milliseconds) to a UTC DateTime value.'
-                    Example = $null
-                    Parameters = @{
-                        Epoch = 'The epoch timestamp to convert, which can be an integer, long, double, or numeric string representing the number of seconds since January 1, 1970.'
-                    }
-                    ReturnValue = 'The DateTime representation of the given epoch timestamp.'
-                }
                 GetValue = @{
                     Description = 'Safely retrieves the value of a specified property from a PSCustomObject, returning null if the property does not exist.'
                     Example = $null
