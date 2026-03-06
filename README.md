@@ -46,7 +46,7 @@ Resolve all critical-severity alerts for devices in a site filter:
 
 ```powershell
 $Filter = Get-RMMSite -Name "Main Office" | Get-RMMFilter -Name "Critical Servers"
-Get-RMMDevice -FilterId $Filter.Id | Get-RMMAlert | Where-Object {$_.Priority -eq "Critical"} | Resolve-RMMAlert
+$Filter | Get-RMMDevice | Get-RMMAlert | Where-Object {$_.Priority -eq "Critical"} | Resolve-RMMAlert
 ```
 
 Move devices from one site to another:
@@ -90,6 +90,7 @@ Run `Get-Help <CommandName>` for detailed parameter and usage information, or se
 | [Configuration](docs/about/about_DattoRMM.CoreConfiguration.md) | Platform regions, page size, retry settings, and persistent configuration |
 | [Throttling](docs/about/about_DattoRMM.CoreThrottling.md) | Adaptive throttling, profiles, concurrent use, and API rate limit details |
 | [Security](docs/about/about_DattoRMM.CoreSecurity.md) | PII handling, credential lifecycle, SecureString cross-platform behaviour |
+| [Alert Context Discovery (Beta)](docs/about/about_DattoRMM.CoreAlertContextDiscovery.md) | Guidance for collecting unrecognised alert context schema data during beta |
 | [Command Reference](docs/commands/) | Per-command documentation with examples |
 | [Class Reference](docs/about/classes/) | Typed output classes and enums |
 

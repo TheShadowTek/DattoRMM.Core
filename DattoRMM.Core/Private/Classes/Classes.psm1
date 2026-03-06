@@ -1714,7 +1714,12 @@ class DRMMAlertContext : DRMMObject {
             '^temperature_ctx$' { [DRMMAlertContextTemperature]::FromAPIMethod($Response) }
             '^windows_performance_ctx$' { [DRMMAlertContextWindowsPerformance]::FromAPIMethod($Response) }
             '^wmi_ctx$' { [DRMMAlertContextWmi]::FromAPIMethod($Response) }
-            default { [DRMMAlertContextGeneric]::FromAPIMethod($Response) }
+            default {
+
+                Write-Debug "AlertContext: Unrecognised @class '$ClassValue' — using DRMMAlertContextGeneric. Properties: $($Response.PSObject.Properties.Name -join ', ')"
+                [DRMMAlertContextGeneric]::FromAPIMethod($Response)
+
+            }
 
         }
 
@@ -2084,13 +2089,38 @@ class DRMMAlertContextFileSystem : DRMMAlertContext {
 .SYNOPSIS
     Represents a generic alert context in the DRMM system when specific context class information is not available.
 .DESCRIPTION
-    The DRMMAlertContextGeneric class models a generic alert context in the DRMM platform. It is used when specific context class information is not available, encapsulating a hashtable of properties that provide detailed information about the alert context. This allows for flexible handling of various alert types that do not have dedicated context classes.
+    The DRMMAlertContextGeneric class models a generic alert context in the DRMM platform. It is used when specific context class information is not available, encapsulating a hashtable of properties that provide detailed information about the alert context, along with a companion hashtable that records the .NET type name of each property value. This supports both flexible handling of unrecognised alert context types and schema discovery during beta testing, where the property names, values, and types of undocumented contexts need to be captured for analysis. The GetSummary method provides a quick visual indicator of what data was captured.
 #>
 class DRMMAlertContextGeneric : DRMMAlertContext {
 
     [hashtable]$Properties
+    [hashtable]$PropertyTypes
 
     DRMMAlertContextGeneric() : base() {
+
+    }
+
+    <#
+    .SYNOPSIS
+        Gets a summary of the generic alert context, including the class name and property names.
+    .DESCRIPTION
+        The GetSummary method returns a string summarising the generic alert context. It includes the @class value and a list of property names captured from the API response. This provides a quick visual indicator that a generic (unrecognised) context was returned and what data it contains, which is useful for identifying undocumented alert context types during beta testing.
+    #>
+    [string] GetSummary() {
+
+        $PropertyNames = if ($this.Properties -and $this.Properties.Count -gt 0) {
+
+            $this.Properties.Keys -join ', '
+
+        } else {
+
+            'none'
+
+        }
+
+        $ClassLabel = if ($this.Class) {$this.Class} else {'<no @class>'}
+
+        return "[Generic] $ClassLabel — Properties: $PropertyNames"
 
     }
 
@@ -2105,14 +2135,24 @@ class DRMMAlertContextGeneric : DRMMAlertContext {
         $Context = [DRMMAlertContextGeneric]::new()
         $Context.Class = $Response.'@class'
         
-        # Store all properties except @class
+        # Store all properties and their types except @class
         $Context.Properties = @{}
+        $Context.PropertyTypes = @{}
         foreach ($Property in $Response.PSObject.Properties) {
 
             if ($Property.Name -ne '@class') {
 
                 $Context.Properties[$Property.Name] = $Property.Value
 
+                if ($null -ne $Property.Value) {
+
+                    $Context.PropertyTypes[$Property.Name] = $Property.Value.GetType().Name
+
+                } else {
+
+                    $Context.PropertyTypes[$Property.Name] = '<null>'
+
+                }
             }
         }
 

@@ -201,7 +201,7 @@ To regenerate API keys for the authenticated user:
 
 ```powershell
 # Regenerate and return the new key/secret pair
-Reset-RMMAPIKeys -ReturnNewKey
+$NewKeys = Reset-RMMAPIKeys -ReturnNewKey
 ```
 
 > [!WARNING]
