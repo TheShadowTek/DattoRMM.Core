@@ -6,7 +6,7 @@ Represents a generic alert context in the DRMM system when specific context clas
 
 ## LONG DESCRIPTION
 
-The DRMMAlertContextGeneric class models a generic alert context in the DRMM platform. It is used when specific context class information is not available, encapsulating a hashtable of properties that provide detailed information about the alert context. This allows for flexible handling of various alert types that do not have dedicated context classes.
+The DRMMAlertContextGeneric class models a generic alert context in the DRMM platform. It is used when specific context class information is not available, encapsulating a hashtable of properties that provide detailed information about the alert context, along with a companion hashtable that records the
 
 This class inherits from [DRMMAlertContext](./about_DRMMAlertContext.md).
 
@@ -16,13 +16,18 @@ The DRMMAlertContextGeneric class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Properties | hashtable | A hashtable containing properties that provide detailed information about the alert context when specific context class information is not available. |
+| Properties    | hashtable | A hashtable containing properties that provide detailed information about the alert context when specific context class information is not available. |
+| PropertyTypes | hashtable | Add description |
 
 ## METHODS
 
 The DRMMAlertContextGeneric class provides the following methods:
 
-No public methods defined.
+### GetSummary()
+
+Gets a summary of the generic alert context, including the class name and property names.
+
+**Returns:** `string` - Describe what this method returns
 
 ## NOTES
 

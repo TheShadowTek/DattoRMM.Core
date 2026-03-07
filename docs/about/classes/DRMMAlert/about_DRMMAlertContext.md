@@ -36,6 +36,7 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertContext.md)
 - [DRMMAlert](./about_DRMMAlert.md)
+- [DRMMAlertContextAction](./about_DRMMAlertContextAction.md)
 - [DRMMAlertContextAntivirus](./about_DRMMAlertContextAntivirus.md)
 - [DRMMAlertContextBackupManagement](./about_DRMMAlertContextBackupManagement.md)
 - [DRMMAlertContextCustomSNMP](./about_DRMMAlertContextCustomSNMP.md)

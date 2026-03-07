@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Represents a generic alert context in the DRMM system when specific context class information is not available.
+Represents the context of an antivirus alert in the DRMM system, including status and product name.
 
 ## LONG DESCRIPTION
 
-The DRMMAlertContextGeneric class models a generic alert context for cases where the specific context class information is not available or does not match known types. It captures the raw response data and provides a summary that includes the class if available. This allows for handling of alert contexts that may not fit into predefined categories while still retaining the original information for reference.
+The DRMMAlertContextAntivirus class models the context information specific to antivirus alerts in the DRMM platform. It encapsulates properties such as the antivirus status and product name that provide detailed context about the antivirus alert.
 
 This class inherits from [DRMMAlertContext](./about_DRMMAlertContext.md).
 

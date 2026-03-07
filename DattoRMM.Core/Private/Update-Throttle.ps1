@@ -124,7 +124,7 @@ Throttle Calibration:
 `tAccount Limit: $($Script:RMMThrottle.AccountLimit) | Write Limit: $($Script:RMMThrottle.WriteLimit)
 `tOperation Buckets: $($Script:RMMThrottle.OperationBuckets.Count)
 `tOperation Stats:
-`t`t$OpLinesText
+`t$OpLinesText
 `tPause Threshold: $([math]::Round($PauseThreshold * 100, 2))%
 `tThrottle: $($Script:RMMThrottle.Throttle) | Pause: $($Script:RMMThrottle.Pause)
 `tDelay MS: $([math]::Round($Script:RMMThrottle.DelayMS, 2))

@@ -14,21 +14,28 @@ When the API returns an alert with an `@class` value that is not documented or n
 
 ### Recognised vs Unrecognised Context Types
 
-The module recognises 26 alert context types that are documented in the Datto RMM API v2 specification. Additional context types have been discovered through testing but are not yet included as dedicated module classes. These unrecognised types are fully functional — the API returns structured data — and the module captures them in `DRMMAlertContextGeneric` objects.
+The module recognises 27 alert context types that are documented in the Datto RMM API v2 specification. Additional context types have been discovered through testing but are not yet included as dedicated module classes. These unrecognised types are fully functional — the API returns structured data — and the module captures them in `DRMMAlertContextGeneric` objects.
+
+### Recently Resolved Context Types
+
+The following `@class` values were previously handled as generic but have been identified as alternate discriminator values (new-UI variants) for existing context types. They now route to their corresponding typed class:
+
+| @class Value | Routed To | Reason |
+|---|---|---|
+| `fs_object_ctx` | `DRMMAlertContextFileSystem` | Identical properties to `filesystem_ctx` |
+| `perf_disk_usage_ctx` | `DRMMAlertContextDiskUsage` | Identical properties to `disk_usage_ctx` |
+| `process_resource_usage_ctx` | `DRMMAlertContextResourceUsage` | Identical properties to `resource_usage_ctx` |
+| `process_status_ctx` | `DRMMAlertContextStatus` | Identical properties to `status_ctx` |
 
 ### Known Unrecognised Context Types
 
-The following `@class` values have been identified through testing and are currently handled as generic contexts:
+The following `@class` values have been identified through testing and are currently handled as generic contexts. Their property structures differ from any documented context type, so they cannot be aliased to existing classes:
 
-| @class Value | Known Properties |
-|---|---|
-| `fs_object_ctx` | path, condition, threshold, sample, objectType |
-| `perf_disk_usage_ctx` | totalVolume, unitOfMeasure, diskName, diskNameDesignation, freeSpace |
-| `perf_resource_usage_ctx` | percentage, type |
-| `process_resource_usage_ctx` | type, processName, sample |
-| `process_status_ctx` | status, processName |
-| `srvc_resource_usage_ctx` | type, serviceName, sample |
-| `srvc_status_ctx` | serviceName, status |
+| @class Value | Known Properties | Notes |
+|---|---|---|
+| `perf_resource_usage_ctx` | percentage, type | Different structure from `resource_usage_ctx` (uses `percentage` instead of `processName` + `sample`) |
+| `srvc_resource_usage_ctx` | type, serviceName, sample | Service-specific variant (uses `serviceName` instead of `processName`) |
+| `srvc_status_ctx` | serviceName, status | Service-specific variant (uses `serviceName` instead of `processName`) |
 
 This list is incomplete. There are likely additional undocumented context types for other monitor categories created in the new UI.
 

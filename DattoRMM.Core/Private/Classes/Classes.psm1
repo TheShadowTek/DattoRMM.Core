@@ -1688,6 +1688,7 @@ class DRMMAlertContext : DRMMObject {
         # Map @class values to specific context classes
         $Result = switch -Regex ($ClassValue) {
 
+            '^action_ctx$' { [DRMMAlertContextAction]::FromAPIMethod($Response) }
             '^online_offline_status_ctx$' { [DRMMAlertContextOnlineOfflineStatus]::FromAPIMethod($Response) }
             '^ransomware_ctx$' { [DRMMAlertContextRansomWare]::FromAPIMethod($Response) }
             '^eventlog_ctx$' { [DRMMAlertContextEventLog]::FromAPIMethod($Response) }
@@ -1696,21 +1697,21 @@ class DRMMAlertContext : DRMMObject {
             '^backup_management_ctx$' { [DRMMAlertContextBackupManagement]::FromAPIMethod($Response) }
             '^custom_snmp_ctx$' { [DRMMAlertContextCustomSNMP]::FromAPIMethod($Response) }
             '^disk_health_ctx$' { [DRMMAlertContextDiskHealth]::FromAPIMethod($Response) }
-            '^disk_usage_ctx$' { [DRMMAlertContextDiskUsage]::FromAPIMethod($Response) }
+            '^(disk_usage|perf_disk_usage)_ctx$' { [DRMMAlertContextDiskUsage]::FromAPIMethod($Response) }
             '^endpoint_security_threat_ctx$' { [DRMMAlertContextEndpointSecurityThreat]::FromAPIMethod($Response) }
             '^endpoint_security_windows_defender_ctx$' { [DRMMAlertContextEndpointSecurityWindowsDefender]::FromAPIMethod($Response) }
             '^fan_ctx$' { [DRMMAlertContextFan]::FromAPIMethod($Response) }
-            '^filesystem_ctx$' { [DRMMAlertContextFileSystem]::FromAPIMethod($Response) }
+            '^(filesystem|fs_object)_ctx$' { [DRMMAlertContextFileSystem]::FromAPIMethod($Response) }
             '^network_monitor_ctx$' { [DRMMAlertContextNetworkMonitor]::FromAPIMethod($Response) }
             '^patch_ctx$' { [DRMMAlertContextPatch]::FromAPIMethod($Response) }
             '^ping_ctx$' { [DRMMAlertContextPing]::FromAPIMethod($Response) }
             '^printer_ctx$' { [DRMMAlertContextPrinter]::FromAPIMethod($Response) }
             '^psu_ctx$' { [DRMMAlertContextPsu]::FromAPIMethod($Response) }
-            '^resource_usage_ctx$' { [DRMMAlertContextResourceUsage]::FromAPIMethod($Response) }
+            '^(resource_usage|process_resource_usage)_ctx$' { [DRMMAlertContextResourceUsage]::FromAPIMethod($Response) }
             '^snmp_probe_ctx$' { [DRMMAlertContextSNMPProbe]::FromAPIMethod($Response) }
             '^seccenter_ctx$' { [DRMMAlertContextSecCenter]::FromAPIMethod($Response) }
             '^security_management_ctx$' { [DRMMAlertContextSecurityManagement]::FromAPIMethod($Response) }
-            '^status_ctx$' { [DRMMAlertContextStatus]::FromAPIMethod($Response) }
+            '^(status|process_status)_ctx$' { [DRMMAlertContextStatus]::FromAPIMethod($Response) }
             '^temperature_ctx$' { [DRMMAlertContextTemperature]::FromAPIMethod($Response) }
             '^windows_performance_ctx$' { [DRMMAlertContextWindowsPerformance]::FromAPIMethod($Response) }
             '^wmi_ctx$' { [DRMMAlertContextWmi]::FromAPIMethod($Response) }
@@ -1730,9 +1731,46 @@ class DRMMAlertContext : DRMMObject {
 
 <#
 .SYNOPSIS
-    Represents a generic alert context in the DRMM system when specific context class information is not available.
+    Represents the context of an action alert in the DRMM system, including package name, action type, and version information.
 .DESCRIPTION
-    The DRMMAlertContextGeneric class models a generic alert context for cases where the specific context class information is not available or does not match known types. It captures the raw response data and provides a summary that includes the class if available. This allows for handling of alert contexts that may not fit into predefined categories while still retaining the original information for reference.
+    The DRMMAlertContextAction class models the context information specific to software action alerts in the DRMM platform. It encapsulates properties such as the package name, action type (installed, uninstalled, or version changed), previous version, and current version that provide detailed context about the software action that triggered the alert.
+#>
+class DRMMAlertContextAction : DRMMAlertContext {
+
+    [string]$PackageName
+    [string]$ActionType
+    [string]$PrevVersion
+    [string]$Version
+
+    DRMMAlertContextAction() : base() {
+
+    }
+
+    static [DRMMAlertContextAction] FromAPIMethod([pscustomobject]$Response) {
+
+        if ($null -eq $Response) {
+
+            return $null
+
+        }
+
+        $Context = [DRMMAlertContextAction]::new()
+        $Context.Class = $Response.'@class'
+        $Context.PackageName = $Response.packageName
+        $Context.ActionType = $Response.actionType
+        $Context.PrevVersion = $Response.prevVersion
+        $Context.Version = $Response.version
+
+        return $Context
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents the context of an antivirus alert in the DRMM system, including status and product name.
+.DESCRIPTION
+    The DRMMAlertContextAntivirus class models the context information specific to antivirus alerts in the DRMM platform. It encapsulates properties such as the antivirus status and product name that provide detailed context about the antivirus alert.
 #>
 class DRMMAlertContextAntivirus : DRMMAlertContext {
 
@@ -2592,12 +2630,11 @@ class DRMMAlertContextSNMPProbe : DRMMAlertContext {
         $Context = [DRMMAlertContextSNMPProbe]::new()
         $Context.Class = $Response.'@class'
         $Context.IpAddress = $Response.ipAddress
-        $Context.OID = $Response.OID
+        $Context.Oid = $Response.oid
         $Context.RuleName = $Response.ruleName
         $Context.ResponseValue = $Response.responseValue
         $Context.DeviceName = $Response.deviceName
         $Context.MonitorName = $Response.monitorName
-        $Context.Oid = $Response.oid
 
         return $Context
 
