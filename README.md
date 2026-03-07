@@ -2,7 +2,7 @@
 
 A PowerShell module for the Datto RMM API v2. Provides typed, object-oriented access to devices, sites, alerts, jobs, filters, variables, and account management with built-in adaptive throttling and secure credential handling.
 
-> **Requires PowerShell 7.0 or later** (Core edition only).
+> **Requires PowerShell 7.4 or later** (Core edition only).
 
 ## Features
 
@@ -11,7 +11,7 @@ A PowerShell module for the Datto RMM API v2. Provides typed, object-oriented ac
 - **Adaptive Throttling** — Automatic rate-limit management with configurable profiles (Aggressive, Medium, Cautious) for safe single or concurrent use.
 - **Secure by Default** — Credentials handled via `SecureString` and `PSCredential`; tokens held in memory only; PII-sensitive operations require explicit confirmation.
 - **Persistent Configuration** — Platform region, throttle profile, page size, and retry settings saved to a JSON config file for consistent behaviour across sessions.
-- **Comprehensive Coverage** — 40 commands across 11 domains: Account, Activity Log, Alerts, Auth, Components, Config, Devices, Filters, Jobs, Sites, and Variables.
+- **Comprehensive Coverage** — 41 commands across 11 domains: Account, Activity Log, Alerts, Auth, Components, Config, Devices, Filters, Jobs, Sites, and Variables.
 
 ## Installation
 
@@ -67,7 +67,7 @@ Get-RMMDevice -FilterId 12345 | New-RMMQuickJob -JobName "Emergency Patch" -Comp
 
 | Domain | Commands |
 |---|---|
-| **Account** | `Get-RMMAccount`, `Get-RMMNetMapping`, `Get-RMMRequestRate`, `Get-RMMStatus`, `Get-RMMUser` |
+| **Account** | `Get-RMMAccount`, `Get-RMMNetMapping`, `Get-RMMRequestRate`, `Get-RMMStatus`, `Get-RMMUser`, `Invoke-RMMApiMethod` |
 | **Activity Log** | `Get-RMMActivityLog` |
 | **Alerts** | `Get-RMMAlert`, `Resolve-RMMAlert` |
 | **Auth** | `Connect-DattoRMM`, `Disconnect-DattoRMM`, `Request-RMMToken`, `Reset-RMMAPIKeys`, `Show-RMMToken` |
