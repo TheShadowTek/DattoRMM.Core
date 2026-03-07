@@ -100,6 +100,21 @@ function Update-Throttle {
     $Script:RMMThrottle.LastCalibrationUtc = [datetime]::UtcNow
     $Script:RMMThrottle.SamplesAtLastCalibration = $Script:RMMThrottle.AccountLocalTimestamps.Count
 
+    # Build per-operation write bucket summary lines for debug output
+    $OpLines = @()
+    if ($Script:RMMThrottle.OperationBuckets -and $Script:RMMThrottle.OperationBuckets.Count -gt 0) {
+        $Script:RMMThrottle.OperationBuckets.GetEnumerator() | ForEach-Object {
+            $OpName = $_.Key
+            $Bucket = $_.Value
+            $LocalCount = if ($Bucket.LocalTimestamps) { $Bucket.LocalTimestamps.Count } else { 0 }
+            $Limit = if ($Bucket.Limit) { $Bucket.Limit } else { 0 }
+            $UtilPct = if ($Limit -gt 0) { [math]::Round(($LocalCount / $Limit) * 100, 2) } else { 0 }
+            $OpLines += ("{0}: Limit={1} Local={2} Util={3}%" -f $OpName, $Limit, $LocalCount, $UtilPct)
+        }
+    }
+
+    $OpLinesText = if ($OpLines.Count -gt 0) { $OpLines -join "`n`t" } else { 'none' }
+
     Write-Debug @"
 Throttle Calibration:
 `tAccount Utilisation: $([math]::Round($Script:RMMThrottle.AccountUtilisation * 100, 2))% (API: $([math]::Round($ApiAccountUtil * 100, 2))%, Local: $([math]::Round($LocalAccountUtil * 100, 2))%)
@@ -108,6 +123,8 @@ Throttle Calibration:
 `tAPI Counts: Account=$($RateInfo.accountCount), Write=$($RateInfo.accountWriteCount)
 `tAccount Limit: $($Script:RMMThrottle.AccountLimit) | Write Limit: $($Script:RMMThrottle.WriteLimit)
 `tOperation Buckets: $($Script:RMMThrottle.OperationBuckets.Count)
+`tOperation Stats:
+`t`t$OpLinesText
 `tPause Threshold: $([math]::Round($PauseThreshold * 100, 2))%
 `tThrottle: $($Script:RMMThrottle.Throttle) | Pause: $($Script:RMMThrottle.Pause)
 `tDelay MS: $([math]::Round($Script:RMMThrottle.DelayMS, 2))

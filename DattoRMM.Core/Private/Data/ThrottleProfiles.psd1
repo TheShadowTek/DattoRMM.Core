@@ -39,7 +39,7 @@
         UnknownOperationSafetyFactor = 0.5
     }
     'Medium' = @{
-        DelayMultiplier = 1000
+        DelayMultiplier = 750
         CalibrationBaseSeconds = 8
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 50
