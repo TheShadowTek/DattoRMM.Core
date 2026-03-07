@@ -11,6 +11,12 @@
     primary control mechanism, with periodic time-based calibration against the live API
     to detect concurrent usage. The highest pressure across all applicable buckets determines
     the actual delay applied.
+
+    Calibration frequency is governed by three floors (highest wins):
+      1. CalibrationMinSeconds — absolute floor to prevent API spam.
+      2. Base × Confidence × DriftFactor — dynamic formula based on sample count and drift.
+      3. Delay-pacing floor — current delay × 10, ensuring enough paced requests pass
+         between calibrations to avoid wasting overhead when throttling is already active.
 #>
 function Invoke-APIThrottle {
     [CmdletBinding()]
@@ -58,12 +64,26 @@ function Invoke-APIThrottle {
 
     $DriftFactor = 1 / (1 + $DriftRatio * $Script:RMMThrottle.DriftScalingFactor)
 
-    # Effective interval: Base × Confidence × DriftFactor, clamped to floor
+    # Delay-pacing floor: when delays are active, scale calibration interval so that
+    # enough requests pass between calibrations to avoid wasting API calls on
+    # calibration overhead during well-paced operation.
+    # DelayMS 800 × 10 = 8s floor → ~10 requests between calibrations.
+    # DelayMS 0 × 10 = 0 → no effect, confidence/drift formula governs.
+    $DelayPacingFloorSeconds = ($Script:RMMThrottle.DelayMS / 1000) * 10
+
+    # Effective interval: highest of three floors:
+    #   1. CalibrationMinSeconds: absolute floor to prevent API spam
+    #   2. Base × Confidence × DriftFactor: dynamic formula
+    #   3. DelayPacingFloor: delay-correlated floor when throttling is active
     # Low confidence OR high drift → short interval → frequent calibration
     # High confidence AND low drift → full base → minimal API overhead
+    # High delay → long interval → let paced requests breathe between calibrations
     $EffectiveInterval = [math]::Max(
         $Script:RMMThrottle.CalibrationMinSeconds,
-        $Script:RMMThrottle.CalibrationBaseSeconds * $ConfidenceFactor * $DriftFactor
+        [math]::Max(
+            $Script:RMMThrottle.CalibrationBaseSeconds * $ConfidenceFactor * $DriftFactor,
+            $DelayPacingFloorSeconds
+        )
     )
 
     $ElapsedSeconds = ($Now - $Script:RMMThrottle.LastCalibrationUtc).TotalSeconds

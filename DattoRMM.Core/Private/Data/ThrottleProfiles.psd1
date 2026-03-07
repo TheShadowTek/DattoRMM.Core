@@ -27,7 +27,7 @@
 
 @{
     'Cautious' = @{
-        DelayMultiplier = 2000
+        DelayMultiplier = 1500
         CalibrationBaseSeconds = 5
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 30
@@ -39,7 +39,7 @@
         UnknownOperationSafetyFactor = 0.5
     }
     'Medium' = @{
-        DelayMultiplier = 750
+        DelayMultiplier = 1000
         CalibrationBaseSeconds = 8
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 50
@@ -51,13 +51,13 @@
         UnknownOperationSafetyFactor = 0.3
     }
     'Aggressive' = @{
-        DelayMultiplier = 500
+        DelayMultiplier = 300
         CalibrationBaseSeconds = 15
         CalibrationMinSeconds = 1
         CalibrationConfidenceCount = 80
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 1.5
-        ThrottleUtilisationThreshold = 0.4
+        ThrottleUtilisationThreshold = 0.5
         ThrottleCutOffOverhead = 0.04
         WriteDelayMultiplier = 750
         UnknownOperationSafetyFactor = 0.1
