@@ -339,6 +339,22 @@ function Connect-DattoRMM {
         }
     }
 
+    # Discover rate limits and initialise multi-bucket throttle state
+    try {
+
+        Initialize-ThrottleState
+
+        # Perform an explicit calibration on connect so throttle state is synchronised
+        # before the first workload request and debug output is available immediately.
+        Write-Debug "Throttle: Performing initial calibration during connect."
+        Update-Throttle
+
+    } catch {
+
+        Write-Warning "Failed to initialise throttle state: $($_.Exception.Message). Using defaults."
+
+    }
+
     # Test connection and set page size
     try {
 

@@ -201,10 +201,12 @@ function Set-RMMConfig {
 
         # Reset throttle to default profile (Medium)
         $Script:RMMThrottle.Profile = 'DefaultProfile'
-        $Script:RMMThrottle.DelayMultiplier = $Script:ThrottleProfileDefaults.DefaultProfile.DelayMultiplier
-        $Script:RMMThrottle.LowUtilCheckInterval = $Script:ThrottleProfileDefaults.DefaultProfile.LowUtilCheckInterval
-        $Script:RMMThrottle.ThrottleCutOffOverhead = $Script:ThrottleProfileDefaults.DefaultProfile.ThrottleCutOffOverhead
-        $Script:RMMThrottle.ThrottleUtilisationThreshold = $Script:ThrottleProfileDefaults.DefaultProfile.ThrottleUtilisationThreshold
+
+        foreach ($Key in $Script:ThrottleProfileDefaults['DefaultProfile'].Keys) {
+
+            $Script:RMMThrottle[$Key] = $Script:ThrottleProfileDefaults['DefaultProfile'][$Key]
+
+        }
 
         if ($Persist) {
 
@@ -276,17 +278,20 @@ function Set-RMMConfig {
 
         'ThrottleProfile' {
 
-            # Set throttle profile parameter
-            Write-Verbose "Set ThrottleProfile to: $ThrottleProfile"
-            $Script:RMMThrottle.Profile = [RMMThrottleProfile]::GetName($ThrottleProfile)
-            $Script:RMMThrottle.DelayMultiplier = $Script:ThrottleProfileDefaults.$([RMMThrottleProfile]::GetName($ThrottleProfile)).DelayMultiplier
-            $Script:RMMThrottle.LowUtilCheckInterval = $Script:ThrottleProfileDefaults.$([RMMThrottleProfile]::GetName($ThrottleProfile)).LowUtilCheckInterval
-            $Script:RMMThrottle.ThrottleCutOffOverhead = $Script:ThrottleProfileDefaults.$([RMMThrottleProfile]::GetName($ThrottleProfile)).ThrottleCutOffOverhead
-            $Script:RMMThrottle.ThrottleUtilisationThreshold = $Script:ThrottleProfileDefaults.$([RMMThrottleProfile]::GetName($ThrottleProfile)).ThrottleUtilisationThreshold
+            # Set throttle profile — iterate profile keys generically to stay in sync with ThrottleProfiles.psd1
+            $ProfileName = [RMMThrottleProfile]::GetName($ThrottleProfile)
+            Write-Verbose "Set ThrottleProfile to: $ProfileName"
+            $Script:RMMThrottle.Profile = $ProfileName
+
+            foreach ($Key in $Script:ThrottleProfileDefaults[$ProfileName].Keys) {
+
+                $Script:RMMThrottle[$Key] = $Script:ThrottleProfileDefaults[$ProfileName][$Key]
+
+            }
 
             if ($Persist) {
 
-                $Config['ThrottleProfile'] = [RMMThrottleProfile]::GetName($ThrottleProfile)
+                $Config['ThrottleProfile'] = $ProfileName
 
             }
         }

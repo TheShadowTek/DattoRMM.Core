@@ -140,9 +140,12 @@ function Invoke-APIMethod {
         Write-Debug "Invoking RMM API: $Method $Path"
         Write-Debug "Uri: $($RequestParams.Uri)"
 
+        # Classify the operation for multi-bucket throttle tracking
+        $OperationName = Resolve-ThrottleOperationName -Path $Path -Method $Method
+
         if ($Paginate) {
 
-            $Result = Invoke-APIRestMethod -Parameters $RequestParams
+            $Result = Invoke-APIRestMethod -Parameters $RequestParams -Method $Method -OperationName $OperationName
 
             # Parse the original URI to extract query parameters (excluding max and page)
             $OriginalUri = [System.Uri]$RequestParams.Uri
@@ -214,14 +217,14 @@ function Invoke-APIMethod {
 
                 Write-Debug "Fetching next page: $NextUrl"
                 $RequestParams.Uri = $NextUrl
-                $Result = Invoke-APIRestMethod -Parameters $RequestParams
+                $Result = Invoke-APIRestMethod -Parameters $RequestParams -Method $Method -OperationName $OperationName
                 $Result.$PageElement
 
             }
 
         } else {
             
-            Invoke-APIRestMethod -Parameters $RequestParams
+            Invoke-APIRestMethod -Parameters $RequestParams -Method $Method -OperationName $OperationName
 
         }
 

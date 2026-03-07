@@ -4,20 +4,30 @@
 #>
 <#
 .SYNOPSIS
-    Invokes an API method with built-in retry logic and error handling.
+    Invokes an API method with built-in retry logic, multi-bucket throttling, and error handling.
 .DESCRIPTION
-    This function wraps the Invoke-RestMethod cmdlet with additional logic to handle retries, throttling, and error handling. It checks the API throttle status before making the request and retries the request based on configurable parameters if certain errors occur.
+    This function wraps Invoke-RestMethod with retry logic, multi-bucket throttle gating, and request
+    recording. Before each attempt, the request is evaluated against global account, global write, and
+    per-operation write buckets. After a successful response, the request is recorded in the local
+    sliding-window counters for accurate utilisation tracking between calibrations.
 #>
 function Invoke-APIRestMethod {
     [CmdletBinding()]
     param(
+
         [hashtable]
-        $Parameters
+        $Parameters,
+
+        [Microsoft.PowerShell.Commands.WebRequestMethod]
+        $Method = 'Get',
+
+        [string]
+        $OperationName
     )
 
-    $Attempt      = 0
-    $Success      = $false
-    $LastError    = $null
+    $Attempt = 0
+    $Success = $false
+    $LastError = $null
 
     # Retry loop
     while (-not $Success -and $Attempt -le $Script:APIMethodRetry.MaxRetries) {
@@ -25,7 +35,7 @@ function Invoke-APIRestMethod {
         # Check API throttle status and apply any necessary delays before making the API call
         try {
 
-             Invoke-APIThrottle -ErrorAction Stop
+             Invoke-APIThrottle -Method $Method -OperationName $OperationName -ErrorAction Stop
 
         } catch {
 
@@ -37,6 +47,9 @@ function Invoke-APIRestMethod {
 
             $Response = Invoke-RestMethod @Parameters -ErrorAction Stop
             $Success  = $true
+
+            # Record successful request in local sliding-window counters
+            Add-ThrottleRequest -Method $Method -OperationName $OperationName
 
         } catch {
 
@@ -120,11 +133,21 @@ function Invoke-APIRestMethod {
                 429 {
 
                     # Non-terminating condition after max retries
+                    # 120s backoff is intentional protection against unexpected external factors and uncontrolled workflows
                     $Generic = "Rate limit exceeded. Too many requests have been made in a short period."
-                    
-                    # Hardcoded 429 2 minute wait in addition to retry interval
-                    Write-Warning "Rate limit exceeded. Waiting 2 minutes before retrying @ $((Get-Date).AddSeconds(120).ToString("HH:mm:ss"))..."
+
+                    if ($OperationName) {
+
+                        Write-Warning "Rate limit exceeded on operation '$OperationName'. Waiting 2 minutes before retrying @ $((Get-Date).AddSeconds(120).ToString("HH:mm:ss"))..."
+
+                    } else {
+
+                        Write-Warning "Rate limit exceeded. Waiting 2 minutes before retrying @ $((Get-Date).AddSeconds(120).ToString("HH:mm:ss"))..."
+
+                    }
+
                     Start-Sleep -Seconds 120
+                    Update-Throttle
                     $ShouldRetry = $true
 
                 }
@@ -147,7 +170,6 @@ function Invoke-APIRestMethod {
                     }
                 }
             }
-
 
             if ($ShouldRetry -and $Attempt -le $Script:APIMethodRetry.MaxRetries) {
 

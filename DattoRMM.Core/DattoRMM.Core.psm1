@@ -11,6 +11,9 @@ using module '.\Private\Classes\Classes.psm1'
 # Load throttle profile defaults from data file
 $Script:ThrottleProfileDefaults = Import-PowerShellDataFile -Path "$PSScriptRoot\Private\Data\ThrottleProfiles.psd1"
 
+# Load operation-to-rate-limit mapping for write operation classification
+$Script:OperationMapping = Import-PowerShellDataFile -Path "$PSScriptRoot\Private\Data\OperationMapping.psd1"
+
 # Load API method retry configuration from data file
 $Script:APIMethodRetry = Import-PowerShellDataFile -Path "$PSScriptRoot\Private\Data\RetryDefaults.psd1"
 
@@ -28,19 +31,35 @@ $Script:ConfigAPITimeoutSeconds = $null
 $Script:TokenExpireHours = 100
 $Script:MaxPageSize = $null
 
-# Initialize throttle state variable, and set safe defaults
+# Initialize throttle state variable with safe defaults for multi-bucket model
+# Profile settings are overridden by Import-ThrottleProfile during config loading.
+# Discovered limits are populated by Initialize-ThrottleState on Connect-DattoRMM.
 $Script:RMMThrottle = [ordered]@{
-    Profile = 'DefaultProfile'          # Initialise default profile
-    CheckInterval = 1                   # Force initialisation of throttle state
-    CheckCount = 1                      # Number of checks since last update - force initial delay
-    Utilisation = 0                     # Current rate limit utilisation (0 to 1) - force initial update
-    LowUtilCheckInterval = 25           # Utilisation limit before delaying requests - throttling activation threshold
-    DelayMultiplier = 750               # Multiplier for calculating delay when throttling
-    DelayMS = 0                         # Current delay in milliseconds
-    Pause = $false                      # Whether to pause requests entirely
-    Throttle = $false                   # Whether to throttle requests
-    ThrottleCutOffOverhead = 0.05       # Fraction of rate limit to reserve as safety margin (default 5%)
-    ThrottleUtilisationThreshold = 0.5  # Utilisation threshold to start throttling
+    Profile = 'DefaultProfile'                                                      # Active throttle profile name
+    DelayMultiplier = 750                                                           # Delay multiplier for global account bucket throttling
+    ThrottleCutOffOverhead = 0.05                                                   # Safety margin below accountCutOffRatio for pause trigger
+    ThrottleUtilisationThreshold = 0.3                                              # Utilisation ratio at which throttling activates
+    CalibrationBaseSeconds = 8                                                      # Ceiling interval at high confidence and zero drift
+    CalibrationMinSeconds = 0.5                                                     # Absolute floor to prevent excessive API calibration calls
+    CalibrationConfidenceCount = 50                                                 # Local samples needed before interval reaches full base
+    DriftThresholdPercent = 0.02                                                    # Drift gap at which accelerated calibration begins (2%)
+    DriftScalingFactor = 2                                                          # How aggressively interval shrinks as drift exceeds threshold
+    WriteDelayMultiplier = 1000                                                     # Delay multiplier for write bucket throttling
+    UnknownOperationSafetyFactor = 0.3                                              # Fractional delay for unmapped write operations
+    WindowSizeSeconds = 60                                                          # Rolling window size (discovered from API)
+    AccountLimit = 600                                                              # Global account rate limit (discovered from API)
+    AccountCutOffRatio = 0.9                                                        # Account cut-off ratio (discovered from API)
+    WriteLimit = 600                                                                # Global write rate limit (discovered from API)
+    AccountLocalTimestamps = [System.Collections.Generic.List[datetime]]::new()     # Local timestamps for global account bucket
+    WriteLocalTimestamps = [System.Collections.Generic.List[datetime]]::new()       # Local timestamps for global write bucket
+    OperationBuckets = @{}                                                          # Per-operation write buckets (discovered from API)
+    LastCalibrationUtc = [datetime]::MinValue                                       # Force initial calibration
+    SamplesAtLastCalibration = 0                                                    # Local account sample count at last calibration (for request gate)
+    AccountUtilisation = 0.0                                                        # Computed global account utilisation
+    WriteUtilisation = 0.0                                                          # Computed global write utilisation
+    DelayMS = 0                                                                     # Current computed delay in milliseconds
+    Pause = $false                                                                  # Hard pause flag
+    Throttle = $false                                                               # Soft throttle flag
 }
 
 # Dot-source remaining .ps1 files in Private folder
@@ -108,49 +127,11 @@ if ($null -ne $SavedConfig) {
                 $Script:ConfigAPITimeoutSeconds = $SavedConfig.APITimeoutSeconds
                 Write-Verbose "APITimeoutSeconds: $($Script:APIMethodRetry.TimeoutSeconds)"
             }
+
             'ThrottleProfile' {
 
-                if ($SavedConfig.ThrottleProfile -ne 'Custom') {
+                Import-ThrottleProfile -Config $SavedConfig
 
-                    Set-RMMConfig -ThrottleProfile $SavedConfig.ThrottleProfile
-                    $Script:RMMThrottle.Profile = $SavedConfig.ThrottleProfile
-                    $Script:ConfigThrottleProfile = $SavedConfig.ThrottleProfile
-                    $Script:SessionThrottleProfile = $SavedConfig.ThrottleProfile
-
-                } else {
-
-                    # Load defaults for any incomplete or missing settings
-                    Write-Warning "Loading custom configuration settings from $($Script:ConfigPath) - session behaviour may be unpredictable..."
-                    $Script:ConfigThrottleProfile = 'Custom'
-                    $Script:RMMThrottle.Profile = 'Custom'
-                    $Script:RMMThrottle.DelayMultiplier =  $Script:ThrottleProfileDefaults.DefaultProfile.DelayMultiplier
-                    $Script:RMMThrottle.LowUtilCheckInterval = $Script:ThrottleProfileDefaults.DefaultProfile.LowUtilCheckInterval
-                    $Script:RMMThrottle.ThrottleCutOffOverhead = $Script:ThrottleProfileDefaults.DefaultProfile.ThrottleCutOffOverhead
-                    $Script:RMMThrottle.ThrottleUtilisationThreshold = $Script:ThrottleProfileDefaults.DefaultProfile.ThrottleUtilisationThreshold
-
-                    # Load custom defaults
-                    switch ($SavedConfig.Keys) {
-
-                        'DelayMultiplier' {
-                            $Script:RMMThrottle.DelayMultiplier = $SavedConfig.DelayMultiplier
-                            Write-Warning "`tCUSTOM DelayMultiplier: $($Script:RMMThrottle.DelayMultiplier)"
-                        }
-                        'LowUtilCheckInterval' {
-                            $Script:RMMThrottle.LowUtilCheckInterval = $SavedConfig.LowUtilCheckInterval
-                            Write-Warning "`tCUSTOM LowUtilCheckInterval: $($Script:RMMThrottle.LowUtilCheckInterval)"
-                        }
-
-                        'ThrottleCutOffOverhead' {
-                            $Script:RMMThrottle.ThrottleCutOffOverhead = $SavedConfig.ThrottleCutOffOverhead
-                            Write-Warning "`tCUSTOM ThrottleCutOffOverhead: $($Script:RMMThrottle.ThrottleCutOffOverhead)"
-                        }
-
-                        'ThrottleUtilisationThreshold' {
-                            $Script:RMMThrottle.ThrottleUtilisationThreshold = $SavedConfig.ThrottleUtilisationThreshold
-                            Write-Warning "`tCUSTOM ThrottleUtilisationThreshold: $($Script:RMMThrottle.ThrottleUtilisationThreshold)"
-                        }
-                    }
-                }
             }
         }
 
@@ -188,5 +169,6 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
     Remove-Variable -Name RMMThrottle -Scope Script -ErrorAction SilentlyContinue
     Remove-Variable -Name APIMethodRetry -Scope Script -ErrorAction SilentlyContinue
     Remove-Variable -Name ThrottleProfileDefaults -Scope Script -ErrorAction SilentlyContinue
+    Remove-Variable -Name OperationMapping -Scope Script -ErrorAction SilentlyContinue
     
 }
