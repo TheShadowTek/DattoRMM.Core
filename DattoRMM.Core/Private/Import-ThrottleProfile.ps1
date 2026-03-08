@@ -63,21 +63,9 @@ function Import-ThrottleProfile {
 
         }
 
-        # Override with any custom values present in configuration
-        $CustomKeys = @(
-            'DelayMultiplier'
-            'CalibrationBaseSeconds'
-            'CalibrationMinSeconds'
-            'CalibrationConfidenceCount'
-            'DriftThresholdPercent'
-            'DriftScalingFactor'
-            'ThrottleCutOffOverhead'
-            'ThrottleUtilisationThreshold'
-            'WriteDelayMultiplier'
-            'UnknownOperationSafetyFactor'
-        )
-
-        foreach ($Key in $CustomKeys) {
+        # Override with any custom values present in configuration.
+        # Keys are derived from DefaultProfile to stay in sync with ThrottleProfiles.psd1.
+        foreach ($Key in $Script:ThrottleProfileDefaults['DefaultProfile'].Keys) {
 
             if ($Config.ContainsKey($Key)) {
 

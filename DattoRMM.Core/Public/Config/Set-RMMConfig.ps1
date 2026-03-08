@@ -193,11 +193,11 @@ function Set-RMMConfig {
 
         Write-Verbose "Resetting configuration to default settings."
 
-        # Clear saved config
-        $Config = @{}
-
         # Reset session variables to defaults
         $Script:TokenExpireHours = 100
+        $Script:SessionPlatform = $null
+        $Script:SessionPageSize = $null
+        $Script:PageSize = $null
 
         # Reset throttle to default profile (Medium)
         $Script:RMMThrottle.Profile = 'DefaultProfile'
@@ -216,6 +216,16 @@ function Set-RMMConfig {
                 Write-Verbose "Deleted configuration file at: $Script:ConfigPath"
 
             }
+
+            # Clear Config* tracking variables to reflect the now-empty persistent state
+            $Script:ConfigPlatform = $null
+            $Script:ConfigPageSize = $null
+            $Script:ConfigThrottleProfile = $null
+            $Script:ConfigTokenExpireHours = $null
+            $Script:ConfigAPIMaxRetries = $null
+            $Script:ConfigAPIRetryIntervalSeconds = $null
+            $Script:ConfigAPITimeoutSeconds = $null
+
         }
 
         return

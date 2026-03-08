@@ -42,7 +42,7 @@ function Get-RMMConfig {
 
     .LINK
         Save-RMMConfig
-        ReSave-RMMConfig
+        Remove-RMMConfig
         Set-RMMPageSize
         Get-RMMPageSize
     #>

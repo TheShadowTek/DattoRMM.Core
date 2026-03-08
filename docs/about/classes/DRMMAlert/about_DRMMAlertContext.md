@@ -6,7 +6,7 @@ Represents the context of an alert in the DRMM system, including its class and s
 
 ## LONG DESCRIPTION
 
-The DRMMAlertContext class models the context information associated with an alert in the DRMM platform. It includes a property for the class of the context, which indicates the type of alert context (e
+The DRMMAlertContext class models the context information associated with an alert in the DRMM platform. It includes a property for the class of the context, which indicates the type of alert context. The class provides a static method to create an instance of the appropriate context subclass based on the '@class' property in the API response. If the '@class' property is not present or does not match known types, it defaults to creating an instance of DRMMAlertContextGeneric. Each specific context type has its own properties and parsing logic to capture relevant details for that type of alert context.
 
 This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 

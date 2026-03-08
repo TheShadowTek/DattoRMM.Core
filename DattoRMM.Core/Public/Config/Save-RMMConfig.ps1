@@ -64,6 +64,15 @@ function Save-RMMConfig {
 
     if ($Success) {
 
+        # Sync Config* tracking variables to reflect what is now persisted
+        $Script:ConfigPlatform = $Script:SessionPlatform
+        $Script:ConfigPageSize = $Script:PageSize
+        $Script:ConfigThrottleProfile = $Script:RMMThrottle.Profile
+        $Script:ConfigTokenExpireHours = $Script:TokenExpireHours
+        $Script:ConfigAPIMaxRetries = $Script:APIMethodRetry.MaxRetries
+        $Script:ConfigAPIRetryIntervalSeconds = $Script:APIMethodRetry.RetryIntervalSeconds
+        $Script:ConfigAPITimeoutSeconds = $Script:APIMethodRetry.TimeoutSeconds
+
         Write-Host "Configuration saved successfully." -ForegroundColor Green
 
     } else {

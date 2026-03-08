@@ -1646,7 +1646,7 @@ class DRMMAlert : DRMMObject {
 .SYNOPSIS
     Represents the context of an alert in the DRMM system, including its class and specific details based on the type of alert.
 .DESCRIPTION
-    The DRMMAlertContext class models the context information associated with an alert in the DRMM platform. It includes a property for the class of the context, which indicates the type of alert context (e.g., antivirus, backup management, etc.). The class provides a static method to create an instance of the appropriate context subclass based on the '@class' property in the API response. If the '@class' property is not present or does not match known types, it defaults to creating an instance of DRMMAlertContextGeneric. Each specific context type (e.g., DRMMAlertContextAntivirus, DRMMAlertContextBackupManagement) has its own properties and parsing logic to capture relevant details for that type of alert context.
+    The DRMMAlertContext class models the context information associated with an alert in the DRMM platform. It includes a property for the class of the context, which indicates the type of alert context. The class provides a static method to create an instance of the appropriate context subclass based on the '@class' property in the API response. If the '@class' property is not present or does not match known types, it defaults to creating an instance of DRMMAlertContextGeneric. Each specific context type has its own properties and parsing logic to capture relevant details for that type of alert context.
 #>
 class DRMMAlertContext : DRMMObject {
 
@@ -6494,6 +6494,104 @@ class DRMMStatus : DRMMObject {
     }
 }
 #endregion DRMMStatus class
+
+#region DRMMThrottleStatus and related classes
+<#
+.SYNOPSIS
+    Represents a single rate-limit bucket in the DRMM throttle system, covering account, write, or per-operation buckets.
+.DESCRIPTION
+    The DRMMThrottleBucket class models one rate-limit bucket from the combined view of API-reported
+    and locally tracked throttle state. Each bucket has a Type (Account, Write, or Operation), a Name
+    that identifies it (e.g. 'Account', 'Write', 'site-create', 'device-move'), the configured Limit,
+    the API-reported Count, the locally tracked LocalCount, and a computed Utilisation ratio. This class
+    is used as an element in the Buckets collection of DRMMThrottleStatus, providing a uniform structure
+    for all bucket types so they can be filtered, sorted, and analysed consistently.
+#>
+class DRMMThrottleBucket : DRMMObject {
+
+    [string]$Type
+    [string]$Name
+    [int]$Limit
+    [int]$ApiCount
+    [int]$LocalCount
+    [double]$Utilisation
+
+    DRMMThrottleBucket() : base() {
+
+    }
+
+    <#
+    .SYNOPSIS
+        Generates a summary string for the throttle bucket, including type, name, utilisation, and counts.
+    .DESCRIPTION
+        The GetSummary method returns a formatted string that summarises the bucket's current state,
+        showing the type, name, utilisation percentage, and both API and local counts against the limit.
+    #>
+    [string] GetSummary() {
+
+        $UtilPct = [math]::Round($this.Utilisation * 100, 2)
+
+        return "$($this.Type)/$($this.Name): $UtilPct% (API=$($this.ApiCount), Local=$($this.LocalCount), Limit=$($this.Limit))"
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents the combined throttle and rate-limit status for a DRMM account, merging API-reported data with local tracking state.
+.DESCRIPTION
+    The DRMMThrottleStatus class provides a detailed snapshot of the current API rate-limit state,
+    combining fresh data from the Datto RMM rate-status endpoint with the local sliding-window
+    throttle model. It includes the active throttle profile, global account and write utilisation,
+    throttle and pause flags, current computed delay, calibration metadata, configured thresholds,
+    the rolling window size, and a collection of DRMMThrottleBucket objects representing every
+    tracked bucket (account, write, and per-operation). This class is designed for monitoring,
+    diagnostics, and long-running load test analysis, providing the complete throttle picture
+    before any drift adjustment is applied.
+#>
+class DRMMThrottleStatus : DRMMObject {
+
+    [string]$Profile
+    [string]$AccountUid
+    [int]$WindowSizeSeconds
+    [double]$AccountUtilisation
+    [double]$WriteUtilisation
+    [double]$AccountCutOffRatio
+    [double]$ThrottleUtilisationThreshold
+    [double]$PauseThreshold
+    [bool]$Throttle
+    [bool]$Pause
+    [double]$DelayMs
+    [double]$DelayMultiplier
+    [double]$WriteDelayMultiplier
+    [Nullable[datetime]]$LastCalibrationUtc
+    [int]$SamplesAtLastCalibration
+    [DRMMThrottleBucket[]]$Buckets
+
+    DRMMThrottleStatus() : base() {
+
+        $this.Buckets = @()
+
+    }
+
+    <#
+    .SYNOPSIS
+        Generates a summary string for the throttle status, including key utilisation metrics and flags.
+    .DESCRIPTION
+        The GetSummary method returns a formatted string summarising the overall throttle state,
+        including account and write utilisation percentages, whether throttling or pausing is active,
+        the current delay, and the number of tracked buckets.
+    #>
+    [string] GetSummary() {
+
+        $AcctPct = [math]::Round($this.AccountUtilisation * 100, 2)
+        $WritePct = [math]::Round($this.WriteUtilisation * 100, 2)
+
+        return "Account=$($AcctPct)%, Write=$($WritePct)%, Throttle=$($this.Throttle), Pause=$($this.Pause), Delay=$([math]::Round($this.DelayMs, 2))ms, Buckets=$($this.Buckets.Count)"
+
+    }
+}
+#endregion DRMMThrottleStatus and related classes
 
 #region DRMMUser class
 <#

@@ -79,74 +79,11 @@ if (Test-Path $PSScriptRoot\Public) {
     }
 }
 
-# Load configuration from file if it exists
-Write-Verbose "Attempting to load configuration file..."
-$ConfigDir = Join-Path $HOME '.DattoRMM.Core'
-$Script:ConfigPath = Join-Path $ConfigDir 'config.json'
-$SavedConfig = Read-ConfigFile
+# Establish module-level config file path (used by Read-ConfigFile, Write-ConfigFile, and related functions)
+$Script:ConfigPath = Join-Path (Join-Path $HOME '.DattoRMM.Core') 'config.json'
 
-if ($null -ne $SavedConfig) {
-
-    try {
-
-        switch ($SavedConfig.Keys) {
-
-            'Platform' {
-                $Script:ConfigPlatform = $SavedConfig.Platform
-                $Script:SessionPlatform = $SavedConfig.Platform
-                Write-Verbose "Platform: $($Script:ConfigPlatform)"
-            }
-
-            'PageSize' {
-                $Script:ConfigPageSize = $SavedConfig.PageSize
-                $Script:SessionPageSize = $SavedConfig.PageSize
-                Write-Verbose "PageSize: $($Script:ConfigPageSize)"
-            }
-
-            'TokenExpireHours' {
-                $Script:TokenExpireHours = $SavedConfig.TokenExpireHours
-                $Script:ConfigTokenExpireHours = $SavedConfig.TokenExpireHours
-
-                Write-Verbose "TokenExpireHours: $($Script:TokenExpireHours)"
-            }
-
-            'APIMaxRetries' {
-                $Script:APIMethodRetry.MaxRetries = $SavedConfig.APIMaxRetries
-                $Script:ConfigAPIMaxRetries = $SavedConfig.APIMaxRetries
-                Write-Verbose "APIMaxRetries: $($Script:APIMethodRetry.MaxRetries)"
-            }
-
-            'APIRetryIntervalSeconds' {
-                $Script:APIMethodRetry.RetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
-                $Script:ConfigAPIRetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
-                Write-Verbose "APIRetryIntervalSeconds: $($Script:APIMethodRetry.RetryIntervalSeconds)"
-            }
-
-            'APITimeoutSeconds' {
-                $Script:APIMethodRetry.TimeoutSeconds = $SavedConfig.APITimeoutSeconds
-                $Script:ConfigAPITimeoutSeconds = $SavedConfig.APITimeoutSeconds
-                Write-Verbose "APITimeoutSeconds: $($Script:APIMethodRetry.TimeoutSeconds)"
-            }
-
-            'ThrottleProfile' {
-
-                Import-ThrottleProfile -Config $SavedConfig
-
-            }
-        }
-
-    } catch {
-
-        Write-Error "Error loading saved config $($Script:ConfigPath). Session settings may be incomplete: $($_.Exception.Message)"
-
-    }
-
-} else {
-
-    $Script:RMMThrottle.Profile = 'DefaultProfile'
-    Write-Verbose "No configuration file found; using default settings."
-
-}
+# Load and apply any saved configuration from disk
+Initialize-SavedConfig
 
 # Module removal handler - cleanup module variables
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
