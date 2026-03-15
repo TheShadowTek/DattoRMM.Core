@@ -6498,14 +6498,18 @@ class DRMMStatus : DRMMObject {
 #region DRMMThrottleStatus and related classes
 <#
 .SYNOPSIS
-    Represents a single rate-limit bucket in the DRMM throttle system, covering account, write, or per-operation buckets.
+    Represents a single rate-limit bucket in the DRMM throttle system, covering read, write, or per-operation buckets.
 .DESCRIPTION
     The DRMMThrottleBucket class models one rate-limit bucket from the combined view of API-reported
-    and locally tracked throttle state. Each bucket has a Type (Account, Write, or Operation), a Name
-    that identifies it (e.g. 'Account', 'Write', 'site-create', 'device-move'), the configured Limit,
+    and locally tracked throttle state. Each bucket has a Type (Read, Write, or Operation), a Name
+    that identifies it (e.g. 'Read', 'Write', 'site-create', 'device-move'), the configured Limit,
     the API-reported Count, the locally tracked LocalCount, and a computed Utilisation ratio. This class
     is used as an element in the Buckets collection of DRMMThrottleStatus, providing a uniform structure
     for all bucket types so they can be filtered, sorted, and analysed consistently.
+
+    The Datto RMM API tracks reads and writes as independent quotas:
+    - accountCount / accountRateLimit   → read (GET) operations only
+    - accountWriteCount / accountWriteRateLimit → write (PUT/POST/DELETE) operations only
 #>
 class DRMMThrottleBucket : DRMMObject {
 
@@ -6542,30 +6546,37 @@ class DRMMThrottleBucket : DRMMObject {
 .DESCRIPTION
     The DRMMThrottleStatus class provides a detailed snapshot of the current API rate-limit state,
     combining fresh data from the Datto RMM rate-status endpoint with the local sliding-window
-    throttle model. It includes the active throttle profile, global account and write utilisation,
-    throttle and pause flags, current computed delay, calibration metadata, configured thresholds,
-    the rolling window size, and a collection of DRMMThrottleBucket objects representing every
-    tracked bucket (account, write, and per-operation). This class is designed for monitoring,
-    diagnostics, and long-running load test analysis, providing the complete throttle picture
-    before any drift adjustment is applied.
+    throttle model. It includes the active throttle profile, read and write utilisation (tracked
+    independently), throttle and pause flags, current computed delays for each track, calibration
+    metadata, configured thresholds, the rolling window size, and a collection of DRMMThrottleBucket
+    objects representing every tracked bucket (read, write, and per-operation). This class is designed
+    for monitoring, diagnostics, and long-running load test analysis, providing the complete throttle
+    picture before any drift adjustment is applied.
+
+    The Datto RMM API tracks reads and writes as independent quotas:
+    - accountCount / accountRateLimit   → read (GET) operations only
+    - accountWriteCount / accountWriteRateLimit → write (PUT/POST/DELETE) operations only
 #>
 class DRMMThrottleStatus : DRMMObject {
 
     [string]$Profile
     [string]$AccountUid
     [int]$WindowSizeSeconds
-    [double]$AccountUtilisation
+    [double]$ReadUtilisation
     [double]$WriteUtilisation
     [double]$AccountCutOffRatio
     [double]$ThrottleUtilisationThreshold
     [double]$PauseThreshold
     [bool]$Throttle
     [bool]$Pause
-    [double]$DelayMs
+    [double]$ReadDelayMs
+    [double]$WriteDelayMs
     [double]$DelayMultiplier
     [double]$WriteDelayMultiplier
-    [Nullable[datetime]]$LastCalibrationUtc
-    [int]$SamplesAtLastCalibration
+    [Nullable[datetime]]$ReadLastCalibrationUtc
+    [Nullable[datetime]]$WriteLastCalibrationUtc
+    [int]$ReadSamplesAtLastCalibration
+    [int]$WriteSamplesAtLastCalibration
     [DRMMThrottleBucket[]]$Buckets
 
     DRMMThrottleStatus() : base() {
@@ -6579,15 +6590,15 @@ class DRMMThrottleStatus : DRMMObject {
         Generates a summary string for the throttle status, including key utilisation metrics and flags.
     .DESCRIPTION
         The GetSummary method returns a formatted string summarising the overall throttle state,
-        including account and write utilisation percentages, whether throttling or pausing is active,
-        the current delay, and the number of tracked buckets.
+        including read and write utilisation percentages, whether throttling or pausing is active,
+        the current delays, and the number of tracked buckets.
     #>
     [string] GetSummary() {
 
-        $AcctPct = [math]::Round($this.AccountUtilisation * 100, 2)
+        $ReadPct = [math]::Round($this.ReadUtilisation * 100, 2)
         $WritePct = [math]::Round($this.WriteUtilisation * 100, 2)
 
-        return "Account=$($AcctPct)%, Write=$($WritePct)%, Throttle=$($this.Throttle), Pause=$($this.Pause), Delay=$([math]::Round($this.DelayMs, 2))ms, Buckets=$($this.Buckets.Count)"
+        return "Read=$($ReadPct)%, Write=$($WritePct)%, Throttle=$($this.Throttle), Pause=$($this.Pause), ReadDelay=$([math]::Round($this.ReadDelayMs, 2))ms, WriteDelay=$([math]::Round($this.WriteDelayMs, 2))ms, Buckets=$($this.Buckets.Count)"
 
     }
 }

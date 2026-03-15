@@ -2651,7 +2651,7 @@
         DRMMThrottleBucket = @{
             Examples = @{
             }
-            LongDescription = 'The DRMMThrottleBucket class models one rate-limit bucket from the combined view of API-reported and locally tracked throttle state. Each bucket has a Type (Account, Write, or Operation), a Name that identifies it (e'
+            LongDescription = 'The DRMMThrottleBucket class models one rate-limit bucket from the combined view of API-reported and locally tracked throttle state. Each bucket has a Type (Read, Write, or Operation), a Name that identifies it (e'
             MethodDescriptions = @{
                 GetSummary = @{
                     Description = 'Generates a summary string for the throttle bucket, including type, name, utilisation, and counts.'
@@ -2666,17 +2666,17 @@
                 ApiCount = 'The current request count reported by the Datto RMM API for this bucket.'
                 Limit = 'The configured rate limit for this bucket, indicating the maximum number of requests allowed within the rolling window.'
                 LocalCount = 'The number of requests tracked locally in the sliding-window model for this bucket.'
-                Name = 'The name that identifies the bucket. For Account and Write buckets, this is the bucket type name. For Operation buckets, this is the operation name (e.g., site-create, device-move).'
-                Type = 'The bucket type: Account (global account requests), Write (global write operations), or Operation (per-operation write buckets).'
+                Name = 'The name that identifies the bucket. For Read and Write buckets, this is the bucket type name. For Operation buckets, this is the operation name (e.g., site-create, device-move).'
+                Type = 'The bucket type: Read (global read/GET requests), Write (global write operations), or Operation (per-operation write buckets).'
                 Utilisation = 'The computed utilisation ratio for this bucket, calculated as the higher of API-reported utilisation or local-tracked utilisation. Ratio ranges from 0.0 (empty) to 1.0 or higher (over-limit).'
             }
             RelatedLinks = @()
-            ShortDescription = 'Represents a single rate-limit bucket in the DRMM throttle system, covering account, write, or per-operation buckets.'
+            ShortDescription = 'Represents a single rate-limit bucket in the DRMM throttle system, covering read, write, or per-operation buckets.'
         }
         DRMMThrottleStatus = @{
             Examples = @{
             }
-            LongDescription = 'The DRMMThrottleStatus class provides a detailed snapshot of the current API rate-limit state, combining fresh data from the Datto RMM rate-status endpoint with the local sliding-window throttle model. It includes the active throttle profile, global account and write utilisation, throttle and pause flags, current computed delay, calibration metadata, configured thresholds, the rolling window size, and a collection of DRMMThrottleBucket objects representing every tracked bucket (account, write, and per-operation). This class is designed for monitoring, diagnostics, and long-running load test analysis, providing the complete throttle picture before any drift adjustment is applied.'
+            LongDescription = 'The DRMMThrottleStatus class provides a detailed snapshot of the current API rate-limit state, combining fresh data from the Datto RMM rate-status endpoint with the local sliding-window throttle model. It includes the active throttle profile, independent read and write utilisation, throttle and pause flags, separate read and write computed delays, per-track calibration metadata, configured thresholds, the rolling window size, and a collection of DRMMThrottleBucket objects representing every tracked bucket (read, write, and per-operation). Read (GET) and write (POST/PUT/DELETE) requests are tracked against independent API quotas. This class is designed for monitoring, diagnostics, and long-running load test analysis, providing the complete throttle picture before any drift adjustment is applied.'
             MethodDescriptions = @{
                 GetSummary = @{
                     Description = 'Generates a summary string for the throttle status, including key utilisation metrics and flags.'
@@ -2690,19 +2690,22 @@
             PropertyDescriptions = @{
                 AccountCutOffRatio = 'The account cut-off ratio from the API, representing the utilisation threshold at which the system enforces a hard pause to prevent exceeding the rate limit.'
                 AccountUid = 'The unique identifier (UID) of the account from the API response.'
-                AccountUtilisation = 'The global account utilisation ratio (0.0 to 1.0+), calculated as the higher of API-reported or locally-tracked utilisation. Represents the portion of the account rate limit currently in use.'
-                Buckets = 'A collection of DRMMThrottleBucket objects representing all tracked rate-limit buckets: the global account bucket, the global write bucket, and all monitored per-operation write buckets (both API-reported and locally-tracked unidentified operations).'
-                DelayMs = 'The current computed delay in milliseconds. When throttling is active, this value increases proportionally with utilisation to slow request rates.'
-                DelayMultiplier = 'The configured multiplier (e.g., 750) used to calculate delay from account utilisation: Delay = Utilisation * DelayMultiplier.'
-                LastCalibrationUtc = 'The UTC datetime of the last throttle calibration, when local state was synchronized with API-reported values.'
-                Pause = 'Boolean indicating whether hard pause is currently active. True when AccountUtilisation exceeds PauseThreshold, causing all API requests to be blocked.'
+                ReadUtilisation = 'The global read utilisation ratio (0.0 to 1.0+), calculated as the higher of API-reported or locally-tracked utilisation for read (GET) operations. Represents the portion of the account read rate limit currently in use.'
+                Buckets = 'A collection of DRMMThrottleBucket objects representing all tracked rate-limit buckets: the global read bucket, the global write bucket, and all monitored per-operation write buckets (both API-reported and locally-tracked unidentified operations).'
+                ReadDelayMs = 'The current computed delay in milliseconds for read (GET) requests. When throttling is active, this value increases proportionally with read utilisation to slow request rates.'
+                WriteDelayMs = 'The current computed delay in milliseconds for write (POST/PUT/DELETE) requests. When throttling is active, this value increases proportionally with write utilisation to slow request rates.'
+                DelayMultiplier = 'The configured multiplier (e.g., 750) used to calculate delay from read utilisation: ReadDelayMs = ReadUtilisation * DelayMultiplier.'
+                ReadLastCalibrationUtc = 'The UTC datetime of the last read-track throttle calibration, when local read state was synchronized with API-reported values.'
+                WriteLastCalibrationUtc = 'The UTC datetime of the last write-track throttle calibration, when local write state was synchronized with API-reported values.'
+                Pause = 'Boolean indicating whether hard pause is currently active. True when either ReadUtilisation or WriteUtilisation exceeds PauseThreshold, causing all API requests to be blocked.'
                 PauseThreshold = 'The computed utilisation threshold at which hard pause activates, calculated as AccountCutOffRatio minus a safety margin (ThrottleCutOffOverhead).'
                 Profile = 'The name of the active throttle profile (e.g., DefaultProfile, ConservativeProfile).'
-                SamplesAtLastCalibration = 'The number of local account request samples recorded at the time of the last calibration, used to track state stability.'
-                Throttle = 'Boolean indicating whether soft throttling is currently active. True when AccountUtilisation exceeds ThrottleUtilisationThreshold.'
+                ReadSamplesAtLastCalibration = 'The number of local read request samples recorded at the time of the last read-track calibration, used to track read state stability.'
+                WriteSamplesAtLastCalibration = 'The number of local write request samples recorded at the time of the last write-track calibration, used to track write state stability.'
+                Throttle = 'Boolean indicating whether soft throttling is currently active. True when either ReadUtilisation or WriteUtilisation exceeds ThrottleUtilisationThreshold.'
                 ThrottleUtilisationThreshold = 'The configured utilisation threshold (e.g., 0.3 for 30%) at which soft throttling activates, introducing delays to reduce request rate.'
                 WindowSizeSeconds = 'The rolling window size in seconds for the throttle model, as reported by the API.'
-                WriteDelayMultiplier = 'The configured multiplier (e.g., 1000) used to calculate delay from write utilisation when write limits are exceeded.'
+                WriteDelayMultiplier = 'The configured multiplier (e.g., 1000) used to calculate delay from write utilisation: WriteDelayMs = WriteUtilisation * WriteDelayMultiplier.'
                 WriteUtilisation = 'The global write utilisation ratio (0.0 to 1.0+), calculated as the higher of API-reported or locally-tracked utilisation for write operations.'
             }
             RelatedLinks = @()

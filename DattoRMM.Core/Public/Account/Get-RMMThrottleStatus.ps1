@@ -10,19 +10,23 @@ function Get-RMMThrottleStatus {
     .DESCRIPTION
         The Get-RMMThrottleStatus function provides a combined view of the Datto RMM API rate-status
         endpoint data and the local sliding-window throttle model. It calls the rate-status API to
-        fetch fresh account and write counts, limits, and per-operation bucket status, then merges
+        fetch fresh read and write counts, limits, and per-operation bucket status, then merges
         this with the local throttle tracking state (timestamps, utilisation, flags, thresholds).
+
+        The Datto RMM API tracks reads and writes as independent quotas:
+        - accountCount / accountRateLimit   → read (GET) operations only
+        - accountWriteCount / accountWriteRateLimit → write (PUT/POST/DELETE) operations only
 
         The returned DRMMThrottleStatus object includes:
         - Active throttle profile and configured thresholds
-        - Global account and write utilisation (both API-reported and locally tracked)
+        - Independent read and write utilisation (both API-reported and locally tracked)
         - Throttle and pause flags reflecting the current state before drift adjustment
-        - Current computed delay in milliseconds
-        - Calibration metadata (last calibration time, sample count)
-        - A Buckets collection of DRMMThrottleBucket objects covering the account bucket,
+        - Independent read and write delay values in milliseconds
+        - Calibration metadata for both read and write tracks
+        - A Buckets collection of DRMMThrottleBucket objects covering the read bucket,
           write bucket, and all per-operation write buckets (both mapped and unidentified)
 
-        Each bucket reports its Type (Account, Write, or Operation), Name, Limit, ApiCount,
+        Each bucket reports its Type (Read, Write, or Operation), Name, Limit, ApiCount,
         LocalCount, and computed Utilisation ratio.
 
         This function is designed for monitoring, diagnostics, and sample capture during long-running
@@ -64,18 +68,21 @@ function Get-RMMThrottleStatus {
         - Profile (string): Active throttle profile name
         - AccountUid (string): Account unique identifier from the API
         - WindowSizeSeconds (int): Rolling window size in seconds
-        - AccountUtilisation (double): Global account utilisation ratio (higher of API or local)
-        - WriteUtilisation (double): Global write utilisation ratio (higher of API or local)
+        - ReadUtilisation (double): Read utilisation ratio (higher of API or local)
+        - WriteUtilisation (double): Write utilisation ratio (higher of API or local)
         - AccountCutOffRatio (double): API-reported account cut-off ratio
         - ThrottleUtilisationThreshold (double): Configured threshold at which throttling activates
         - PauseThreshold (double): Computed threshold at which hard pause activates
         - Throttle (bool): Whether soft throttling is currently active
         - Pause (bool): Whether hard pause is currently active
-        - DelayMs (double): Current computed delay in milliseconds
-        - DelayMultiplier (double): Configured global delay multiplier
+        - ReadDelayMs (double): Current computed read delay in milliseconds
+        - WriteDelayMs (double): Current computed write delay in milliseconds
+        - DelayMultiplier (double): Configured read delay multiplier
         - WriteDelayMultiplier (double): Configured write delay multiplier
-        - LastCalibrationUtc (datetime): UTC time of the last calibration
-        - SamplesAtLastCalibration (int): Local account samples at last calibration
+        - ReadLastCalibrationUtc (datetime): UTC time of the last read calibration
+        - WriteLastCalibrationUtc (datetime): UTC time of the last write calibration
+        - ReadSamplesAtLastCalibration (int): Local read samples at last calibration
+        - WriteSamplesAtLastCalibration (int): Local write samples at last calibration
         - Buckets (DRMMThrottleBucket[]): Collection of all tracked rate-limit buckets
 
     .NOTES
@@ -83,7 +90,7 @@ function Get-RMMThrottleStatus {
         Use Connect-DattoRMM to authenticate before calling this function.
 
         This function calls the rate-status API endpoint to fetch fresh data, which itself
-        counts as an API request against the account rate limit.
+        counts as a read request against the account rate limit.
 
         The throttle state reported is a pre-drift-adjustment snapshot. The actual throttle
         engine may adjust utilisation values during calibration cycles.
@@ -112,7 +119,7 @@ function Get-RMMThrottleStatus {
         # Fetch fresh rate-status from the API
         $RateInfo = Invoke-ApiMethod -Path 'system/request_rate' -Method GET
 
-        Write-Debug "ThrottleStatus: API returned Account=$($RateInfo.accountCount)/$($RateInfo.accountRateLimit), Write=$($RateInfo.accountWriteCount)/$($RateInfo.accountWriteRateLimit)"
+        Write-Debug "ThrottleStatus: API returned Read=$($RateInfo.accountCount)/$($RateInfo.accountRateLimit), Write=$($RateInfo.accountWriteCount)/$($RateInfo.accountWriteRateLimit)"
 
         # --- Build the result object ---
         $Result = [DRMMThrottleStatus]::new()
@@ -124,13 +131,15 @@ function Get-RMMThrottleStatus {
         $Result.PauseThreshold = $RateInfo.accountCutOffRatio - $Script:RMMThrottle.ThrottleCutOffOverhead
         $Result.DelayMultiplier = $Script:RMMThrottle.DelayMultiplier
         $Result.WriteDelayMultiplier = $Script:RMMThrottle.WriteDelayMultiplier
-        $Result.LastCalibrationUtc = $Script:RMMThrottle.LastCalibrationUtc
-        $Result.SamplesAtLastCalibration = $Script:RMMThrottle.SamplesAtLastCalibration
+        $Result.ReadLastCalibrationUtc = $Script:RMMThrottle.ReadLastCalibrationUtc
+        $Result.WriteLastCalibrationUtc = $Script:RMMThrottle.WriteLastCalibrationUtc
+        $Result.ReadSamplesAtLastCalibration = $Script:RMMThrottle.ReadSamplesAtLastCalibration
+        $Result.WriteSamplesAtLastCalibration = $Script:RMMThrottle.WriteSamplesAtLastCalibration
 
         # --- Compute utilisation from both sources (same logic as Update-Throttle, pre-drift) ---
-        $ApiAccountUtil = $RateInfo.accountCount / [math]::Max($RateInfo.accountRateLimit, 1)
-        $LocalAccountUtil = $Script:RMMThrottle.AccountLocalTimestamps.Count / [math]::Max($Script:RMMThrottle.AccountLimit, 1)
-        $Result.AccountUtilisation = [math]::Max($ApiAccountUtil, $LocalAccountUtil)
+        $ApiReadUtil = $RateInfo.accountCount / [math]::Max($RateInfo.accountRateLimit, 1)
+        $LocalReadUtil = $Script:RMMThrottle.ReadLocalTimestamps.Count / [math]::Max($Script:RMMThrottle.ReadLimit, 1)
+        $Result.ReadUtilisation = [math]::Max($ApiReadUtil, $LocalReadUtil)
 
         $ApiWriteUtil = 0.0
         $LocalWriteUtil = 0.0
@@ -144,32 +153,44 @@ function Get-RMMThrottleStatus {
 
         $Result.WriteUtilisation = [math]::Max($ApiWriteUtil, $LocalWriteUtil)
 
-        # --- Compute flags and delay (mirrors Update-Throttle logic, pre-adjustment) ---
-        $Result.Throttle = ($Result.AccountUtilisation -ge $Script:RMMThrottle.ThrottleUtilisationThreshold)
-        $Result.Pause = ($Result.AccountUtilisation -ge $Result.PauseThreshold)
+        # --- Compute flags and delays (mirrors Update-Throttle logic, pre-adjustment) ---
+        $ReadThrottle = ($Result.ReadUtilisation -ge $Script:RMMThrottle.ThrottleUtilisationThreshold)
+        $WriteThrottle = ($Result.WriteUtilisation -ge $Script:RMMThrottle.ThrottleUtilisationThreshold)
+        $Result.Throttle = ($ReadThrottle -or $WriteThrottle)
+        $Result.Pause = ($Result.ReadUtilisation -ge $Result.PauseThreshold) -or ($Result.WriteUtilisation -ge $Result.PauseThreshold)
 
-        if ($Result.Throttle) {
+        if ($ReadThrottle) {
 
-            $Result.DelayMs = $Result.AccountUtilisation * $Script:RMMThrottle.DelayMultiplier
+            $Result.ReadDelayMs = $Result.ReadUtilisation * $Script:RMMThrottle.DelayMultiplier
 
         } else {
 
-            $Result.DelayMs = 0
+            $Result.ReadDelayMs = 0
+
+        }
+
+        if ($WriteThrottle) {
+
+            $Result.WriteDelayMs = $Result.WriteUtilisation * $Script:RMMThrottle.WriteDelayMultiplier
+
+        } else {
+
+            $Result.WriteDelayMs = 0
 
         }
 
         # --- Build bucket collection ---
         $BucketList = [System.Collections.Generic.List[DRMMThrottleBucket]]::new()
 
-        # Account bucket
-        $AccountBucket = [DRMMThrottleBucket]::new()
-        $AccountBucket.Type = 'Account'
-        $AccountBucket.Name = 'Account'
-        $AccountBucket.Limit = $RateInfo.accountRateLimit
-        $AccountBucket.ApiCount = $RateInfo.accountCount
-        $AccountBucket.LocalCount = $Script:RMMThrottle.AccountLocalTimestamps.Count
-        $AccountBucket.Utilisation = $Result.AccountUtilisation
-        $BucketList.Add($AccountBucket)
+        # Read bucket
+        $ReadBucket = [DRMMThrottleBucket]::new()
+        $ReadBucket.Type = 'Read'
+        $ReadBucket.Name = 'Read'
+        $ReadBucket.Limit = $RateInfo.accountRateLimit
+        $ReadBucket.ApiCount = $RateInfo.accountCount
+        $ReadBucket.LocalCount = $Script:RMMThrottle.ReadLocalTimestamps.Count
+        $ReadBucket.Utilisation = $Result.ReadUtilisation
+        $BucketList.Add($ReadBucket)
 
         # Write bucket
         $WriteBucket = [DRMMThrottleBucket]::new()
@@ -245,7 +266,7 @@ function Get-RMMThrottleStatus {
 
         $Result.Buckets = $BucketList.ToArray()
 
-        Write-Debug "ThrottleStatus: Built $($Result.Buckets.Count) buckets — Account=$([math]::Round($Result.AccountUtilisation * 100, 2))%, Write=$([math]::Round($Result.WriteUtilisation * 100, 2))%, Throttle=$($Result.Throttle), Pause=$($Result.Pause)"
+        Write-Debug "ThrottleStatus: Built $($Result.Buckets.Count) buckets — Read=$([math]::Round($Result.ReadUtilisation * 100, 2))%, Write=$([math]::Round($Result.WriteUtilisation * 100, 2))%, Throttle=$($Result.Throttle), Pause=$($Result.Pause)"
 
         $Result
 

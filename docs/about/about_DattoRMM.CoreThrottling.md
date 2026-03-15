@@ -10,18 +10,20 @@ The DattoRMM.Core module implements an adaptive throttling system to manage API 
 
 ### Rate Limit Tiers
 
-Datto RMM enforces rate limits at multiple levels within a rolling 60-second window:
+Datto RMM enforces rate limits at multiple levels within a rolling 60-second window. Reads and writes are tracked as **independent quotas** — they do not overlap:
 
-- **Account-wide limit** — all requests, all sessions, all users share this quota (600 req/min on most accounts)
-- **Global write limit** — all non-GET requests (PUT, POST, DELETE) across the account share a separate write quota
+- **Read limit** — all GET requests across the account share a read quota (reported as `accountCount` / `accountRateLimit` by the API)
+- **Write limit** — all non-GET requests (PUT, POST, DELETE) across the account share a separate write quota (reported as `accountWriteCount` / `accountWriteRateLimit`)
 - **Per-operation write limits** — individual write operations each have their own quota within the global write allowance
+
+A read request only counts against the read limit. A write request only counts against the write limit and its per-operation bucket. The two quotas are completely independent.
 
 > [!NOTE]
 > Per-operation write limit values are returned by the Datto RMM API. How those limits are applied and enforced by the platform has been determined through testing and evaluation, as this behaviour is not formally documented. The write tier of the throttling system errs on the side of caution as a result.
 
 ### Architecture
 
-Every request passes through a pre-request gate that evaluates pressure across all applicable rate limit tiers. The highest pressure bucket determines the delay applied.
+Every request passes through a pre-request gate that evaluates pressure against the appropriate bucket(s) based on the HTTP method. Read requests are evaluated against the read bucket only. Write requests are evaluated against write buckets only.
 
 ```
   ┌──────────────────────────────────┐
@@ -30,16 +32,18 @@ Every request passes through a pre-request gate that evaluates pressure across a
                     │
         ┌───────────▼────────────┐
         │    Pre-Request Gate    │
-        │  (evaluates all tiers) │
+        │  (method-based routing)│
         └──┬──────────┬──────────┘
            │          │
+  GET only │          │ PUT/POST/DELETE only
+           │          │
   ┌────────▼──┐  ┌────▼───────────────────────────────┐
-  │  Account  │  │         Write (non-GET only)       │
+  │   Read    │  │         Write (non-GET only)       │
   │  Bucket   │  ├──────────────┬─────────────────────┤
-  │ (all req) │  │ Global Write │ Per-Operation (×16) │
-  └────────┬──┘  └──────┬───────┴──────────┬──────────┘
-           │            │                  │
-           └────────────┴──────────────────┘
+  │ (GET req) │  │ Global Write │ Per-Operation (×16) │
+  └───────────┘  └──────┬───────┴──────────┬──────────┘
+                        │                  │
+                        └──────────────────┘
                               │
                     ┌─────────▼──────────┐
                     │  Highest pressure  │
@@ -53,7 +57,13 @@ The module maintains local sliding-window counters for each bucket. These are th
 
 Periodically, the system calibrates against the live API to reconcile the local picture with actual platform utilisation. This is necessary because other sessions, users, or external callers consume shared quota that local tracking cannot see.
 
-Calibration frequency adapts based on:
+Read and write tracks maintain **independent calibration state** (confidence, drift, interval, sample counts). When either track triggers a calibration, both tracks receive fresh data from the single API call. This means:
+
+- A read-heavy session calibrates based on read pressure; writes benefit from the shared data.
+- A write-heavy session calibrates based on write pressure; reads benefit from the shared data.
+- If both tracks are active, whichever is under more pressure triggers calibration more frequently.
+
+Calibration frequency per track adapts based on:
 - How much local data has been collected (early in a session, calibrations are more frequent)
 - Whether the local and API-reported figures have drifted apart (indicating concurrent activity)
 - How much delay is already being applied (if the system is already pacing heavily, it backs off on calibration frequency to avoid unnecessary overhead)
@@ -64,9 +74,9 @@ This means a session under sustained load will self-regulate naturally — delay
 
 When utilisation crosses the configured threshold, a delay is applied before each request. The delay scales with utilisation — higher utilisation produces a longer delay. The threshold and delay multiplier are controlled by the selected profile.
 
-For write operations, the delay is calculated independently per applicable bucket (global write and per-operation), and the highest value across all buckets is used. Write operations are treated more conservatively than reads by default.
+Read and write delays are computed independently. Each track carries its own calibration-determined delay floor forward between calibrations. For write operations, the delay is calculated independently per applicable bucket (global write and per-operation), and the highest value across all write buckets is used. Write operations are treated more conservatively than reads by default.
 
-If utilisation reaches the hard cutoff threshold (configurable via the profile), requests are paused entirely until utilisation drops. This is a last-resort protection mechanism and should rarely trigger under normal operation with an appropriate profile selected.
+If utilisation on either track reaches the hard cutoff threshold (configurable via the profile), requests of that type are paused entirely until utilisation drops. This is a last-resort protection mechanism and should rarely trigger under normal operation with an appropriate profile selected.
 
 ## PROFILES
 
@@ -105,7 +115,7 @@ Save-RMMConfig
 
 ## CONCURRENT USE
 
-All sessions using the same Datto RMM account share a single API quota. The throttling system detects pressure from other sessions through calibration drift — when API-reported utilisation exceeds what local tracking expects, the system tightens its calibration cadence and applies a delay floor to carry that pressure forward until the next calibration.
+All sessions using the same Datto RMM account share the same read and write quotas. The throttling system detects pressure from other sessions through calibration drift — when API-reported utilisation exceeds what local tracking expects, the system tightens its calibration cadence and applies a delay floor to carry that pressure forward until the next calibration. Read and write tracks detect drift independently.
 
 Recommended profiles by concurrency:
 
@@ -120,14 +130,19 @@ For long-running or unattended tasks, always prefer a more conservative profile 
 
 ## DATTO RMM API RATE LIMIT DETAILS
 
-Datto RMM enforces a rolling 60-second window for all rate limits. Counts are account-wide — all users and scripts share the same quota.
+Datto RMM enforces a rolling 60-second window for all rate limits. Counts are account-wide — all users and scripts share the same quotas. Reads and writes are independent quotas:
 
-- At ~90% utilisation (~540 requests in 60s), the platform may introduce a 1-second response delay.
+- **Read quota** (`accountCount` / `accountRateLimit`): tracks GET requests only
+- **Write quota** (`accountWriteCount` / `accountWriteRateLimit`): tracks PUT/POST/DELETE requests only
+
+A read never counts against the write quota, and a write never counts against the read quota.
+
+- At ~90% utilisation on either quota, the platform may introduce a 1-second response delay.
 - If the platform returns HTTP 429 (Too Many Requests), the module will automatically wait 120 seconds before retrying and will perform a throttle calibration to reassess utilisation. This automatic backoff helps when an uncontrolled or concurrent workload is consuming shared quota.
 - Sustained requests after a 429 can trigger HTTP 403 (Forbidden) with a temporary IP block. Wait at least 5 minutes before retrying. In most cases the module's automatic 120s backoff and recalibration will prevent repeated overage.
 
 > [!NOTE]
-> The request count is account-wide. Concurrent users, scripts, and background processes all contribute to the same limit.
+> Both quotas are account-wide. Concurrent users, scripts, and background processes all contribute to the same limits.
 
 ## CUSTOM THROTTLING SETTINGS (ADVANCED)
 

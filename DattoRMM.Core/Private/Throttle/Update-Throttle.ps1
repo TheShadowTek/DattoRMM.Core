@@ -6,10 +6,16 @@
 .SYNOPSIS
     Calibrates local throttle state against actual API-reported utilisation.
 .DESCRIPTION
-    Calls the rate-status endpoint and adjusts the local sliding-window model. If the API
-    reports higher utilisation than local tracking (indicating concurrent sessions or external
-    API consumers), the local model adopts the higher value. Also refreshes per-operation
-    bucket limits in case they have been adjusted by Datto.
+    Calls the rate-status endpoint and adjusts the local sliding-window model for both
+    read and write buckets independently. If the API reports higher utilisation than local
+    tracking (indicating concurrent sessions or external API consumers), the local model
+    adopts the higher value. Also refreshes per-operation bucket limits in case they have
+    been adjusted by Datto.
+
+    The Datto RMM API tracks reads and writes as independent quotas:
+    - accountCount / accountRateLimit   → read (GET) operations only
+    - accountWriteCount / accountWriteRateLimit → write (PUT/POST/DELETE) operations only
+    Read and write delays are computed independently against their respective buckets.
 #>
 function Update-Throttle {
     [CmdletBinding()]
@@ -18,16 +24,16 @@ function Update-Throttle {
     $Now = [datetime]::UtcNow
     $WindowStart = $Now.AddSeconds(-$Script:RMMThrottle.WindowSizeSeconds)
 
-    $PrePruneAccountCount = $Script:RMMThrottle.AccountLocalTimestamps.Count
+    $PrePruneReadCount = $Script:RMMThrottle.ReadLocalTimestamps.Count
     $PrePruneWriteCount = $Script:RMMThrottle.WriteLocalTimestamps.Count
 
     # Ensure local counters are always aligned to the active rolling window before calibration
     Invoke-ThrottleBucketPrune -WindowStart $WindowStart
 
-    $PostPruneAccountCount = $Script:RMMThrottle.AccountLocalTimestamps.Count
+    $PostPruneReadCount = $Script:RMMThrottle.ReadLocalTimestamps.Count
     $PostPruneWriteCount = $Script:RMMThrottle.WriteLocalTimestamps.Count
 
-    Write-Debug "Throttle: Local prune window $($Script:RMMThrottle.WindowSizeSeconds)s | Account $PrePruneAccountCount->$PostPruneAccountCount | Write $PrePruneWriteCount->$PostPruneWriteCount"
+    Write-Debug "Throttle: Local prune window $($Script:RMMThrottle.WindowSizeSeconds)s | Read $PrePruneReadCount->$PostPruneReadCount | Write $PrePruneWriteCount->$PostPruneWriteCount"
 
     try {
 
@@ -42,15 +48,15 @@ function Update-Throttle {
 
     $PauseThreshold = $RateInfo.accountCutOffRatio - $Script:RMMThrottle.ThrottleCutOffOverhead
 
-    # --- Global account calibration ---
-    $ApiAccountUtil = $RateInfo.accountCount / [math]::Max($RateInfo.accountRateLimit, 1)
-    $LocalAccountUtil = $Script:RMMThrottle.AccountLocalTimestamps.Count / [math]::Max($Script:RMMThrottle.AccountLimit, 1)
+    # --- Read bucket calibration ---
+    $ApiReadUtil = $RateInfo.accountCount / [math]::Max($RateInfo.accountRateLimit, 1)
+    $LocalReadUtil = $Script:RMMThrottle.ReadLocalTimestamps.Count / [math]::Max($Script:RMMThrottle.ReadLimit, 1)
 
     # Use the higher of API-reported or local-tracked utilisation
     # This handles concurrent sessions consuming the shared quota
-    $Script:RMMThrottle.AccountUtilisation = [math]::Max($ApiAccountUtil, $LocalAccountUtil)
+    $Script:RMMThrottle.ReadUtilisation = [math]::Max($ApiReadUtil, $LocalReadUtil)
 
-    # --- Global write calibration ---
+    # --- Write bucket calibration ---
     if ($RateInfo.accountWriteRateLimit -gt 0) {
 
         $ApiWriteUtil = $RateInfo.accountWriteCount / [math]::Max($RateInfo.accountWriteRateLimit, 1)
@@ -84,21 +90,42 @@ function Update-Throttle {
     }
 
     # --- Update computed flags ---
-    $Script:RMMThrottle.Throttle = ($Script:RMMThrottle.AccountUtilisation -ge $Script:RMMThrottle.ThrottleUtilisationThreshold)
-    $Script:RMMThrottle.Pause = ($Script:RMMThrottle.AccountUtilisation -ge $PauseThreshold)
+    # Throttle/pause triggers if EITHER read OR write bucket exceeds threshold
+    $ReadThrottle = ($Script:RMMThrottle.ReadUtilisation -ge $Script:RMMThrottle.ThrottleUtilisationThreshold)
+    $WriteThrottle = ($Script:RMMThrottle.WriteUtilisation -ge $Script:RMMThrottle.ThrottleUtilisationThreshold)
+    $Script:RMMThrottle.Throttle = ($ReadThrottle -or $WriteThrottle)
 
-    if ($Script:RMMThrottle.Throttle) {
+    $ReadPause = ($Script:RMMThrottle.ReadUtilisation -ge $PauseThreshold)
+    $WritePause = ($Script:RMMThrottle.WriteUtilisation -ge $PauseThreshold)
+    $Script:RMMThrottle.Pause = ($ReadPause -or $WritePause)
 
-        $Script:RMMThrottle.DelayMS = $Script:RMMThrottle.AccountUtilisation * $Script:RMMThrottle.DelayMultiplier
+    # Compute independent delays for each track
+    if ($ReadThrottle) {
+
+        $Script:RMMThrottle.ReadDelayMS = $Script:RMMThrottle.ReadUtilisation * $Script:RMMThrottle.DelayMultiplier
 
     } else {
 
-        $Script:RMMThrottle.DelayMS = 0
+        $Script:RMMThrottle.ReadDelayMS = 0
 
     }
 
-    $Script:RMMThrottle.LastCalibrationUtc = [datetime]::UtcNow
-    $Script:RMMThrottle.SamplesAtLastCalibration = $Script:RMMThrottle.AccountLocalTimestamps.Count
+    if ($WriteThrottle) {
+
+        $Script:RMMThrottle.WriteDelayMS = $Script:RMMThrottle.WriteUtilisation * $Script:RMMThrottle.WriteDelayMultiplier
+
+    } else {
+
+        $Script:RMMThrottle.WriteDelayMS = 0
+
+    }
+
+    # Reset both calibration trackers — both tracks received fresh data
+    $Now = [datetime]::UtcNow
+    $Script:RMMThrottle.ReadLastCalibrationUtc = $Now
+    $Script:RMMThrottle.WriteLastCalibrationUtc = $Now
+    $Script:RMMThrottle.ReadSamplesAtLastCalibration = $Script:RMMThrottle.ReadLocalTimestamps.Count
+    $Script:RMMThrottle.WriteSamplesAtLastCalibration = $Script:RMMThrottle.WriteLocalTimestamps.Count
 
     # Build per-operation write bucket summary lines for debug output
     $OpLines = @()
@@ -117,17 +144,17 @@ function Update-Throttle {
 
     Write-Debug @"
 Throttle Calibration:
-`tAccount Utilisation: $([math]::Round($Script:RMMThrottle.AccountUtilisation * 100, 2))% (API: $([math]::Round($ApiAccountUtil * 100, 2))%, Local: $([math]::Round($LocalAccountUtil * 100, 2))%)
+`tRead Utilisation: $([math]::Round($Script:RMMThrottle.ReadUtilisation * 100, 2))% (API: $([math]::Round($ApiReadUtil * 100, 2))%, Local: $([math]::Round($LocalReadUtil * 100, 2))%)
 `tWrite Utilisation: $([math]::Round($Script:RMMThrottle.WriteUtilisation * 100, 2))%
-`tLocal Counts: Account=$PostPruneAccountCount, Write=$PostPruneWriteCount
-`tAPI Counts: Account=$($RateInfo.accountCount), Write=$($RateInfo.accountWriteCount)
-`tAccount Limit: $($Script:RMMThrottle.AccountLimit) | Write Limit: $($Script:RMMThrottle.WriteLimit)
+`tLocal Counts: Read=$PostPruneReadCount, Write=$PostPruneWriteCount
+`tAPI Counts: Read=$($RateInfo.accountCount), Write=$($RateInfo.accountWriteCount)
+`tRead Limit: $($Script:RMMThrottle.ReadLimit) | Write Limit: $($Script:RMMThrottle.WriteLimit)
 `tOperation Buckets: $($Script:RMMThrottle.OperationBuckets.Count)
 `tOperation Stats:
 `t$OpLinesText
 `tPause Threshold: $([math]::Round($PauseThreshold * 100, 2))%
 `tThrottle: $($Script:RMMThrottle.Throttle) | Pause: $($Script:RMMThrottle.Pause)
-`tDelay MS: $([math]::Round($Script:RMMThrottle.DelayMS, 2))
+`tRead Delay MS: $([math]::Round($Script:RMMThrottle.ReadDelayMS, 2)) | Write Delay MS: $([math]::Round($Script:RMMThrottle.WriteDelayMS, 2))
 "@
 
 }

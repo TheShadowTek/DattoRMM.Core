@@ -6,8 +6,8 @@
 .SYNOPSIS
     Removes expired timestamps from all local sliding-window throttle buckets.
 .DESCRIPTION
-    Prunes timestamps older than the rolling window start from the global account bucket,
-    global write bucket, and all per-operation write buckets. Called before each throttle
+    Prunes timestamps older than the rolling window start from the read bucket,
+    write bucket, and all per-operation write buckets. Called before each throttle
     evaluation to ensure local counters reflect only the current window.
 #>
 function Invoke-ThrottleBucketPrune {
@@ -21,10 +21,10 @@ function Invoke-ThrottleBucketPrune {
         $WindowStart
     )
 
-    # Prune global account timestamps
-    while ($Script:RMMThrottle.AccountLocalTimestamps.Count -gt 0 -and $Script:RMMThrottle.AccountLocalTimestamps[0] -lt $WindowStart) {
+    # Prune read timestamps
+    while ($Script:RMMThrottle.ReadLocalTimestamps.Count -gt 0 -and $Script:RMMThrottle.ReadLocalTimestamps[0] -lt $WindowStart) {
 
-        $Script:RMMThrottle.AccountLocalTimestamps.RemoveAt(0)
+        $Script:RMMThrottle.ReadLocalTimestamps.RemoveAt(0)
 
     }
 

@@ -70,7 +70,7 @@ Get-RMMDevice -FilterId 12345 | New-RMMQuickJob -JobName "Emergency Patch" -Comp
 | **Account** | `Get-RMMAccount`, `Get-RMMNetMapping`, `Get-RMMRequestRate`, `Get-RMMStatus`, `Get-RMMThrottleStatus`, `Get-RMMUser`, `Invoke-RMMApiMethod` |
 | **Activity Log** | `Get-RMMActivityLog` |
 | **Alerts** | `Get-RMMAlert`, `Resolve-RMMAlert` |
-| **Auth** | `Connect-DattoRMM`, `Disconnect-DattoRMM`, `Request-RMMToken`, `Reset-RMMAPIKeys`, `Show-RMMToken` |
+| **Auth** | `Connect-DattoRMM`, `Disconnect-DattoRMM`, `Request-RMMToken`, `Reset-RMMApiKeys`, `Show-RMMToken` |
 | **Components** | `Get-RMMComponent` |
 | **Config** | `Get-RMMConfig`, `Set-RMMConfig`, `Save-RMMConfig`, `Remove-RMMConfig` |
 | **Devices** | `Get-RMMDevice`, `Get-RMMDeviceAudit`, `Get-RMMDeviceSoftware`, `Get-RMMEsxiHostAudit`, `Get-RMMPrinterAudit`, `Move-RMMDevice`, `Set-RMMDeviceUDF`, `Set-RMMDeviceWarranty` |
