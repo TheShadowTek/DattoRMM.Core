@@ -56,7 +56,15 @@ function Invoke-APIRestMethod {
             $Attempt++
             $LastError = $_
             $StatusCode = $LastError.Exception.Response.StatusCode.value__
-            
+
+            # Record the request if it reached the server — any HTTP status code means quota was consumed
+            # regardless of whether the response was a success or an error
+            if ($StatusCode) {
+
+                Add-ThrottleRequest -Method $Method -OperationName $OperationName
+
+            }
+
             # Try to get the actual API error message from the response body
             if ($LastError.ErrorDetails.Message) {
 

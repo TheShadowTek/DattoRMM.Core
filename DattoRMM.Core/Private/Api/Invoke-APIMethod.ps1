@@ -83,6 +83,19 @@ function Invoke-APIMethod {
         }
     }
 
+    # Trim '/' and '?' from path if present to avoid double slashes in URI and issues with query parameters
+    if ($Path.StartsWith('/')) {
+
+        $Path = $Path.TrimStart('/')
+
+    }
+
+    if ($Path.EndsWith('?')) {
+
+        $Path = $Path.TrimEnd('?')
+
+    }
+
     # Build the request parameters for Invoke-RestMethod, including authentication headers and any query parameters
     $RequestParams = @{
         Uri = "$API/$Path"
@@ -93,15 +106,10 @@ function Invoke-APIMethod {
     }
 
     # Add proxy settings if configured
-    if ($Script:RMMAuth.ContainsKey('Proxy')) {
+    switch ($Script:RMMAuth.Keys) {
 
-        $RequestParams.Proxy = $Script:RMMAuth.Proxy
-
-    }
-
-    if ($Script:RMMAuth.ContainsKey('ProxyCredential')) {
-
-        $RequestParams.ProxyCredential = $Script:RMMAuth.ProxyCredential
+        'Proxy' {$RequestParams.Proxy = $script:RMMAuth.Proxy}
+        'ProxyCredential' {$RequestParams.ProxyCredential = $script:RMMAuth.ProxyCredential}
 
     }
 
@@ -130,7 +138,7 @@ function Invoke-APIMethod {
 
     if ($Body) {
 
-        $RequestParams.Body = $Body | ConvertTo-Json
+        $RequestParams.Body = $Body | ConvertTo-Json -Depth 10
         $RequestParams.ContentType = 'application/json'
 
     }
