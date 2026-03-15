@@ -187,7 +187,7 @@ function Set-RMMDeviceWarranty {
             Body = $Body
         }
 
-        Invoke-APIMethod @APIMethod | Out-Null
+        Invoke-ApiMethod @APIMethod | Out-Null
         
     }
 }

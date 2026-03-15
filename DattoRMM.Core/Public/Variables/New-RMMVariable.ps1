@@ -186,10 +186,10 @@ function New-RMMVariable {
             Body = $Body
         }
 
-        # Invoke-APIMethod does not throw on 400 errors by default, so use try/catch, throw on warnings
+        # Invoke-ApiMethod does not throw on 400 errors by default, so use try/catch, throw on warnings
         try {
 
-            Invoke-APIMethod @APIMethod -WarningAction Stop | Out-Null
+            Invoke-ApiMethod @APIMethod -WarningAction Stop | Out-Null
 
             
         } catch {

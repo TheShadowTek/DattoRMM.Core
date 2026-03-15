@@ -88,7 +88,7 @@ function Get-RMMAccount {
     process {
 
         # Retrieve account information
-        $Response = Invoke-APIMethod -Path 'account' -Method GET
+        $Response = Invoke-ApiMethod -Path 'account' -Method GET
 
         [DRMMAccount]::FromAPIMethod($Response)
 

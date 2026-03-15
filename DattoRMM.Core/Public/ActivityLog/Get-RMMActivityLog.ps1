@@ -214,7 +214,7 @@ function Get-RMMActivityLog {
             $Parameters['siteIds'] = ($BatchSites | ForEach-Object {$_.Id}) -join ','
             $Path = 'activity-logs'
 
-            Invoke-APIMethod -Method 'GET' -Path $Path -Parameters $Parameters -Paginate -PageElement 'activities' | ForEach-Object {
+            Invoke-ApiMethod -Method 'GET' -Path $Path -Parameters $Parameters -Paginate -PageElement 'activities' | ForEach-Object {
 
                 [DRMMActivityLog]::FromAPIMethod($_, $UseExperimentalDetailClasses.IsPresent)
 

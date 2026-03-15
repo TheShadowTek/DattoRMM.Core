@@ -171,7 +171,7 @@ function Get-RMMFilter {
                 'SiteAll' {
 
                     Write-Debug "Getting all filters for site: $($Site.Name) (UID: $($Site.Uid))"
-                    Invoke-APIMethod @APIMethod | ForEach-Object {
+                    Invoke-ApiMethod @APIMethod | ForEach-Object {
 
                         [DRMMFilter]::FromAPIMethod($_, 'Site', $Site, $Script:SessionPlatform)
 
@@ -181,7 +181,7 @@ function Get-RMMFilter {
                 'SiteById' {
 
                     Write-Debug "Getting site filter by ID: $Id for site: $($Site.Name) (UID: $($Site.Uid))"
-                    Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
+                    Invoke-ApiMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
 
                         [DRMMFilter]::FromAPIMethod($_, 'Site', $Site, $Script:SessionPlatform)
 
@@ -191,7 +191,7 @@ function Get-RMMFilter {
                 'SiteByName' {
 
                     Write-Debug "Getting site filter by Name: $Name for site: $($Site.Name) (UID: $($Site.Uid))"
-                    Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
+                    Invoke-ApiMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
 
                         [DRMMFilter]::FromAPIMethod($_, 'Site', $Site, $Script:SessionPlatform)
 
@@ -249,7 +249,7 @@ function Get-RMMFilter {
                     'GlobalAll' {
 
                         Write-Debug "Getting global filters from $($Method.Path)"
-                        Invoke-APIMethod @APIMethod | ForEach-Object {
+                        Invoke-ApiMethod @APIMethod | ForEach-Object {
 
                             [DRMMFilter]::FromAPIMethod($_, $Method.Scope, $null, $Script:SessionPlatform)
 
@@ -259,7 +259,7 @@ function Get-RMMFilter {
                     'GlobalById' {
 
                         Write-Debug "Getting global filter by ID: $Id from $($Method.Path)"
-                        Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
+                        Invoke-ApiMethod @APIMethod | Where-Object {$_.id -eq $Id} | ForEach-Object {
 
                             [DRMMFilter]::FromAPIMethod($_, $Method.Scope, $null, $Script:SessionPlatform)
 
@@ -269,7 +269,7 @@ function Get-RMMFilter {
                     'GlobalByName' {
 
                         Write-Debug "Getting global filter by Name: $Name from $($Method.Path)"
-                        Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
+                        Invoke-ApiMethod @APIMethod | Where-Object {$_.name -eq $Name} | ForEach-Object {
 
                             [DRMMFilter]::FromAPIMethod($_, $Method.Scope, $null, $Script:SessionPlatform)
 

@@ -97,7 +97,7 @@ function Get-RMMUser {
         }
 
         Write-Debug "Getting all account users"
-        Invoke-APIMethod @APIMethod | ForEach-Object {
+        Invoke-ApiMethod @APIMethod | ForEach-Object {
 
             [DRMMUser]::FromAPIMethod($_)
 

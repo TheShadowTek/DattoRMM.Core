@@ -361,7 +361,7 @@ function Set-RMMDeviceUDF {
             Body = $Body
         }
 
-        Invoke-APIMethod @APIMethod | Out-Null
+        Invoke-ApiMethod @APIMethod | Out-Null
     }
 }
 

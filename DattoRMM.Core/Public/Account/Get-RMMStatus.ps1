@@ -67,7 +67,7 @@ function Get-RMMStatus {
             Method = 'Get'
         }
 
-        $Response = Invoke-APIMethod @APIMethod
+        $Response = Invoke-ApiMethod @APIMethod
         [DRMMStatus]::FromAPIMethod($Response)
 
     }

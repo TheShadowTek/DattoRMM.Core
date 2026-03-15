@@ -75,7 +75,7 @@ function Get-RMMNetMapping {
             PageElement = 'dnetSiteMappings'
         }
 
-        Invoke-APIMethod @APIMethod | Where-Object {try {[void][guid]$_.uid; $true} catch {$false}} | ForEach-Object {
+        Invoke-ApiMethod @APIMethod | Where-Object {try {[void][guid]$_.uid; $true} catch {$false}} | ForEach-Object {
 
             [DRMMNetMapping]::FromAPIMethod($_)
 

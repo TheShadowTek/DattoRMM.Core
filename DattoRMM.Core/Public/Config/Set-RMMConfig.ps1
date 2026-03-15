@@ -24,13 +24,13 @@ function Set-RMMConfig {
     .PARAMETER TokenExpireHours
         Sets the token refresh interval (in hours) for the current session. Valid range: 1-100. Default is 100. Use -Persist to save as the default for future sessions.
 
-    .PARAMETER APIMaxRetries
+    .PARAMETER ApiMaxRetries
         Sets the maximum number of retry attempts for failed API requests. Valid range: 1-10. Default is 5. Use -Persist to save as the default for future sessions.
 
-    .PARAMETER APIRetryIntervalSeconds
+    .PARAMETER ApiRetryIntervalSeconds
         Sets the wait time in seconds between retry attempts. Valid range: 1-300. Default is 10. Use -Persist to save as the default for future sessions.
 
-    .PARAMETER APITimeoutSeconds
+    .PARAMETER ApiTimeoutSeconds
         Sets the timeout in seconds for API requests. Valid range: 10-300. Default is 60. Use -Persist to save as the default for future sessions.
 
     .PARAMETER Persist
@@ -124,7 +124,7 @@ function Set-RMMConfig {
         )]
         [ValidateRange(1, 10)]
         [int]
-        $APIMaxRetries,
+        $ApiMaxRetries,
 
         [Parameter(
             ParameterSetName = 'Set',
@@ -132,7 +132,7 @@ function Set-RMMConfig {
         )]
         [ValidateRange(1, 300)]
         [int]
-        $APIRetryIntervalSeconds,
+        $ApiRetryIntervalSeconds,
 
         [Parameter(
             ParameterSetName = 'Set',
@@ -140,7 +140,7 @@ function Set-RMMConfig {
         )]
         [ValidateRange(10, 300)]
         [int]
-        $APITimeoutSeconds,
+        $ApiTimeoutSeconds,
 
         [Parameter(
             ParameterSetName = 'Set',
@@ -222,9 +222,9 @@ function Set-RMMConfig {
             $Script:ConfigPageSize = $null
             $Script:ConfigThrottleProfile = $null
             $Script:ConfigTokenExpireHours = $null
-            $Script:ConfigAPIMaxRetries = $null
-            $Script:ConfigAPIRetryIntervalSeconds = $null
-            $Script:ConfigAPITimeoutSeconds = $null
+            $Script:ConfigApiMaxRetries = $null
+            $Script:ConfigApiRetryIntervalSeconds = $null
+            $Script:ConfigApiTimeoutSeconds = $null
 
         }
 
@@ -318,38 +318,38 @@ function Set-RMMConfig {
             }
         }
 
-        'APIMaxRetries' {
+        'ApiMaxRetries' {
 
-            Write-Verbose "Set APIMaxRetries to: $APIMaxRetries"
-            $Script:APIMethodRetry.MaxRetries = $APIMaxRetries
+            Write-Verbose "Set ApiMaxRetries to: $ApiMaxRetries"
+            $Script:ApiMethodRetry.MaxRetries = $ApiMaxRetries
 
             if ($Persist) {
 
-                $Config['APIMaxRetries'] = $APIMaxRetries
+                $Config['ApiMaxRetries'] = $ApiMaxRetries
 
             }
         }
 
-        'APIRetryIntervalSeconds' {
+        'ApiRetryIntervalSeconds' {
 
-            Write-Verbose "Set APIRetryIntervalSeconds to: $APIRetryIntervalSeconds"
-            $Script:APIMethodRetry.RetryIntervalSeconds = $APIRetryIntervalSeconds
+            Write-Verbose "Set ApiRetryIntervalSeconds to: $ApiRetryIntervalSeconds"
+            $Script:ApiMethodRetry.RetryIntervalSeconds = $ApiRetryIntervalSeconds
 
             if ($Persist) {
 
-                $Config['APIRetryIntervalSeconds'] = $APIRetryIntervalSeconds
+                $Config['ApiRetryIntervalSeconds'] = $ApiRetryIntervalSeconds
 
             }
         }
 
-        'APITimeoutSeconds' {
+        'ApiTimeoutSeconds' {
 
-            Write-Verbose "Set APITimeoutSeconds to: $APITimeoutSeconds"
-            $Script:APIMethodRetry.TimeoutSeconds = $APITimeoutSeconds
+            Write-Verbose "Set ApiTimeoutSeconds to: $ApiTimeoutSeconds"
+            $Script:ApiMethodRetry.TimeoutSeconds = $ApiTimeoutSeconds
 
             if ($Persist) {
 
-                $Config['APITimeoutSeconds'] = $APITimeoutSeconds
+                $Config['ApiTimeoutSeconds'] = $ApiTimeoutSeconds
 
             }
         }
@@ -380,16 +380,16 @@ function Set-RMMConfig {
                     $Script:ConfigTokenExpireHours = $Script:TokenExpireHours
                 }
 
-                'APIMaxRetries' {
-                    $Script:ConfigAPIMaxRetries = $Script:APIMethodRetry.MaxRetries
+                'ApiMaxRetries' {
+                    $Script:ConfigApiMaxRetries = $Script:ApiMethodRetry.MaxRetries
                 }
 
-                'APIRetryIntervalSeconds' {
-                    $Script:ConfigAPIRetryIntervalSeconds = $Script:APIMethodRetry.RetryIntervalSeconds
+                'ApiRetryIntervalSeconds' {
+                    $Script:ConfigApiRetryIntervalSeconds = $Script:ApiMethodRetry.RetryIntervalSeconds
                 }
 
-                'APITimeoutSeconds' {
-                    $Script:ConfigAPITimeoutSeconds = $Script:APIMethodRetry.TimeoutSeconds
+                'ApiTimeoutSeconds' {
+                    $Script:ConfigApiTimeoutSeconds = $Script:ApiMethodRetry.TimeoutSeconds
                 }
             }
 

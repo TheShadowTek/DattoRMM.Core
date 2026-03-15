@@ -133,7 +133,7 @@ function Get-RMMPrinterAudit {
             Method = 'Get'
         }
 
-        $Response = Invoke-APIMethod @APIMethod
+        $Response = Invoke-ApiMethod @APIMethod
 
         if ($Response) {
 

@@ -8,8 +8,8 @@ Configures the current DattoRMM.Core session and optionally saves settings persi
 Set
 ```
 Set-RMMConfig [-Platform <RMMPlatform>] [-PageSize <Int32>] [-ThrottleProfile <RMMThrottleProfile>]
- [-TokenExpireHours <Int32>] [-APIMaxRetries <Int32>] [-APIRetryIntervalSeconds <Int32>]
- [-APITimeoutSeconds <Int32>] [-Persist] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [-TokenExpireHours <Int32>] [-ApiMaxRetries <Int32>] [-ApiRetryIntervalSeconds <Int32>]
+ [-ApiTimeoutSeconds <Int32>] [-Persist] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -135,7 +135,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -APIMaxRetries
+### -ApiMaxRetries
 Sets the maximum number of retry attempts for failed API requests.
 Valid range: 1-10.
 Default is 5.
@@ -153,7 +153,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -APIRetryIntervalSeconds
+### -ApiRetryIntervalSeconds
 Sets the wait time in seconds between retry attempts.
 Valid range: 1-300.
 Default is 10.
@@ -171,7 +171,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -APITimeoutSeconds
+### -ApiTimeoutSeconds
 Sets the timeout in seconds for API requests.
 Valid range: 10-300.
 Default is 60.

@@ -279,7 +279,7 @@ function Connect-DattoRMM {
         }
 
         # Request new OAuth token
-        $ResponseToken = Request-APIToken @TokenRequestParams
+        $ResponseToken = Request-ApiToken @TokenRequestParams
 
         # Build the auth hashtable
         $Script:RMMAuth = @{

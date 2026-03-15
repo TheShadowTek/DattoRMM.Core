@@ -153,7 +153,7 @@ function Remove-RMMVariable {
             Method = 'Delete'
         }
 
-        Invoke-APIMethod @APIMethod | Out-Null
+        Invoke-ApiMethod @APIMethod | Out-Null
 
     }
 }

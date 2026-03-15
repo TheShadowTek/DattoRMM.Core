@@ -87,11 +87,11 @@ The module includes automatic retry logic for transient API failures:
 
     Setting                   Description                              Range      Default       
     ------------------------- ---------------------------------------- ---------- --------------
-    `APIMaxRetries`           Maximum retry attempts for failed req... 1–10       Module default
-    `APIRetryIntervalSeconds` Wait time between retries                1–300      Module default
-    `APITimeoutSeconds`       Request timeout                          10–300     Module default
+    `ApiMaxRetries`           Maximum retry attempts for failed req... 1–10       Module default
+    `ApiRetryIntervalSeconds` Wait time between retries                1–300      Module default
+    `ApiTimeoutSeconds`       Request timeout                          10–300     Module default
 ```powershell
-Set-RMMConfig -APIMaxRetries 5 -APIRetryIntervalSeconds 10 -APITimeoutSeconds 60
+Set-RMMConfig -ApiMaxRetries 5 -ApiRetryIntervalSeconds 10 -ApiTimeoutSeconds 60
 ```
 
 ## PERSISTING CONFIGURATION
@@ -152,7 +152,7 @@ Set-RMMConfig -Platform Merlot -PageSize 50 -ThrottleProfile Medium -Persist
 ### Example 2: Tune API resilience for an unreliable network
 
 ```powershell
-Set-RMMConfig -APIMaxRetries 5 -APIRetryIntervalSeconds 30 -APITimeoutSeconds 120 -Persist
+Set-RMMConfig -ApiMaxRetries 5 -ApiRetryIntervalSeconds 30 -ApiTimeoutSeconds 120 -Persist
 ```
 
 ### Example 3: Temporary session override without persisting

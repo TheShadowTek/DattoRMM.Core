@@ -101,7 +101,7 @@ function Get-RMMDeviceSoftware {
             PageElement = 'software'
         }
 
-        Invoke-APIMethod @APIMethod | ForEach-Object {
+        Invoke-ApiMethod @APIMethod | ForEach-Object {
 
             [DRMMDeviceAuditSoftware]::FromAPIMethod($_)
 

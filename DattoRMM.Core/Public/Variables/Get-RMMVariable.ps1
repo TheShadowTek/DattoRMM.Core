@@ -189,14 +189,14 @@ function Get-RMMVariable {
                 {$_ -in 'SiteAll','SiteAllUid'} {
 
                     Write-Debug "Getting all variables for site UID: $SiteUid"
-                    Invoke-APIMethod @APIMethod | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)}
+                    Invoke-ApiMethod @APIMethod | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)}
 
                 }
 
                 {$_ -in 'SiteById','SiteUidById'} {
 
                     Write-Debug "Getting site variable by ID: $Id for site UID: $SiteUid"
-                    $Results = Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id}
+                    $Results = Invoke-ApiMethod @APIMethod | Where-Object {$_.id -eq $Id}
                     
                     if ($Results) {
 
@@ -212,7 +212,7 @@ function Get-RMMVariable {
                 {$_ -in 'SiteByName','SiteUidByName'} {
 
                     Write-Debug "Getting site variable by Name: $Name for site UID: $SiteUid"
-                    $Results = Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name}
+                    $Results = Invoke-ApiMethod @APIMethod | Where-Object {$_.name -eq $Name}
                     
                     if ($Results) {
 
@@ -240,14 +240,14 @@ function Get-RMMVariable {
                 'GlobalAll' {
 
                     Write-Debug "Getting all global variables"
-                    Invoke-APIMethod @APIMethod | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Global', $null)}
+                    Invoke-ApiMethod @APIMethod | ForEach-Object {[DRMMVariable]::FromAPIMethod($_, 'Global', $null)}
 
                 }
 
                 'GlobalById' {
 
                     Write-Debug "Getting global variable by ID: $Id"
-                    $Results = Invoke-APIMethod @APIMethod | Where-Object {$_.id -eq $Id}
+                    $Results = Invoke-ApiMethod @APIMethod | Where-Object {$_.id -eq $Id}
                     
                     if ($Results) {
 
@@ -263,7 +263,7 @@ function Get-RMMVariable {
                 'GlobalByName' {
 
                     Write-Debug "Getting global variable by Name: $Name"
-                    $Results = Invoke-APIMethod @APIMethod | Where-Object {$_.name -eq $Name}
+                    $Results = Invoke-ApiMethod @APIMethod | Where-Object {$_.name -eq $Name}
                     
                     if ($Results) {
 

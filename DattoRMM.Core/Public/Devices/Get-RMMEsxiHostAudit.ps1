@@ -144,7 +144,7 @@ function Get-RMMEsxiHostAudit {
             Method = 'Get'
         }
 
-        $Response = Invoke-APIMethod @APIMethod
+        $Response = Invoke-ApiMethod @APIMethod
 
         if ($Response) {
 

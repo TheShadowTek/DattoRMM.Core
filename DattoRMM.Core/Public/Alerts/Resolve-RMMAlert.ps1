@@ -88,7 +88,7 @@ function Resolve-RMMAlert {
                     Method = 'Post'
                 }
 
-                $null = Invoke-APIMethod @APIMethod
+                $null = Invoke-ApiMethod @APIMethod
                 Write-Verbose "Successfully resolved alert: $AlertUid"
 
             } catch {

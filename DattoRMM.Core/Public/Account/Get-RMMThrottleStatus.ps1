@@ -110,7 +110,7 @@ function Get-RMMThrottleStatus {
     process {
 
         # Fetch fresh rate-status from the API
-        $RateInfo = Invoke-APIMethod -Path 'system/request_rate' -Method GET
+        $RateInfo = Invoke-ApiMethod -Path 'system/request_rate' -Method GET
 
         Write-Debug "ThrottleStatus: API returned Account=$($RateInfo.accountCount)/$($RateInfo.accountRateLimit), Write=$($RateInfo.accountWriteCount)/$($RateInfo.accountWriteRateLimit)"
 

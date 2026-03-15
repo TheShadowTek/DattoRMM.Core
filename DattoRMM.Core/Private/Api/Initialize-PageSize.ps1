@@ -46,7 +46,7 @@ function Initialize-PageSize {
         Method = 'Get'
     }
 
-    $AccountMaxPageSize = (Invoke-APIMethod @PageSizeMethod).max
+    $AccountMaxPageSize = (Invoke-ApiMethod @PageSizeMethod).max
     $Script:MaxPageSize = $AccountMaxPageSize
 
     # Check if there's a configured default page size

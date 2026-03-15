@@ -43,7 +43,7 @@ function Get-RMMRequestRate {
         Uri = "$API/system/request_rate"
         Method = 'Get'
         Headers = $Headers
-        TimeoutSec = $Script:APIMethodRetry.TimeoutSeconds
+        TimeoutSec = $Script:ApiMethodRetry.TimeoutSeconds
     }
 
     if ($Script:RMMAuth.ContainsKey('Proxy')) {

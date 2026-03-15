@@ -287,7 +287,7 @@ function Set-RMMVariable {
 
         try {
 
-            Invoke-APIMethod @APIMethod -WarningAction Stop | Out-Null
+            Invoke-ApiMethod @APIMethod -WarningAction Stop | Out-Null
 
 
         } catch {

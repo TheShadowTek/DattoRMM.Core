@@ -219,7 +219,7 @@ function Set-RMMSite {
             Body = $Body
         }
 
-        $Response = Invoke-APIMethod @APIMethod
+        $Response = Invoke-ApiMethod @APIMethod
         [DRMMSite]::FromAPIMethod($Response)
 
     }

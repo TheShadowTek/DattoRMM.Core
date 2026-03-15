@@ -438,7 +438,7 @@ function Get-RMMDevice {
         # Invoke API and return typed objects
         if ($PSCmdlet.ParameterSetName -match 'NetSummary') {
 
-            Invoke-APIMethod @APIMethod | ForEach-Object {
+            Invoke-ApiMethod @APIMethod | ForEach-Object {
 
                 [DRMMDeviceNetworkInterface]::FromAPIMethod($_)
 
@@ -446,7 +446,7 @@ function Get-RMMDevice {
 
         } elseif ($APIMethod.Paginate) {
 
-            Invoke-APIMethod @APIMethod | ForEach-Object {
+            Invoke-ApiMethod @APIMethod | ForEach-Object {
 
                 [DRMMDevice]::FromAPIMethod($_, $IncludeLastLoggedInUser.IsPresent)
 
@@ -454,7 +454,7 @@ function Get-RMMDevice {
 
         } else {
 
-            $Response = Invoke-APIMethod @APIMethod
+            $Response = Invoke-ApiMethod @APIMethod
 
             [DRMMDevice]::FromAPIMethod($Response, $IncludeLastLoggedInUser.IsPresent)
 

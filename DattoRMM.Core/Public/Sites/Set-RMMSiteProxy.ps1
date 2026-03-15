@@ -188,7 +188,7 @@ function Set-RMMSiteProxy {
             Body = $Body
         }
 
-        Invoke-APIMethod @APIMethod | Out-Null
+        Invoke-ApiMethod @APIMethod | Out-Null
 
         Write-Verbose "Proxy settings configured for site $SiteUid"
 

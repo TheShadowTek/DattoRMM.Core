@@ -11,7 +11,7 @@
     per-operation write buckets. After a successful response, the request is recorded in the local
     sliding-window counters for accurate utilisation tracking between calibrations.
 #>
-function Invoke-APIRestMethod {
+function Invoke-ApiRestMethod {
     [CmdletBinding()]
     param(
 
@@ -30,12 +30,12 @@ function Invoke-APIRestMethod {
     $LastError = $null
 
     # Retry loop
-    while (-not $Success -and $Attempt -le $Script:APIMethodRetry.MaxRetries) {
+    while (-not $Success -and $Attempt -le $Script:ApiMethodRetry.MaxRetries) {
 
         # Check API throttle status and apply any necessary delays before making the API call
         try {
 
-             Invoke-APIThrottle -Method $Method -OperationName $OperationName -ErrorAction Stop
+             Invoke-ApiThrottle -Method $Method -OperationName $OperationName -ErrorAction Stop
 
         } catch {
 
@@ -126,7 +126,7 @@ function Invoke-APIRestMethod {
                     # Non-terminating condition after max retries
                     $Generic = "Conflict detected. The resource is being modified elsewhere or there is a data conflict."
 
-                    if ($Attempt -lt $Script:APIMethodRetry.MaxRetries) {
+                    if ($Attempt -lt $Script:ApiMethodRetry.MaxRetries) {
 
                         $ShouldRetry = $true
 
@@ -166,7 +166,7 @@ function Invoke-APIRestMethod {
                     $Generic = "Unexpected error occurred."
                     $ShouldRetry = $true
 
-                    if ($Attempt -lt $Script:APIMethodRetry.MaxRetries) {
+                    if ($Attempt -lt $Script:ApiMethodRetry.MaxRetries) {
 
                         $ShouldRetry = $true
 
@@ -179,10 +179,10 @@ function Invoke-APIRestMethod {
                 }
             }
 
-            if ($ShouldRetry -and $Attempt -le $Script:APIMethodRetry.MaxRetries) {
+            if ($ShouldRetry -and $Attempt -le $Script:ApiMethodRetry.MaxRetries) {
 
-                Write-Warning "Retry in $($Script:APIMethodRetry.RetryIntervalSeconds) seconds. Attempt $Attempt of $($Script:APIMethodRetry.MaxRetries)..."
-                Start-Sleep -Seconds $Script:APIMethodRetry.RetryIntervalSeconds
+                Write-Warning "Retry in $($Script:ApiMethodRetry.RetryIntervalSeconds) seconds. Attempt $Attempt of $($Script:ApiMethodRetry.MaxRetries)..."
+                Start-Sleep -Seconds $Script:ApiMethodRetry.RetryIntervalSeconds
 
             } else {
 
@@ -198,7 +198,7 @@ function Invoke-APIRestMethod {
 
     } else {
 
-        throw "Failed to invoke API method after $($Script:APIMethodRetry.MaxRetries) attempts. Last error: $($LastError.Exception.Message)"
+        throw "Failed to invoke API method after $($Script:ApiMethodRetry.MaxRetries) attempts. Last error: $($LastError.Exception.Message)"
 
     }
 }

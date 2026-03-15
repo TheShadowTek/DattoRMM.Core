@@ -15,7 +15,7 @@ $Script:ThrottleProfileDefaults = Import-PowerShellDataFile -Path "$PSScriptRoot
 $Script:OperationMapping = Import-PowerShellDataFile -Path "$PSScriptRoot\Private\Data\OperationMapping.psd1"
 
 # Load API method retry configuration from data file
-$Script:APIMethodRetry = Import-PowerShellDataFile -Path "$PSScriptRoot\Private\Data\RetryDefaults.psd1"
+$Script:ApiMethodRetry = Import-PowerShellDataFile -Path "$PSScriptRoot\Private\Data\RetryDefaults.psd1"
 
 # Initialize script-scoped auth object
 $Script:RMMAuth = $null
@@ -47,9 +47,9 @@ $Script:ConfigPlatform = $null
 $Script:ConfigPageSize = $null
 $Script:ConfigThrottleProfile = $null
 $Script:ConfigTokenExpireHours = $null
-$Script:ConfigAPIMaxRetries = $null
-$Script:ConfigAPIRetryIntervalSeconds = $null
-$Script:ConfigAPITimeoutSeconds = $null
+$Script:ConfigApiMaxRetries = $null
+$Script:ConfigApiRetryIntervalSeconds = $null
+$Script:ConfigApiTimeoutSeconds = $null
 $Script:TokenExpireHours = 100
 $Script:MaxPageSize = $null
 
@@ -78,7 +78,7 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
     
     # Remove throttle state and module defaults
     Remove-Variable -Name RMMThrottle -Scope Script -ErrorAction SilentlyContinue
-    Remove-Variable -Name APIMethodRetry -Scope Script -ErrorAction SilentlyContinue
+    Remove-Variable -Name ApiMethodRetry -Scope Script -ErrorAction SilentlyContinue
     Remove-Variable -Name ThrottleProfileDefaults -Scope Script -ErrorAction SilentlyContinue
     Remove-Variable -Name OperationMapping -Scope Script -ErrorAction SilentlyContinue
     

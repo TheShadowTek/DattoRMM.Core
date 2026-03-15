@@ -195,7 +195,7 @@ function Get-RMMSite {
         'Single' {
 
             $APIMethod.Path = "site/$SiteUid"
-            $Response = Invoke-APIMethod @APIMethod
+            $Response = Invoke-ApiMethod @APIMethod
             $Site = [DRMMSite]::FromAPIMethod($Response)
 
             if ($ExtendedProperties.Count -gt 0) {
@@ -215,7 +215,7 @@ function Get-RMMSite {
             $APIMethod.PageElement = 'sites'
             
             # Return only sites with invalid GUIDs (e.g., "Deleted Devices" system site)
-            Invoke-APIMethod @APIMethod | Where-Object {try {[void][guid]$_.uid; $false} catch {$true}} | ForEach-Object {
+            Invoke-ApiMethod @APIMethod | Where-Object {try {[void][guid]$_.uid; $false} catch {$true}} | ForEach-Object {
                 
                 [DRMMDeletedDevicesSite]::FromAPIMethod($_)
                 
@@ -235,7 +235,7 @@ function Get-RMMSite {
             }
 
             # Process sites - filter out invalid GUIDs
-            Invoke-APIMethod @APIMethod | Where-Object {try {[void][guid]$_.uid; $true} catch {$false}} | ForEach-Object {
+            Invoke-ApiMethod @APIMethod | Where-Object {try {[void][guid]$_.uid; $true} catch {$false}} | ForEach-Object {
 
                 Write-Verbose "Processing site: $($_.name)"
                 $Site = [DRMMSite]::FromAPIMethod($_)

@@ -8,7 +8,7 @@
 RootModule = 'DattoRMM.Core.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.5.48'
+ModuleVersion = '0.5.49'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -98,7 +98,7 @@ FunctionsToExport = @(
     'Remove-RMMSiteProxy',
     'Remove-RMMVariable',
     'Request-RMMToken',
-    'Reset-RMMAPIKeys',
+    'Reset-RMMApiKeys',
     'Resolve-RMMAlert',
     'Save-RMMConfig',
     'Set-RMMConfig',

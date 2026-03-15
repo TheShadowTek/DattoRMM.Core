@@ -191,7 +191,7 @@ function Request-RMMToken {
     }
 
     # Request new OAuth token and return as DRMMToken object
-    $Response = Request-APIToken @TokenRequestParams
+    $Response = Request-ApiToken @TokenRequestParams
     return [DRMMToken]::FromAPIMethod($Response)
 
 }

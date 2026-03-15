@@ -50,22 +50,22 @@ function Initialize-SavedConfig {
                     Write-Verbose "TokenExpireHours: $($Script:TokenExpireHours)"
                 }
 
-                'APIMaxRetries' {
-                    $Script:APIMethodRetry.MaxRetries = $SavedConfig.APIMaxRetries
-                    $Script:ConfigAPIMaxRetries = $SavedConfig.APIMaxRetries
-                    Write-Verbose "APIMaxRetries: $($Script:APIMethodRetry.MaxRetries)"
+                'ApiMaxRetries' {
+                    $Script:ApiMethodRetry.MaxRetries = $SavedConfig.ApiMaxRetries
+                    $Script:ConfigApiMaxRetries = $SavedConfig.ApiMaxRetries
+                    Write-Verbose "ApiMaxRetries: $($Script:ApiMethodRetry.MaxRetries)"
                 }
 
-                'APIRetryIntervalSeconds' {
-                    $Script:APIMethodRetry.RetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
-                    $Script:ConfigAPIRetryIntervalSeconds = $SavedConfig.APIRetryIntervalSeconds
-                    Write-Verbose "APIRetryIntervalSeconds: $($Script:APIMethodRetry.RetryIntervalSeconds)"
+                'ApiRetryIntervalSeconds' {
+                    $Script:ApiMethodRetry.RetryIntervalSeconds = $SavedConfig.ApiRetryIntervalSeconds
+                    $Script:ConfigApiRetryIntervalSeconds = $SavedConfig.ApiRetryIntervalSeconds
+                    Write-Verbose "ApiRetryIntervalSeconds: $($Script:ApiMethodRetry.RetryIntervalSeconds)"
                 }
 
-                'APITimeoutSeconds' {
-                    $Script:APIMethodRetry.TimeoutSeconds = $SavedConfig.APITimeoutSeconds
-                    $Script:ConfigAPITimeoutSeconds = $SavedConfig.APITimeoutSeconds
-                    Write-Verbose "APITimeoutSeconds: $($Script:APIMethodRetry.TimeoutSeconds)"
+                'ApiTimeoutSeconds' {
+                    $Script:ApiMethodRetry.TimeoutSeconds = $SavedConfig.ApiTimeoutSeconds
+                    $Script:ConfigApiTimeoutSeconds = $SavedConfig.ApiTimeoutSeconds
+                    Write-Verbose "ApiTimeoutSeconds: $($Script:ApiMethodRetry.TimeoutSeconds)"
                 }
 
                 'ThrottleProfile' {

@@ -11,7 +11,7 @@
     paginated requests by automatically fetching subsequent pages until all data is retrieved.
 
 #>
-function Invoke-APIMethod {
+function Invoke-ApiMethod {
     [CmdletBinding(DefaultParameterSetName = 'Default')]
 
     param (
@@ -102,7 +102,7 @@ function Invoke-APIMethod {
         Method = $Method
         ContentType = 'application/json'
         Headers = $RMMAuth.AuthHeader
-        TimeoutSec = $Script:APIMethodRetry.TimeoutSeconds
+        TimeoutSec = $Script:ApiMethodRetry.TimeoutSeconds
     }
 
     # Add proxy settings if configured
@@ -153,7 +153,7 @@ function Invoke-APIMethod {
 
         if ($Paginate) {
 
-            $Result = Invoke-APIRestMethod -Parameters $RequestParams -Method $Method -OperationName $OperationName
+            $Result = Invoke-ApiRestMethod -Parameters $RequestParams -Method $Method -OperationName $OperationName
 
             # Parse the original URI to extract query parameters (excluding max and page)
             $OriginalUri = [System.Uri]$RequestParams.Uri
@@ -225,14 +225,14 @@ function Invoke-APIMethod {
 
                 Write-Debug "Fetching next page: $NextUrl"
                 $RequestParams.Uri = $NextUrl
-                $Result = Invoke-APIRestMethod -Parameters $RequestParams -Method $Method -OperationName $OperationName
+                $Result = Invoke-ApiRestMethod -Parameters $RequestParams -Method $Method -OperationName $OperationName
                 $Result.$PageElement
 
             }
 
         } else {
             
-            Invoke-APIRestMethod -Parameters $RequestParams -Method $Method -OperationName $OperationName
+            Invoke-ApiRestMethod -Parameters $RequestParams -Method $Method -OperationName $OperationName
 
         }
 

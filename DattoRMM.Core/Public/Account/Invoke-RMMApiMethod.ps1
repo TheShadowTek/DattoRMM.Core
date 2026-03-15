@@ -239,7 +239,7 @@ function Invoke-RMMApiMethod {
 
         Write-Verbose "Invoking API: $Method $Path"
 
-        # Build splatting hashtable for Invoke-APIMethod
+        # Build splatting hashtable for Invoke-ApiMethod
         $InvokeApiMethod = @{
             Path   = $Path
             Method = $Method
@@ -264,7 +264,7 @@ function Invoke-RMMApiMethod {
 
         }
 
-        Invoke-APIMethod @InvokeApiMethod
+        Invoke-ApiMethod @InvokeApiMethod
 
     }
 }

@@ -134,7 +134,7 @@ function Get-RMMJobResult {
             Method = 'Get'
         }
 
-        $JobResult = Invoke-APIMethod @APIMethod | ForEach-Object {[DRMMJobResults]::FromAPIMethod($_)}
+        $JobResult = Invoke-ApiMethod @APIMethod | ForEach-Object {[DRMMJobResults]::FromAPIMethod($_)}
 
         if ($IncludeOutput) {
 
@@ -145,7 +145,7 @@ function Get-RMMJobResult {
                     Method = 'Get'
                 }
 
-                $JobResult.StdOut = Invoke-APIMethod @StdOutAPIMethod | ForEach-Object {[DRMMJobStdData]::FromAPIMethod($_, $JobUid, $DeviceUid, 'StdOut')}
+                $JobResult.StdOut = Invoke-ApiMethod @StdOutAPIMethod | ForEach-Object {[DRMMJobStdData]::FromAPIMethod($_, $JobUid, $DeviceUid, 'StdOut')}
 
             }
 
@@ -156,7 +156,7 @@ function Get-RMMJobResult {
                     Method = 'Get'
                 }
 
-                $JobResult.StdErr = Invoke-APIMethod @StdErrAPIMethod | ForEach-Object {[DRMMJobStdData]::FromAPIMethod($_, $JobUid, $DeviceUid, 'StdErr')}
+                $JobResult.StdErr = Invoke-ApiMethod @StdErrAPIMethod | ForEach-Object {[DRMMJobStdData]::FromAPIMethod($_, $JobUid, $DeviceUid, 'StdErr')}
 
             }
         }

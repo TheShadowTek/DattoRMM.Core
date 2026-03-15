@@ -110,7 +110,7 @@ function Get-RMMJob {
             Method = 'Get'
         }
 
-        Invoke-APIMethod @APIMethod | ForEach-Object {[DRMMJob]::FromAPIMethod($_)}
+        Invoke-ApiMethod @APIMethod | ForEach-Object {[DRMMJob]::FromAPIMethod($_)}
 
     }
 }

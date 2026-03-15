@@ -18,7 +18,7 @@
       3. Delay-pacing floor — current delay × 10, ensuring enough paced requests pass
          between calibrations to avoid wasting overhead when throttling is already active.
 #>
-function Invoke-APIThrottle {
+function Invoke-ApiThrottle {
     [CmdletBinding()]
     param (
 

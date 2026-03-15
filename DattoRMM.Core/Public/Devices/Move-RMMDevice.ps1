@@ -174,7 +174,7 @@ function Move-RMMDevice {
             Method = 'Put'
         }
 
-        Invoke-APIMethod @APIMethod | Out-Null
+        Invoke-ApiMethod @APIMethod | Out-Null
 
     }
 }

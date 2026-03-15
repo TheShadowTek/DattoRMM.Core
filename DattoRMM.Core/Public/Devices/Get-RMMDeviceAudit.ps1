@@ -185,7 +185,7 @@ function Get-RMMDeviceAudit {
         }
 
         Write-Debug "Getting device audit for DeviceUid: $DeviceUid"
-        $Response = Invoke-APIMethod @APIMethod
+        $Response = Invoke-ApiMethod @APIMethod
 
         $Audit = [DRMMDeviceAudit]::FromAPIMethod($Response)
         $Audit.DeviceUid = $DeviceUid

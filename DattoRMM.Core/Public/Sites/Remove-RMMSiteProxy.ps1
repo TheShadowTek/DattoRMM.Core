@@ -111,7 +111,7 @@ function Remove-RMMSiteProxy {
             Method = 'Delete'
         }
 
-        Invoke-APIMethod @APIMethod | Out-Null
+        Invoke-ApiMethod @APIMethod | Out-Null
 
         Write-Verbose "Proxy settings removed from site $SiteUid"
 

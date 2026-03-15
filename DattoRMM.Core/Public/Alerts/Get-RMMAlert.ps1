@@ -233,7 +233,7 @@ function Get-RMMAlert {
                 PageElement = 'alerts'
             }
 
-            Invoke-APIMethod @APIMethod | ForEach-Object {
+            Invoke-ApiMethod @APIMethod | ForEach-Object {
 
                 [DRMMAlert]::FromAPIMethod($_, $Script:SessionPlatform)
 

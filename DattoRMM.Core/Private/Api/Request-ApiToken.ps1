@@ -2,7 +2,7 @@
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
-function Request-APIToken {
+function Request-ApiToken {
     <#
     .SYNOPSIS
         Requests a new API access token from the Datto RMM OAuth endpoint.
@@ -71,7 +71,7 @@ function Request-APIToken {
             Method = 'Post'
             Body = "grant_type=password&username=$Key&password=$AuthSecret"
             ContentType = 'application/x-www-form-urlencoded'
-            TimeoutSec = $Script:APIMethodRetry.TimeoutSeconds
+            TimeoutSec = $Script:ApiMethodRetry.TimeoutSeconds
         }
 
 

@@ -4,13 +4,13 @@
 #>
 
 # Plural noun 'Keys' is used in the function name to reflect that both Access and Secret keys are reset.
-function Reset-RMMAPIKeys {
+function Reset-RMMApiKeys {
     <#
     .SYNOPSIS
         Resets the authenticated user's API access and secret keys in Datto RMM.
 
     .DESCRIPTION
-        The Reset-RMMAPIKeys function regenerates the API access key and secret key for the
+        The Reset-RMMApiKeys function regenerates the API access key and secret key for the
         currently authenticated user. This invalidates the existing keys immediately.
 
         When using -ReturnNewKey, the API secret key (as shown in the Datto RMM UI) will NOT be returned in plain text, but as a SecureString for security. To convert the SecureString to plain text (not recommended unless absolutely necessary), use:
@@ -43,12 +43,12 @@ function Reset-RMMAPIKeys {
         You should capture the output in a variable to retrieve the new secret. If not specified, the new keys will be discarded.
 
     .EXAMPLE
-        $newKeys = Reset-RMMAPIKeys -ReturnNewKey
+        $newKeys = Reset-RMMApiKeys -ReturnNewKey
 
         Resets the API keys and returns the new key/secret object. Capture the output to retrieve the new secret.
 
     .EXAMPLE
-        Reset-RMMAPIKeys
+        Reset-RMMApiKeys
 
         Resets the API keys with confirmation prompt. If -ReturnNewKey is not specified, the new keys are discarded.
         New keys must be retrieved from the Datto RMM web portal.
@@ -77,7 +77,7 @@ function Reset-RMMAPIKeys {
         - Update all automation scripts with new keys after reset
 
     .LINK
-        https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMAPIKeys.md
+        https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMApiKeys.md
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
@@ -129,12 +129,12 @@ Are you sure you want to reset your API keys? This action is irreversible unless
         if ($ReturnNewKey) {
 
             Write-Verbose "Resetting API keys and returning new key/secret."
-            Invoke-APIMethod @APIMethod | ForEach-Object {[DRMMAPIKeySecret]::FromAPIMethod($_)}
+            Invoke-ApiMethod @APIMethod | ForEach-Object {[DRMMAPIKeySecret]::FromAPIMethod($_)}
 
         } else {
 
             Write-Verbose "Resetting API keys without returning new key/secret."
-            Invoke-APIMethod @APIMethod | Out-Null
+            Invoke-ApiMethod @APIMethod | Out-Null
 
         }
 

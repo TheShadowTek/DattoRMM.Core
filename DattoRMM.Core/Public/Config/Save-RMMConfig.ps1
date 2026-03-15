@@ -55,9 +55,9 @@ function Save-RMMConfig {
         'PageSize' = $Script:PageSize
         'ThrottleProfile' = $Script:RMMThrottle.Profile
         'TokenExpireHours' = $Script:TokenExpireHours
-        'APIMaxRetries' = $Script:APIMethodRetry.MaxRetries
-        'APIRetryIntervalSeconds' = $Script:APIMethodRetry.RetryIntervalSeconds
-        'APITimeoutSeconds' = $Script:APIMethodRetry.TimeoutSeconds
+        'ApiMaxRetries' = $Script:ApiMethodRetry.MaxRetries
+        'ApiRetryIntervalSeconds' = $Script:ApiMethodRetry.RetryIntervalSeconds
+        'ApiTimeoutSeconds' = $Script:ApiMethodRetry.TimeoutSeconds
     }
 
     $Success = Write-ConfigFile -Config $Config
@@ -69,9 +69,9 @@ function Save-RMMConfig {
         $Script:ConfigPageSize = $Script:PageSize
         $Script:ConfigThrottleProfile = $Script:RMMThrottle.Profile
         $Script:ConfigTokenExpireHours = $Script:TokenExpireHours
-        $Script:ConfigAPIMaxRetries = $Script:APIMethodRetry.MaxRetries
-        $Script:ConfigAPIRetryIntervalSeconds = $Script:APIMethodRetry.RetryIntervalSeconds
-        $Script:ConfigAPITimeoutSeconds = $Script:APIMethodRetry.TimeoutSeconds
+        $Script:ConfigApiMaxRetries = $Script:ApiMethodRetry.MaxRetries
+        $Script:ConfigApiRetryIntervalSeconds = $Script:ApiMethodRetry.RetryIntervalSeconds
+        $Script:ConfigApiTimeoutSeconds = $Script:ApiMethodRetry.TimeoutSeconds
 
         Write-Host "Configuration saved successfully." -ForegroundColor Green
 

@@ -243,7 +243,7 @@ function New-RMMQuickJob {
             Body = $Body
         }
 
-        $Response = Invoke-APIMethod @APIMethod
+        $Response = Invoke-ApiMethod @APIMethod
 
         # Parse and return the job object from the response
         if ($Response -and $Response.job) {

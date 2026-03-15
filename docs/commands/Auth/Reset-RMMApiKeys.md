@@ -1,4 +1,4 @@
-# Reset-RMMAPIKeys
+# Reset-RMMApiKeys
 
 ## SYNOPSIS
 Resets the authenticated user's API access and secret keys in Datto RMM.
@@ -6,11 +6,11 @@ Resets the authenticated user's API access and secret keys in Datto RMM.
 ## SYNTAX
 
 ```
-Reset-RMMAPIKeys [-ReturnNewKey] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Reset-RMMApiKeys [-ReturnNewKey] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Reset-RMMAPIKeys function regenerates the API access key and secret key for the
+The Reset-RMMApiKeys function regenerates the API access key and secret key for the
 currently authenticated user.
 This invalidates the existing keys immediately.
 
@@ -52,7 +52,7 @@ This function is useful for security purposes when:
 
 EXAMPLE 1
 ```powershell
-$newKeys = Reset-RMMAPIKeys -ReturnNewKey
+$newKeys = Reset-RMMApiKeys -ReturnNewKey
 ```
 
 Resets the API keys and returns the new key/secret object.
@@ -60,7 +60,7 @@ Capture the output to retrieve the new secret.
 
 EXAMPLE 2
 ```powershell
-Reset-RMMAPIKeys
+Reset-RMMApiKeys
 ```
 
 Resets the API keys with confirmation prompt.
@@ -143,4 +143,4 @@ Best practices:
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMAPIKeys.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMAPIKeys.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMApiKeys.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMApiKeys.md))
