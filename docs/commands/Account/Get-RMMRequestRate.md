@@ -1,7 +1,7 @@
 # Get-RMMRequestRate
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves the current API request rate information for the Datto RMM account.
 
 ## SYNTAX
 
@@ -10,25 +10,35 @@ Get-RMMRequestRate [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Get-RMMRequestRate connects to the Datto RMM API and retrieves information about the current request rate limits for the account.
+This includes details such as the maximum allowed requests per minute, the number of requests currently used, and the time until the request count resets.
+
+This information is useful for monitoring API usage and ensuring that your applications stay within the allowed limits to avoid throttling.
 
 ## EXAMPLES
 
-Example 1
+EXAMPLE 1
 ```powershell
-PS C:\> {{ Add example code here }}
+Get-RMMRequestRate
 ```
 
-{{ Add example description here }}
+Retrieves the current API request rate information for the connected Datto RMM account.
 
 ## PARAMETERS
 
 ## INPUTS
 
-None
-
 ## OUTPUTS
 
-System.Object
 ## NOTES
+This function requires an active connection to the Datto RMM API.
+Use Connect-DattoRMM to authenticate before calling this function.
 
+The request rate information is returned as a custom object with properties such as MaxRequestsPerMinute, RequestsUsed, and TimeUntilReset.
+
+For more details on the API request rate limits, refer to the Datto RMM API documentation.
+
+## RELATED LINKS
+
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMRequestRate.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMRequestRate.md))

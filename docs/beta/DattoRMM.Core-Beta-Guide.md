@@ -1,15 +1,29 @@
-# DattoRMM.Core Closed Beta Guide
+# DattoRMM.Core Beta Guide
 
 
 ## Introduction
 
-Welcome to the closed beta of the DattoRMM.Core PowerShell module! This guide will help you get started, understand key features, and provide feedback. Your input is vital for improving the module before public release.
+Welcome to the DattoRMM.Core PowerShell module beta! This guide will help you get started, understand key features, and provide feedback. Your input is vital for improving the module before v1.
+
+For beta status, expectations, and the roadmap to v1, see [Beta Overview](about_DattoRMM.CoreBeta.md).  
+For detailed worked examples (Azure Automation, CSV exports, type extensions, UDF expansion), see [Beta Examples](DattoRMM.Core-Beta-Examples.md).
 
 ---
 ## Requirements
 
-- **PowerShell Core v7 or later is required**
+- **PowerShell 7.4 or later** (Core edition only).
 - **Recommended:** Use the latest Long-Term Support (LTS) version of PowerShell for best stability and compatibility.
+
+### Platform Testing
+
+| Platform | Status |
+|---|---|
+| **Windows** | Primary development and testing platform. Fully supported. |
+| **Azure Automation** | Limited testing, core functionality validated. |
+| **Linux** | Limited testing on Ubuntu 24.04.1 LTS only. Expected to work on other distributions, but not yet verified. |
+| **macOS** | No testing performed. Expected to work under PowerShell 7.4+, but not verified. |
+
+If you are running on Linux or macOS, **OS-specific feedback is especially valuable** — please report any issues, unexpected behaviour, or platform-specific quirks via GitHub Issues.
 
 ---
 
@@ -68,9 +82,6 @@ Get all devices (efficient for large environments):
 Get-RMMSite | Get-RMMDevice
 ```
 
-> [!NOTE]
-> The PowerShell AzTable batch function requires an advanced function with pipeline support, the AzTable module, and dependent Az modules installed.
-
 Export sites, devices, and alerts to separate CSV files:
 
 ```powershell
@@ -98,7 +109,7 @@ Get-RMMSite | Get-RMMDevice | <AzureTableBatchFunction>
 
 ## Throttling & Long-Running Operations
 
-The module includes adaptive throttling to respect Datto RMM API rate limits. For more details, see [about_DattoRMM.CoreThrottling](about/about_DattoRMM.CoreThrottling.md). Throttling profiles:
+The module includes adaptive throttling to respect Datto RMM API rate limits. For more details, see [about_DattoRMM.CoreThrottling](../about/about_DattoRMM.CoreThrottling.md). Throttling profiles:
 
 
 
@@ -167,6 +178,10 @@ Please report issues, undocumented alert contexts, or suggestions via GitHub Iss
 ## Further Reading
 
 - [Project README](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/README.md)
+- [Beta Overview](about_DattoRMM.CoreBeta.md) — Beta status, expectations, and roadmap to v1
+- [Beta Examples](DattoRMM.Core-Beta-Examples.md) — Detailed worked examples (Azure Automation, CSV exports, type extensions, UDF expansion)
+- [Authentication](../about/about_DattoRMM.CoreAuthentication.md) — All credential methods including Key Vault and SecretStore
+- [Configuration](../about/about_DattoRMM.CoreConfiguration.md) — Platform, throttle, and persistence settings
 - In-module help: `Get-Help <Command>`
 - About topics: `Get-Help about_DattoRMM.Core`, `Get-Help about_DattoRMM.CoreThrottling`
 

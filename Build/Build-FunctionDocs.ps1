@@ -168,6 +168,9 @@ try {
                 if ($SourceModified -gt $MarkdownModified) {
                     $ShouldGenerate = $true
                     $Reason = "source modified"
+                } elseif (Select-String -Path $MarkdownFile -Pattern '\{\{ Fill' -Quiet) {
+                    $ShouldGenerate = $true
+                    $Reason = "placeholder content detected"
                 }
             }
         } else {

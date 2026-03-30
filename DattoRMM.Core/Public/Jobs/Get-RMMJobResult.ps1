@@ -2,66 +2,66 @@
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
-<#
-.SYNOPSIS
-    Retrieves job execution results and output for a specific device from the Datto RMM API.
-
-.DESCRIPTION
-    Retrieves execution results, standard output, and error output for a job on a specific device in the Datto RMM
-    system. You can specify JobUid and DeviceUid directly, or pipe ActivityLog objects (from Get-RMMActivityLog)
-    with Entity: Device, Category: Job, and Action: Deployment. The -UseExperimentalDetailClasses switch must be
-    used with Get-RMMActivityLog to provide the required detail type (DRMMActivityLogDetailsDeviceJobDeployment).
-    Non-deployment activity logs are safely skipped with a warning.
-
-.PARAMETER JobUid
-    The unique identifier (GUID) of the job.
-
-.PARAMETER DeviceUid
-    The unique identifier (GUID) of the device associated with the job results.
-
-.PARAMETER ActivityLog
-    An activity log object (from Get-RMMActivityLog -Entity Device -Category Job -Action Deployment -UseExperimentalDetailClasses)
-    containing job deployment details. Can be piped to this function. Non-deployment
-    activity logs are skipped with a warning.
-
-.PARAMETER IncludeOutput
-    Switch to retrieve standard output and error output for the job result, if available.
-
-.EXAMPLE
-    Get-RMMJobResult -JobUid $JobUid -DeviceUid $DeviceUid
-
-    Retrieves the execution results for a job on a specific device.
-
-.EXAMPLE
-    Get-RMMJobResult -JobUid $JobUid -DeviceUid $DeviceUid -IncludeOutput
-
-    Retrieves the execution results and includes standard output and error output for the job.
-
-.EXAMPLE
-    Get-RMMActivityLog -Entity Device -Category Job -Action Deployment -UseExperimentalDetailClasses | Get-RMMJobResult
-
-    Retrieves job results for all deployment job activity logs for devices. The -UseExperimentalDetailClasses
-    switch is required to provide the correct detail type for piping.
-
-.INPUTS
-    System.Guid, DRMMActivityLog. You can pipe ActivityLog objects to this function.
-
-.OUTPUTS
-    DRMMJobResults. Returns job result objects. If -IncludeOutput is used, includes standard output and error output.
-
-.NOTES
-    This function requires an active connection to the Datto RMM API.
-    Use Connect-DattoRMM to authenticate before calling this function.
-    For details on -UseExperimentalDetailClasses, see Get-RMMActivityLog help.
-
-.LINK
-    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJobResult.md
-.LINK
-    about_DRMMJobResult
-.LINK
-    Get-RMMActivityLog
-#>
 function Get-RMMJobResult {
+    <#
+    .SYNOPSIS
+        Retrieves job execution results and output for a specific device from the Datto RMM API.
+
+    .DESCRIPTION
+        Retrieves execution results, standard output, and error output for a job on a specific device in the Datto RMM
+        system. You can specify JobUid and DeviceUid directly, or pipe ActivityLog objects (from Get-RMMActivityLog)
+        with Entity: Device, Category: Job, and Action: Deployment. The -UseExperimentalDetailClasses switch must be
+        used with Get-RMMActivityLog to provide the required detail type (DRMMActivityLogDetailsDeviceJobDeployment).
+        Non-deployment activity logs are safely skipped with a warning.
+
+    .PARAMETER JobUid
+        The unique identifier (GUID) of the job.
+
+    .PARAMETER DeviceUid
+        The unique identifier (GUID) of the device associated with the job results.
+
+    .PARAMETER ActivityLog
+        An activity log object (from Get-RMMActivityLog -Entity Device -Category Job -Action Deployment -UseExperimentalDetailClasses)
+        containing job deployment details. Can be piped to this function. Non-deployment
+        activity logs are skipped with a warning.
+
+    .PARAMETER IncludeOutput
+        Switch to retrieve standard output and error output for the job result, if available.
+
+    .EXAMPLE
+        Get-RMMJobResult -JobUid $JobUid -DeviceUid $DeviceUid
+
+        Retrieves the execution results for a job on a specific device.
+
+    .EXAMPLE
+        Get-RMMJobResult -JobUid $JobUid -DeviceUid $DeviceUid -IncludeOutput
+
+        Retrieves the execution results and includes standard output and error output for the job.
+
+    .EXAMPLE
+        Get-RMMActivityLog -Entity Device -Category Job -Action Deployment -UseExperimentalDetailClasses | Get-RMMJobResult
+
+        Retrieves job results for all deployment job activity logs for devices. The -UseExperimentalDetailClasses
+        switch is required to provide the correct detail type for piping.
+
+    .INPUTS
+        System.Guid, DRMMActivityLog. You can pipe ActivityLog objects to this function.
+
+    .OUTPUTS
+        DRMMJobResults. Returns job result objects. If -IncludeOutput is used, includes standard output and error output.
+
+    .NOTES
+        This function requires an active connection to the Datto RMM API.
+        Use Connect-DattoRMM to authenticate before calling this function.
+        For details on -UseExperimentalDetailClasses, see Get-RMMActivityLog help.
+
+    .LINK
+        https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJobResult.md
+    .LINK
+        about_DRMMJobResult
+    .LINK
+        Get-RMMActivityLog
+    #>
     [CmdletBinding(DefaultParameterSetName = 'JobUid')]
     param (
         # Unique identifier for the Datto RMM job.

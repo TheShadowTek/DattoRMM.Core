@@ -91,6 +91,9 @@ Run `Get-Help <CommandName>` for detailed parameter and usage information, or se
 | [Throttling](docs/about/about_DattoRMM.CoreThrottling.md) | Adaptive throttling, profiles, concurrent use, and API rate limit details |
 | [Security](docs/about/about_DattoRMM.CoreSecurity.md) | PII handling, credential lifecycle, SecureString cross-platform behaviour |
 | [Alert Context Discovery (Beta)](docs/about/about_DattoRMM.CoreAlertContextDiscovery.md) | Guidance for collecting unrecognised alert context schema data during beta |
+| [Beta Overview](docs/beta/about_DattoRMM.CoreBeta.md) | Beta status, expectations, and roadmap to v1 |
+| [Beta Guide](docs/beta/DattoRMM.Core-Beta-Guide.md) | Getting started with the beta, usage tips, and feedback |
+| [Beta Examples](docs/beta/DattoRMM.Core-Beta-Examples.md) | Worked examples: Azure Automation, CSV exports, type extensions, UDF expansion |
 | [Command Reference](docs/commands/) | Per-command documentation with examples |
 | [Class Reference](docs/about/classes/) | Typed output classes and enums |
 

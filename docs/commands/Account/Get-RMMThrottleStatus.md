@@ -13,19 +13,23 @@ Get-RMMThrottleStatus [-ProgressAction <ActionPreference>] [<CommonParameters>]
 The Get-RMMThrottleStatus function provides a combined view of the Datto RMM API rate-status
 endpoint data and the local sliding-window throttle model.
 It calls the rate-status API to
-fetch fresh account and write counts, limits, and per-operation bucket status, then merges
+fetch fresh read and write counts, limits, and per-operation bucket status, then merges
 this with the local throttle tracking state (timestamps, utilisation, flags, thresholds).
+
+The Datto RMM API tracks reads and writes as independent quotas:
+- accountCount / accountRateLimit   → read (GET) operations only
+- accountWriteCount / accountWriteRateLimit → write (PUT/POST/DELETE) operations only
 
 The returned DRMMThrottleStatus object includes:
 - Active throttle profile and configured thresholds
-- Global account and write utilisation (both API-reported and locally tracked)
+- Independent read and write utilisation (both API-reported and locally tracked)
 - Throttle and pause flags reflecting the current state before drift adjustment
-- Current computed delay in milliseconds
-- Calibration metadata (last calibration time, sample count)
-- A Buckets collection of DRMMThrottleBucket objects covering the account bucket,
+- Independent read and write delay values in milliseconds
+- Calibration metadata for both read and write tracks
+- A Buckets collection of DRMMThrottleBucket objects covering the read bucket,
   write bucket, and all per-operation write buckets (both mapped and unidentified)
 
-Each bucket reports its Type (Account, Write, or Operation), Name, Limit, ApiCount,
+Each bucket reports its Type (Read, Write, or Operation), Name, Limit, ApiCount,
 LocalCount, and computed Utilisation ratio.
 
 This function is designed for monitoring, diagnostics, and sample capture during long-running
@@ -84,25 +88,28 @@ DRMMThrottleStatus. Returns a throttle status object with the following properti
 - Profile (string): Active throttle profile name
 - AccountUid (string): Account unique identifier from the API
 - WindowSizeSeconds (int): Rolling window size in seconds
-- AccountUtilisation (double): Global account utilisation ratio (higher of API or local)
-- WriteUtilisation (double): Global write utilisation ratio (higher of API or local)
+- ReadUtilisation (double): Read utilisation ratio (higher of API or local)
+- WriteUtilisation (double): Write utilisation ratio (higher of API or local)
 - AccountCutOffRatio (double): API-reported account cut-off ratio
 - ThrottleUtilisationThreshold (double): Configured threshold at which throttling activates
 - PauseThreshold (double): Computed threshold at which hard pause activates
 - Throttle (bool): Whether soft throttling is currently active
 - Pause (bool): Whether hard pause is currently active
-- DelayMs (double): Current computed delay in milliseconds
-- DelayMultiplier (double): Configured global delay multiplier
+- ReadDelayMs (double): Current computed read delay in milliseconds
+- WriteDelayMs (double): Current computed write delay in milliseconds
+- DelayMultiplier (double): Configured read delay multiplier
 - WriteDelayMultiplier (double): Configured write delay multiplier
-- LastCalibrationUtc (datetime): UTC time of the last calibration
-- SamplesAtLastCalibration (int): Local account samples at last calibration
+- ReadLastCalibrationUtc (datetime): UTC time of the last read calibration
+- WriteLastCalibrationUtc (datetime): UTC time of the last write calibration
+- ReadSamplesAtLastCalibration (int): Local read samples at last calibration
+- WriteSamplesAtLastCalibration (int): Local write samples at last calibration
 - Buckets (DRMMThrottleBucket[]): Collection of all tracked rate-limit buckets
 ## NOTES
 This function requires an active connection to the Datto RMM API.
 Use Connect-DattoRMM to authenticate before calling this function.
 
 This function calls the rate-status API endpoint to fetch fresh data, which itself
-counts as an API request against the account rate limit.
+counts as a read request against the account rate limit.
 
 The throttle state reported is a pre-drift-adjustment snapshot.
 The actual throttle
