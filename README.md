@@ -15,10 +15,12 @@ A PowerShell module for the Datto RMM API v2. Provides typed, object-oriented ac
 
 ## Installation
 
-Copy the module folder to a path in `$env:PSModulePath`, or import directly:
+See [INSTALL.md](INSTALL.md) for full instructions including execution policy options, certificate trust, user and system scope install, and Azure Automation.
+
+Quick start — import directly from an extracted folder:
 
 ```powershell
-Import-Module ./DattoRMM.Core.psd1
+Import-Module .\DattoRMM.Core\DattoRMM.Core.psd1
 ```
 
 ## Quick Start
@@ -85,6 +87,9 @@ Run `Get-Help <CommandName>` for detailed parameter and usage information, or se
 
 | Topic | Description |
 |---|---|
+| [Installation](INSTALL.md) | Download, unblock, execution policy, user/system/folder install, Azure Automation |
+| [Changelog](CHANGELOG.md) | Version history and release notes |
+| [Security Policy](SECURITY.md) | Vulnerability reporting and credential security design |
 | [Module Overview](docs/about/about_DattoRMM.Core.md) | Architecture, design principles, and feature summary |
 | [Authentication](docs/about/about_DattoRMM.CoreAuthentication.md) | All authentication methods, credential storage, and automation scenarios |
 | [Configuration](docs/about/about_DattoRMM.CoreConfiguration.md) | Platform regions, page size, retry settings, and persistent configuration |

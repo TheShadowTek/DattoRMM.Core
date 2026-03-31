@@ -5,3 +5,11 @@
 ToDo.md
 Issues/
 Backup/
+
+# Signing - never commit private keys
+*.pfx
+*.p12
+
+# Release build output
+Release/
+*.zip
