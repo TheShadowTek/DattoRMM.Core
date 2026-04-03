@@ -613,8 +613,8 @@ if (-not $SkipPsd1Merge) {
                     if ([string]::IsNullOrWhiteSpace($PsdPropDesc)) { continue }
 
                     # Match a property declaration line (with or without existing comment)
-                    # Pattern: optional leading whitespace, optional type, $PropName
-                    $PropPattern  = "(?m)([ \t]*(?:\[[\w\[\]]+\][ \t]+)?\`$$PropName\b)"
+                    # Pattern: optional leading whitespace, optional type (with optional space), $PropName
+                    $PropPattern  = "(?m)([ \t]*(?:\[[\w\[\]]+\][ \t]*)?\`$$PropName\b)"
                     $PropMatch    = [regex]::Match($Source, $PropPattern)
 
                     if ($PropMatch.Success) {
@@ -643,6 +643,9 @@ if (-not $SkipPsd1Merge) {
             }
 
             # ── 3. Enrich method comments ────────────────────────────────────
+            # Strategy: if a method already has a <# .SYNOPSIS .DESCRIPTION #> block,
+            # inject .OUTPUTS into the existing block rather than adding a duplicate.
+            # Only add a brand-new block if no existing comment is found.
 
             $MethDescs = if ($PsdEntry -is [hashtable] -and $PsdEntry.ContainsKey('MethodDescriptions')) { $PsdEntry.MethodDescriptions } else { $null }
             if ($MethDescs -and $MethDescs.Count -gt 0) {
@@ -652,24 +655,7 @@ if (-not $SkipPsd1Merge) {
                     $MethEntry = $MethDescs[$MethName]
                     if (-not $MethEntry) { continue }
 
-                    $MethDesc   = $MethEntry.Description
                     $MethReturn = $MethEntry.ReturnValue
-                    if ([string]::IsNullOrWhiteSpace($MethDesc)) { continue }
-
-                    # Build help block
-                    $HelpLines = @('<#')
-                    $HelpLines += ".SYNOPSIS"
-                    $HelpLines += "    $MethDesc"
-
-                    if (-not [string]::IsNullOrWhiteSpace($MethReturn)) {
-
-                        $HelpLines += ".OUTPUTS"
-                        $HelpLines += "    $MethReturn"
-
-                    }
-
-                    $HelpLines += '#>'
-                    $HelpBlock  = $HelpLines -join "`n    "
 
                     # Find the method declaration - match [returntype] MethodName( or just MethodName(
                     $MethPattern = "(?m)([ \t]*(?:\[[\w\[\]]+\][ \t]+)?$([regex]::Escape($MethName))\s*\()"
@@ -677,17 +663,70 @@ if (-not $SkipPsd1Merge) {
 
                     if ($MethMatch.Success) {
 
-                        $MethLine  = $MethMatch.Value
-                        $Indent    = [regex]::Match($MethLine, '^([ \t]*)').Groups[1].Value
-                        $MethIndex = $Source.IndexOf($MethLine)
+                        $MethIndex = $Source.IndexOf($MethMatch.Value)
                         $Before    = $Source.Substring(0, $MethIndex)
-                        $LastNl    = $Before.LastIndexOf("`n")
-                        $PrevLine  = if ($LastNl -ge 0) { $Before.Substring($LastNl + 1).TrimEnd() } else { '' }
 
-                        if ($PrevLine -notmatch '^\s*(?:#|<#)') {
+                        # Walk backwards past blank lines to find the real preceding content
+                        $BeforeLines = $Before -split "`n"
+                        $ScanIdx = $BeforeLines.Count - 1
+                        while ($ScanIdx -ge 0 -and [string]::IsNullOrWhiteSpace($BeforeLines[$ScanIdx])) {
 
-                            $IndentedBlock = ($HelpBlock -split "`n" | ForEach-Object { "$Indent$_" }) -join "`n"
-                            $Source = $Source.Insert($MethIndex, "$IndentedBlock`n")
+                            $ScanIdx--
+
+                        }
+
+                        $PrevContentLine = if ($ScanIdx -ge 0) { $BeforeLines[$ScanIdx].TrimEnd() } else { '' }
+
+                        # Check if existing comment block ends just before this method
+                        if ($PrevContentLine -match '#>\s*$') {
+
+                            # Existing block found — inject .OUTPUTS before the closing #>
+                            if (-not [string]::IsNullOrWhiteSpace($MethReturn)) {
+
+                                # Find the #> that closes this block
+                                $ClosingIdx = $Before.LastIndexOf('#>')
+
+                                if ($ClosingIdx -ge 0) {
+
+                                    # Detect the indent from the #> line
+                                    $BeforeClose = $Before.Substring(0, $ClosingIdx)
+                                    $LastNlClose = $BeforeClose.LastIndexOf("`n")
+                                    $CloseIndent = if ($LastNlClose -ge 0) {
+                                        [regex]::Match($Before.Substring($LastNlClose + 1), '^([ \t]*)').Groups[1].Value
+                                    } else { '    ' }
+
+                                    $OutputsBlock = ".OUTPUTS`n$CloseIndent    $MethReturn`n$CloseIndent"
+                                    $Source = $Source.Insert($ClosingIdx, "$OutputsBlock")
+                                    Write-Detail "  Added method comment: $TypeName.$MethName"
+
+                                }
+
+                            }
+
+                        } else {
+
+                            # No existing block — add a full help comment (rare/fallback case)
+                            $MethDesc = $MethEntry.Description
+                            if ([string]::IsNullOrWhiteSpace($MethDesc)) { continue }
+
+                            $MethLine = $MethMatch.Value
+                            $Indent   = [regex]::Match($MethLine, '^([ \t]*)').Groups[1].Value
+
+                            $HelpLines = @('<#')
+                            $HelpLines += ".SYNOPSIS"
+                            $HelpLines += "    $MethDesc"
+
+                            if (-not [string]::IsNullOrWhiteSpace($MethReturn)) {
+
+                                $HelpLines += ".OUTPUTS"
+                                $HelpLines += "    $MethReturn"
+
+                            }
+
+                            $HelpLines += '#>'
+                            $HelpBlock  = $HelpLines -join "`n$Indent"
+
+                            $Source = $Source.Insert($MethIndex, "$Indent$HelpBlock`n")
                             Write-Detail "  Added method comment: $TypeName.$MethName"
 
                         }
@@ -898,19 +937,51 @@ foreach ($FolderName in $DomainMap.Keys) {
 }
 
 # DomainFolderName -> HashSet of domain folder names it depends on
+# Detects BOTH inheritance deps AND property/method type references
 $DomainDeps = @{}
 foreach ($FolderName in $DomainMap.Keys) {
 
     $DomainDeps[$FolderName] = [System.Collections.Generic.HashSet[string]]::new()
 
+    # Collect home type names for this domain (to exclude self-references)
+    $HomeTypes = [System.Collections.Generic.HashSet[string]]::new()
     foreach ($TypeInfo in $DomainMap[$FolderName].TypeDefs) {
 
+        $null = $HomeTypes.Add($TypeInfo.Name)
+
+    }
+
+    foreach ($TypeInfo in $DomainMap[$FolderName].TypeDefs) {
+
+        # 1. Inheritance dependencies
         if ($TypeInfo.BaseType -and $ClassDomainMap.ContainsKey($TypeInfo.BaseType)) {
 
             $BaseDomain = $ClassDomainMap[$TypeInfo.BaseType]
             if ($BaseDomain -ne $FolderName) {
 
                 $null = $DomainDeps[$FolderName].Add($BaseDomain)
+
+            }
+
+        }
+
+        # 2. Property/method type references (scan raw source for [TypeName] and [TypeName[]] patterns)
+        if ($TypeInfo.RawSource) {
+
+            $TypeRefs = [regex]::Matches($TypeInfo.RawSource, '\[(DRMM\w+|RMM\w+)(?:\[\])?\]')
+            foreach ($Ref in $TypeRefs) {
+
+                $RefType = $Ref.Groups[1].Value
+                if (-not $HomeTypes.Contains($RefType) -and $ClassDomainMap.ContainsKey($RefType)) {
+
+                    $RefDomain = $ClassDomainMap[$RefType]
+                    if ($RefDomain -ne $FolderName) {
+
+                        $null = $DomainDeps[$FolderName].Add($RefDomain)
+
+                    }
+
+                }
 
             }
 
@@ -1091,7 +1162,7 @@ foreach ($FolderName in $DomainMap.Keys) {
 
         foreach ($DepDomain in ($CrossDomainDeps | Sort-Object)) {
 
-            $null = $Sb.AppendLine("using module '..\..$DepDomain\$DepDomain.psm1'")
+            $null = $Sb.AppendLine("using module '..\$DepDomain\$DepDomain.psm1'")
 
         }
 

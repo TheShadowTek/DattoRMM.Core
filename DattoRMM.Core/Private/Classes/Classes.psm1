@@ -5445,11 +5445,11 @@ class DRMMVariable : DRMMObject {
 #region DRMMFilter class
 <#
 .SYNOPSIS
-    Represents a filter in the DRMM system, including its name, description, type, scope, and associated site.
+    Represents a filter in the DRMM system, including its name, description, type, and scope.
 .DESCRIPTION
-    The DRMMFilter class models a filter within the DRMM platform, encapsulating properties such as Id, FilterId, Name, Description, Type, Scope, Site (for site-scoped filters), SiteUid, DateCreate, LastUpdated, and PortalUrl. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to determine if the filter is global or site-specific, as well as a method to generate a summary string of the filter's information. Additionally, it includes methods to retrieve devices and alerts associated with the filter.
+    The DRMMFilter class models a filter within the DRMM platform, encapsulating properties such as Id, FilterId, Name, Description, Type, Scope, SiteUid, DateCreate, LastUpdated, and PortalUrl. It provides a constructor and a static method to create an instance from API response data. The class also includes methods to determine if the filter is global or site-specific, as well as a method to generate a summary string of the filter's information. Additionally, it includes methods to retrieve devices and alerts associated with the filter.
     
-    For site-scoped filters, the Site property provides full context about the associated site, while SiteUid is maintained for backward compatibility.
+    For site-scoped filters, the DRMMSiteFilter subclass extends this class with a Site property that provides full context about the associated site.
 #>
 class DRMMFilter : DRMMObject {
 
@@ -5460,7 +5460,6 @@ class DRMMFilter : DRMMObject {
     [string]$Type
     [string]$Scope
     [Nullable[guid]]$SiteUid
-    [DRMMSite]$Site
     [Nullable[datetime]]$DateCreate
     [Nullable[datetime]]$LastUpdated
     [string]$PortalUrl
@@ -5469,7 +5468,7 @@ class DRMMFilter : DRMMObject {
 
     }
 
-    static [DRMMFilter] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [DRMMSite]$Site, [string]$Platform) {
+    static [DRMMFilter] FromAPIMethod([pscustomobject]$Response, [string]$Scope, [string]$Platform) {
 
         if ($null -eq $Response) {
             
@@ -5484,23 +5483,7 @@ class DRMMFilter : DRMMObject {
         $Filter.Description = $Response.description
         $Filter.Type = $Response.type
         $Filter.Scope = $Scope
-        $Filter.Site = $Site
-        
-        # Set SiteUid for backward compatibility and when Site object is available
-        if ($Site) {
-            $Filter.SiteUid = $Site.Uid
-        }
-        
-        # Build PortalUrl with SiteId suffix for site-scoped filters
-        if ($Site -and $Scope -eq 'Site') {
-
-            $Filter.PortalUrl = "https://$($Platform.ToLower()).rmm.datto.com/device-filter-results/$($Filter.Id)-$($Site.Id)"
-
-        } else {
-
-            $Filter.PortalUrl = "https://$($Platform.ToLower()).rmm.datto.com/device-filter-results/$($Filter.Id)"
-
-        }
+        $Filter.PortalUrl = "https://$($Platform.ToLower()).rmm.datto.com/device-filter-results/$($Filter.Id)"
 
         $CreateDate = [DRMMObject]::ParseApiDate($Response.dateCreate)
         $Filter.DateCreate = $CreateDate.DateTime
@@ -6383,6 +6366,72 @@ class DRMMDevicesStatus : DRMMObject {
     [string] GetSummary() {
 
         return "Devices: $($this.NumberOfDevices), Online: $($this.NumberOfOnlineDevices), Offline: $($this.NumberOfOfflineDevices)"
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a site-scoped filter in the DRMM system, extending DRMMFilter with a Site property.
+.DESCRIPTION
+    The DRMMSiteFilter class extends DRMMFilter to model site-scoped filters within the DRMM platform. It adds a Site property that provides full context about the associated DRMMSite, and overrides the portal URL construction to include the site ID suffix. This subclass exists to break the circular dependency between DRMMFilter and DRMMSite while preserving the ability to navigate from a filter to its parent site via the pipeline.
+#>
+class DRMMSiteFilter : DRMMFilter {
+
+    [DRMMSite]$Site
+
+    DRMMSiteFilter() : base() {
+
+    }
+
+    static [DRMMSiteFilter] FromAPIMethod([pscustomobject]$Response, [DRMMSite]$Site, [string]$Platform) {
+
+        if ($null -eq $Response) {
+            
+            return $null
+        
+        }
+
+        $Filter = [DRMMSiteFilter]::new()
+        $Filter.Id = $Response.id
+        $Filter.FilterId = $Response.id
+        $Filter.Name = $Response.name
+        $Filter.Description = $Response.description
+        $Filter.Type = $Response.type
+        $Filter.Scope = 'Site'
+        $Filter.Site = $Site
+        $Filter.SiteUid = $Site.Uid
+        $Filter.PortalUrl = "https://$($Platform.ToLower()).rmm.datto.com/device-filter-results/$($Filter.Id)-$($Site.Id)"
+
+        $CreateDate = [DRMMObject]::ParseApiDate($Response.dateCreate)
+        $Filter.DateCreate = $CreateDate.DateTime
+
+        $UpdatedDate = [DRMMObject]::ParseApiDate($Response.lastUpdated)
+        $Filter.LastUpdated = $UpdatedDate.DateTime
+
+        return $Filter
+
+    }
+
+    <#
+    .SYNOPSIS
+        Generates a summary string for the site filter, including its name, site name, and type.
+    .DESCRIPTION
+        The GetSummary method returns a string summarizing the filter's name, associated site name, and type. If the Type property is not set, it defaults to '-'.
+    #>
+    [string] GetSummary() {
+
+        if ($this.Type) {
+
+            $TypeValue = $this.Type
+
+        } else {
+
+            $TypeValue = '-'
+
+        }
+
+        return "$($this.Name) [Site: $($this.Site.Name)]$TypeValue"
 
     }
 }
