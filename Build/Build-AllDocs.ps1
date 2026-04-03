@@ -11,8 +11,8 @@
        - PowerShell handles help for these automatically (no .help.txt conversion)
     
     2. CLASS DOCUMENTATION (Build-ClassDocs.ps1)
-       - Parses Classes.psm1 using AST
-       - Generates class documentation content (ClassDocContent.psd1)
+       - Parses per-domain class .psm1 files using AST
+       - Generates class reference markdown from inline documentation
        - Outputs markdown to docs/about/classes/
     
     3. HELP TEXT CONVERSION

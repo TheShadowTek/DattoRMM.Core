@@ -150,23 +150,25 @@ Copilot should avoid:
 
 ### Class File Structure
 
-- All classes are defined in a single structured module file:
-  - `Private/Classes/Classes.psm1`
-- This file is imported using `using module` at the top of the main module file (`ModuleName.psm1`).
-- The classes module is loaded **before any other code**, ensuring:
+- Classes are organized by domain in separate `.psm1` files:
+  - `Private/Classes/<Domain>/<Domain>.psm1` (e.g., `DRMMAccount/DRMMAccount.psm1`)
+  - Each domain folder contains one primary class file and supporting type/format definitions
+  - Related auxiliary classes (e.g., `DRMMAccountDescriptor`) are in the same domain folder
+- Each class file is imported using `using module` where it is needed.
+- The class modules are loaded **before any other code**, ensuring:
   - class definitions are available globally
   - inheritance works correctly
   - ScriptAnalyzer does not complain about ordering
   - downstream functions can rely on class types
 
-#### Why a Single `.psm1` File
-- PowerShell class inheritance and ScriptAnalyzer have known issues when classes are split across multiple files.
-- A single `.psm1` ensures:
-  - predictable load order
-  - stable inheritance chains
-  - no circular reference problems
-  - no partial class visibility
-- Copilot must not split classes into multiple files.
+#### Domain-Based Organization
+- Per-domain class files allow:
+  - logical grouping of related classes (parent + dependent types)
+  - easier navigation and maintenance
+  - clear ownership boundaries
+  - parallel development without merge conflicts
+- Each domain `.psm1` is **a single, stable file** that must not be split further.
+- Copilot must not split domain class files into multiple files.
 
 #### Regions and Organisation
 - The classes module is divided into clearly named `#region` / `#endregion` blocks.
@@ -175,14 +177,17 @@ Copilot should avoid:
 - Region names must be stable and descriptive to support documentation tooling.
 
 #### Comment-Based Help for Documentation Metadata
-- Every class includes `.SYNOPSIS` and `.DESCRIPTION` comment-based help.
-- Every class method also includes `.SYNOPSIS` and `.DESCRIPTION`.
+- **Every class** must have `.SYNOPSIS` and `.DESCRIPTION` comment-based help.
+- **Every public class method** must have `.SYNOPSIS` and `.DESCRIPTION`.
+- **Every class property** must have inline `# comment` describing its purpose.
 - These blocks are used to generate:
   - documentation metadata
-  - markdown help files
+  - markdown help files (one per class)
   - about_ topics
   - class reference documentation
-- Copilot must not omit or auto‑generate placeholder help blocks.
+  - 100% documentation coverage verification
+- **Documentation is mandatory for 100% coverage**. Any class, method, or property without proper help blocks fails the coverage check and must be fixed before merge.
+- Copilot must not omit or auto‑generate placeholder help blocks. Missing documentation is a code defect, not optional.
 
 #### Class Ordering
 - Classes appear in the following order:
@@ -191,14 +196,21 @@ Copilot should avoid:
   3. Utility classes
 - This ordering ensures predictable inheritance and clean documentation output.
 
-#### File Stability Rules
+#### File Stability and Documentation Rules
 - Copilot must not:
-  - split classes into multiple files
-  - reorder classes
-  - remove or rename regions
+  - split domain class files into multiple files
+  - reorder classes without explicit instruction
+  - remove or rename regions that feed documentation generation
   - change the `.psm1` to `.ps1`
-  - modify the load order in `ModuleName.psm1`
-- The classes module is a **stable architectural artifact**, not a place for experimentation.
+  - modify the load order in `ModuleName.psm1` without justification
+- **Class API changes require coordinated updates**:
+  - Any change to class properties, methods, or signatures must include:
+    - Updated `.SYNOPSIS` and `.DESCRIPTION` in the class/method help blocks
+    - Updated or new format file (`<Domain>.Format.ps1xml`)
+    - Updated or new type file (`<Domain>.Types.ps1xml`)
+    - Verification that all properties and methods have proper help documentation
+  - Changes to a single class may require rebuilding documentation and re-signing all module files.
+- **Each domain class file is a stable architectural artifact**, not a place for experimentation.
 
 ### Layering and Boundaries
 - The module follows a strict layered architecture:
@@ -247,18 +259,26 @@ Copilot should avoid:
 - Copilot must not modify static data files unless explicitly asked.
 
 ### Class Architecture
-- All classes live in `Private/Classes/Classes.psm1`.
-- Loaded first via `using module` in the main module file.
+- Classes are organized in domain-specific files under `Private/Classes/<Domain>/`.
+  - Example domains: `DRMMAccount`, `DRMMDevice`, `DRMMAlert`, etc.
+  - Each domain file is loaded via `using module` where it is needed.
 - Classes define:
   - domain models
   - request/response types
   - validation logic
   - transformation helpers
+  - property accessors and computed properties
 - Classes must not:
   - perform network calls
   - read or write files
   - depend on module state
-- Copilot must not create new class files or split the class module.
+  - omit required `.SYNOPSIS`, `.DESCRIPTION`, or property comments
+- **Documentation Requirements**:
+  - Class help blocks are **non-negotiable** and checked during build.
+  - The build process flags missing documentation and builds fail if coverage is not 100%.
+  - All class files are code-signed; any change requires re-signing.
+- Copilot must not create new class files without explicit instruction from the developer.
+- Copilot must not omit, abbreviate, or defer documentation in the name of "scaffolding".
 
 ### Module Initialisation
 - `Classes.psm1` is loaded first using `using module`.
@@ -277,6 +297,76 @@ Copilot should avoid:
 
 ### API Accuracy Expectations
 <!-- This section will be completed in Task 16 -->
+
+## Commit Message Conventions
+
+### Message Structure
+All commits must follow this convention:
+
+```
+<Type>: <Title> (<version-tag>)
+
+<Description with bullet points>
+```
+
+### Types
+- `docs:` — Documentation changes (class docs, help text, markdown, about_ topics)
+- `refactor:` — Code restructuring (no functional change)
+- `feat:` — New features or capabilities
+- `fix:` — Bug fixes
+- `build:` — Build system, scripts, signing (not module code)
+- `chore:` — Housekeeping, minor cleanup
+
+### Title Guidelines
+- Concise, imperative mood (e.g., "Fix async timing bug" not "Fixed" or "Fixes")
+- Explain **what changed**, not why
+- Include version tag in parentheses if releasing a version (e.g., `(v0.5.52)`)
+
+### Description (Bullet List)
+- Lead with a summary line (can be blank if title is sufficient)
+- Use bullet points for details:
+  - What changed
+  - Why it changed (if not obvious)
+  - What now works differently (if applicable)
+- Be specific about affected areas:
+  - Class names (`DRMMAccount.psm1`)
+  - Public functions (`Get-RMMDevice`)
+  - Build artifacts (docs, help.txt, signatures)
+- Reference related issues or tasks if applicable
+
+### Examples
+
+**Documentation commit:**
+```
+docs: Regenerated all class markdown and help text (v0.5.51)
+
+- Built 119 class reference documents from updated inline help blocks
+- Converted all markdown to help.txt with proper URL formatting
+- Achieved 100% documentation coverage (770 items verified)
+- All help.txt files regenerated with clickable URLs in SEE ALSO sections
+```
+
+**Refactor commit:**
+```
+refactor: Move license blocks above using statements in all class files
+
+- Reorganized 18 class file headers to match PowerShell conventions
+- License/Copyright now appears at line 1 (before using statements)
+- Maintains all functionality; purely structural improvement
+- Improves code organization for clarity and maintainability
+```
+
+**Build commit:**
+```
+build: Add comprehensive code signing script and guide
+
+- Created Sign-Module.ps1 to sign 101 PowerShell files
+  - Searches for code signing cert in standard certificate stores
+  - Signs .ps1, .psm1, .psd1, .ps1xml files
+  - Excludes archived/deprecated files (_Archive/)
+  - Supports -Force flag for re-signing after edits
+- Added CODE-SIGNING-GUIDE.md with setup and troubleshooting
+```
 
 ## Refactoring Expectations
 
