@@ -28,19 +28,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    DiskName [string]
-    TotalVolume [float]
-    FreeSpace [float]
-    UnitOfMeasure [string]
-    DiskNameDesignation [string]
-
-METHODS
-    DRMMAlertContextDiskUsage() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
-    DRMMAlert
-    DRMMAlertContext
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertContextDiskUsage.md

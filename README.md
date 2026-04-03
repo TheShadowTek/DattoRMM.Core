@@ -100,7 +100,7 @@ Run `Get-Help <CommandName>` for detailed parameter and usage information, or se
 | [Beta Guide](docs/beta/DattoRMM.Core-Beta-Guide.md) | Getting started with the beta, usage tips, and feedback |
 | [Beta Examples](docs/beta/DattoRMM.Core-Beta-Examples.md) | Worked examples: Azure Automation, CSV exports, type extensions, UDF expansion |
 | [Command Reference](docs/commands/) | Per-command documentation with examples |
-| [Class Reference](docs/about/classes/) | Typed output classes and enums |
+| [Class Reference](docs/about/classes/about_ClassIndex.md) | Typed output classes and enums |
 
 About topics are also available in-module:
 

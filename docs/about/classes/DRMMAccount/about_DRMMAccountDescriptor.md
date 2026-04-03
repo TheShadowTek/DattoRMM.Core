@@ -28,11 +28,10 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAccount/about_DRMMAccountDescriptor.md)
-- [DRMMAccount](./about_DRMMAccount.md)
 - [Get-RMMAccount](../../../commands/Account/Get-RMMAccount.md)
 

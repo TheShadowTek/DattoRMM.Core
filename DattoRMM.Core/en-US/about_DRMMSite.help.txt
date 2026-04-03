@@ -39,188 +39,149 @@ The DRMMSite class provides the following methods:
 
 Generates a summary string for the site, including its name, unique identifier, and device count.
 
-**Returns:** `string` - A summary string that includes the name, unique identifier, and device count for the site.
+**Returns:** `string` - Returns string
 
 ### Set([Hashtable]$Properties)
 
 Updates the properties of the site based on the provided hashtable of property names and values.
 
-**Returns:** `DRMMSite` - This method does not return a value. It performs an action to update the properties of the site based on the provided hashtable of property names and values.
+**Returns:** `DRMMSite` - Represents a site in the DRMM system, including its properties, settings, and associated devices and variables.
 
 **Parameters:**
-- `[Hashtable]$Properties` - The hashtable of properties to update for the site, where the keys are the property names and the values are the new values to set for those properties.
+- `[Hashtable]$Properties` - TODO: Describe this parameter
 
 ### GetAlerts()
 
 Retrieves alerts associated with the site, optionally filtered by status.
 
-**Returns:** `DRMMAlert[]` - A collection of alerts associated with the site, optionally filtered by the specified status.
+**Returns:** `DRMMAlert[]` - Represents an alert in the DRMM system, including its properties, context, source information, and response actions.
 
 ### GetAlerts([String]$Status)
 
 Retrieves alerts associated with the site, optionally filtered by status.
 
-**Returns:** `DRMMAlert[]` - A collection of alerts associated with the site, optionally filtered by the specified status.
+**Returns:** `DRMMAlert[]` - Represents an alert in the DRMM system, including its properties, context, source information, and response actions.
 
 **Parameters:**
-- `[String]$Status` - The status of the alerts to retrieve (e.g., "active", "resolved").
+- `[String]$Status` - TODO: Describe this parameter
 
 ### OpenPortal()
 
 Opens the portal URL associated with the site in the default web browser.
 
-**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
+**Returns:** `void` - Returns void
 
 ### GetDevices()
 
 Retrieves devices associated with the site, optionally filtered by a specific filter ID.
 
-**Returns:** `DRMMDevice[]` - A collection of devices associated with the site, optionally filtered by the specified filter ID.
+**Returns:** `DRMMDevice[]` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 ### GetDevices([Int64]$FilterId)
 
 Retrieves devices associated with the site, optionally filtered by a specific filter ID.
 
-**Returns:** `DRMMDevice[]` - A collection of devices associated with the site, optionally filtered by the specified filter ID.
+**Returns:** `DRMMDevice[]` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[Int64]$FilterId` - The ID of the filter to apply when retrieving devices.
+- `[Int64]$FilterId` - TODO: Describe this parameter
 
 ### GetDeviceCount()
 
 Retrieves the count of devices associated with the site.
 
-**Returns:** `int` - The count of devices associated with the site.
+**Returns:** `int` - Returns int
 
 ### GetVariables()
 
 Retrieves variables associated with the site.
 
-**Returns:** `DRMMVariable[]` - A collection of variables associated with the site.
+**Returns:** `DRMMVariable[]` - Represents a variable in the DRMM system, including its name, value, scope, and other attributes.
 
 ### GetVariable([String]$Name)
 
 Retrieves a specific variable associated with the site by name.
 
-**Returns:** `DRMMVariable` - The variable associated with the site that matches the specified name, or null if no matching variable is found.
+**Returns:** `DRMMVariable` - Represents a variable in the DRMM system, including its name, value, scope, and other attributes.
 
 **Parameters:**
-- `[String]$Name` - The name of the variable to retrieve.
+- `[String]$Name` - TODO: Describe this parameter
 
 ### NewVariable([String]$Name, [String]$Value)
 
-Creates a new variable associated with the site, with an option to mask the value.
+Creates a new variable associated with the site.
 
-**Returns:** `DRMMVariable` - The newly created variable associated with the site.
+**Returns:** `DRMMVariable` - Represents a variable in the DRMM system, including its name, value, scope, and other attributes.
 
 **Parameters:**
-- `[String]$Name` - The name of the variable.
-- `[String]$Value` - The value of the variable.
+- `[String]$Name` - TODO: Describe this parameter
+- `[String]$Value` - TODO: Describe this parameter
 
 ### NewVariable([String]$Name, [String]$Value, [Boolean]$Masked)
 
 Creates a new variable associated with the site, with an option to mask the value.
 
-**Returns:** `DRMMVariable` - The newly created variable associated with the site.
+**Returns:** `DRMMVariable` - Represents a variable in the DRMM system, including its name, value, scope, and other attributes.
 
 **Parameters:**
-- `[String]$Name` - The name of the variable.
-- `[String]$Value` - The value of the variable.
-- `[Boolean]$Masked` - Indicates whether the variable is masked.
+- `[String]$Name` - TODO: Describe this parameter
+- `[String]$Value` - TODO: Describe this parameter
+- `[Boolean]$Masked` - TODO: Describe this parameter
 
 ### GetFilters()
 
 Retrieves filters associated with the site.
 
-**Returns:** `DRMMFilter[]` - A collection of filters associated with the site.
+**Returns:** `DRMMFilter[]` - Represents a filter in the DRMM system, including its name, description, type, and scope.
 
 ### GetFilter([String]$Name)
 
 Retrieves a specific filter associated with the site by name.
 
-**Returns:** `DRMMFilter` - The filter associated with the site that matches the specified name, or null if no matching filter is found.
+**Returns:** `DRMMFilter` - Represents a filter in the DRMM system, including its name, description, type, and scope.
 
 **Parameters:**
-- `[String]$Name` - The name of the filter to retrieve.
+- `[String]$Name` - TODO: Describe this parameter
 
 ### GetSettings()
 
 Retrieves the site settings for the site.
 
-**Returns:** `DRMMSiteSettings` - The site settings associated with the site.
+**Returns:** `DRMMSiteSettings` - Represents the overall settings for a site in the DRMM system, including general settings, proxy settings, mail recipients, and site UID.
 
 ### SetProxy([String]$ProxyHost, [Int32]$Port, [String]$Type)
 
-Sets the proxy settings for the site, including authentication credentials.
+Sets the proxy settings for the site.
 
-**Returns:** `DRMMSiteSettings` - This method does not return a value. It performs an action to set the proxy settings for the site, including authentication credentials.
+**Returns:** `DRMMSiteSettings` - Represents the overall settings for a site in the DRMM system, including general settings, proxy settings, mail recipients, and site UID.
 
 **Parameters:**
-- `[String]$ProxyHost` - The hostname or IP address of the proxy server.
-- `[Int32]$Port` - The port number for the proxy server.
-- `[String]$Type` - The type of proxy (e.g., HTTP, SOCKS).
+- `[String]$ProxyHost` - TODO: Describe this parameter
+- `[Int32]$Port` - TODO: Describe this parameter
+- `[String]$Type` - TODO: Describe this parameter
 
 ### SetProxy([String]$ProxyHost, [Int32]$Port, [String]$Type, [String]$Username, [SecureString]$Password)
 
 Sets the proxy settings for the site, including authentication credentials.
 
-**Returns:** `DRMMSiteSettings` - This method does not return a value. It performs an action to set the proxy settings for the site, including authentication credentials.
+**Returns:** `DRMMSiteSettings` - Represents the overall settings for a site in the DRMM system, including general settings, proxy settings, mail recipients, and site UID.
 
 **Parameters:**
-- `[String]$ProxyHost` - The hostname or IP address of the proxy server.
-- `[Int32]$Port` - The port number for the proxy server.
-- `[String]$Type` - The type of proxy (e.g., HTTP, SOCKS).
-- `[String]$Username` - The username for proxy authentication.
-- `[SecureString]$Password` - The password for proxy authentication.
+- `[String]$ProxyHost` - TODO: Describe this parameter
+- `[Int32]$Port` - TODO: Describe this parameter
+- `[String]$Type` - TODO: Describe this parameter
+- `[String]$Username` - TODO: Describe this parameter
+- `[SecureString]$Password` - TODO: Describe this parameter
 
 ### RemoveProxy()
 
 Removes the proxy settings for the site.
 
-**Returns:** `DRMMSiteSettings` - This method does not return a value. It performs an action to remove the proxy settings for the site.
+**Returns:** `DRMMSiteSettings` - Represents the overall settings for a site in the DRMM system, including general settings, proxy settings, mail recipients, and site UID.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Id [long]
-    Uid [guid]
-    AccountUid [string]
-    Name [string]
-    Description [string]
-    Notes [string]
-    OnDemand [bool]
-    SplashtopAutoInstall [bool]
-    ProxySettings [DRMMSiteProxySettings]
-    DevicesStatus [DRMMDevicesStatus]
-    SiteSettings [DRMMSiteSettings]
-    Variables [DRMMVariable[]]
-    Filters [DRMMFilter[]]
-    AutotaskCompanyName [string]
-    AutotaskCompanyId [string]
-    PortalUrl [string]
-
-METHODS
-    DRMMSite() : void
-    GetSummary() : string
-    Set([Hashtable]$Properties) : DRMMSite
-    GetAlerts() : DRMMAlert[]
-    GetAlerts([String]$Status) : DRMMAlert[]
-    OpenPortal() : void
-    GetDevices() : DRMMDevice[]
-    GetDevices([Int64]$FilterId) : DRMMDevice[]
-    GetDeviceCount() : int
-    GetVariables() : DRMMVariable[]
-    GetVariable([String]$Name) : DRMMVariable
-    NewVariable([String]$Name, [String]$Value) : DRMMVariable
-    NewVariable([String]$Name, [String]$Value, [Boolean]$Masked) : DRMMVariable
-    GetFilters() : DRMMFilter[]
-    GetFilter([String]$Name) : DRMMFilter
-    GetSettings() : DRMMSiteSettings
-    SetProxy([String]$ProxyHost, [Int32]$Port, [String]$Type) : DRMMSiteSettings
-    SetProxy([String]$ProxyHost, [Int32]$Port, [String]$Type, [String]$Username, [SecureString]$Password) : DRMMSiteSettings
-    RemoveProxy() : DRMMSiteSettings
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMSite/about_DRMMSite.md

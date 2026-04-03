@@ -40,49 +40,45 @@ The DRMMAlert class provides the following methods:
 
 Determines if the alert is currently open (not resolved).
 
-**Returns:** `bool` - True if the alert is currently open (not resolved), otherwise false.
+**Returns:** `bool` - Returns bool
 
 ### IsCritical()
 
 Determines if the alert is of priority level "Critical".
 
-**Returns:** `bool` - True if the alert is of priority level "Critical", otherwise false.
+**Returns:** `bool` - Returns bool
 
 ### IsHigh()
 
 Determines if the alert is of priority level "High".
 
-**Returns:** `bool` - True if the alert is of priority level "High", otherwise false.
+**Returns:** `bool` - Returns bool
 
 ### Resolve()
 
 Resolves the alert.
 
-**Returns:** `void` - An updated instance of the DRMMAlert class with the alert marked as resolved.
+**Returns:** `void` - Returns void
 
 ### GetSummary()
 
 Gets a summary of the alert.
 
-**Returns:** `string` - A summary string combining key properties of the alert for easy display.
+**Returns:** `string` - Returns string
 
 ### OpenPortal()
 
 Opens the alert's portal URL in the default web browser.
 
-**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
+**Returns:** `void` - Returns void
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlert.md)
-- [DRMMAlertContext](./about_DRMMAlertContext.md)
-- [DRMMAlertMonitorInfo](./about_DRMMAlertMonitorInfo.md)
-- [DRMMAlertSourceInfo](./about_DRMMAlertSourceInfo.md)
-- [DRMMAlertResponseAction](./about_DRMMAlertResponseAction.md)
 - [Get-RMMAlert](../../../commands/Alerts/Get-RMMAlert.md)
 - [Resolve-RMMAlert](../../../commands/Alerts/Resolve-RMMAlert.md)
 

@@ -1,0 +1,39 @@
+TOPIC
+    about_DRMMThrottleBucket
+
+SHORT DESCRIPTION
+    Represents a single rate-limit bucket in the DRMM throttle system, covering read, write, or per-operation buckets.
+
+LONG DESCRIPTION
+The DRMMThrottleBucket class models one rate-limit bucket from the combined view of API-reported and locally tracked throttle state. Each bucket has a Type (Read, Write, or Operation), a Name that identifies it (e
+
+This class inherits from DRMMObject.
+
+## PROPERTIES
+
+The DRMMThrottleBucket class exposes the following properties:
+
+    Property    Type       Description                             
+    ----------- ---------- ----------------------------------------
+    Type        string     The bucket type: Read (global read/GE...
+    Name        string     The name that identifies the bucket. ...
+    Limit       int        The configured rate limit for this bu...
+    ApiCount    int        The current request count reported by...
+    LocalCount  int        The number of requests tracked locall...
+    Utilisation double     The computed utilisation ratio for th...
+## METHODS
+
+The DRMMThrottleBucket class provides the following methods:
+
+### GetSummary()
+
+Generates a summary string for the throttle bucket, including type, name, utilisation, and counts.
+
+**Returns:** `string` - Returns string
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's class system.
+SEE ALSO
+    Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMThrottleStatus/about_DRMMThrottleBucket.md

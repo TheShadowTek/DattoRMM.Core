@@ -14,15 +14,16 @@ The following values are defined for RMMPlatform:
 
 | Value | Description |
 |-------|-------------|
-| `Pinotage` | The Pinotage platform instance. |
-| `Concord` | The Concord platform instance. |
-| `Vidal` | The Vidal platform instance. |
-| `Merlot` | The Merlot platform instance. |
-| `Zinfandel` | The Zinfandel platform instance. |
-| `Syrah` | The Syrah platform instance. |
+| `Pinotage` | TODO: Describe this value |
+| `Concord` | TODO: Describe this value |
+| `Vidal` | TODO: Describe this value |
+| `Merlot` | TODO: Describe this value |
+| `Zinfandel` | TODO: Describe this value |
+| `Syrah` | TODO: Describe this value |
+
 ## NOTES
 
-This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
+This enum is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 

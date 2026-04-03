@@ -30,36 +30,37 @@ The DRMMJob class provides the following methods:
 
 Checks if the job is currently active.
 
-**Returns:** `bool` - Indicates whether the job is currently active (true/false).
+**Returns:** `bool` - Returns bool
 
 ### IsCompleted()
 
 Checks if the job is completed.
 
-**Returns:** `bool` - Indicates whether the job is completed (true/false).
+**Returns:** `bool` - Returns bool
 
 ### GetAge()
 
 Calculates the age of the job based on its creation date.
 
-**Returns:** `timespan` - The age of the job as a TimeSpan object, representing the time elapsed since the job was created.
+**Returns:** `timespan` - Returns timespan
 
 ### GetComponents()
 
 Retrieves the components associated with the job.
 
-**Returns:** `DRMMJobComponent[]` - A list of components associated with the job.
+**Returns:** `DRMMJobComponent[]` - Represents a component of a DRMM job, including its unique identifier, name, and associated variables.
 
 ### GetSummary()
 
 Generates a summary string for the job.
 
-**Returns:** `string` - A summary string representing the job.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMJob/about_DRMMJob.md)
+

@@ -35,25 +35,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    DataFromSiteId [long]
-    DataFromSiteName [string]
-    DataFromSiteUid [guid]
-    DataToSiteId [long]
-    DataToSiteName [string]
-    DataToSiteUid [guid]
-    SiteName [string]
-    UserEmail [string]
-    UserFirstName [string]
-    UserId [long]
-    UserLastName [string]
-    UserUsername [string]
-
-METHODS
-    DRMMActivityLogDetailsDeviceDeviceMoveDevice() : void
-    static FromActivityLogDetail([Hashtable]$ActivityLogDetail) : DRMMActivityLogDetailsDeviceDeviceMoveDevice
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceDeviceMoveDevice.md

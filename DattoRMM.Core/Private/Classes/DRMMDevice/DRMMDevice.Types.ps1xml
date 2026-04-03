@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMDevice domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMDevice</Name>
+    <Members>
+      <AliasProperty>
+        <Name>DeviceUid</Name>
+        <ReferencedMemberName>Uid</ReferencedMemberName>
+      </AliasProperty>
+      <AliasProperty>
+        <Name>DeviceId</Name>
+        <ReferencedMemberName>Id</ReferencedMemberName>
+      </AliasProperty>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAntivirusInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceNetworkInterface</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Hostname) ($($this.IntIpAddress))"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDevicePatchManagement</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Status = if ($this.PatchStatus) {$this.PatchStatus} else {'Unknown'}
+            $Pending = if ($null -ne $this.PatchesApprovedPending) {" Pending:$($this.PatchesApprovedPending)"} else {''}
+            $Installed = if ($null -ne $this.PatchesInstalled) {" Installed:$($this.PatchesInstalled)"} else {''}
+            "$Status$Pending$Installed"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceType</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Category)/$($this.Type)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceUdfs</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Set = 0
+            for ($i = 1; $i -le 30; $i++) {
+              $Val = $this."Udf$i"
+              if (-not [string]::IsNullOrWhiteSpace($Val)) {$Set++}
+            }
+            "$Set of 30 UDFs set"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>
+<!-- SIG # Begin signature block -->
+<!-- MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor -->
+<!-- BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG -->
+<!-- KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCOtMFnP2VjyiUB -->
+<!-- d7Vy5RYS3Co0zl6++s54hd/coNMq36CCA04wggNKMIICMqADAgECAhB464iXHfI6 -->
+<!-- gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk -->
+<!-- ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz -->
+<!-- MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl -->
+<!-- czEjMCEGA1UEAwwaRGF0dG9STU0uQ29yZSBDb2RlIFNpZ25pbmcwggEiMA0GCSqG -->
+<!-- SIb3DQEBAQUAA4IBDwAwggEKAoIBAQChn1EpMYQgl1RgWzQj2+wp2mvdfb3UsaBS -->
+<!-- nxEVGoQ0gj96tJ2MHAF7zsITdUjwaflKS1vE6wAlOg5EI1V79tJCMxzM0bFpOdR1 -->
+<!-- L5F2HE/ovIAKNkHxFUF5qWU8vVeAsOViFQ4yhHpzLen0WLF6vhmc9eH23dLQy5fy -->
+<!-- tELZQEc2WbQFa4HMAitP/P9kHAu6CUx5s4woLIOyyR06jkr3l9vk0sxcbCxx7+dF -->
+<!-- RrsSLyPYPH+bUAB8+a0hs+6qCeteBuUfLvGzpMhpzKAsY82WZ3Rd9X38i32dYj+y -->
+<!-- dYx+nx+UEMDLjDJrZgnVa8as4RojqVLcEns5yb/XTjLxDc58VatdAgMBAAGjRjBE -->
+<!-- MA4GA1UdDwEB/wQEAwIHgDATBgNVHSUEDDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQU -->
+<!-- H+B0vf97dYXqdUX1YMcWhFsY6fcwDQYJKoZIhvcNAQELBQADggEBAJmD4EEGNmcD -->
+<!-- 1JtFoRGxuLJaTHxDwBsjqcRQRE1VPZNGaiwIm8oSQdHVjQg0oIyK7SEb02cs6n6Y -->
+<!-- NZbwf7B7WZJ4aKYbcoLug1k1x9SoqwBmfElECeJTKXf6dkRRNmrAodpGCixR4wMH -->
+<!-- KXqwqP5F+5j7bdnQPiIVXuMesxc4tktz362ysph1bqKjDQSCBpwi0glEIH7bv5Ms -->
+<!-- Ey9Gl3fe+vYC5W06d2LYVebEfm9+7766hsOgpdDVgdtnN+e6uwIJjG/6PTG6TMDP -->
+<!-- y+pr5K6LyUVYJYcWWUTZRBqqwBHiLGekPbxrjEVfxUY32Pq4QfLzUH5hhUCAk4HN -->
+<!-- XpF9pOzFLMUxggIDMIIB/wIBATBRMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRkZXMx -->
+<!-- IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE -->
+<!-- kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC -->
+<!-- gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG -->
+<!-- CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIDxGPy5EwkAsNuDSLgz5v+To9tcI -->
+<!-- E1rdb8A2Jc5NFG5ZMA0GCSqGSIb3DQEBAQUABIIBACPftnswh5i4QJHl3K6dwC1q -->
+<!-- gTkEUi93aNvmZkNSlsBetFP+/fmyBTj19+0Q4s7hiPB8VrRamJOdaHcEVRETsji1 -->
+<!-- RcnFGHTcyQYeMG9QiTAiWjHB6KkM5rK9IVZvPFm69LVo88Qi5Q+8VhhBxbotsJaH -->
+<!-- l13Ec02ZBMgK2S5LKrhz8vWfF9vL9ojNRnf+8rtIBi9cTug4urAFcP1lkOnEBeM5 -->
+<!-- aWwBPD54Cf5OjOHeB1Zu2eCqgHGEtlfvntakg2Jl3VqwyDTiArNDH6GwmkE7qBAP -->
+<!-- hzh0EA2rcdR0OZkrYZHo/QHe+5h/nNbQcAhllicuOvuthmKMn/xDbxblKZnoTB4= -->
+<!-- SIG # End signature block -->

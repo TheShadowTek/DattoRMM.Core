@@ -37,16 +37,14 @@ The DRMMActivityLog class provides the following methods:
 
 Generates a summary string for the activity log entry, including key details about the activity.
 
-**Returns:** `string` - A summary string combining key details of the activity log entry.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLog.md)
-- [DRMMActivityLogSite](./about_DRMMActivityLogSite.md)
-- [DRMMActivityLogUser](./about_DRMMActivityLogUser.md)
 - [Get-RMMActivityLog](../../../commands/ActivityLog/Get-RMMActivityLog.md)
 

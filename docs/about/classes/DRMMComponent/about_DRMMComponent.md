@@ -33,43 +33,42 @@ The DRMMComponent class provides the following methods:
 
 Retrieves a specific variable from the component by name.
 
-**Returns:** `DRMMComponentVariable` - The DRMMComponentVariable object that matches the specified name, or null if not found.
+**Returns:** `DRMMComponentVariable` - Represents a variable associated with a DRMM component, including its name, type, direction, and other metadata.
 
 **Parameters:**
-- `[String]$Name` - The name of the variable to retrieve.
+- `[String]$Name` - TODO: Describe this parameter
 
 ### GetInputVariables()
 
 Retrieves all input variables associated with the component.
 
-**Returns:** `DRMMComponentVariable[]` - An array of DRMMComponentVariable objects that are designated as input variables for the component.
+**Returns:** `DRMMComponentVariable[]` - Represents a variable associated with a DRMM component, including its name, type, direction, and other metadata.
 
 ### GetOutputVariables()
 
 Retrieves all output variables associated with the component.
 
-**Returns:** `DRMMComponentVariable[]` - An array of DRMMComponentVariable objects that are designated as output variables for the component.
+**Returns:** `DRMMComponentVariable[]` - Represents a variable associated with a DRMM component, including its name, type, direction, and other metadata.
 
 ### OpenPortal()
 
 Opens the component's portal URL in the default web browser.
 
-**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
+**Returns:** `void` - Returns void
 
 ### GetSummary()
 
 Generates a summary string for the component, including its name, variable count, credentials requirement, and category.
 
-**Returns:** `string` - A summary string for the component, including its name, variable count, credentials requirement, and category.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMComponent/about_DRMMComponent.md)
 - [Get-RMMComponent](../../../commands/Component/Get-RMMComponent.md)
 - [New-RMMQuickJob](../../../commands/Jobs/New-RMMQuickJob.md)
-- [DRMMComponentVariable](./about_DRMMComponentVariable.md)
 

@@ -14,13 +14,14 @@ The following values are defined for RMMThrottleProfile:
 
 | Value | Description |
 |-------|-------------|
-| `Medium` | A moderate throttling profile that balances request speed with rate limit awareness. |
-| `Aggressive` | Sends requests at a faster rate with minimal delay between calls, prioritising speed over rate limit safety. |
-| `Cautious` | Sends requests at a slower rate with longer delays between calls, prioritising rate limit safety over speed. |
-| `DefaultProfile` | The default throttling profile, providing a balanced rate between speed and rate limit compliance. |
+| `Medium` | TODO: Describe this value |
+| `Aggressive` | TODO: Describe this value |
+| `Cautious` | TODO: Describe this value |
+| `DefaultProfile` | TODO: Describe this value |
+
 ## NOTES
 
-This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
+This enum is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 

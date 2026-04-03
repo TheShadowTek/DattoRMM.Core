@@ -13,13 +13,13 @@ This class inherits from DRMMObject.
 
 The DRMMToken class exposes the following properties:
 
-    Property    Type         Description    
-    ----------- ------------ ---------------
-    AccessToken securestring Add description
-    TokenType   string       Add description
-    Expires     datetime     Add description
-    Scope       string       Add description
-    Jti         string       Add description
+    Property    Type         Description                             
+    ----------- ------------ ----------------------------------------
+    AccessToken securestring The OAuth access token, stored as a s...
+    TokenType   string       The type of the access token (e.g., B...
+    Expires     datetime     The expiration date and time of the a...
+    Scope       string       The OAuth scope granted by the access...
+    Jti         string       The unique JWT identifier for the acc...
 ## METHODS
 
 The DRMMToken class provides the following methods:
@@ -28,17 +28,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    AccessToken [securestring]
-    TokenType [string]
-    Expires [datetime]
-    Scope [string]
-    Jti [string]
-
-METHODS
-    DRMMToken() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMToken/about_DRMMToken.md

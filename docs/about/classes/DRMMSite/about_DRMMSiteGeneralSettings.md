@@ -29,12 +29,13 @@ The DRMMSiteGeneralSettings class provides the following methods:
 
 Generates a summary string for the general settings, including the on-demand status.
 
-**Returns:** `string` - A summary string that includes the on-demand status of the site's general settings.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMSite/about_DRMMSiteGeneralSettings.md)
+

@@ -38,73 +38,43 @@ The DRMMAlert class provides the following methods:
 
 Determines if the alert is currently open (not resolved).
 
-**Returns:** `bool` - True if the alert is currently open (not resolved), otherwise false.
+**Returns:** `bool` - Returns bool
 
 ### IsCritical()
 
 Determines if the alert is of priority level "Critical".
 
-**Returns:** `bool` - True if the alert is of priority level "Critical", otherwise false.
+**Returns:** `bool` - Returns bool
 
 ### IsHigh()
 
 Determines if the alert is of priority level "High".
 
-**Returns:** `bool` - True if the alert is of priority level "High", otherwise false.
+**Returns:** `bool` - Returns bool
 
 ### Resolve()
 
 Resolves the alert.
 
-**Returns:** `void` - An updated instance of the DRMMAlert class with the alert marked as resolved.
+**Returns:** `void` - Returns void
 
 ### GetSummary()
 
 Gets a summary of the alert.
 
-**Returns:** `string` - A summary string combining key properties of the alert for easy display.
+**Returns:** `string` - Returns string
 
 ### OpenPortal()
 
 Opens the alert's portal URL in the default web browser.
 
-**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
+**Returns:** `void` - Returns void
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    AlertUid [guid]
-    Priority [string]
-    Diagnostics [string]
-    Resolved [bool]
-    ResolvedBy [string]
-    ResolvedOn [Nullable[datetime]]
-    Muted [bool]
-    TicketNumber [string]
-    Timestamp [Nullable[datetime]]
-    AlertMonitorInfo [DRMMAlertMonitorInfo]
-    AlertContext [DRMMAlertContext]
-    AlertSourceInfo [DRMMAlertSourceInfo]
-    ResponseActions [DRMMAlertResponseAction[]]
-    AutoresolveMins [Nullable[int]]
-    PortalUrl [string]
-
-METHODS
-    DRMMAlert() : void
-    IsOpen() : bool
-    IsCritical() : bool
-    IsHigh() : bool
-    Resolve() : void
-    GetSummary() : string
-    OpenPortal() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
-    DRMMAlertContext
-    DRMMAlertMonitorInfo
-    DRMMAlertSourceInfo
-    DRMMAlertResponseAction
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlert.md
     Get-RMMAlert
     Resolve-RMMAlert

@@ -11,13 +11,15 @@ The RMMThrottleProfile enum defines the available API request throttling profile
 
 The following values are defined for RMMThrottleProfile:
 
-    Value            Description                             
-    ---------------- ----------------------------------------
-    `Medium`         A moderate throttling profile that ba...
-    `Aggressive`     Sends requests at a faster rate with ...
-    `Cautious`       Sends requests at a slower rate with ...
-    `DefaultProfile` The default throttling profile, provi...## NOTES
+    Value            Description              
+    ---------------- -------------------------
+    `Medium`         TODO: Describe this value
+    `Aggressive`     TODO: Describe this value
+    `Cautious`       TODO: Describe this value
+    `DefaultProfile` TODO: Describe this value
+## NOTES
 
-This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
+This enum is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/Enums/about_RMMThrottleProfile.md

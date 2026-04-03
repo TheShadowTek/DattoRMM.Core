@@ -29,15 +29,14 @@ The DRMMActivityLogUser class provides the following methods:
 
 Generates a summary string for the user, including their first name, last name, and username.
 
-**Returns:** `string` - A summary string combining the user's first name, last name, and username.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogUser.md)
-- [DRMMActivityLog](./about_DRMMActivityLog.md)
 - [Get-RMMActivityLog](../../../commands/ActivityLog/Get-RMMActivityLog.md)
 

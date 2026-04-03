@@ -161,4 +161,4 @@ Get-RMMUser -Force
 - about_DattoRMM.CoreAuthentication
 - about_DattoRMM.CoreConfiguration
 SEE ALSO
-    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DattoRMM.CoreSecurity.md
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/about_DattoRMM.CoreSecurity.md

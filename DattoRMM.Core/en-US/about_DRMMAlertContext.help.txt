@@ -5,7 +5,7 @@ SHORT DESCRIPTION
     Represents the context of an alert in the DRMM system, including its class and specific details based on the type of alert.
 
 LONG DESCRIPTION
-The DRMMAlertContext class models the context information associated with an alert in the DRMM platform. It includes a property for the class of the context, which indicates the type of alert context (e
+The DRMMAlertContext class models the context information associated with an alert in the DRMM platform. It includes a property for the class of the context, which indicates the type of alert context. The class provides a static method to create an instance of the appropriate context subclass based on the '@class' property in the API response. If the '@class' property is not present or does not match known types, it defaults to creating an instance of DRMMAlertContextGeneric. Each specific context type has its own properties and parsing logic to capture relevant details for that type of alert context.
 
 This class inherits from DRMMObject.
 
@@ -24,22 +24,15 @@ The DRMMAlertContext class provides the following methods:
 
 Gets a summary of the alert context.
 
-**Returns:** `string` - A summary string of the alert context.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Class [string]
-
-METHODS
-    DRMMAlertContext() : void
-    GetSummary() : string
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
-    DRMMAlert
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertContext.md
+    DRMMAlertContextAction
     DRMMAlertContextAntivirus
     DRMMAlertContextBackupManagement
     DRMMAlertContextCustomSNMP
@@ -50,7 +43,6 @@ SEE ALSO
     DRMMAlertContextEventLog
     DRMMAlertContextFan
     DRMMAlertContextFileSystem
-    DRMMAlertContextGeneric
     DRMMAlertContextNetworkMonitor
     DRMMAlertContextOnlineOfflineStatus
     DRMMAlertContextPatch

@@ -30,14 +30,13 @@ The DRMMAlertResponseAction class provides the following methods:
 
 Generates a summary string for the alert response action, including action type and description.
 
-**Returns:** `string` - A summary string for the alert response action, including action type and description.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertResponseAction.md)
-- [DRMMAlert](./about_DRMMAlert.md)
 

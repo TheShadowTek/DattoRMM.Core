@@ -20,7 +20,7 @@ The DRMMJobStdData class exposes the following properties:
     ComponentUid  guid       The unique identifier (UID) of the jo...
     ComponentName string     The name of the job component.          
     StdData       string     The standard data output of the job c...
-    StdType       string     Add description                         
+    StdType       string     The type of standard data, indicating...
 ## METHODS
 
 The DRMMJobStdData class provides the following methods:
@@ -29,51 +29,36 @@ The DRMMJobStdData class provides the following methods:
 
 Retrieves the standard data associated with a completed job component, parsed from JSON format.
 
-**Returns:** `pscustomobject` - Describe what this method returns
+**Returns:** `pscustomobject` - Returns pscustomobject
 
 ### GetStdDataAsCsv()
 
 Retrieves the standard data associated with a completed job component, parsed from CSV format.
 
-**Returns:** `pscustomobject[]` - Describe what this method returns
+**Returns:** `pscustomobject[]` - Returns pscustomobject[]
 
 ### GetStdDataAsCsv([String[]]$Headers)
 
 Retrieves the standard data associated with a completed job component, parsed from CSV format.
 
-**Returns:** `pscustomobject[]` - Describe what this method returns
+**Returns:** `pscustomobject[]` - Returns pscustomobject[]
 
 **Parameters:**
-- `[String[]]$Headers` - Describe this parameter
+- `[String[]]$Headers` - TODO: Describe this parameter
 
 ### GetStdDataAsCsv([String[]]$Headers, [Boolean]$RemoveFirstRow)
 
 Retrieves the standard data associated with a completed job component, parsed from CSV format.
 
-**Returns:** `pscustomobject[]` - Describe what this method returns
+**Returns:** `pscustomobject[]` - Returns pscustomobject[]
 
 **Parameters:**
-- `[String[]]$Headers` - Describe this parameter
-- `[Boolean]$RemoveFirstRow` - Describe this parameter
+- `[String[]]$Headers` - TODO: Describe this parameter
+- `[Boolean]$RemoveFirstRow` - TODO: Describe this parameter
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    JobUid [guid]
-    DeviceUid [guid]
-    ComponentUid [guid]
-    ComponentName [string]
-    StdData [string]
-    StdType [string]
-
-METHODS
-    DRMMJobStdData() : void
-    GetStdDataAsJson() : pscustomobject
-    GetStdDataAsCsv() : pscustomobject[]
-    GetStdDataAsCsv([String[]]$Headers) : pscustomobject[]
-    GetStdDataAsCsv([String[]]$Headers, [Boolean]$RemoveFirstRow) : pscustomobject[]
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMJob/about_DRMMJobStdData.md

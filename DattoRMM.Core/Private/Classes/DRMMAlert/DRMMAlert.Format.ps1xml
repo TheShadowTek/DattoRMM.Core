@@ -1,0 +1,373 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMAlert domain Format views -->
+<Configuration>
+  <ViewDefinitions>
+
+    <View>
+      <Name>DRMMAlert.List</Name>
+      <ViewSelectedBy>
+        <TypeName>DRMMAlert</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>AlertUid</Label>
+                <PropertyName>AlertUid</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Priority</Label>
+                <PropertyName>Priority</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Diagnostics</Label>
+                <PropertyName>Diagnostics</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Resolved</Label>
+                <PropertyName>Resolved</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>ResolvedBy</Label>
+                <PropertyName>ResolvedBy</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>ResolvedOn</Label>
+                <PropertyName>ResolvedOn</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Muted</Label>
+                <PropertyName>Muted</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>TicketNumber</Label>
+                <PropertyName>TicketNumber</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Timestamp</Label>
+                <PropertyName>Timestamp</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>AutoresolveMins</Label>
+                <PropertyName>AutoresolveMins</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>PortalUrl</Label>
+                <PropertyName>PortalUrl</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>AlertMonitorInfo</Label>
+                <ScriptBlock>if ($_.AlertMonitorInfo) {$_.AlertMonitorInfo.GetSummary()} else {''}</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>AlertContext</Label>
+                <ScriptBlock>if ($_.AlertContext) {$_.AlertContext.ToString()} else {''}</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>AlertSourceInfo</Label>
+                <ScriptBlock>if ($_.AlertSourceInfo) {$_.AlertSourceInfo.GetSummary()} else {''}</ScriptBlock>
+              </ListItem>
+              <ListItem>
+                <Label>ResponseActions</Label>
+                <ScriptBlock>if ($_.ResponseActions) {($_.ResponseActions | ForEach-Object {$_.GetSummary()}) -join '; '} else {''}</ScriptBlock>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <View>
+      <Name>DRMMAlert.Table</Name>
+      <ViewSelectedBy>
+        <TypeName>DRMMAlert</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>AlertUid</Label>
+            <Width>36</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Priority</Label>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Diagnostics</Label>
+            <Width>40</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Resolved</Label>
+            <Width>8</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Muted</Label>
+            <Width>6</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Timestamp</Label>
+            <Width>20</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>TicketNumber</Label>
+            <Width>15</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Source</Label>
+            <Width>30</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Monitor</Label>
+            <Width>25</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Context</Label>
+            <Width>30</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>ResolvedBy</Label>
+            <Width>20</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>ResolvedOn</Label>
+            <Width>20</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>AutoresolveMins</Label>
+            <Width>15</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>ResponseActions</Label>
+            <Width>30</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>PortalUrl</Label>
+            <Width>60</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>AlertUid</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Priority</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Diagnostics</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Resolved</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Muted</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Timestamp</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>TicketNumber</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>if ($_.AlertSourceInfo) {$_.AlertSourceInfo.GetSummary()} else {''}</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>if ($_.AlertMonitorInfo) {$_.AlertMonitorInfo.GetSummary()} else {''}</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>if ($_.AlertContext) {$_.AlertContext.ToString()} else {''}</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ResolvedBy</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ResolvedOn</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>AutoresolveMins</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <ScriptBlock>if ($_.ResponseActions) {($_.ResponseActions | ForEach-Object {$_.GetSummary()}) -join '; '} else {''}</ScriptBlock>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>PortalUrl</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+    <View>
+      <Name>DRMMAlertMonitorInfo.List</Name>
+      <ViewSelectedBy>
+        <TypeName>DRMMAlertMonitorInfo</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>SendsEmails</Label>
+                <PropertyName>SendsEmails</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>CreatesTicket</Label>
+                <PropertyName>CreatesTicket</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <View>
+      <Name>DRMMAlertSourceInfo.List</Name>
+      <ViewSelectedBy>
+        <TypeName>DRMMAlertSourceInfo</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>DeviceName</Label>
+                <PropertyName>DeviceName</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>DeviceUid</Label>
+                <PropertyName>DeviceUid</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>SiteName</Label>
+                <PropertyName>SiteName</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>SiteUid</Label>
+                <PropertyName>SiteUid</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <View>
+      <Name>DRMMAlertResponseAction.List</Name>
+      <ViewSelectedBy>
+        <TypeName>DRMMAlertResponseAction</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>ActionType</Label>
+                <PropertyName>ActionType</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Description</Label>
+                <PropertyName>Description</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>ActionTime</Label>
+                <PropertyName>ActionTime</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>ActionReference</Label>
+                <PropertyName>ActionReference</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>ActionReferenceInt</Label>
+                <PropertyName>ActionReferenceInt</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <View>
+      <Name>DRMMAlertResponseAction.Table</Name>
+      <ViewSelectedBy>
+        <TypeName>DRMMAlertResponseAction</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>ActionType</Label>
+            <Width>20</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Description</Label>
+            <Width>40</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>ActionTime</Label>
+            <Width>20</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>ActionReference</Label>
+            <Width>30</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>ActionType</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Description</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ActionTime</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>ActionReference</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+  </ViewDefinitions>
+</Configuration>
+<!-- SIG # Begin signature block -->
+<!-- MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor -->
+<!-- BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG -->
+<!-- KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCow8kucPmo8HQG -->
+<!-- XZGN7Z3Idp5sQvjD7RpmWWmAuL26rKCCA04wggNKMIICMqADAgECAhB464iXHfI6 -->
+<!-- gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk -->
+<!-- ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz -->
+<!-- MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl -->
+<!-- czEjMCEGA1UEAwwaRGF0dG9STU0uQ29yZSBDb2RlIFNpZ25pbmcwggEiMA0GCSqG -->
+<!-- SIb3DQEBAQUAA4IBDwAwggEKAoIBAQChn1EpMYQgl1RgWzQj2+wp2mvdfb3UsaBS -->
+<!-- nxEVGoQ0gj96tJ2MHAF7zsITdUjwaflKS1vE6wAlOg5EI1V79tJCMxzM0bFpOdR1 -->
+<!-- L5F2HE/ovIAKNkHxFUF5qWU8vVeAsOViFQ4yhHpzLen0WLF6vhmc9eH23dLQy5fy -->
+<!-- tELZQEc2WbQFa4HMAitP/P9kHAu6CUx5s4woLIOyyR06jkr3l9vk0sxcbCxx7+dF -->
+<!-- RrsSLyPYPH+bUAB8+a0hs+6qCeteBuUfLvGzpMhpzKAsY82WZ3Rd9X38i32dYj+y -->
+<!-- dYx+nx+UEMDLjDJrZgnVa8as4RojqVLcEns5yb/XTjLxDc58VatdAgMBAAGjRjBE -->
+<!-- MA4GA1UdDwEB/wQEAwIHgDATBgNVHSUEDDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQU -->
+<!-- H+B0vf97dYXqdUX1YMcWhFsY6fcwDQYJKoZIhvcNAQELBQADggEBAJmD4EEGNmcD -->
+<!-- 1JtFoRGxuLJaTHxDwBsjqcRQRE1VPZNGaiwIm8oSQdHVjQg0oIyK7SEb02cs6n6Y -->
+<!-- NZbwf7B7WZJ4aKYbcoLug1k1x9SoqwBmfElECeJTKXf6dkRRNmrAodpGCixR4wMH -->
+<!-- KXqwqP5F+5j7bdnQPiIVXuMesxc4tktz362ysph1bqKjDQSCBpwi0glEIH7bv5Ms -->
+<!-- Ey9Gl3fe+vYC5W06d2LYVebEfm9+7766hsOgpdDVgdtnN+e6uwIJjG/6PTG6TMDP -->
+<!-- y+pr5K6LyUVYJYcWWUTZRBqqwBHiLGekPbxrjEVfxUY32Pq4QfLzUH5hhUCAk4HN -->
+<!-- XpF9pOzFLMUxggIDMIIB/wIBATBRMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRkZXMx -->
+<!-- IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE -->
+<!-- kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC -->
+<!-- gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG -->
+<!-- CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIGvZgXrI+08i/OjL36XCZumZQEAU -->
+<!-- FHlN8BeVcJ9zzWWaMA0GCSqGSIb3DQEBAQUABIIBAG76U+GKwSDZHjZ8cqFperew -->
+<!-- KOqOUUgqq59P85i4fX+a7NjVusfZnySdUBwjVoI0PuFoK0nP2SWB2/nDeNjYj3Kh -->
+<!-- IVkPrF1JVZcajG64l9Br63txKJFQauXhfG7/FEnytmJrslNqywES1blcOL2YaG05 -->
+<!-- +hgixE9+l3xcihqTicbcshDQy/2HViyc/a7I8nqDUdCiICrnOyqX86FzP2DXtCC7 -->
+<!-- H7mlNo0qf7/djgsXThYKGazBk9NsqE8GUEaVKHLTLtW+GMZ2aKooBCiAImgTfUtc -->
+<!-- osifb+wGCMNhzoQBV/JigxnR0qD7vUlzPPt+blsWxrAjnU2Tm5GQi6gjWbu8F0s= -->
+<!-- SIG # End signature block -->

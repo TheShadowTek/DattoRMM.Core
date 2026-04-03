@@ -26,16 +26,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Action [string]
-    Detail [string]
-    Name [string]
-
-METHODS
-    DRMMActivityLogDetailsRemoteSessionDetail() : void
-    static FromActivityLogDetail([Hashtable]$DetailItem) : DRMMActivityLogDetailsRemoteSessionDetail
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsRemoteSessionDetail.md

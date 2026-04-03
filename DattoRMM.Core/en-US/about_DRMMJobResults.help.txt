@@ -20,11 +20,11 @@ The DRMMJobResults class exposes the following properties:
     RanOn                 Nullable[datetime]       The date and time when the job was run. 
     JobDeploymentStatus   string                   The deployment status of the job.       
     ComponentResults      DRMMJobComponentResult[] The results of the job components.      
-    TotalNumberOfWarnings int                      Add description                         
-    HasStdOut             bool                     Add description                         
-    HasStdErr             bool                     Add description                         
-    StdOut                DRMMJobStdData[]         Add description                         
-    StdErr                DRMMJobStdData[]         Add description                         
+    TotalNumberOfWarnings int                      The total number of warnings across a...
+    HasStdOut             bool                     Indicates whether any component resul...
+    HasStdErr             bool                     Indicates whether any component resul...
+    StdOut                DRMMJobStdData[]         The standard output data collected fr...
+    StdErr                DRMMJobStdData[]         The standard error data collected fro...
 ## METHODS
 
 The DRMMJobResults class provides the following methods:
@@ -33,22 +33,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    JobUid [guid]
-    DeviceUid [guid]
-    RanOn [Nullable[datetime]]
-    JobDeploymentStatus [string]
-    ComponentResults [DRMMJobComponentResult[]]
-    TotalNumberOfWarnings [int]
-    HasStdOut [bool]
-    HasStdErr [bool]
-    StdOut [DRMMJobStdData[]]
-    StdErr [DRMMJobStdData[]]
-
-METHODS
-    DRMMJobResults() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMJob/about_DRMMJobResults.md

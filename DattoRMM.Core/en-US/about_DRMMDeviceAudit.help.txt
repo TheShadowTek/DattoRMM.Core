@@ -39,28 +39,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    DeviceUid [guid]
-    PortalUrl [string]
-    WebRemoteUrl [string]
-    SystemInfo [DRMMDeviceAuditSystemInfo]
-    Nics [DRMMNetworkInterface[]]
-    Bios [DRMMDeviceAuditBios]
-    BaseBoard [DRMMDeviceAuditBaseBoard]
-    Displays [DRMMDeviceAuditDisplay[]]
-    LogicalDisks [DRMMDeviceAuditLogicalDisk[]]
-    MobileInfo [DRMMDeviceAuditMobileInfo[]]
-    Processors [DRMMDeviceAuditProcessor[]]
-    VideoBoards [DRMMDeviceAuditVideoBoard[]]
-    AttachedDevices [DRMMDeviceAuditAttachedDevice[]]
-    SnmpInfo [DRMMDeviceAuditSnmpInfo]
-    PhysicalMemory [DRMMDeviceAuditPhysicalMemory[]]
-    Software [DRMMDeviceAuditSoftware[]]
-
-METHODS
-    DRMMDeviceAudit() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMDeviceAudit/about_DRMMDeviceAudit.md

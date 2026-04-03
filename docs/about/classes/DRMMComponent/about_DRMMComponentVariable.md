@@ -31,14 +31,13 @@ The DRMMComponentVariable class provides the following methods:
 
 Generates a summary string for the component variable.
 
-**Returns:** `string` - A summary string for the component variable.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMComponent/about_DRMMComponentVariable.md)
-- [DRMMComponent](./about_DRMMComponent.md)
 

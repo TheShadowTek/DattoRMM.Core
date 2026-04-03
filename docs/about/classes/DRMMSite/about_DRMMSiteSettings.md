@@ -29,12 +29,13 @@ The DRMMSiteSettings class provides the following methods:
 
 Generates a summary string for the site's settings, including on-demand status, proxy information, and mail recipient count.
 
-**Returns:** `string` - A summary string that includes the on-demand status, proxy information, and mail recipient count for the site.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMSite/about_DRMMSiteSettings.md)
+

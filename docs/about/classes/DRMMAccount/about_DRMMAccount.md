@@ -31,16 +31,14 @@ The DRMMAccount class provides the following methods:
 
 Generates a summary string for the account, including its name and device status.
 
-**Returns:** `string` - A summary string combining the account name and device status.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAccount/about_DRMMAccount.md)
-- [DRMMAccountDescriptor](./about_DRMMAccountDescriptor.md)
-- [DRMMAccountDevicesStatus](./about_DRMMAccountDevicesStatus.md)
 - [Get-RMMAccount](../../../commands/Account/Get-RMMAccount.md)
 

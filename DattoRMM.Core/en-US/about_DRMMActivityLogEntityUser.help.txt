@@ -27,17 +27,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Entity [string]
-    EventAction [string]
-    EventCategory [string]
-    Uid [guid]
-
-METHODS
-    DRMMActivityLogEntityUser() : void
-    static PopulateEntityProperties([Object]$Details, [Hashtable]$ActivityLogDetail) : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogEntityUser.md

@@ -14,12 +14,13 @@ The following values are defined for RMMSiteExtendedProperty:
 
 | Value | Description |
 |-------|-------------|
-| `Settings` | Include the settings associated with the site. |
-| `Variables` | Include the variables associated with the site. |
-| `Filters` | Include the filters associated with the site. |
+| `Settings` | TODO: Describe this value |
+| `Variables` | TODO: Describe this value |
+| `Filters` | TODO: Describe this value |
+
 ## NOTES
 
-This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
+This enum is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 

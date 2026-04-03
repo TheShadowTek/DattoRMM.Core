@@ -33,22 +33,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Id [long]
-    Uid [guid]
-    SiteId [long]
-    SiteUid [guid]
-    SiteName [string]
-    DeviceType [DRMMDeviceType]
-    Hostname [string]
-    IntIpAddress [string]
-    ExtIpAddress [string]
-    Nics [DRMMNetworkInterface[]]
-
-METHODS
-    DRMMDeviceNetworkInterface() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMDevice/about_DRMMDeviceNetworkInterface.md

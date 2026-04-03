@@ -26,16 +26,15 @@ The DRMMAlertContext class provides the following methods:
 
 Gets a summary of the alert context.
 
-**Returns:** `string` - A summary string of the alert context.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertContext.md)
-- [DRMMAlert](./about_DRMMAlert.md)
 - [DRMMAlertContextAction](./about_DRMMAlertContextAction.md)
 - [DRMMAlertContextAntivirus](./about_DRMMAlertContextAntivirus.md)
 - [DRMMAlertContextBackupManagement](./about_DRMMAlertContextBackupManagement.md)
@@ -47,7 +46,6 @@ This class is defined in the DattoRMM.Core module's Classes.psm1 file.
 - [DRMMAlertContextEventLog](./about_DRMMAlertContextEventLog.md)
 - [DRMMAlertContextFan](./about_DRMMAlertContextFan.md)
 - [DRMMAlertContextFileSystem](./about_DRMMAlertContextFileSystem.md)
-- [DRMMAlertContextGeneric](./about_DRMMAlertContextGeneric.md)
 - [DRMMAlertContextNetworkMonitor](./about_DRMMAlertContextNetworkMonitor.md)
 - [DRMMAlertContextOnlineOfflineStatus](./about_DRMMAlertContextOnlineOfflineStatus.md)
 - [DRMMAlertContextPatch](./about_DRMMAlertContextPatch.md)
