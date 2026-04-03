@@ -2,10 +2,10 @@ TOPIC
     about_DRMMObject
 
 SHORT DESCRIPTION
-    region DRMMObject - Base Class
+    Base class for all DattoRMM
 
 LONG DESCRIPTION
-Add a detailed description of what this class represents and its purpose
+The DRMMObject class is the root base class for all domain model classes in the DattoRMM
 
 
 
@@ -20,7 +20,7 @@ The DRMMObject class provides the following methods:
 
 ### static GetValue([PSObject]$InputObject, [String]$Key)
 
-Add method description explaining what this method does
+Safely retrieves the value of a specified property from a PSCustomObject, returning null if the property does not exist.
 
 **Returns:** `object` - Returns object
 
@@ -30,7 +30,7 @@ Add method description explaining what this method does
 
 ### static ValidateShape([PSObject]$Sample, [String[]]$RequiredProperties)
 
-Add method description explaining what this method does
+Validates that a PSCustomObject contains all specified required properties, used to verify API response structures before processing.
 
 **Returns:** `bool` - Returns bool
 
@@ -40,7 +40,7 @@ Add method description explaining what this method does
 
 ### static ParseApiDate([Object]$Value)
 
-Add method description explaining what this method does
+Parses an API date value that may be an epoch timestamp (milliseconds or seconds) or an ISO 8601 string, normalising it to a UTC DateTime.
 
 **Returns:** `hashtable` - Returns hashtable
 
@@ -49,7 +49,7 @@ Add method description explaining what this method does
 
 ### static MaskString([String]$Value, [Int32]$VisibleChars, [String]$MaskChar)
 
-Add method description explaining what this method does
+Masks a string value by replacing characters beyond a specified visible count with a mask character, used to obscure sensitive data such as API keys or secrets.
 
 **Returns:** `string` - Returns string
 

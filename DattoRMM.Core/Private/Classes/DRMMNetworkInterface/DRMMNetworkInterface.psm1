@@ -5,8 +5,13 @@
     SPDX-License-Identifier: MPL-2.0
 #>
 #region DRMMNetworkInterface class
+<#
+.SYNOPSIS
+    Represents a network interface attached to a device in the Datto RMM platform.
+.DESCRIPTION
+    The DRMMNetworkInterface class models network interface information returned as part of a device audit in the Datto RMM platform. It captures the instance identifier, IPv4 and IPv6 addresses, MAC address, and interface type. Instances are created from API responses via the static FromAPIMethod factory method and are typically used as elements within device audit network interface collections on DRMMDevice and DRMMDeviceAudit objects.
+#>
 class DRMMNetworkInterface : DRMMObject {
-    # region DRMMNetworkInterface class
     [string]$Instance
     # The IPv4 address of the network interface.
     [string]$Ipv4

@@ -179,13 +179,13 @@ A reference index of all classes and enums defined in the DattoRMM.Core module, 
 
 | Class | Synopsis |
 | ----- | -------- |
-| [`DRMMNetworkInterface`](DRMMNetworkInterface/about_DRMMNetworkInterface.md) | region DRMMNetworkInterface class |
+| [`DRMMNetworkInterface`](DRMMNetworkInterface/about_DRMMNetworkInterface.md) | Represents a network interface attached to a device in the Datto RMM platform. |
 
 ## DRMMObject
 
 | Class | Synopsis |
 | ----- | -------- |
-| [`DRMMObject`](DRMMObject/about_DRMMObject.md) | region DRMMObject - Base Class |
+| [`DRMMObject`](DRMMObject/about_DRMMObject.md) | Base class for all DattoRMM |
 
 ## DRMMPrinterAudit
 

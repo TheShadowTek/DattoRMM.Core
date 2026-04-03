@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-region DRMMNetworkInterface class
+Represents a network interface attached to a device in the Datto RMM platform.
 
 ## LONG DESCRIPTION
 
-Add a detailed description of what this class represents and its purpose
+The DRMMNetworkInterface class models network interface information returned as part of a device audit in the Datto RMM platform. It captures the instance identifier, IPv4 and IPv6 addresses, MAC address, and interface type. Instances are created from API responses via the static FromAPIMethod factory method and are typically used as elements within device audit network interface collections on DRMMDevice and DRMMDeviceAudit objects.
 
 This class inherits from [DRMMObject](../DRMMObject/about_DRMMObject.md).
 
@@ -16,7 +16,7 @@ The DRMMNetworkInterface class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Instance   | string | region DRMMNetworkInterface class |
+| Instance   | string | Represents a network interface attached to a device in the Datto RMM platform. |
 | Ipv4       | string | The IPv4 address of the network interface. |
 | Ipv6       | string | The IPv6 address of the network interface. |
 | MacAddress | string | The MAC address of the network interface. |
