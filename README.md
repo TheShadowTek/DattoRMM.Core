@@ -81,7 +81,7 @@ Get-RMMDevice -FilterId 12345 | New-RMMQuickJob -JobName "Emergency Patch" -Comp
 | **Sites** | `Get-RMMSite`, `Get-RMMSiteSettings`, `New-RMMSite`, `Set-RMMSite`, `Set-RMMSiteProxy`, `Remove-RMMSiteProxy` |
 | **Variables** | `Get-RMMVariable`, `New-RMMVariable`, `Set-RMMVariable`, `Remove-RMMVariable` |
 
-Run `Get-Help <CommandName>` for detailed parameter and usage information, or see the [command reference](docs/commands/).
+Run `Get-Help <CommandName>` for detailed parameter and usage information, or see the [command reference](docs/commands/about_CommandIndex.md).
 
 ## Documentation
 
@@ -99,7 +99,7 @@ Run `Get-Help <CommandName>` for detailed parameter and usage information, or se
 | [Beta Overview](docs/beta/about_DattoRMM.CoreBeta.md) | Beta status, expectations, and roadmap to v1 |
 | [Beta Guide](docs/beta/DattoRMM.Core-Beta-Guide.md) | Getting started with the beta, usage tips, and feedback |
 | [Beta Examples](docs/beta/DattoRMM.Core-Beta-Examples.md) | Worked examples: Azure Automation, CSV exports, type extensions, UDF expansion |
-| [Command Reference](docs/commands/) | Per-command documentation with examples |
+| [Command Reference](docs/commands/about_CommandIndex.md) | Per-command documentation with examples |
 | [Class Reference](docs/about/classes/about_ClassIndex.md) | Typed output classes and enums |
 
 About topics are also available in-module:

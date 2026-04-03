@@ -16,7 +16,18 @@ Thank you for your interest in contributing to DattoRMM.Core. This guide explain
 - [Private Helpers](#private-helpers)
 - [Public Functions](#public-functions)
   - [Function Conventions](#function-conventions)
+  - [Comment-Based Help Requirements](#comment-based-help-requirements)
+  - [Parameter Set Design](#parameter-set-design)
+  - [Pipeline Input and Parameter Binding](#pipeline-input-and-parameter-binding)
+  - [API Method Splatting](#api-method-splatting)
+  - [Object Instantiation with FromAPIMethod](#object-instantiation-with-fromapimethod)
+  - [Complete Function Example](#complete-function-example)
+  - [Invoke-RMMApiMethod (Public API Passthrough)](#invoke-rmmapimethod-public-api-passthrough)
   - [Adding a Public Function](#adding-a-public-function)
+  - [Rationale for Orchestration-Only Public Functions](#rationale-for-orchestration-only-public-functions)
+  - [Error Handling Expectations](#error-handling-expectations)
+  - [Parameter Validation](#parameter-validation)
+  - [Common Mistakes to Avoid](#common-mistakes-to-avoid)
 - [Static Data](#static-data)
 - [Formatting and Naming](#formatting-and-naming)
 - [Build Processes](#build-processes)
@@ -241,53 +252,331 @@ Public functions are the module's stable API surface. Each function:
 
 - Lives in `Public/<Domain>/` with the filename matching the function name exactly
 - Uses an **approved PowerShell verb** (e.g. `Get-`, `Set-`, `Move-`, `Connect-`)
-- Includes **full comment-based help** (`.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.EXAMPLE`, `.INPUTS`, `.OUTPUTS`)
+- Includes **full comment-based help** (`.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.EXAMPLE`, `.INPUTS`, `.OUTPUTS`, `.NOTES`, `.LINK`)
 - Uses **PascalCase** parameters with descriptive, intent-based names
 - Returns **typed class objects** (e.g. `[DRMMDevice]`, `[DRMMAlert]`), not raw `PSObject`
 - Supports **pipeline input** where appropriate via `[Parameter(ValueFromPipeline)]`
 
-**Example structure:**
+### Comment-Based Help Requirements
+
+Every public function requires complete comment-based help. The following sections are mandatory:
+
+| Section | Required | Purpose |
+|---------|----------|---------|
+| `.SYNOPSIS` | Yes | One-line summary of the function |
+| `.DESCRIPTION` | Yes | Detailed behaviour description including scopes, pipeline support, and caveats |
+| `.PARAMETER` | Yes (each) | Description of every parameter, including type and intent |
+| `.EXAMPLE` | Yes (2+) | At least two usage examples with descriptions |
+| `.INPUTS` | Yes | Pipeline input types accepted (e.g. `DRMMSite`, `DRMMFilter`) |
+| `.OUTPUTS` | Yes | Return type(s) and key properties |
+| `.NOTES` | Yes | Authentication requirements, related guidance |
+| `.LINK` | Yes | Online documentation URL and related commands/topics |
+
+**Online Documentation Link:**
+
+The first `.LINK` entry must be a hardcoded URL pointing to the function's online documentation. This URL is constructed from the `DocsBaseUrl` in the module manifest and the function's domain path:
 
 ```powershell
-function Get-RMMDevice {
+.LINK
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/<Domain>/<FunctionName>.md
+```
+
+Subsequent `.LINK` entries reference related about_ topics and functions by name:
+
+```powershell
+.LINK
+    about_DRMMDevice
+
+.LINK
+    Get-RMMSite
+```
+
+### Parameter Set Design
+
+Public functions use parameter sets to control API scope and define mutually exclusive parameter combinations. Parameter sets are a core architectural pattern — they determine which API endpoint is called, what parameters are valid, and how pipeline input is routed.
+
+**Naming convention:** Parameter set names follow the pattern `<Scope><Action>`:
+
+| Pattern | Example | Meaning |
+|---------|---------|---------|
+| `Global` / `GlobalAll` | Default account-level scope | Queries the global (account) endpoint |
+| `GlobalById` | Specific resource by ID at account scope | Uses the account endpoint with an ID filter |
+| `GlobalByName` | Specific resource by name at account scope | Uses the account endpoint with a name filter |
+| `SiteAll` | All resources at a site | Queries the site-specific endpoint |
+| `SiteById` | Specific resource by ID at a site | Uses the site endpoint with an ID filter |
+| `ByDeviceObject` | Input from a piped device | Routes via the device's UID |
+| `ByDeviceUid` | Input from an explicit UID | Routes directly to the device endpoint |
+
+**Rules:**
+
+- Every function must declare `DefaultParameterSetName` in `[CmdletBinding()]`
+- Parameter sets control which API path is constructed — they are not just UI convenience
+- A parameter may belong to multiple parameter sets (e.g. `$Id` in both `GlobalById` and `SiteById`)
+- Use `[Parameter(Mandatory)]` to enforce required combinations within each set
+
+### Pipeline Input and Parameter Binding
+
+Pipeline input follows a strict convention:
+
+- **Module class objects** (e.g. `[DRMMSite]`, `[DRMMFilter]`, `[DRMMDevice]`) are accepted via `ValueFromPipeline = $true`
+- **Scalar identifiers** (UIDs, IDs, names) are **not** pipeline-bound — they are positional or named parameters only
+- `ValueFromPipelineByPropertyName` is used sparingly and only where it aligns with a clear property contract
+
+**Why:** Class objects carry rich context (UIDs, scopes, related metadata) that scalar values cannot provide. Piping a `[DRMMSite]` object gives the function access to `$Site.Uid`, `$Site.Name`, and scope information. Piping a bare UID string loses this context.
+
+```powershell
+# Correct: Class object via pipeline
+[Parameter(ValueFromPipeline = $true)]
+[DRMMSite] $Site,
+
+# Correct: Scalar identifier as named parameter (not pipeline)
+[Parameter(Mandatory = $true)]
+[guid] $DeviceUid
+```
+
+### API Method Splatting
+
+Public functions build a parameter splat hashtable for `Invoke-ApiMethod` (the private API orchestrator). This keeps request construction explicit and readable.
+
+**Standard pattern:**
+
+```powershell
+$ApiMethod = @{
+    Path        = "site/$($Site.Uid)/devices"
+    Method      = 'Get'
+    Paginate    = $true
+    PageElement = 'devices'
+}
+
+Invoke-ApiMethod @ApiMethod | ForEach-Object {
+
+    [DRMMDevice]::FromAPIMethod($_, $Script:SessionPlatform)
+
+}
+```
+
+**Conventions:**
+
+- Name the splat `$ApiMethod` (singular, PascalCase)
+- Always include `Path` and `Method`
+- Include `Paginate` and `PageElement` for list endpoints
+- Include `Body` for PUT/POST requests
+- The splat is constructed inside the parameter set switch, not outside — each branch builds its own request
+
+### Object Instantiation with `FromAPIMethod`
+
+API responses are converted to typed domain objects using the static `FromAPIMethod()` pattern defined on each class. Public functions do not construct class instances directly — they delegate to this factory method.
+
+**Common signatures:**
+
+```powershell
+# Simple conversion — response only
+[DRMMAccount]::FromAPIMethod($Response)
+
+# With scope context
+[DRMMFilter]::FromAPIMethod($_, $Scope, $Script:SessionPlatform)
+
+# With parent object context
+[DRMMSiteFilter]::FromAPIMethod($_, $Site, $Script:SessionPlatform)
+
+# With scope and identifier
+[DRMMVariable]::FromAPIMethod($_, 'Site', $SiteUid)
+```
+
+**Rules:**
+
+- Always use `FromAPIMethod()` — never construct class instances with `[ClassName]::new()` followed by manual property assignment
+- The method handles null checking, property mapping, and type coercion
+- Additional context parameters (scope, platform, parent objects) are passed as needed by the class
+
+### Complete Function Example
+
+The following example demonstrates all conventions working together:
+
+```powershell
+function Get-RMMFilter {
     <#
     .SYNOPSIS
-        Retrieves device information from the Datto RMM API.
+        Retrieves filters from the Datto RMM API.
     .DESCRIPTION
-        Detailed description of behaviour, scopes, and pipeline support.
-    .PARAMETER DeviceUid
-        The unique identifier (GUID) of the device.
+        The Get-RMMFilter function retrieves filters at different scopes:
+        global (account-level) or site-level. Filters can be retrieved by
+        ID, name, or all filters at a given scope.
+    .PARAMETER Site
+        A DRMMSite object to retrieve filters for. Accepts pipeline input.
+    .PARAMETER Id
+        Retrieve a specific filter by its numeric ID.
+    .PARAMETER Name
+        Retrieve a filter by its name (exact match).
+    .PARAMETER FilterType
+        Filter the results by type. Valid values: 'All', 'Default', 'Custom'.
     .EXAMPLE
-        Get-RMMDevice -DeviceUid '12345678-1234-1234-1234-123456789abc'
+        Get-RMMFilter
+        Retrieves all filters at the account level.
+    .EXAMPLE
+        Get-RMMSite -Name "Main Office" | Get-RMMFilter
+        Gets all filters for the "Main Office" site.
     .INPUTS
-        DRMMSite, DRMMFilter
+        DRMMSite. You can pipe site objects from Get-RMMSite.
     .OUTPUTS
-        DRMMDevice
+        DRMMFilter. Returns typed filter objects.
+    .NOTES
+        Requires an active connection via Connect-DattoRMM.
+    .LINK
+        https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Filter/Get-RMMFilter.md
+    .LINK
+        about_DRMMFilter
+    .LINK
+        Get-RMMDevice
     #>
 
-    [CmdletBinding(DefaultParameterSetName = 'Default')]
+    [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]
     param (
 
-        [Parameter(ValueFromPipeline)]
+        [Parameter(ParameterSetName = 'SiteAll', Mandatory, ValueFromPipeline)]
+        [Parameter(ParameterSetName = 'SiteById', Mandatory, ValueFromPipeline)]
         [DRMMSite] $Site,
 
-        [guid] $DeviceUid
+        [Parameter(ParameterSetName = 'GlobalById', Mandatory)]
+        [Parameter(ParameterSetName = 'SiteById', Mandatory)]
+        [int] $Id,
+
+        [Parameter(ParameterSetName = 'GlobalByName', Mandatory)]
+        [ValidateSet('All', 'Default', 'Custom')]
+        [string] $FilterType = 'All'
 
     )
 
-    # Orchestration logic — delegates to private helpers
+    process {
+
+        # Parameter set determines API scope
+        if ($PSCmdlet.ParameterSetName -match '^Site') {
+
+            # Build API method splat for site-scoped request
+            $ApiMethod = @{
+                Path        = "site/$($Site.Uid)/filters"
+                Method      = 'Get'
+                Paginate    = $true
+                PageElement = 'filters'
+            }
+
+            Invoke-ApiMethod @ApiMethod | ForEach-Object {
+
+                [DRMMSiteFilter]::FromAPIMethod($_, $Site, $Script:SessionPlatform)
+
+            }
+
+        } else {
+
+            # Global scope — build and invoke
+            $ApiMethod = @{
+                Path        = 'filter/default-filters'
+                Method      = 'Get'
+                Paginate    = $true
+                PageElement = 'filters'
+            }
+
+            Invoke-ApiMethod @ApiMethod | ForEach-Object {
+
+                [DRMMFilter]::FromAPIMethod($_, 'Global', $Script:SessionPlatform)
+
+            }
+        }
+    }
 }
 ```
+
+### Invoke-RMMApiMethod (Public API Passthrough)
+
+`Invoke-RMMApiMethod` is the only public function that exposes the private `Invoke-ApiMethod` helper directly. It provides advanced users with access to arbitrary API endpoints while preserving all module infrastructure (authentication, throttling, retries, pagination).
+
+All other public functions call `Invoke-ApiMethod` internally and return typed objects. `Invoke-RMMApiMethod` returns raw `PSObject` responses — it is the escape hatch, not the standard path.
 
 ### Adding a Public Function
 
 1. Create the function file in the appropriate `Public/<Domain>/` folder.
-2. Write full comment-based help with all parameter documentation and examples.
-3. Use typed class objects for input and output.
-4. Add the function name to the `FunctionsToExport` list in `DattoRMM.Core.psd1`.
-5. Do not add business logic — delegate to private helpers and classes.
+2. Write full comment-based help with all mandatory sections (see [Comment-Based Help Requirements](#comment-based-help-requirements)).
+3. Include the hardcoded online documentation URL as the first `.LINK` entry.
+4. Design parameter sets that map to API scopes (see [Parameter Set Design](#parameter-set-design)).
+5. Accept module class objects via pipeline; use scalar identifiers as named parameters only.
+6. Build an `$ApiMethod` splat and call `Invoke-ApiMethod` — do not call `Invoke-RestMethod` directly.
+7. Use `[ClassName]::FromAPIMethod()` to instantiate return objects.
+8. Add the function name to the `FunctionsToExport` list in `DattoRMM.Core.psd1`.
+9. Do not add business logic — delegate to private helpers and classes.
 
 Public function signatures are part of the module's contract. Do not modify existing signatures without discussion.
+
+### Rationale for Orchestration-Only Public Functions
+
+Public functions must remain thin orchestration layers. This architectural boundary is intentional and preserves:
+
+- **Stable, predictable public API** — Functions do not contain domain logic that might change with internal refactoring
+- **Clear separation of concerns** — Orchestration (public), logic (private), modelling (classes)
+- **Testability** — Business logic in private helpers can be unit tested in isolation
+- **Consistent behaviour** — All domains follow the same pattern
+- **Reduced API risk** — Internal logic changes do not leak out to users
+
+**Consequence:** If you find yourself tempted to add logic to a public function, create a private helper instead. The boundary exists to protect the API surface.
+
+### Error Handling Expectations
+
+To maintain consistent error semantics across the module:
+
+- **Public functions must not suppress or swallow errors** from private helpers — let errors propagate naturally
+- **Errors may be wrapped only to add context** — e.g., catching a low-level API error and re-throwing with the device UID for clarity
+- **API-level errors originate in private helpers**, not public functions — do not add custom error messages in orchestration
+- **Public functions throw terminating errors** for invalid or contradictory input — parameter validation errors should stop execution
+- **Avoid non-terminating errors** unless there is explicit, documented reason (rare edge cases only)
+
+**Example — correct error handling:**
+
+```powershell
+# BAD: Suppressing errors
+Invoke-ApiMethod @ApiMethod -ErrorAction SilentlyContinue
+
+# BAD: Adding custom error logic to public function
+if ($null -eq $result) {
+    Write-Warning "Device not found"
+    return
+}
+
+# GOOD: Let private helpers handle errors, let them propagate
+$result = Invoke-ApiMethod @ApiMethod
+
+# GOOD: Add context for troubleshooting
+try {
+    $result = Get-RMMDevice -DeviceUid $uid
+} catch {
+    throw "Failed to retrieve device $uid : $_"
+}
+```
+
+### Parameter Validation
+
+Use parameter sets and validation attributes to enforce valid invocation paths:
+
+- **Parameter sets** control which API endpoint is called — use them for scope and action filtering
+- **`[ValidateSet(...)]`** for enums and restricted values
+- **`[Mandatory]`** for required parameters within a parameter set
+- **Type declarations** enforce input types at parse time (e.g., `[DRMMSite]`, `[guid]`)
+- **Avoid inline validation logic** — use attributes and parameter sets instead
+
+Validation failures should be caught early by PowerShell before the function body runs.
+
+### Common Mistakes to Avoid
+
+Contributors frequently introduce inconsistencies by:
+
+1. **Adding business logic directly to public functions** — Move it to `Private/` helpers
+2. **Returning raw API responses or untyped PSCustomObject** — Always use `[ClassName]::FromAPIMethod()`
+3. **Forgetting to update `FunctionsToExport`** in `DattoRMM.Core.psd1` — New functions won't be exported
+4. **Using non-approved PowerShell verbs** — Only use standard verbs (Get, Set, New, Remove, Connect, Disconnect, Resolve, etc.)
+5. **Embedding static data in functions** — Create `.psd1` files in `Private/Data/` instead
+6. **Parameters that mirror API structure** — Parameter names should express user intent, not API fields (e.g., `$DeviceId` not `$id`)
+7. **Implementing retry, pagination, or request construction in public functions** — Delegate to `Invoke-ApiMethod`
+8. **Returning different types depending on parameter combinations** — Keep return types consistent (or use formal parameter-set-specific outputs)
+
+These patterns break consistency and violate the module's architectural expectations.
 
 ---
 
@@ -356,7 +645,7 @@ The documentation pipeline generates markdown reference docs and PowerShell help
 | Script | Purpose |
 |--------|---------|
 | `Build-ClassDocs.ps1` | Scans all per-domain `.psm1` files and generates markdown class reference documentation |
-| `Build-FunctionDocs.ps1` | Extracts public function help via PlatyPS and generates command documentation |
+| `Build-FunctionDocs.ps1` | Extracts public function help via PlatyPS, generates command documentation, and builds the command index |
 | `Build-AllDocs.ps1` | Orchestrates full documentation build (classes, functions, help text conversion) |
 | `Get-ClassDocStatus.ps1` | Reports documentation coverage — must show **0 gaps** before merge |
 
