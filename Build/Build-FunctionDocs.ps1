@@ -9,6 +9,7 @@
     - Post-processing output to clean up formatting issues
     - Preserving folder structure from Public/ in docs/commands/
     - Only regenerating files when source has been modified (unless -Force)
+    - Generating a about_CommandIndex.md with all functions grouped by domain
 
     Post-processing includes:
     - Removing 'PS >' and '>>' prompts from examples
@@ -363,6 +364,62 @@ try {
             $Skipped++
         }
     }
+    
+    # ============================================================================
+    # GENERATE COMMAND INDEX
+    # ============================================================================
+    
+    Write-Host "`n=== Generating Command Index ===" -ForegroundColor Cyan
+    
+    $IndexPath = Join-Path $OutputFolder 'about_CommandIndex.md'
+    $IndexContent = [System.Text.StringBuilder]::new()
+    
+    [void]$IndexContent.AppendLine("# DattoRMM.Core Command Reference")
+    [void]$IndexContent.AppendLine()
+    [void]$IndexContent.AppendLine("A reference index of all public functions in the DattoRMM.Core module, organised by domain.")
+    [void]$IndexContent.AppendLine()
+    
+    # Group functions by domain folder
+    $DomainGroups = $PublicFunctions | Group-Object {
+        $_.DirectoryName.Replace((Join-Path $ModuleRoot 'DattoRMM.Core\Public'), '').TrimStart('\', '/').Split('\')[0].Split('/')[0]
+    } | Sort-Object Name
+    
+    # Table of Contents
+    [void]$IndexContent.AppendLine("## Contents")
+    [void]$IndexContent.AppendLine()
+    foreach ($Group in $DomainGroups) {
+        $Anchor = $Group.Name.ToLower()
+        [void]$IndexContent.AppendLine("- [$($Group.Name)](#$Anchor)")
+    }
+    [void]$IndexContent.AppendLine()
+    
+    # Per-domain tables
+    foreach ($Group in $DomainGroups) {
+        [void]$IndexContent.AppendLine("## $($Group.Name)")
+        [void]$IndexContent.AppendLine()
+        [void]$IndexContent.AppendLine("| Command | Synopsis |")
+        [void]$IndexContent.AppendLine("| ------- | -------- |")
+        
+        foreach ($FuncFile in ($Group.Group | Sort-Object BaseName)) {
+            $FuncName = $FuncFile.BaseName
+            $RelFolder = $FuncFile.DirectoryName.Replace((Join-Path $ModuleRoot 'DattoRMM.Core\Public'), '').TrimStart('\', '/') -replace '\\', '/'
+            $DocLink = if ($RelFolder) { "$RelFolder/$FuncName.md" } else { "$FuncName.md" }
+            
+            # Extract synopsis from function file
+            $Synopsis = ''
+            $FuncContent = Get-Content $FuncFile.FullName -Raw
+            if ($FuncContent -match '\.SYNOPSIS\s*\r?\n\s*(.+?)(?:\r?\n\s*\r?\n|\r?\n\s*\.)') {
+                $Synopsis = $Matches[1].Trim()
+            }
+            
+            [void]$IndexContent.AppendLine("| [``$FuncName``]($DocLink) | $Synopsis |")
+        }
+        
+        [void]$IndexContent.AppendLine()
+    }
+    
+    Set-Content -Path $IndexPath -Value $IndexContent.ToString().TrimEnd() -NoNewline
+    Write-Host "  ✓ Generated about_CommandIndex.md ($($PublicFunctions.Count) functions across $($DomainGroups.Count) domains)" -ForegroundColor Green
     
     # Summary
     Write-Host "`n=== Summary ===" -ForegroundColor Cyan
