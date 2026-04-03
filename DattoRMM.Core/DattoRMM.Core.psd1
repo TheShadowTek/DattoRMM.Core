@@ -1,4 +1,4 @@
-<#
+﻿<#
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
@@ -56,10 +56,44 @@ PowerShellVersion = '7.4'
 # ScriptsToProcess = @()
 
 # Type files (.ps1xml) to be loaded when importing this module
-TypesToProcess = @('DattoRMM.Core.Types.ps1xml')
+TypesToProcess = @(
+    'Private\\Classes\\DRMMAccount\\DRMMAccount.Types.ps1xml'
+    'Private\\Classes\\DRMMActivityLog\\DRMMActivityLog.Types.ps1xml'
+    'Private\\Classes\\DRMMAlert\\DRMMAlert.Types.ps1xml'
+    'Private\\Classes\\DRMMComponent\\DRMMComponent.Types.ps1xml'
+    'Private\\Classes\\DRMMNetworkInterface\\DRMMNetworkInterface.Types.ps1xml'
+    'Private\\Classes\\DRMMDeviceAudit\\DRMMDeviceAudit.Types.ps1xml'
+    'Private\\Classes\\DRMMEsxiHostAudit\\DRMMEsxiHostAudit.Types.ps1xml'
+    'Private\\Classes\\DRMMPrinterAudit\\DRMMPrinterAudit.Types.ps1xml'
+    'Private\\Classes\\DRMMJob\\DRMMJob.Types.ps1xml'
+    'Private\\Classes\\DRMMDevice\\DRMMDevice.Types.ps1xml'
+    'Private\\Classes\\DRMMVariable\\DRMMVariable.Types.ps1xml'
+    'Private\\Classes\\DRMMFilter\\DRMMFilter.Types.ps1xml'
+    'Private\\Classes\\DRMMSite\\DRMMSite.Types.ps1xml'
+    'Private\\Classes\\DRMMNetMapping\\DRMMNetMapping.Types.ps1xml'
+    'Private\\Classes\\DRMMStatus\\DRMMStatus.Types.ps1xml'
+    'Private\\Classes\\DRMMUser\\DRMMUser.Types.ps1xml'
+)
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = @('DattoRMM.Core.Format.ps1xml')
+FormatsToProcess = @(
+    'Private\\Classes\\DRMMAccount\\DRMMAccount.Format.ps1xml'
+    'Private\\Classes\\DRMMActivityLog\\DRMMActivityLog.Format.ps1xml'
+    'Private\\Classes\\DRMMAlert\\DRMMAlert.Format.ps1xml'
+    'Private\\Classes\\DRMMComponent\\DRMMComponent.Format.ps1xml'
+    'Private\\Classes\\DRMMNetworkInterface\\DRMMNetworkInterface.Format.ps1xml'
+    'Private\\Classes\\DRMMDeviceAudit\\DRMMDeviceAudit.Format.ps1xml'
+    'Private\\Classes\\DRMMEsxiHostAudit\\DRMMEsxiHostAudit.Format.ps1xml'
+    'Private\\Classes\\DRMMPrinterAudit\\DRMMPrinterAudit.Format.ps1xml'
+    'Private\\Classes\\DRMMJob\\DRMMJob.Format.ps1xml'
+    'Private\\Classes\\DRMMDevice\\DRMMDevice.Format.ps1xml'
+    'Private\\Classes\\DRMMVariable\\DRMMVariable.Format.ps1xml'
+    'Private\\Classes\\DRMMFilter\\DRMMFilter.Format.ps1xml'
+    'Private\\Classes\\DRMMSite\\DRMMSite.Format.ps1xml'
+    'Private\\Classes\\DRMMNetMapping\\DRMMNetMapping.Format.ps1xml'
+    'Private\\Classes\\DRMMStatus\\DRMMStatus.Format.ps1xml'
+    'Private\\Classes\\DRMMUser\\DRMMUser.Format.ps1xml'
+)
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 #NestedModules = @('Private\Classes\DRMMObject.psm1')

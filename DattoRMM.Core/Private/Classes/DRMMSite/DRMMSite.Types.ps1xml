@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMSite domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMSite</Name>
+    <Members>
+      <AliasProperty>
+        <Name>SiteUid</Name>
+        <ReferencedMemberName>Uid</ReferencedMemberName>
+      </AliasProperty>
+      <AliasProperty>
+        <Name>SiteId</Name>
+        <ReferencedMemberName>Id</ReferencedMemberName>
+      </AliasProperty>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeletedDevicesSite</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $SiteName = if ($this.Name) {$this.Name} else {'Deleted Site'}
+            "$SiteName (Deleted)"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMSiteSettings</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMSiteGeneralSettings</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMSiteProxySettings</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMSiteMailRecipient</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $RecipName = if ($this.Name) {$this.Name} else {'Recipient'}
+            $Email = if ($this.Email) {" &lt;$($this.Email)&gt;"} else {''}
+            "$RecipName$Email"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDevicesStatus</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>

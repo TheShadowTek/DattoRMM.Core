@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMNetMapping domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMNetMapping</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Name) {$this.Name} else {"NetMapping $($this.Uid)"}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMVariable domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMVariable</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>

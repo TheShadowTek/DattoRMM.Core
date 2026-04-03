@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMEsxiHostAudit domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMEsxiHostAudit</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Sys = if ($this.SystemInfo) {"$($this.SystemInfo.Manufacturer) $($this.SystemInfo.Model)"} else {''}
+            if ($Sys) {"$($this.DeviceUid) - $Sys"} else {"$($this.DeviceUid)"}
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiSystemInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Manufacturer) $($this.Model)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiGuest</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.GuestName) {$this.GuestName} else {'Guest'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiDatastore</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Name = if ($this.DatastoreName) {$this.DatastoreName} else {'Datastore'}
+            $Status = if ($this.Status) {" [$($this.Status)]"} else {''}
+            "$Name$Status"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiNic</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $NicName = if ($this.Name) {$this.Name} else {'NIC'}
+            $Ip = if ($this.Ipv4) {" ($($this.Ipv4))"} else {''}
+            "$NicName$Ip"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiPhysicalMemory</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Mod = if ($this.Module) {$this.Module} else {'Memory'}
+            $SizeGb = if ($this.Size -and $this.Size -gt 0) {" $([math]::Round($this.Size / 1GB, 1))GB"} else {''}
+            "$Mod$SizeGb"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMEsxiProcessor</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $ProcName = if ($this.Name) {$this.Name} else {'Processor'}
+            $Cores = if ($this.NumberOfCores) {" ($($this.NumberOfCores) cores)"} else {''}
+            "$ProcName$Cores"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>

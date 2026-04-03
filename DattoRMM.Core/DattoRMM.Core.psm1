@@ -1,4 +1,4 @@
-<#
+﻿<#
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
@@ -6,7 +6,28 @@
 # Main module file for Datto RMM API v2 PowerShell module
 
 # Load class definitions
-using module '.\Private\Classes\Classes.psm1'
+# Load class definitions - order is determined by cross-domain inheritance
+using module '.\Private\Classes\Enums\Enums.psm1'
+using module '.\Private\Classes\DRMMObject\DRMMObject.psm1'
+using module '.\Private\Classes\DRMMToken\DRMMToken.psm1'
+using module '.\Private\Classes\DRMMAPIKeySecret\DRMMAPIKeySecret.psm1'
+using module '.\Private\Classes\DRMMAccount\DRMMAccount.psm1'
+using module '.\Private\Classes\DRMMActivityLog\DRMMActivityLog.psm1'
+using module '.\Private\Classes\DRMMAlert\DRMMAlert.psm1'
+using module '.\Private\Classes\DRMMComponent\DRMMComponent.psm1'
+using module '.\Private\Classes\DRMMNetworkInterface\DRMMNetworkInterface.psm1'
+using module '.\Private\Classes\DRMMDeviceAudit\DRMMDeviceAudit.psm1'
+using module '.\Private\Classes\DRMMEsxiHostAudit\DRMMEsxiHostAudit.psm1'
+using module '.\Private\Classes\DRMMPrinterAudit\DRMMPrinterAudit.psm1'
+using module '.\Private\Classes\DRMMJob\DRMMJob.psm1'
+using module '.\Private\Classes\DRMMDevice\DRMMDevice.psm1'
+using module '.\Private\Classes\DRMMVariable\DRMMVariable.psm1'
+using module '.\Private\Classes\DRMMFilter\DRMMFilter.psm1'
+using module '.\Private\Classes\DRMMSite\DRMMSite.psm1'
+using module '.\Private\Classes\DRMMNetMapping\DRMMNetMapping.psm1'
+using module '.\Private\Classes\DRMMStatus\DRMMStatus.psm1'
+using module '.\Private\Classes\DRMMThrottleStatus\DRMMThrottleStatus.psm1'
+using module '.\Private\Classes\DRMMUser\DRMMUser.psm1'
 
 # Load throttle profile defaults from data file
 $Script:ThrottleProfileDefaults = Import-PowerShellDataFile -Path "$PSScriptRoot\Private\Data\ThrottleProfiles.psd1"

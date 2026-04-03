@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMNetworkInterface domain Format views -->
+<Configuration>
+  <ViewDefinitions>
+
+    <View>
+      <Name>DRMMNetworkInterface.List</Name>
+      <ViewSelectedBy>
+        <TypeName>DRMMNetworkInterface</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem>
+                <Label>Instance</Label>
+                <PropertyName>Instance</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Type</Label>
+                <PropertyName>Type</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Ipv4</Label>
+                <PropertyName>Ipv4</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Ipv6</Label>
+                <PropertyName>Ipv6</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>MacAddress</Label>
+                <PropertyName>MacAddress</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <View>
+      <Name>DRMMNetworkInterface.Table</Name>
+      <ViewSelectedBy>
+        <TypeName>DRMMNetworkInterface</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>Instance</Label>
+            <Width>30</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Type</Label>
+            <Width>12</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Ipv4</Label>
+            <Width>15</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Ipv6</Label>
+            <Width>30</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>MacAddress</Label>
+            <Width>18</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Instance</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Type</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Ipv4</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Ipv6</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>MacAddress</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+  </ViewDefinitions>
+</Configuration>

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMJob domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMJob</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMJobComponent</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Name) {$this.Name} else {"$($this.Uid)"}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMJobComponentResult</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.ComponentName) - $($this.ComponentStatus)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMJobComponentVariable</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Name) = $($this.Value)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMJobResults</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.JobUid) [$($this.JobDeploymentStatus)] Warnings:$($this.TotalNumberOfWarnings)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMJobStdData</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.ComponentName) [$($this.StdType)]"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>

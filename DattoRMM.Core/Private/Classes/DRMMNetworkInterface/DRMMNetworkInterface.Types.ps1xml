@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMNetworkInterface domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMNetworkInterface</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Inst = if ($this.Instance) {$this.Instance} else {'NIC'}
+            $Ip = if ($this.Ipv4) {" ($($this.Ipv4))"} else {''}
+            "$Inst$Ip"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMPrinterAudit domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMPrinterAudit</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Info = if ($this.SystemInfo) {"$($this.SystemInfo.Manufacturer) $($this.SystemInfo.Model)"} else {$null}
+            if ($Info) {"$($this.DeviceUid) - $Info"} else {"$($this.DeviceUid)"}
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMPrinter</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($null -ne $this.PrintedPageCount) {"Pages: $($this.PrintedPageCount)"} else {'Printer'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMPrinterSystemInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Manufacturer) $($this.Model)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMPrinterSnmpInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.SnmpName) {$this.SnmpName} elseif ($this.ObjectId) {$this.ObjectId} else {'SNMP'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMPrinterMarkerSupply</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Desc = if ($this.Description) {$this.Description} else {'Supply'}
+            $Level = if ($this.SuppliesLevel) {" [$($this.SuppliesLevel)]"} else {''}
+            "$Desc$Level"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>

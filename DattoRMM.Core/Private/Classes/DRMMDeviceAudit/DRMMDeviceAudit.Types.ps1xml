@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMDeviceAudit domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMDeviceAudit</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Sys = if ($this.SystemInfo) {"$($this.SystemInfo.Manufacturer) $($this.SystemInfo.Model)"} else {''}
+            if ($Sys) {"$($this.DeviceUid) - $Sys"} else {"$($this.DeviceUid)"}
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditSystemInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Manufacturer) $($this.Model)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditBios</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Manufacturer) $($this.Name)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditBaseBoard</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Manufacturer) $($this.Product)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditDisplay</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Instance) ($($this.ScreenWidth)x$($this.ScreenHeight))"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditLogicalDisk</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $FreeGb = [math]::Round($this.Freespace / 1GB, 1)
+            $SizeGb = [math]::Round($this.Size / 1GB, 1)
+            "$($this.DiskIdentifier) ${FreeGb}GB free / ${SizeGb}GB"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditMobileInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Number) {$this.Number} elseif ($this.Imei) {$this.Imei} else {'Mobile'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditPhysicalMemory</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $CapGb = if ($this.Capacity -gt 0) {[math]::Round($this.Capacity / 1GB, 1)} else {0}
+            "$($this.Manufacturer) $($this.BankLabel) ${CapGb}GB"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditProcessor</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Name) {$this.Name} else {'Processor'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditSnmpInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Name) {$this.Name} elseif ($this.Description) {$this.Description} else {'SNMP'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditSoftware</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Name) $($this.Version)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditVideoBoard</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.DisplayAdapter) {$this.DisplayAdapter} else {'VideoBoard'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAuditAttachedDevice</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>if ($this.Description) {$this.Description} elseif ($this.Instance) {$this.Instance} else {'AttachedDevice'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMAccount domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMAccount</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAccountDescriptor</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Parts = @()
+            if ($this.BillingEmail) {$Parts += $this.BillingEmail}
+            if ($this.DeviceLimit) {$Parts += "Limit: $($this.DeviceLimit)"}
+            if ($this.TimeZone) {$Parts += $this.TimeZone}
+            if ($Parts.Count -gt 0) {$Parts -join ' | '} else {'DRMMAccountDescriptor'}
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMAccountDevicesStatus</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>

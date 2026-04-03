@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- DRMMDevice domain Type extensions -->
+<Types>
+
+  <Type>
+    <Name>DRMMDevice</Name>
+    <Members>
+      <AliasProperty>
+        <Name>DeviceUid</Name>
+        <ReferencedMemberName>Uid</ReferencedMemberName>
+      </AliasProperty>
+      <AliasProperty>
+        <Name>DeviceId</Name>
+        <ReferencedMemberName>Id</ReferencedMemberName>
+      </AliasProperty>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceAntivirusInfo</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>$this.GetSummary()</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceNetworkInterface</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Hostname) ($($this.IntIpAddress))"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDevicePatchManagement</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Status = if ($this.PatchStatus) {$this.PatchStatus} else {'Unknown'}
+            $Pending = if ($null -ne $this.PatchesApprovedPending) {" Pending:$($this.PatchesApprovedPending)"} else {''}
+            $Installed = if ($null -ne $this.PatchesInstalled) {" Installed:$($this.PatchesInstalled)"} else {''}
+            "$Status$Pending$Installed"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceType</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>"$($this.Category)/$($this.Type)"</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+  <Type>
+    <Name>DRMMDeviceUdfs</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>ToString</Name>
+        <Script>
+            $Set = 0
+            for ($i = 1; $i -le 30; $i++) {
+              $Val = $this."Udf$i"
+              if (-not [string]::IsNullOrWhiteSpace($Val)) {$Set++}
+            }
+            "$Set of 30 UDFs set"
+          </Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+
+</Types>
