@@ -200,6 +200,11 @@ $publicFunctions = Get-ChildItem -Path $ModulePath -Include '*.ps1' -Recurse |
 	Where-Object { $_.FullName -like "*Public*" }
 $filesToSign += $publicFunctions.FullName
 
+# All .psd1 files in Private/Data (static data files)
+$dataFiles = Get-ChildItem -Path $ModulePath -Include '*.psd1' -Recurse |
+	Where-Object { $_.FullName -like "*Private\Data*" -or $_.FullName -like "*Private/Data*" }
+$filesToSign += $dataFiles.FullName
+
 # All .ps1xml files (format and type definitions)
 $xmlFiles = Get-ChildItem -Path $ModulePath -Include '*.ps1xml' -Recurse
 $filesToSign += $xmlFiles.FullName
