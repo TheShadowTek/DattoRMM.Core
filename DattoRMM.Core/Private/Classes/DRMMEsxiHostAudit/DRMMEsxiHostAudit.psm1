@@ -1,9 +1,8 @@
-﻿using module '..\DRMMObject\DRMMObject.psm1'
-
-<#
+﻿<#
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
+using module '..\DRMMObject\DRMMObject.psm1'
 <#
 .SYNOPSIS
     Represents the audit information of an ESXi host, including system info, guests, processors, network interfaces, physical memory, and datastores.

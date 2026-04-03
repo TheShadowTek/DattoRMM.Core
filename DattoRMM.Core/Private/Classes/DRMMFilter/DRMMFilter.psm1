@@ -1,11 +1,10 @@
-﻿using module '..\DRMMAlert\DRMMAlert.psm1'
-using module '..\DRMMDevice\DRMMDevice.psm1'
-using module '..\DRMMObject\DRMMObject.psm1'
-
-<#
+﻿<#
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
+using module '..\DRMMAlert\DRMMAlert.psm1'
+using module '..\DRMMDevice\DRMMDevice.psm1'
+using module '..\DRMMObject\DRMMObject.psm1'
 <#
 .SYNOPSIS
     Represents a filter in the DRMM system, including its name, description, type, and scope.

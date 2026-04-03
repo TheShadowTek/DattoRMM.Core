@@ -1,13 +1,12 @@
-﻿using module '..\DRMMAlert\DRMMAlert.psm1'
+﻿<#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
+using module '..\DRMMAlert\DRMMAlert.psm1'
 using module '..\DRMMDevice\DRMMDevice.psm1'
 using module '..\DRMMFilter\DRMMFilter.psm1'
 using module '..\DRMMObject\DRMMObject.psm1'
 using module '..\DRMMVariable\DRMMVariable.psm1'
-
-<#
-    Copyright (c) 2025-2026 Robert Faddes
-    SPDX-License-Identifier: MPL-2.0
-#>
 <#
 .SYNOPSIS
     Represents a site in the DRMM system, including its properties, settings, and associated devices and variables.

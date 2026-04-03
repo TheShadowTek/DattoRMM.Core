@@ -1,10 +1,9 @@
-﻿using module '..\DRMMNetworkInterface\DRMMNetworkInterface.psm1'
-using module '..\DRMMObject\DRMMObject.psm1'
-
-<#
+﻿<#
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
+using module '..\DRMMNetworkInterface\DRMMNetworkInterface.psm1'
+using module '..\DRMMObject\DRMMObject.psm1'
 <#
 .SYNOPSIS
     Represents a comprehensive audit of a device, including hardware, software, and network information.

@@ -1,9 +1,8 @@
-﻿using module '..\DRMMObject\DRMMObject.psm1'
-
-<#
+﻿<#
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
+using module '..\DRMMObject\DRMMObject.psm1'
 <#
 .SYNOPSIS
     Represents a component in the DRMM system, including its properties and associated variables.
