@@ -217,72 +217,6 @@ try {
         Write-Host "Converting docs/about/ markdown to en-US/*.help.txt..." -ForegroundColor Yellow
         Write-Host "Note: docs/commands/ is NOT converted (PowerShell handles function help automatically)" -ForegroundColor Gray
         
-        # Parse class info for injection into help text
-        Write-Host "`nLoading class definitions for help text injection..." -ForegroundColor Yellow
-        
-        $ClassesFile = Join-Path $ModuleRoot 'DattoRMM.Core\Private\Classes\Classes.psm1'
-        $ClassDefs = @{}
-        
-        if (Test-Path $ClassesFile) {
-            $ClassesContent = Get-Content $ClassesFile -Raw
-            $AST = [System.Management.Automation.Language.Parser]::ParseInput(
-                $ClassesContent, 
-                [ref]$null, 
-                [ref]$null
-            )
-            
-            $ClassDefinitions = $AST.FindAll({
-                param($node)
-                $node -is [System.Management.Automation.Language.TypeDefinitionAst] -and
-                $node.IsClass
-            }, $true)
-            
-            foreach ($ClassDef in $ClassDefinitions) {
-                $ClassName = $ClassDef.Name
-                
-                # Properties
-                $Properties = $ClassDef.Members | Where-Object { 
-                    $_ -is [System.Management.Automation.Language.PropertyMemberAst] 
-                }
-                $PropStrings = foreach ($Prop in $Properties) {
-                    "    $($Prop.Name) [$($Prop.PropertyType.TypeName.FullName)]"
-                }
-                
-                # Methods (excluding static FromAPIMethod)
-                $Methods = $ClassDef.Members | Where-Object { 
-                    $_ -is [System.Management.Automation.Language.FunctionMemberAst] 
-                }
-                $MethodStrings = foreach ($Method in $Methods) {
-                    if ($Method.IsStatic -and $Method.Name -eq 'FromAPIMethod') {
-                        continue
-                    }
-                    $Params = $Method.Parameters | ForEach-Object {
-                        $ParamType = if ($_.StaticType) { $_.StaticType.Name } else { 'object' }
-                        $ParamName = $_.Name.VariablePath.UserPath
-                        "[$ParamType]`$$ParamName"
-                    }
-                    $RetType = if ($Method.ReturnType) { 
-                        $Method.ReturnType.TypeName.FullName 
-                    } else { 
-                        'void' 
-                    }
-                    $Signature = if ($Method.IsStatic) {
-                        "static $($Method.Name)($($Params -join ', '))"
-                    } else {
-                        "$($Method.Name)($($Params -join ', '))"
-                    }
-                    "    $Signature : $RetType"
-                }
-                
-                $ClassDefs[$ClassName] = @{
-                    Properties = $PropStrings
-                    Methods = $MethodStrings
-                }
-            }
-            
-            Write-Host "  Loaded $($ClassDefs.Count) class definitions" -ForegroundColor Gray
-        }
-        
         # Get all about_*.md files from docs/about/ and docs/about/classes/ ONLY
         Write-Host "`nScanning for about_*.md files..." -ForegroundColor Yellow
         $AboutFiles = @(
@@ -304,7 +238,6 @@ try {
         foreach ($MdFile in $AboutFiles) {
             $AboutName = $MdFile.BaseName
             $ClassName = $AboutName -replace '^about_', ''
-            $IsClass = $ClassDefs.ContainsKey($ClassName)
             
             $HelpFile = Join-Path $OutputFolder "$AboutName.help.txt"
             
@@ -322,7 +255,6 @@ try {
                 Write-Host "`n  Converting: $AboutName" -ForegroundColor Green
                 Write-Host "    Source: $($MdFile.FullName.Replace($ModuleRoot + '\', ''))" -ForegroundColor Gray
                 Write-Host "    Output: $($HelpFile.Replace($ModuleRoot + '\', ''))" -ForegroundColor Gray
-                Write-Host "    Type: $(if ($IsClass) { 'Class' } else { 'Topic' })" -ForegroundColor Gray
                 
                 try {
                     $Markdown = Get-Content $MdFile.FullName -Raw
@@ -370,8 +302,12 @@ try {
                                 $LongDesc += $Line + "`n"
                             }
                         } elseif ($InSeeAlso) {
-                            # Extract link text (strip markdown)
-                            if ($Line -match '^\s*-\s*\[([^\]]+)\]') {
+                            # HTTP links: emit label then URL on separate lines so Get-Help can show both
+                            if ($Line -match '^\s*-\s*\[([^\]]+)\]\((https?://[^\)]+)\)') {
+                                $SeeAlso += $matches[1].Trim()
+                                $SeeAlso += $matches[2].Trim()
+                            } elseif ($Line -match '^\s*-\s*\[([^\]]+)\]\([^\)]*\)') {
+                                # Relative link — emit label only (URL not useful in shell)
                                 $SeeAlso += $matches[1].Trim()
                             } elseif ($Line -match '^\s*-\s*(.+)') {
                                 $SeeAlso += $matches[1].Trim()
@@ -390,28 +326,7 @@ try {
                         param($match)
                         Format-MarkdownTable -TableText $match.Value
                     })
-                    
-                    # If class, inject class structure
-                    if ($IsClass -and $ClassDefs.ContainsKey($ClassName)) {
-                        Write-Host "    Injecting class structure..." -ForegroundColor Gray
-                        $ClassInfo = $ClassDefs[$ClassName]
-                        
-                        $LongDesc += "`n`n"
-                        $LongDesc += "PROPERTIES`n"
-                        if ($ClassInfo.Properties.Count -gt 0) {
-                            $LongDesc += ($ClassInfo.Properties -join "`n") + "`n"
-                        } else {
-                            $LongDesc += "    No public properties.`n"
-                        }
-                        
-                        $LongDesc += "`nMETHODS`n"
-                        if ($ClassInfo.Methods.Count -gt 0) {
-                            $LongDesc += ($ClassInfo.Methods -join "`n") + "`n"
-                        } else {
-                            $LongDesc += "    No public methods.`n"
-                        }
-                    }
-                    
+
                     # Build help text format
                     $HelpText = @"
 TOPIC

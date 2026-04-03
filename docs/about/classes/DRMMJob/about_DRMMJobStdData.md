@@ -31,37 +31,38 @@ The DRMMJobStdData class provides the following methods:
 
 Retrieves the standard data associated with a completed job component, parsed from JSON format.
 
-**Returns:** `pscustomobject` - A PSCustomObject representing the parsed JSON data, or null if the standard type is not StdOut or the data is empty.
+**Returns:** `pscustomobject` - Returns pscustomobject
 
 ### GetStdDataAsCsv()
 
 Retrieves the standard data associated with a completed job component, parsed from CSV format.
 
-**Returns:** `pscustomobject[]` - An array of PSCustomObject instances representing the parsed CSV data, or an empty array if the standard type is not StdOut or the data is empty.
+**Returns:** `pscustomobject[]` - Returns pscustomobject[]
 
 ### GetStdDataAsCsv([String[]]$Headers)
 
 Retrieves the standard data associated with a completed job component, parsed from CSV format.
 
-**Returns:** `pscustomobject[]` - An array of PSCustomObject instances representing the parsed CSV data, or an empty array if the standard type is not StdOut or the data is empty.
+**Returns:** `pscustomobject[]` - Returns pscustomobject[]
 
 **Parameters:**
-- `[String[]]$Headers` - Describe this parameter
+- `[String[]]$Headers` - TODO: Describe this parameter
 
 ### GetStdDataAsCsv([String[]]$Headers, [Boolean]$RemoveFirstRow)
 
 Retrieves the standard data associated with a completed job component, parsed from CSV format.
 
-**Returns:** `pscustomobject[]` - An array of PSCustomObject instances representing the parsed CSV data, or an empty array if the standard type is not StdOut or the data is empty.
+**Returns:** `pscustomobject[]` - Returns pscustomobject[]
 
 **Parameters:**
-- `[String[]]$Headers` - Describe this parameter
-- `[Boolean]$RemoveFirstRow` - Describe this parameter
+- `[String[]]$Headers` - TODO: Describe this parameter
+- `[Boolean]$RemoveFirstRow` - TODO: Describe this parameter
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMJob/about_DRMMJobStdData.md)
+

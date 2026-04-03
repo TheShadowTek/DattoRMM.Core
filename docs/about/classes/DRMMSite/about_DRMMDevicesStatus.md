@@ -28,12 +28,13 @@ The DRMMDevicesStatus class provides the following methods:
 
 Generates a summary string for the device status, including counts of total devices, online devices, and offline devices.
 
-**Returns:** `string` - A summary string that includes the total number of devices, the number of online devices, and the number of offline devices for the site.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMSite/about_DRMMDevicesStatus.md)
+

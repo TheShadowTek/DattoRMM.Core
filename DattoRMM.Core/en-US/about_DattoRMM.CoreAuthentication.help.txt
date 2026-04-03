@@ -198,7 +198,7 @@ To regenerate API keys for the authenticated user:
 
 ```powershell
 # Regenerate and return the new key/secret pair
-Reset-RMMAPIKeys -ReturnNewKey
+$NewKeys = Reset-RMMAPIKeys -ReturnNewKey
 ```
 
 > [!WARNING]
@@ -263,4 +263,4 @@ Connect-DattoRMM -ApiToken $TokenResponse.AccessToken
 - Disconnect-DattoRMM
 - Reset-RMMAPIKeys
 SEE ALSO
-    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs//about/about_DattoRMM.CoreAuthentication.md
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/about_DattoRMM.CoreAuthentication.md

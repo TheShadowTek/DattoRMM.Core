@@ -29,20 +29,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    IpAddress [string]
-    Oid [string]
-    RuleName [string]
-    ResponseValue [string]
-    DeviceName [string]
-    MonitorName [string]
-
-METHODS
-    DRMMAlertContextSNMPProbe() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
-    DRMMAlert
-    DRMMAlertContext
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertContextSNMPProbe.md

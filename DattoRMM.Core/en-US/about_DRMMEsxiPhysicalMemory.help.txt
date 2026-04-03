@@ -30,19 +30,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Module [string]
-    Size [Nullable[long]]
-    Type [string]
-    Speed [string]
-    SerialNumber [string]
-    PartNumber [string]
-    Bank [string]
-
-METHODS
-    DRMMEsxiPhysicalMemory() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMEsxiHostAudit/about_DRMMEsxiPhysicalMemory.md

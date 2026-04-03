@@ -30,21 +30,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    State [int]
-    ConfidenceFactor [int]
-    AffectedDirectories [string[]]
-    WatchPaths [string[]]
-    Rwextension [string]
-    MetaAlertTime [Nullable[datetime]]
-    AlertTime [Nullable[datetime]]
-
-METHODS
-    DRMMAlertContextRansomWare() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
-    DRMMAlert
-    DRMMAlertContext
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertContextRansomWare.md

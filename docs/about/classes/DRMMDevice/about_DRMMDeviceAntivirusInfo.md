@@ -27,24 +27,25 @@ The DRMMDeviceAntivirusInfo class provides the following methods:
 
 Determines if the antivirus is currently running on the device.
 
-**Returns:** `bool` - A boolean value indicating whether the antivirus is currently running on the device.
+**Returns:** `bool` - Returns bool
 
 ### IsUpToDate()
 
 Determines if the antivirus is running and up to date on the device.
 
-**Returns:** `bool` - A boolean value indicating whether the antivirus is running and up to date on the device.
+**Returns:** `bool` - Returns bool
 
 ### GetSummary()
 
 Generates a summary string of the antivirus product and its status.
 
-**Returns:** `string` - A summary string of the antivirus product and its status.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMDevice/about_DRMMDeviceAntivirusInfo.md)
+

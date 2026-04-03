@@ -27,17 +27,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    JobDeploymentId [long]
-    JobScheduledJobId [long]
-    JobScheduledJobUid [guid]
-    Note [string]
-
-METHODS
-    DRMMActivityLogDetailsDeviceJobDeployment() : void
-    static FromActivityLogDetail([Hashtable]$ActivityLogDetail) : DRMMActivityLogDetailsDeviceJobDeployment
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMActivityLog/about_DRMMActivityLogDetailsDeviceJobDeployment.md

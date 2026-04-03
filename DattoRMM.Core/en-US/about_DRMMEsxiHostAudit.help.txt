@@ -31,20 +31,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    DeviceUid [guid]
-    PortalUrl [string]
-    SystemInfo [DRMMEsxiSystemInfo]
-    Guests [DRMMEsxiGuest[]]
-    Processors [DRMMEsxiProcessor[]]
-    Nics [DRMMEsxiNic[]]
-    PhysicalMemory [DRMMEsxiPhysicalMemory[]]
-    Datastores [DRMMEsxiDatastore[]]
-
-METHODS
-    DRMMEsxiHostAudit() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMEsxiHostAudit/about_DRMMEsxiHostAudit.md

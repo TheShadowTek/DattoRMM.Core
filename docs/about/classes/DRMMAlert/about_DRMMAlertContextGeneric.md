@@ -17,7 +17,7 @@ The DRMMAlertContextGeneric class exposes the following properties:
 | Property | Type | Description |
 |----------|------|-------------|
 | Properties    | hashtable | A hashtable containing properties that provide detailed information about the alert context when specific context class information is not available. |
-| PropertyTypes | hashtable | Add description |
+| PropertyTypes | hashtable | A hashtable containing properties that provide detailed information about the alert context when specific context class information is not available. |
 
 ## METHODS
 
@@ -27,15 +27,13 @@ The DRMMAlertContextGeneric class provides the following methods:
 
 Gets a summary of the generic alert context, including the class name and property names.
 
-**Returns:** `string` - Describe what this method returns
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertContextGeneric.md)
-- [DRMMAlert](./about_DRMMAlert.md)
-- [DRMMAlertContext](./about_DRMMAlertContext.md)
 

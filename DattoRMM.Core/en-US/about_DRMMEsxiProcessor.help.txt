@@ -26,15 +26,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Frequency [Nullable[double]]
-    Name [string]
-    NumberOfCores [Nullable[int]]
-
-METHODS
-    DRMMEsxiProcessor() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMEsxiHostAudit/about_DRMMEsxiProcessor.md

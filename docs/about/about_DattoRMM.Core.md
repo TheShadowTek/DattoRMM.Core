@@ -195,4 +195,4 @@ Set-RMMConfig -Platform Merlot -PageSize 100 -ThrottleProfile Medium -Persist
 - [Beta Guide](../beta/DattoRMM.Core-Beta-Guide.md)
 - [Beta Examples](../beta/DattoRMM.Core-Beta-Examples.md)
 - [Command Reference](../commands/)
-- [Class Reference](classes/)
+- [Class Reference](classes/about_ClassIndex.md)

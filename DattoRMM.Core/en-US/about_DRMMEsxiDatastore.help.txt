@@ -29,18 +29,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    DatastoreName [string]
-    SubscriptionPercent [Nullable[int]]
-    FreeSpace [Nullable[long]]
-    Size [Nullable[long]]
-    FileSystem [string]
-    Status [string]
-
-METHODS
-    DRMMEsxiDatastore() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMEsxiHostAudit/about_DRMMEsxiDatastore.md

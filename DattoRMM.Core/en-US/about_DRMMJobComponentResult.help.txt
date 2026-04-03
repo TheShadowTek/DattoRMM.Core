@@ -29,18 +29,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    ComponentUid [guid]
-    ComponentName [string]
-    ComponentStatus [string]
-    NumberOfWarnings [int]
-    HasStdOut [bool]
-    HasStdErr [bool]
-
-METHODS
-    DRMMJobComponentResult() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMJob/about_DRMMJobComponentResult.md

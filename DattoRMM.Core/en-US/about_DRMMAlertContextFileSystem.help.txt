@@ -28,19 +28,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Sample [float]
-    Threshold [float]
-    Path [string]
-    ObjectType [string]
-    Condition [string]
-
-METHODS
-    DRMMAlertContextFileSystem() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
-    DRMMAlert
-    DRMMAlertContext
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertContextFileSystem.md

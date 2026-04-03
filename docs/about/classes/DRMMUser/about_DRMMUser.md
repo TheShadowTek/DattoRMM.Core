@@ -34,18 +34,19 @@ The DRMMUser class provides the following methods:
 
 Generates the full name of the user by combining the first name and last name.
 
-**Returns:** `string` - The full name of the user, which is a combination of the first name and last name.
+**Returns:** `string` - Returns string
 
 ### GetSummary()
 
 Generates a summary string for the user, including their full name, username, and disabled status.
 
-**Returns:** `string` - A summary string that includes the full name, username, and disabled status of the user.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMUser/about_DRMMUser.md)
+

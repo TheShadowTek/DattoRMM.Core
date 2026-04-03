@@ -24,13 +24,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Name [string]
-
-METHODS
-    DRMMDeviceAuditProcessor() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMDeviceAudit/about_DRMMDeviceAuditProcessor.md

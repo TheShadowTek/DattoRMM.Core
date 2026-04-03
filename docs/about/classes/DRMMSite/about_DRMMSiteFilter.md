@@ -1,0 +1,38 @@
+# about_DRMMSiteFilter
+
+## SHORT DESCRIPTION
+
+Represents a site-scoped filter in the DRMM system, extending DRMMFilter with a Site property.
+
+## LONG DESCRIPTION
+
+The DRMMSiteFilter class extends DRMMFilter to model site-scoped filters within the DRMM platform. It adds a Site property that provides full context about the associated DRMMSite, and overrides the portal URL construction to include the site ID suffix. This subclass exists to break the circular dependency between DRMMFilter and DRMMSite while preserving the ability to navigate from a filter to its parent site via the pipeline.
+
+This class inherits from [DRMMFilter](../DRMMFilter/about_DRMMFilter.md).
+
+## PROPERTIES
+
+The DRMMSiteFilter class exposes the following properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| Site | DRMMSite | The DRMMSite object associated with the filter. Provides full site context for site-specific filters. |
+
+## METHODS
+
+The DRMMSiteFilter class provides the following methods:
+
+### GetSummary()
+
+Generates a summary string for the site filter, including its name, site name, and type.
+
+**Returns:** `string` - Returns string
+
+## NOTES
+
+This class is defined in the DattoRMM.Core module's class system.
+
+## RELATED LINKS
+
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMSite/about_DRMMSiteFilter.md)
+

@@ -25,16 +25,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    EsAlertId [string]
-    Description [string]
-
-METHODS
-    DRMMAlertContextEndpointSecurityWindowsDefender() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
-    DRMMAlert
-    DRMMAlertContext
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertContextEndpointSecurityWindowsDefender.md

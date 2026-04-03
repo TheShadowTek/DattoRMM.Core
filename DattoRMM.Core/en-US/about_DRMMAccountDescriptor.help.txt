@@ -26,17 +26,8 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    BillingEmail [string]
-    DeviceLimit [int]
-    TimeZone [string]
-
-METHODS
-    DRMMAccountDescriptor() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
-    DRMMAccount
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAccount/about_DRMMAccountDescriptor.md
     Get-RMMAccount

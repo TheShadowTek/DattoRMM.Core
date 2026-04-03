@@ -59,141 +59,142 @@ The DRMMDevice class provides the following methods:
 
 ### GetAlerts()
 
-Retrieves the alerts associated with the device, filtered by a specified status.
+Retrieves the alerts associated with the device, filtered by status.
 
-**Returns:** `DRMMAlert[]` - An array of alerts associated with the device that match the specified status.
+**Returns:** `DRMMAlert[]` - Represents an alert in the DRMM system, including its properties, context, source information, and response actions.
 
 ### GetAlerts([String]$Status)
 
 Retrieves the alerts associated with the device, filtered by a specified status.
 
-**Returns:** `DRMMAlert[]` - An array of alerts associated with the device that match the specified status.
+**Returns:** `DRMMAlert[]` - Represents an alert in the DRMM system, including its properties, context, source information, and response actions.
 
 **Parameters:**
-- `[String]$Status` - The status to filter alerts by.
+- `[String]$Status` - TODO: Describe this parameter
 
 ### OpenPortal()
 
 Opens the device's portal URL in the default web browser.
 
-**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
+**Returns:** `void` - Returns void
 
 ### OpenWebRemote()
 
 Opens the device's web remote URL in the default web browser.
 
-**Returns:** `void` - This method does not return a value. It performs an action to open the web remote URL in the default web browser.
+**Returns:** `void` - Returns void
 
 ### GetUdfAsJson([Int32]$UdfNumber)
 
 Retrieves the value of a specified User-Defined Field (UDF) as a JSON object.
 
-**Returns:** `object` - A JSON object containing the value of the specified UDF.
+**Returns:** `object` - Returns object
 
 **Parameters:**
-- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to retrieve as JSON.
+- `[Int32]$UdfNumber` - TODO: Describe this parameter
 
 ### GetUdfAsCsv([Int32]$UdfNumber, [String[]]$Headers)
 
-Retrieves the value of a specified User-Defined Field (UDF) as a CSV object with a custom delimiter and headers.
+Retrieves the value of a specified User-Defined Field (UDF) as a CSV object with custom headers.
 
-**Returns:** `pscustomobject` - A CSV object containing the value of the specified UDF, formatted with the provided delimiter and headers.
+**Returns:** `pscustomobject` - Returns pscustomobject
 
 **Parameters:**
-- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to retrieve as CSV.
-- `[String[]]$Headers` - An array of headers to include in the CSV output.
+- `[Int32]$UdfNumber` - TODO: Describe this parameter
+- `[String[]]$Headers` - TODO: Describe this parameter
 
 ### GetUdfAsCsv([Int32]$UdfNumber, [String]$Delimiter, [String[]]$Headers)
 
 Retrieves the value of a specified User-Defined Field (UDF) as a CSV object with a custom delimiter and headers.
 
-**Returns:** `pscustomobject` - A CSV object containing the value of the specified UDF, formatted with the provided delimiter and headers.
+**Returns:** `pscustomobject` - Returns pscustomobject
 
 **Parameters:**
-- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to retrieve as CSV.
-- `[String]$Delimiter` - The delimiter to use in the CSV output (e.g., comma, semicolon).
-- `[String[]]$Headers` - An array of headers to include in the CSV output.
+- `[Int32]$UdfNumber` - TODO: Describe this parameter
+- `[String]$Delimiter` - TODO: Describe this parameter
+- `[String[]]$Headers` - TODO: Describe this parameter
 
 ### GetSummary()
 
 Generates a summary string for the device, including its hostname and device type.
 
-**Returns:** `string` - A summary string for the device, including its hostname and device type.
+**Returns:** `string` - Returns string
 
 ### ResolveAllAlerts()
 
 Resolves all open alerts associated with the device.
 
-**Returns:** `void` - This method does not return a value. It performs an action to resolve all open alerts associated with the device.
+**Returns:** `void` - Returns void
 
 ### GetAudit()
 
 Gets the most recent audit information for this device.
 
-**Returns:** `DRMMDeviceAudit` - The most recent audit information for this device.
+**Returns:** `DRMMDeviceAudit` - Represents a comprehensive audit of a device, including hardware, software, and network information.
 
 ### GetSoftware()
 
 Gets the software information for this device.
 
-**Returns:** `DRMMDeviceAuditSoftware[]` - The software information for this device.
+**Returns:** `DRMMDeviceAuditSoftware[]` - Represents the software information of a device in a device audit, including its name and version.
 
 ### SetUDF([Hashtable]$UDFFields)
 
 Sets the value of one or more User-Defined Fields (UDFs) for the device.
 
-**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to set the specified UDFs for the device.
+**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[Hashtable]$UDFFields` - A hashtable of User-Defined Fields (UDFs) to set for the device.
+- `[Hashtable]$UDFFields` - TODO: Describe this parameter
 
 ### ClearUDF([Int32]$UdfNumber)
 
 Clears the value of a specified User-Defined Field (UDF) for the device.
 
-**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to clear the specified UDF.
+**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[Int32]$UdfNumber` - The number of the User-Defined Field (UDF) to clear.
+- `[Int32]$UdfNumber` - TODO: Describe this parameter
 
 ### ClearUDFs()
 
 Clears the values of all User-Defined Fields (UDFs) for the device.
 
-**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to clear all UDFs.
+**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 ### SetWarranty([DateTime]$WarrantyDate)
 
 Sets the warranty date for the device.
 
-**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to set the warranty date for the device.
+**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[DateTime]$WarrantyDate` - The warranty date to set for the device.
+- `[DateTime]$WarrantyDate` - TODO: Describe this parameter
 
 ### RunQuickJob([Guid]$ComponentUid, [Hashtable]$Variables)
 
 Runs a quick job on the device for a specified job component and variables.
 
-**Returns:** `DRMMJob` - A DRMMJob object representing the job that was run on the device.
+**Returns:** `DRMMJob` - Represents a job in the DRMM system, including its ID, unique identifier, name, creation date, and status.
 
 **Parameters:**
-- `[Guid]$ComponentUid` - The unique identifier of the job component to run.
-- `[Hashtable]$Variables` - A hashtable of variables to pass to the job component.
+- `[Guid]$ComponentUid` - TODO: Describe this parameter
+- `[Hashtable]$Variables` - TODO: Describe this parameter
 
 ### Move([Guid]$TargetSiteUid)
 
 Moves the device to a different site within the DRMM system.
 
-**Returns:** `DRMMDevice` - This method does not return a value. It performs an action to move the device to the specified site.
+**Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[Guid]$TargetSiteUid` - The unique identifier of the target site to move the device to.
+- `[Guid]$TargetSiteUid` - TODO: Describe this parameter
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMDevice/about_DRMMDevice.md)
+

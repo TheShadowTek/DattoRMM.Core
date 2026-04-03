@@ -53,42 +53,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Udf1 [string]
-    Udf2 [string]
-    Udf3 [string]
-    Udf4 [string]
-    Udf5 [string]
-    Udf6 [string]
-    Udf7 [string]
-    Udf8 [string]
-    Udf9 [string]
-    Udf10 [string]
-    Udf11 [string]
-    Udf12 [string]
-    Udf13 [string]
-    Udf14 [string]
-    Udf15 [string]
-    Udf16 [string]
-    Udf17 [string]
-    Udf18 [string]
-    Udf19 [string]
-    Udf20 [string]
-    Udf21 [string]
-    Udf22 [string]
-    Udf23 [string]
-    Udf24 [string]
-    Udf25 [string]
-    Udf26 [string]
-    Udf27 [string]
-    Udf28 [string]
-    Udf29 [string]
-    Udf30 [string]
-
-METHODS
-    DRMMDeviceUdfs() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMDevice/about_DRMMDeviceUdfs.md

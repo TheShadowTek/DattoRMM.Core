@@ -28,17 +28,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    GuestName [string]
-    ProcessorSpeedTotal [Nullable[int]]
-    MemorySizeTotal [Nullable[long]]
-    NumberOfSnapshots [Nullable[int]]
-    Datastores [string]
-
-METHODS
-    DRMMEsxiGuest() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMEsxiHostAudit/about_DRMMEsxiGuest.md

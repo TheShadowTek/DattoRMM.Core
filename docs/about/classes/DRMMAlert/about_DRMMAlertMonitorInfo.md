@@ -27,14 +27,13 @@ The DRMMAlertMonitorInfo class provides the following methods:
 
 Generates a summary string for the alert monitor information, indicating whether it sends emails and creates tickets.
 
-**Returns:** `string` - A summary string indicating the email and ticket creation configuration of the alert monitor.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAlert/about_DRMMAlertMonitorInfo.md)
-- [DRMMAlert](./about_DRMMAlert.md)
 

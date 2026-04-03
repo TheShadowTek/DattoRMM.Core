@@ -28,22 +28,11 @@ The DRMMSiteProxySettings class provides the following methods:
 
 Generates a summary string for the proxy settings, including the type, host, and port information.
 
-**Returns:** `string` - A summary string that includes the type, host, and port information of the site's proxy settings.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    Host [string]
-    Username [string]
-    Password [securestring]
-    Port [int]
-    Type [string]
-
-METHODS
-    DRMMSiteProxySettings() : void
-    GetSummary() : string
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMSite/about_DRMMSiteProxySettings.md

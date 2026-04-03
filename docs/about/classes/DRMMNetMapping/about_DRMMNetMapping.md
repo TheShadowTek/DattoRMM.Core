@@ -32,12 +32,13 @@ The DRMMNetMapping class provides the following methods:
 
 Opens the portal URL associated with the network mapping in the default web browser.
 
-**Returns:** `void` - This method does not return a value. It performs an action to open the portal URL in the default web browser.
+**Returns:** `void` - Returns void
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMNetMapping/about_DRMMNetMapping.md)
+

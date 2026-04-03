@@ -14,11 +14,12 @@ The following values are defined for RMMScope:
 
 | Value | Description |
 |-------|-------------|
-| `Global` | The resource applies globally across all sites in the account. |
-| `Site` | The resource is scoped to a specific site. |
+| `Global` | TODO: Describe this value |
+| `Site` | TODO: Describe this value |
+
 ## NOTES
 
-This enum is defined in the DattoRMM.Core module's Classes.psm1 file.
+This enum is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 

@@ -30,19 +30,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    DeviceUid [guid]
-    PortalUrl [string]
-    SnmpInfo [DRMMPrinterSnmpInfo]
-    PrinterMarkerSupplies [DRMMPrinterMarkerSupply[]]
-    Printer [DRMMPrinter]
-    SystemInfo [DRMMPrinterSystemInfo]
-    Nics [DRMMNetworkInterface[]]
-
-METHODS
-    DRMMPrinterAudit() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMPrinterAudit/about_DRMMPrinterAudit.md

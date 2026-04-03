@@ -27,16 +27,7 @@ No public methods defined.
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
-
-PROPERTIES
-    PatchStatus [string]
-    PatchesApprovedPending [Nullable[long]]
-    PatchesNotApproved [Nullable[long]]
-    PatchesInstalled [Nullable[long]]
-
-METHODS
-    DRMMDevicePatchManagement() : void
-
+This class is defined in the DattoRMM.Core module's class system.
 SEE ALSO
     Online Documentation
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMDevice/about_DRMMDevicePatchManagement.md

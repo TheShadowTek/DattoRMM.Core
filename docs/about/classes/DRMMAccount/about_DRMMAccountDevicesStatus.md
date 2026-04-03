@@ -30,21 +30,20 @@ The DRMMAccountDevicesStatus class provides the following methods:
 
 Calculates the percentage of online devices for the account.
 
-**Returns:** `double` - The percentage of online devices as a double value.
+**Returns:** `double` - Returns double
 
 ### GetSummary()
 
 Generates a summary string for the device status, including the count of online devices and total devices.
 
-**Returns:** `string` - A summary string combining the count of online devices and total devices.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMAccount/about_DRMMAccountDevicesStatus.md)
-- [DRMMAccount](./about_DRMMAccount.md)
 - [Get-RMMAccount](../../../commands/Account/Get-RMMAccount.md)
 

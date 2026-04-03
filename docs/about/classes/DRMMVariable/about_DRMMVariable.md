@@ -31,24 +31,25 @@ The DRMMVariable class provides the following methods:
 
 Determines if the variable is global in scope.
 
-**Returns:** `bool` - True if the variable is global in scope; otherwise, false.
+**Returns:** `bool` - Returns bool
 
 ### IsSite()
 
 Determines if the variable is site-specific in scope.
 
-**Returns:** `bool` - True if the variable is site-specific in scope; otherwise, false.
+**Returns:** `bool` - Returns bool
 
 ### GetSummary()
 
 Generates a summary string for the variable, including its name, scope, and value.
 
-**Returns:** `string` - A summary string that includes the name, scope, and value of the variable.
+**Returns:** `string` - Returns string
 
 ## NOTES
 
-This class is defined in the DattoRMM.Core module's Classes.psm1 file.
+This class is defined in the DattoRMM.Core module's class system.
 
 ## RELATED LINKS
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/classes/DRMMVariable/about_DRMMVariable.md)
+
