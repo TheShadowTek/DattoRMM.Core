@@ -101,7 +101,11 @@ function Get-RMMActivityLog {
         about_DRMMActivityLog
     #>
 
-    [CmdletBinding(DefaultParameterSetName='Global', SupportsShouldProcess = $true, ConfirmImpact='High')]
+    [CmdletBinding(
+        DefaultParameterSetName='Global',
+        SupportsShouldProcess = $true,
+        ConfirmImpact='High'
+    )]
 
     param(
         [Parameter(
@@ -111,38 +115,67 @@ function Get-RMMActivityLog {
         [DRMMSite[]]
         $Site,
 
-        [Parameter(ParameterSetName = 'SiteId')]
-        [long[]]$SiteId,
+        [Parameter(
+            ParameterSetName = 'SiteId'
+        )]
+        [long[]]
+        $SiteId,
 
         [Parameter(
             Mandatory = $false
         )]
-        [datetime]$Start = (Get-Date).AddHours(-24),
+        [datetime]
+        $Start = (Get-Date).AddHours(-24),
 
         [Parameter(
             Mandatory = $false
         )]
-        [datetime]$End = (Get-Date),
+        [datetime]
+        $End = (Get-Date),
 
-        [Parameter()]
-        [ValidateSet('Device', 'User')]
-        [string[]]$Entity,
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateSet(
+            'Device', 
+            'User'
+        )]
+        [string[]]
+        $Entity,
 
-        [Parameter()]
-        [string[]]$Category,
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string[]]
+        $Category,
 
-        [Parameter()]
-        [string[]]$Action,
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string[]]
+        $Action,
 
-        [Parameter()]
-        [long[]]$UserId,
+        [Parameter(
+            Mandatory = $false
+        )]
+        [long[]]
+        $UserId,
 
-        [Parameter()]
-        [ValidateSet('asc', 'desc')]
-        [string]$Order = 'desc',
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateSet(
+            'asc', 
+            'desc'
+        )]
+        [string]
+        $Order = 'desc',
 
-        [Parameter()]
-        [switch]$UseExperimentalDetailClasses
+        [Parameter(
+            Mandatory = $false
+        )]
+        [switch]
+        $UseExperimentalDetailClasses
     )
 
     begin {
