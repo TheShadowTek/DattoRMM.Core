@@ -134,13 +134,11 @@ function New-RMMQuickJob {
 
         [Parameter(
             ParameterSetName = 'ByDeviceUidWithComponent',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Parameter(
             ParameterSetName = 'ByDeviceUidWithComponentUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Alias('Uid')]
         [guid]
