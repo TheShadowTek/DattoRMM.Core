@@ -117,18 +117,15 @@ function Get-RMMVariable {
 
         [Parameter(
             ParameterSetName = 'SiteAllUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Parameter(
             ParameterSetName = 'SiteUidById',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Parameter(
             ParameterSetName = 'SiteUidByName',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Alias('Uid')]
         [guid]
