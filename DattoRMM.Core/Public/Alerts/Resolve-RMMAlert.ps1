@@ -63,11 +63,24 @@ function Resolve-RMMAlert {
         about_DRMMAlert
     #>
 
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
+    [CmdletBinding(
+        SupportsShouldProcess = $true,
+        ConfirmImpact = 'Medium',
+        DefaultParameterSetName = 'Alert'
+    )]
+
     param(
         [Parameter(
+            ParameterSetName = 'Alert',
             Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            ValueFromPipeline = $true
+        )]
+        [DRMMAlert]
+        $Alert,
+
+        [Parameter(
+            ParameterSetName = 'AlertUid',
+            Mandatory = $true
         )]
         [guid]
         $AlertUid,
@@ -77,6 +90,13 @@ function Resolve-RMMAlert {
     )
 
     process {
+
+        if ($PSCmdlet.ParameterSetName -eq 'Alert') {
+
+            $AlertUid = $Alert.AlertUid
+            
+        }
+
         $Target = "Alert: $AlertUid"
 
         if ($Force -or $PSCmdlet.ShouldProcess($Target, "Resolve alert")) {
