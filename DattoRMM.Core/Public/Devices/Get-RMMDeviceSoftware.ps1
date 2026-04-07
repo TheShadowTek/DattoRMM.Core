@@ -83,14 +83,28 @@ function Get-RMMDeviceSoftware {
     [CmdletBinding()]
     param (
         [Parameter(
+            ParameterSetName = 'Device',
             Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            ValueFromPipeline = $true
+        )]
+        [DRMMDevice]
+        $Device,
+
+        [Parameter(
+            ParameterSetName = 'DeviceUid',
+            Mandatory = $true
         )]
         [guid]
         $DeviceUid
     )
 
     process {
+
+        if ($Device) {
+
+            $DeviceUid = $Device.Uid
+            
+        }
 
         Write-Debug "Getting RMM device software for DeviceUid: $DeviceUid"
 
