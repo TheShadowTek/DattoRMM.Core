@@ -78,10 +78,8 @@ function Remove-RMMSiteProxy {
 
         [Parameter(
             ParameterSetName = 'ByUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
-        [Alias('Uid')]
         [guid]
         $SiteUid,
 
