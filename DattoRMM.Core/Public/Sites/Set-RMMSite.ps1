@@ -98,8 +98,7 @@ function Set-RMMSite {
 
         [Parameter(
             ParameterSetName = 'ByUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Alias('Uid')]
         [guid]

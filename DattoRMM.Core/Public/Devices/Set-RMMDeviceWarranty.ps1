@@ -119,10 +119,8 @@ function Set-RMMDeviceWarranty {
 
         [Parameter(
             ParameterSetName = 'ByDeviceUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
-        [Alias('Uid')]
         [guid]
         $DeviceUid,
 

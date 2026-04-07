@@ -96,15 +96,12 @@ function Move-RMMDevice {
 
         [Parameter(
             ParameterSetName = 'ByDeviceUidSiteUid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Parameter(
             ParameterSetName = 'ByDeviceUidSiteObject',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
-        [Alias('Uid')]
         [guid]
         $DeviceUid,
 

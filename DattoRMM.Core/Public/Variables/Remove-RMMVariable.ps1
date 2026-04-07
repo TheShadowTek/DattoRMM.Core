@@ -73,15 +73,13 @@ function Remove-RMMVariable {
 
         [Parameter(
             ParameterSetName = 'ByVariableId',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [long]
         $VariableId,
 
         [Parameter(
-            ParameterSetName = 'ByVariableId',
-            ValueFromPipelineByPropertyName = $true
+            ParameterSetName = 'ByVariableId'
         )]
         [guid]
         $SiteUid

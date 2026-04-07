@@ -2,13 +2,13 @@
     Copyright (c) 2025-2026 Robert Faddes
     SPDX-License-Identifier: MPL-2.0
 #>
-function Set-RMMDeviceUDF {
+function Set-RMMDeviceUdf {
     <#
     .SYNOPSIS
         Sets user-defined fields on a device in Datto RMM.
 
     .DESCRIPTION
-        The Set-RMMDeviceUDF function updates one or more user-defined fields (UDF1-UDF30) on a
+        The Set-RMMDeviceUdf function updates one or more user-defined fields (UDF1-UDF30) on a
         device in the Datto RMM system. UDFs are custom fields that can store additional metadata
         about devices for organisational and reporting purposes.
 
@@ -37,33 +37,33 @@ function Set-RMMDeviceUDF {
         Bypasses the confirmation prompt.
 
     .EXAMPLE
-        Set-RMMDeviceUDF -DeviceUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -UDF1 "Department: IT" -UDF2 "Owner: John"
+        Set-RMMDeviceUdf -DeviceUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -UDF1 "Department: IT" -UDF2 "Owner: John"
 
         Sets UDF1 and UDF2 on a device, leaving other UDFs unchanged.
 
     .EXAMPLE
-        Get-RMMDevice -Hostname "SERVER01" | Set-RMMDeviceUDF -UDF5 "Production" -UDF10 "Critical"
+        Get-RMMDevice -Hostname "SERVER01" | Set-RMMDeviceUdf -UDF5 "Production" -UDF10 "Critical"
 
         Updates UDF5 and UDF10 via pipeline.
 
     .EXAMPLE
-        Set-RMMDeviceUDF -DeviceUid $DeviceUid -UDF1 "" -Force
+        Set-RMMDeviceUdf -DeviceUid $DeviceUid -UDF1 "" -Force
 
         Clears UDF1 (sets to null) without confirmation.
 
     .EXAMPLE
-        Get-RMMDevice -FilterId 100 | Set-RMMDeviceUDF -UDF3 "Datacenter: East"
+        Get-RMMDevice -FilterId 100 | Set-RMMDeviceUdf -UDF3 "Datacenter: East"
 
         Updates UDF3 for all devices in filter 100.
 
     .EXAMPLE
-        Set-RMMDeviceUDF -DeviceUid $DeviceUid -UDFFields @{udf1='IT Department'; udf2='John Smith'; udf5=''}
+        Set-RMMDeviceUdf -DeviceUid $DeviceUid -UDFFields @{udf1='IT Department'; udf2='John Smith'; udf5=''}
 
         Updates multiple UDF fields using a hashtable. UDF5 is cleared.
 
     .EXAMPLE
         $UDFs = @{udf10='Production'; udf15='Critical'; udf20='Datacenter: West'}
-        PS > Get-RMMDevice -Hostname "SERVER*" | Set-RMMDeviceUDF -UDFFields $UDFs -Force
+        PS > Get-RMMDevice -Hostname "SERVER*" | Set-RMMDeviceUdf -UDFFields $UDFs -Force
 
         Updates multiple UDF fields on all servers matching the hostname pattern without confirmation.
 
@@ -110,15 +110,12 @@ function Set-RMMDeviceUDF {
 
         [Parameter(
             ParameterSetName = 'ByDeviceUidIndividual',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
         [Parameter(
             ParameterSetName = 'ByDeviceUidHashtable',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
-        [Alias('Uid')]
         [guid]
         $DeviceUid,
 
