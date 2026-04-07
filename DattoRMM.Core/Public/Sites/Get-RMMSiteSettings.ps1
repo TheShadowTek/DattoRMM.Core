@@ -89,10 +89,8 @@ function Get-RMMSiteSettings {
 
         [Parameter(
             ParameterSetName = 'Uid',
-            Mandatory = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $true
         )]
-        [Alias('Uid')]
         [guid]
         $SiteUid
     )
