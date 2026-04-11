@@ -102,6 +102,7 @@ FormatsToProcess = @(
 FunctionsToExport = @(
     'Connect-DattoRMM',
     'Disconnect-DattoRMM',
+    'Export-RMMObjectCsv',
     'Get-RMMAccount',
     'Get-RMMActivityLog',
     'Get-RMMAlert',

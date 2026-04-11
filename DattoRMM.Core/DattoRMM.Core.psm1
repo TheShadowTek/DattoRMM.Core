@@ -82,6 +82,9 @@ $Script:ConfigPath = Join-Path (Join-Path $HOME '.DattoRMM.Core') 'config.json'
 # Load and apply any saved configuration from disk
 Initialize-SavedConfig
 
+# Load built-in and user-defined export transforms
+Initialize-ExportTransforms
+
 # Module removal handler - cleanup module variables
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 
@@ -104,6 +107,7 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
     Remove-Variable -Name ApiMethodRetry -Scope Script -ErrorAction SilentlyContinue
     Remove-Variable -Name ThrottleProfileDefaults -Scope Script -ErrorAction SilentlyContinue
     Remove-Variable -Name OperationMapping -Scope Script -ErrorAction SilentlyContinue
+    Remove-Variable -Name ExportTransforms -Scope Script -ErrorAction SilentlyContinue
     
 }
 
