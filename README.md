@@ -15,7 +15,8 @@ A PowerShell module for the Datto RMM API v2. Provides typed, object-oriented ac
 - **Adaptive Throttling** — Automatic rate-limit management with configurable profiles (Aggressive, Medium, Cautious) for safe single or concurrent use.
 - **Secure by Default** — Credentials handled via `SecureString` and `PSCredential`; tokens held in memory only; PII-sensitive operations require explicit confirmation.
 - **Persistent Configuration** — Platform region, throttle profile, page size, and retry settings saved to a JSON config file for consistent behaviour across sessions.
-- **Comprehensive Coverage** — 42 commands across 11 domains: Account, Activity Log, Alerts, Auth, Components, Config, Devices, Filters, Jobs, Sites, and Variables.
+- **Opinionated CSV Export** — Export Sites, Devices, and Alerts to flattened CSV using named column transforms. Supports user defined transformations.
+- **Comprehensive Coverage** — 43 commands across 12 domains: Account, Activity Log, Alerts, Auth, Components, Config, Devices, Export, Filters, Jobs, Sites, and Variables.
 
 ## Installation
 
@@ -41,7 +42,7 @@ Get-RMMDevice
 Get-RMMSite -Name "Main Office" | Get-RMMAlert
 
 # Export all sites to CSV
-Get-RMMSite | Export-Csv Sites.csv
+Get-RMMSite | Export-RMMObjectCsv -Path .\Sites.csv
 ```
 
 For credential storage options (SecretStore, Azure Automation, Key Vault), see [Authentication](docs/about/about_DattoRMM.CoreAuthentication.md).
@@ -80,6 +81,7 @@ Get-RMMDevice -FilterId 12345 | New-RMMQuickJob -JobName "Emergency Patch" -Comp
 | **Components** | `Get-RMMComponent` |
 | **Config** | `Get-RMMConfig`, `Set-RMMConfig`, `Save-RMMConfig`, `Remove-RMMConfig` |
 | **Devices** | `Get-RMMDevice`, `Get-RMMDeviceAudit`, `Get-RMMDeviceSoftware`, `Get-RMMEsxiHostAudit`, `Get-RMMPrinterAudit`, `Move-RMMDevice`, `Set-RMMDeviceUDF`, `Set-RMMDeviceWarranty` |
+| **Export** | `Export-RMMObjectCsv` |
 | **Filters** | `Get-RMMFilter` |
 | **Jobs** | `Get-RMMJob`, `Get-RMMJobResult`, `New-RMMQuickJob` |
 | **Sites** | `Get-RMMSite`, `Get-RMMSiteSettings`, `New-RMMSite`, `Set-RMMSite`, `Set-RMMSiteProxy`, `Remove-RMMSiteProxy` |
@@ -99,6 +101,7 @@ Run `Get-Help <CommandName>` for detailed parameter and usage information, or se
 | [Configuration](docs/about/about_DattoRMM.CoreConfiguration.md) | Platform regions, page size, retry settings, and persistent configuration |
 | [Throttling](docs/about/about_DattoRMM.CoreThrottling.md) | Adaptive throttling, profiles, concurrent use, and API rate limit details |
 | [Security](docs/about/about_DattoRMM.CoreSecurity.md) | PII handling, credential lifecycle, SecureString cross-platform behaviour |
+| [Export](docs/about/about_DattoRMM.CoreExport.md) | CSV export, built-in transforms, custom transform authoring, UDF handling |
 | [Alert Context Discovery (Beta)](docs/about/about_DattoRMM.CoreAlertContextDiscovery.md) | Guidance for collecting unrecognised alert context schema data during beta |
 | [Beta Overview](docs/beta/about_DattoRMM.CoreBeta.md) | Beta status, expectations, and roadmap to v1 |
 | [Beta Guide](docs/beta/DattoRMM.Core-Beta-Guide.md) | Getting started with the beta, usage tips, and feedback |

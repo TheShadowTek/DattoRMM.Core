@@ -11,6 +11,7 @@ A reference index of all public functions in the DattoRMM.Core module, organised
 - [Component](#component)
 - [Config](#config)
 - [Devices](#devices)
+- [Export](#export)
 - [Filter](#filter)
 - [Jobs](#jobs)
 - [Sites](#sites)
@@ -78,6 +79,14 @@ A reference index of all public functions in the DattoRMM.Core module, organised
 | [`Move-RMMDevice`](Devices/Move-RMMDevice.md) | Moves a device from one site to another site. |
 | [`Set-RMMDeviceUDF`](Devices/Set-RMMDeviceUDF.md) | Sets user-defined fields on a device in Datto RMM. |
 | [`Set-RMMDeviceWarranty`](Devices/Set-RMMDeviceWarranty.md) | Sets the warranty expiration date on a device in Datto RMM. |
+
+## Export
+
+| Command | Synopsis |
+| ------- | -------- |
+| [`Export-RMMObjectCsv`](Export/Export-RMMObjectCsv.md) | Exports DattoRMM.Core objects to a flattened CSV file using named transforms. |
+
+See [about_DattoRMM.CoreExport](../about/about_DattoRMM.CoreExport.md) for details on transform authoring and custom transforms.
 
 ## Filter
 

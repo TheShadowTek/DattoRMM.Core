@@ -24,6 +24,7 @@ The DattoRMM.Core module provides an object-oriented interface to the Datto RMM 
 - **Auto-Pagination** — Paginated API endpoints are handled transparently, streaming results into the pipeline.
 - **Automatic Token Refresh** — Optional credential retention for long-running automation without manual re-authentication.
 - **API Resilience** — Configurable retry logic with exponential backoff for transient failures.
+- **Opinionated CSV Export** — Export typed objects to flattened CSV using named column transforms. Objects are streamed directly to disk, keeping memory usage constant regardless of pipeline size. Built-in transforms cover Sites, Devices, and Alerts. User-defined transforms extend the system to any class and are loaded automatically from the module profile folder.
 
 ### Module Architecture
 
@@ -31,7 +32,7 @@ The module follows a layered architecture:
 
 1. **Classes** — Domain models, request/response types, and enums defined in a single structured module (`Private/Classes/Classes.psm1`), loaded first via `using module`.
 2. **Private Helpers** — Integration logic, API invocation, throttling, and configuration management.
-3. **Public API** — 40 exported commands organised by domain, orchestrating private helpers and returning typed objects.
+3. **Public API** — 43 exported commands organised by domain, orchestrating private helpers and returning typed objects.
 
 Public functions are grouped by domain under `Public/<Domain>/` and are the only exported surface. Private functions handle all API communication and data transformation.
 
@@ -121,6 +122,17 @@ Manage account-level and site-level variables.
 - `Set-RMMVariable` — Update a variable's name or value.
 - `Remove-RMMVariable` — Permanently delete a variable.
 
+### Export
+Export typed objects to flattened CSV files using named transforms.
+
+- `Export-RMMObjectCsv` — Export Sites, Devices, or Alerts to CSV with built-in or custom transforms.
+
+`Export-RMMObjectCsv` accepts any `DRMMObject` via the pipeline, detects the type automatically, and applies a named column transform to flatten nested properties into a predictable CSV shape. Objects are written to disk one at a time, making it safe for large pipelines and Azure Automation environments with memory constraints.
+
+The `-TransformName` parameter is tab-completable and defaults to `'Default'`. Additional named transforms per type (e.g. `'Summary'`) are included. Users can define their own transforms for any class in `$HOME/.DattoRMM.Core/ExportTransforms.psd1`; these are merged at module load.
+
+See [about_DattoRMM.CoreExport](about_DattoRMM.CoreExport.md) for full details including transform authoring.
+
 ## PIPELINE PATTERNS
 
 The module is designed around pipeline chaining. Common patterns:
@@ -143,9 +155,9 @@ Get-RMMDevice -Hostname "SRV-*" | Get-RMMDeviceAudit
 Get-RMMSite -Name "Branch Office" | Get-RMMVariable
 
 # Bulk export
-Get-RMMSite | Export-Csv Sites.csv
-Get-RMMDevice | Export-Csv Devices.csv
-Get-RMMAlert -Status All | Export-Csv Alerts.csv
+Get-RMMSite | Export-RMMObjectCsv -Path .\Sites.csv
+Get-RMMDevice | Export-RMMObjectCsv -Path .\Devices.csv
+Get-RMMAlert -Status All | Export-RMMObjectCsv -Path .\Alerts.csv -IncludeTimestamp
 ```
 
 ## EXAMPLES
@@ -191,6 +203,7 @@ Set-RMMConfig -Platform Merlot -PageSize 100 -ThrottleProfile Medium -Persist
 - [about_DattoRMM.CoreConfiguration](about_DattoRMM.CoreConfiguration.md)
 - [about_DattoRMM.CoreThrottling](about_DattoRMM.CoreThrottling.md)
 - [about_DattoRMM.CoreSecurity](about_DattoRMM.CoreSecurity.md)
+- [about_DattoRMM.CoreExport](about_DattoRMM.CoreExport.md)
 - [Beta Overview](../beta/about_DattoRMM.CoreBeta.md)
 - [Beta Guide](../beta/DattoRMM.Core-Beta-Guide.md)
 - [Beta Examples](../beta/DattoRMM.Core-Beta-Examples.md)
