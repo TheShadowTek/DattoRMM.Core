@@ -229,8 +229,13 @@ function Get-RMMAlert {
             $APIMethod = @{
                 Path = $MethodPath
                 Method = 'Get'
-                Paginate = $true
-                PageElement = 'alerts'
+            }
+
+            if ($PSCmdlet.ParameterSetName -ne 'Alert') {
+
+                $APIMethod.Paginate = $true
+                $APIMethod.PageElement = 'alerts'
+
             }
 
             Invoke-ApiMethod @APIMethod | ForEach-Object {
