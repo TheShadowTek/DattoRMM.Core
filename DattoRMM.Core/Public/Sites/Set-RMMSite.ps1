@@ -9,8 +9,19 @@ function Set-RMMSite {
 
     .DESCRIPTION
         The Set-RMMSite function updates properties of an existing site in the authenticated
-        user's account. The site can be specified by passing a DRMMSite object from the pipeline
-        or by providing the SiteUid parameter directly.
+        user's account.
+
+        Due to an API limitation, omitted properties are wiped when updating a site. To prevent
+        unintended data loss, this function preserves existing property values by default:
+
+        - Pipeline input: When a DRMMSite object is piped, its current properties are used as
+          defaults for any parameters not explicitly specified.
+        - SiteUid input: When a site UID is provided, the function fetches the current site
+          state from the API and uses those values as defaults.
+
+        To bypass property preservation and send only explicitly specified parameters, use the
+        -OverwriteAll switch. When OverwriteAll is used, Name becomes mandatory and any omitted
+        properties will be reset to their API default values.
 
         Note: Proxy settings cannot be updated using this function. Use Set-RMMSiteProxy or
         Remove-RMMSiteProxy to manage proxy settings.
@@ -22,7 +33,8 @@ function Set-RMMSite {
         The unique identifier (GUID) of the site to update.
 
     .PARAMETER Name
-        The new name for the site. This parameter is required.
+        The new name for the site. Required when using -OverwriteAll. When a reference site
+        is available (pipeline or fetched), defaults to the existing site name.
 
     .PARAMETER Description
         The new description for the site.
@@ -36,13 +48,34 @@ function Set-RMMSite {
     .PARAMETER SplashtopAutoInstall
         Whether Splashtop should be automatically installed on devices at this site.
 
+    .PARAMETER AppendNotes
+        Append the value supplied to -Notes to the site's existing notes, separated by a blank
+        line. Requires -Notes to be specified. Has no effect if -Notes is not provided.
+
+        Not available with -OverwriteAll because the current site state is unknown in that
+        parameter set.
+
+    .PARAMETER OverwriteAll
+        Bypass property preservation and send only explicitly specified parameters to the API.
+        When this switch is used, Name becomes mandatory. Properties not explicitly specified
+        will be reset to their API default values.
+
+        Use this when you intentionally want to clear or reset site properties.
+
     .PARAMETER Force
         Suppress the confirmation prompt.
 
     .EXAMPLE
         Set-RMMSite -SiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -Name "Updated Site Name"
 
-        Updates the name of the specified site.
+        Updates the site name. Other existing properties are preserved by fetching the current
+        site state from the API before updating.
+
+    .EXAMPLE
+        Set-RMMSite -SiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -Name "Clean Site" -OverwriteAll
+
+        Updates the site with only the specified name. All other properties are reset to their
+        API default values because OverwriteAll bypasses property preservation.
 
     .EXAMPLE
         Get-RMMSite -Name "Old Name" | Set-RMMSite -Name "New Name" -Description "Updated description"
@@ -59,6 +92,11 @@ function Set-RMMSite {
         Get-RMMSite | Where-Object {$_.Name -like "Branch*"} | Set-RMMSite -SplashtopAutoInstall
 
         Enables Splashtop auto-install for all sites with names starting with "Branch".
+
+    .EXAMPLE
+        Get-RMMSite -SiteUid $SiteUid | Set-RMMSite -Notes "Reviewed April 2026" -AppendNotes
+
+        Appends a note to the site's existing notes, preserving the original content.
 
     .INPUTS
         DRMMSite. You can pipe site objects from Get-RMMSite.
@@ -86,7 +124,7 @@ function Set-RMMSite {
     .LINK
         Set-RMMSiteProxy
     #>
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium', DefaultParameterSetName = 'BySiteObject')]
     param (
         [Parameter(
             ParameterSetName = 'BySiteObject',
@@ -100,16 +138,23 @@ function Set-RMMSite {
             ParameterSetName = 'ByUid',
             Mandatory = $true
         )]
+        [Parameter(
+            ParameterSetName = 'ByUidOverwrite',
+            Mandatory = $true
+        )]
         [Alias('Uid')]
         [guid]
         $SiteUid,
 
         [Parameter(
-            ParameterSetName = 'ByUid',
-            Mandatory = $true
+            ParameterSetName = 'ByUid'
         )]
         [Parameter(
             ParameterSetName = 'BySiteObject'
+        )]
+        [Parameter(
+            ParameterSetName = 'ByUidOverwrite',
+            Mandatory = $true
         )]
         [string]
         $Name,
@@ -130,6 +175,22 @@ function Set-RMMSite {
         [switch]
         $SplashtopAutoInstall,
 
+        [Parameter(
+            ParameterSetName = 'BySiteObject'
+        )]
+        [Parameter(
+            ParameterSetName = 'ByUid'
+        )]
+        [switch]
+        $AppendNotes,
+
+        [Parameter(
+            ParameterSetName = 'ByUidOverwrite',
+            Mandatory = $true
+        )]
+        [switch]
+        $OverwriteAll,
+
         [Parameter()]
         [switch]
         $Force
@@ -137,14 +198,36 @@ function Set-RMMSite {
 
     process {
 
-        if ($Site) {
+        # Resolve reference site for property preservation
+        switch ($PSCmdlet.ParameterSetName) {
 
-            $SiteUid = $Site.Uid
+            'BySiteObject' {
 
-            # Use existing values if not specified to prevent wiping them
-            $ParamsToCheck = @('Name', 'Description', 'Notes', 'OnDemand', 'SplashtopAutoInstall')
+                $SiteUid = $Site.Uid
+                $ReferenceSite = $Site
 
-            foreach ($ParamName in $ParamsToCheck) {
+            }
+
+            'ByUid' {
+
+                Write-Verbose "Fetching current site properties for preservation: $SiteUid"
+                $ReferenceSite = Get-RMMSite -SiteUid $SiteUid
+
+            }
+
+            'ByUidOverwrite' {
+
+                $ReferenceSite = $null
+
+            }
+        }
+
+        # Preserve existing values for any parameters not explicitly specified
+        if ($ReferenceSite) {
+
+            $PropertiesToPreserve = @('Name', 'Description', 'Notes', 'OnDemand', 'SplashtopAutoInstall')
+
+            foreach ($ParamName in $PropertiesToPreserve) {
 
                 if ($PSBoundParameters.ContainsKey($ParamName)) {
 
@@ -154,62 +237,61 @@ function Set-RMMSite {
 
                 switch ($ParamName) {
 
-                    'Name' {$Name = $Site.Name}
-                    'Description' {$Description = $Site.Description}
-                    'Notes' {$Notes = $Site.Notes}
-                    'OnDemand' {$OnDemand = $Site.OnDemand}
-                    'SplashtopAutoInstall' {$SplashtopAutoInstall = $Site.SplashtopAutoInstall}
-                    
+                    'Name' {$Name = $ReferenceSite.Name}
+                    'Description' {$Description = $ReferenceSite.Description}
+                    'Notes' {$Notes = $ReferenceSite.Notes}
+                    'OnDemand' {$OnDemand = $ReferenceSite.OnDemand}
+                    'SplashtopAutoInstall' {$SplashtopAutoInstall = $ReferenceSite.SplashtopAutoInstall}
+
                 }
             }
         }
 
-        if (-not $Force -and -not $PSCmdlet.ShouldProcess("Site $SiteUid", "Update site properties")) {
+        # Append new notes to existing notes if requested
+        if ($AppendNotes -and $PSBoundParameters.ContainsKey('Notes')) {
+
+            if ($ReferenceSite.Notes) {
+
+                $Notes = $ReferenceSite.Notes + "`n`n" + $Notes
+
+            }
+        }
+
+        if (-not $Force -and -not $PSCmdlet.ShouldProcess("Site $(if ($ReferenceSite) {$ReferenceSite.Name} else {$SiteUid})", "Update site properties")) {
 
             return
 
         }
 
-        Write-Debug "Updating RMM site: $SiteUid"
+        Write-Debug "Updating RMM site: $(if ($ReferenceSite) {$ReferenceSite.Name} else {$SiteUid})"
 
-        # Build request body - always include name
-        $Body = @{
-            name = $Name
-        }
+        # Build request body
+        if ($ReferenceSite) {
 
-        # Add description if it has a value
-        if ($PSBoundParameters.ContainsKey('Description') -or ($Site -and $Description)) {
+            # All properties included to prevent API from wiping unspecified values
+            $Body = @{
+                name = $Name
+                description = $Description
+                notes = $Notes
+                onDemand = [bool]$OnDemand
+                splashtopAutoInstall = [bool]$SplashtopAutoInstall
+            }
 
-            $Body.description = $Description
+        } else {
 
-        }
+            # No preservation - build body from explicit parameters only
+            $Body = @{
+                name = $Name
+            }
 
-        # Add notes if it has a value
-        if ($PSBoundParameters.ContainsKey('Notes') -or ($Site -and $Notes)) {
+            switch ($PSBoundParameters.Keys) {
 
-            $Body.notes = $Notes
+                'Description' {$Body.description = $Description}
+                'Notes' {$Body.notes = $Notes}
+                'OnDemand' {$Body.onDemand = $OnDemand.IsPresent}
+                'SplashtopAutoInstall' {$Body.splashtopAutoInstall = $SplashtopAutoInstall.IsPresent}
 
-        }
-
-        # Handle boolean fields - use .IsPresent for explicit params, direct value for piped site
-        if ($PSBoundParameters.ContainsKey('OnDemand')) {
-
-            $Body.onDemand = $OnDemand.IsPresent
-
-        } elseif ($Site -and $null -ne $OnDemand) {
-
-            $Body.onDemand = [bool]$OnDemand
-
-        }
-
-        if ($PSBoundParameters.ContainsKey('SplashtopAutoInstall')) {
-
-            $Body.splashtopAutoInstall = $SplashtopAutoInstall.IsPresent
-
-        } elseif ($Site -and $null -ne $SplashtopAutoInstall) {
-
-            $Body.splashtopAutoInstall = [bool]$SplashtopAutoInstall
-
+            }
         }
 
         $APIMethod = @{
