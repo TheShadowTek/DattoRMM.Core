@@ -28,6 +28,7 @@ function Invoke-ApiRestMethod {
     $Attempt = 0
     $Success = $false
     $LastError = $null
+    $TokenRefreshAttempted = $false
 
     # Retry loop
     while (-not $Success -and $Attempt -le $Script:ApiMethodRetry.MaxRetries) {
@@ -98,10 +99,46 @@ function Invoke-ApiRestMethod {
 
                 401 {
 
-                    # Terminating condition no retry
-                    $Generic = "Authorization failed. Please check your credentials."
-                    $ShouldRetry = $false
+                    # Reactive token refresh — safety net for mid-request expiry (e.g., during long pagination runs)
+                    if (-not $TokenRefreshAttempted -and $script:RMMAuth.AutoRefresh) {
 
+                        Write-Verbose "Received 401. Attempting token refresh before failing."
+                        $TokenRefreshAttempted = $true
+
+                        $RefreshConnectParams = @{
+                            Key = $script:RMMAuth.Key
+                            Secret = $script:RMMAuth.Secret
+                            AutoRefresh = $true
+                        }
+
+                        switch ($Script:RMMAuth.Keys) {
+
+                            'Proxy' {$RefreshConnectParams.Proxy = $script:RMMAuth.Proxy}
+                            'ProxyCredential' {$RefreshConnectParams.ProxyCredential = $script:RMMAuth.ProxyCredential}
+
+                        }
+
+                        try {
+
+                            Connect-DattoRMM @RefreshConnectParams
+                            $Parameters.Headers = $script:RMMAuth.AuthHeader
+                            $Attempt--
+                            $ShouldRetry = $true
+
+                        } catch {
+
+                            $Generic = "Authorization failed. Token refresh also failed."
+                            $ShouldRetry = $false
+
+                        }
+
+                    } else {
+
+                        # Terminating condition no retry
+                        $Generic = "Authorization failed. Please check your credentials."
+                        $ShouldRetry = $false
+
+                    }
                 }
 
                 403 {

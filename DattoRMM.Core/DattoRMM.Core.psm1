@@ -71,7 +71,9 @@ $Script:ConfigTokenExpireHours = $null
 $Script:ConfigApiMaxRetries = $null
 $Script:ConfigApiRetryIntervalSeconds = $null
 $Script:ConfigApiTimeoutSeconds = $null
+$Script:ConfigTokenRefreshBufferMinutes = $null
 $Script:TokenExpireHours = 100
+$Script:TokenRefreshBufferMinutes = 10
 $Script:MaxPageSize = $null
 
 # Establish module-level config file path (used by Read-ConfigFile, Write-ConfigFile, and related functions)

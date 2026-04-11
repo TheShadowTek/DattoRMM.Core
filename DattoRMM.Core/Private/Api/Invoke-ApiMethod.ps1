@@ -53,10 +53,12 @@ function Invoke-ApiMethod {
 
     }
 
-    # Check token expiration (UTC comparison)
+    # Check token expiration with buffer (UTC comparison)
+    # Refresh proactively before expiry to prevent mid-pagination failures
     $Now = [datetime]::UtcNow
+    $RefreshThreshold = $script:RMMAuth.ExpiresAt.AddMinutes(-$Script:TokenRefreshBufferMinutes)
 
-    if ($Now -gt $script:RMMAuth.ExpiresAt) {
+    if ($Now -gt $RefreshThreshold) {
 
         if ($script:RMMAuth.AutoRefresh) {
 
