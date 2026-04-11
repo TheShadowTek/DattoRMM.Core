@@ -144,8 +144,8 @@ function New-RMMSite {
 
             'Description' {$Body.description = $Description}
             'Notes' {$Body.notes = $Notes}
-            'OnDemand' {$Body.onDemand = $true}
-            'SplashtopAutoInstall' {$Body.splashtopAutoInstall = $true}
+            'OnDemand' {$Body.onDemand = $OnDemand.IsPresent}
+            'SplashtopAutoInstall' {$Body.splashtopAutoInstall = $SplashtopAutoInstall.IsPresent}
         
         }
 
@@ -178,6 +178,7 @@ function New-RMMSite {
                     # Convert SecureString to plain text for API
                     $PlainPassword = ConvertFrom-SecureStringToPlaintext -SecureString $ProxyPassword
                     $ProxySettings.password = $PlainPassword
+                    $ClearPassword = $true
                     
                 }
             }
@@ -201,9 +202,13 @@ function New-RMMSite {
     end {
 
         # Clear plaintext password from memory
-        $PlainPassword = $null
-        $ProxySettings.password = $null
+        if ($ClearPassword -and $PlainPassword) {
 
+            $PlainPassword = $null
+            $ProxySettings.password = $null
+            [System.Runtime.InteropServices.Marshal]::ZeroFreeGlobalAllocUnicode([System.IntPtr]::Zero)
+
+        }
     }
 }
 
