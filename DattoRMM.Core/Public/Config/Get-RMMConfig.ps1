@@ -59,6 +59,7 @@ function Get-RMMConfig {
         ConfiguredApiMaxRetries = $Script:ConfigApiMaxRetries
         ConfiguredApiRetryIntervalSeconds = $Script:ConfigApiRetryIntervalSeconds
         ConfiguredApiTimeoutSeconds = $Script:ConfigApiTimeoutSeconds
+        ConfiguredTokenRefreshBufferMinutes = $Script:ConfigTokenRefreshBufferMinutes
         SessionPlatform = $Script:SessionPlatform
         SessionPageSize = $Script:SessionPageSize
         SessionThrottleProfile = $Script:RMMThrottle.Profile
@@ -66,6 +67,7 @@ function Get-RMMConfig {
         SessionApiMaxRetries = $Script:ApiMethodRetry.MaxRetries
         SessionApiRetryIntervalSeconds = $Script:ApiMethodRetry.RetryIntervalSeconds
         SessionApiTimeoutSeconds = $Script:ApiMethodRetry.TimeoutSeconds
+        SessionTokenRefreshBufferMinutes = $Script:TokenRefreshBufferMinutes
     }
 
     return $ConfigInfo

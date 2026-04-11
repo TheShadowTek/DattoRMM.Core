@@ -33,6 +33,9 @@ function Set-RMMConfig {
     .PARAMETER ApiTimeoutSeconds
         Sets the timeout in seconds for API requests. Valid range: 10-300. Default is 60. Use -Persist to save as the default for future sessions.
 
+    .PARAMETER TokenRefreshBufferMinutes
+        Sets the number of minutes before token expiry at which the module will proactively refresh the token. Valid range: 1-60. Default is 10. This prevents long-running paginated operations from failing due to mid-request token expiry. Use -Persist to save as the default for future sessions.
+
     .PARAMETER Persist
         If specified, saves the provided settings to the configuration file for future sessions. Without -Persist, changes apply only to the current session.
 
@@ -146,6 +149,14 @@ function Set-RMMConfig {
             ParameterSetName = 'Set',
             Mandatory = $false
         )]
+        [ValidateRange(1, 60)]
+        [int]
+        $TokenRefreshBufferMinutes,
+
+        [Parameter(
+            ParameterSetName = 'Set',
+            Mandatory = $false
+        )]
         [Parameter(
             ParameterSetName = 'Default',
             Mandatory = $false
@@ -195,6 +206,7 @@ function Set-RMMConfig {
 
         # Reset session variables to defaults
         $Script:TokenExpireHours = 100
+        $Script:TokenRefreshBufferMinutes = 10
         $Script:SessionPlatform = $null
         $Script:SessionPageSize = $null
         $Script:PageSize = $null
@@ -225,6 +237,7 @@ function Set-RMMConfig {
             $Script:ConfigApiMaxRetries = $null
             $Script:ConfigApiRetryIntervalSeconds = $null
             $Script:ConfigApiTimeoutSeconds = $null
+            $Script:ConfigTokenRefreshBufferMinutes = $null
 
         }
 
@@ -353,6 +366,18 @@ function Set-RMMConfig {
 
             }
         }
+
+        'TokenRefreshBufferMinutes' {
+
+            Write-Verbose "Set TokenRefreshBufferMinutes to: $TokenRefreshBufferMinutes"
+            $Script:TokenRefreshBufferMinutes = $TokenRefreshBufferMinutes
+
+            if ($Persist) {
+
+                $Config['TokenRefreshBufferMinutes'] = $TokenRefreshBufferMinutes
+
+            }
+        }
     }
 
     if ($Persist) {
@@ -390,6 +415,10 @@ function Set-RMMConfig {
 
                 'ApiTimeoutSeconds' {
                     $Script:ConfigApiTimeoutSeconds = $Script:ApiMethodRetry.TimeoutSeconds
+                }
+
+                'TokenRefreshBufferMinutes' {
+                    $Script:ConfigTokenRefreshBufferMinutes = $Script:TokenRefreshBufferMinutes
                 }
             }
 

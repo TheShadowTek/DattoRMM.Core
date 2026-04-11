@@ -131,6 +131,8 @@ Connect-DattoRMM -Key "your-api-key" -Secret $Secret -AutoRefresh
 
 When `-AutoRefresh` is enabled, the module stores the supplied credentials in memory and uses them to request a new token before the current token expires. The default token lifetime is 100 hours and can be adjusted with `Set-RMMConfig -TokenExpireHours`.
 
+To protect long-running operations (such as paginating large device lists) from mid-request token expiry, the module refreshes the token proactively based on a configurable buffer. The default buffer is 10 minutes and can be adjusted with `Set-RMMConfig -TokenRefreshBufferMinutes`. As an additional safety net, if a 401 response is received during an API call, the module will attempt a single token refresh before failing.
+
 > [!IMPORTANT]
 > `-AutoRefresh` retains credentials in memory for the session. If this is not acceptable for your security posture, omit `-AutoRefresh` and re-authenticate manually when tokens expire.
 

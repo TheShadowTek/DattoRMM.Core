@@ -83,6 +83,16 @@ Controls how frequently the module refreshes its API token when `-AutoRefresh` i
 Set-RMMConfig -TokenExpireHours 48
 ```
 
+### Token Refresh Buffer Minutes
+
+Sets the number of minutes before token expiry at which the module will proactively refresh the token. This prevents long-running paginated operations (e.g., retrieving 100k+ devices) from failing due to mid-request token expiry. Valid range: 1–60. Default: 10.
+
+```powershell
+Set-RMMConfig -TokenRefreshBufferMinutes 15
+```
+
+As a safety net, the module also handles unexpected 401 responses during API calls by attempting a single token refresh (when `-AutoRefresh` is enabled) before failing. This covers edge cases such as clock skew or early token revocation.
+
 ### API Resilience Settings
 
 The module includes automatic retry logic for transient API failures:

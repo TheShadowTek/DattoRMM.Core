@@ -58,6 +58,7 @@ function Save-RMMConfig {
         'ApiMaxRetries' = $Script:ApiMethodRetry.MaxRetries
         'ApiRetryIntervalSeconds' = $Script:ApiMethodRetry.RetryIntervalSeconds
         'ApiTimeoutSeconds' = $Script:ApiMethodRetry.TimeoutSeconds
+        'TokenRefreshBufferMinutes' = $Script:TokenRefreshBufferMinutes
     }
 
     $Success = Write-ConfigFile -Config $Config
@@ -72,6 +73,7 @@ function Save-RMMConfig {
         $Script:ConfigApiMaxRetries = $Script:ApiMethodRetry.MaxRetries
         $Script:ConfigApiRetryIntervalSeconds = $Script:ApiMethodRetry.RetryIntervalSeconds
         $Script:ConfigApiTimeoutSeconds = $Script:ApiMethodRetry.TimeoutSeconds
+        $Script:ConfigTokenRefreshBufferMinutes = $Script:TokenRefreshBufferMinutes
 
         Write-Host "Configuration saved successfully." -ForegroundColor Green
 

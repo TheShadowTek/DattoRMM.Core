@@ -68,6 +68,12 @@ function Initialize-SavedConfig {
                     Write-Verbose "ApiTimeoutSeconds: $($Script:ApiMethodRetry.TimeoutSeconds)"
                 }
 
+                'TokenRefreshBufferMinutes' {
+                    $Script:TokenRefreshBufferMinutes = $SavedConfig.TokenRefreshBufferMinutes
+                    $Script:ConfigTokenRefreshBufferMinutes = $SavedConfig.TokenRefreshBufferMinutes
+                    Write-Verbose "TokenRefreshBufferMinutes: $($Script:TokenRefreshBufferMinutes)"
+                }
+
                 'ThrottleProfile' {
 
                     Import-ThrottleProfile -Config $SavedConfig
