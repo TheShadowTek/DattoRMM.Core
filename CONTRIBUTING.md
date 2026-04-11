@@ -731,6 +731,8 @@ refactor: Simplify pagination logic in Invoke-ApiMethod
 5. **Test your changes** — verify with a live API key pair if possible.
 6. **Describe your changes** — explain what changed, why, and what testing was done.
 
+**Templates:** The repository includes PR and issue templates to standardise contributions. Use the PR template when opening pull requests (see `.github/PULL_REQUEST_TEMPLATE.md`) — it includes sections for summary, related issues, change details, test instructions, and a pre-merge checklist. For new issues, use the templates under `.github/ISSUE_TEMPLATE/` (for example `bug_report.md` and `feature_request.md`). These templates help reviewers and maintainers triage and validate contributions more quickly.
+
 ---
 
 ## Security
