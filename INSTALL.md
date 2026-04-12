@@ -5,7 +5,7 @@
 | Requirement | Details |
 |---|---|
 | **PowerShell** | 7.4 or later (PowerShell Core only — Windows PowerShell 5.1 is not supported) |
-| **Platform** | Windows |
+| **Platform** | Cross‑platform (PowerShell 7.4+) |
 | **Execution Policy** | See [Step 2](#step-2--execution-policy) below |
 
 ---
