@@ -26,7 +26,7 @@ function Add-ThrottleRequest {
 
     $Now = [datetime]::UtcNow
 
-    if ($Method -eq 'Get') {
+    if ($Script:LegacyThrottleMode -or $Method -eq 'Get') {
 
         # Record in read bucket
         $Script:RMMThrottle.ReadLocalTimestamps.Add($Now)

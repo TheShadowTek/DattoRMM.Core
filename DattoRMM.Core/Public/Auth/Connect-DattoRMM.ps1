@@ -54,6 +54,17 @@ function Connect-DattoRMM {
         
         To set a persistent default platform: Save-RMMConfig -DefaultPlatform Merlot
 
+    .PARAMETER LegacyThrottle
+        Forces the throttle engine to operate in legacy single-bucket mode. When enabled, all API
+        requests (including writes) are tracked against the read bucket only. Write-specific counters,
+        per-operation buckets, and write decay logic are bypassed.
+
+        Use this switch if your Datto RMM account uses the legacy single-bucket rate-limit model.
+        Default behaviour (modern multi-bucket model) is unchanged when this switch is not specified.
+
+        This is a temporary compatibility mechanism. It will be deprecated once automatic detection
+        of the rate-limit model is implemented.
+
     .PARAMETER Proxy
         Specifies a proxy server for the request, rather than connecting directly to the Datto RMM API.
         Enter the URI of a network proxy server. This parameter is optional and only needed if your
@@ -196,6 +207,9 @@ function Connect-DattoRMM {
         [RMMPlatform]
         $Platform,
 
+        [switch]
+        $LegacyThrottle,
+
         [Parameter(
             Mandatory = $false
         )]
@@ -337,6 +351,15 @@ function Connect-DattoRMM {
 
             }
         }
+    }
+
+    # Store legacy throttle mode flag
+    $Script:LegacyThrottleMode = $LegacyThrottle.IsPresent
+
+    if ($Script:LegacyThrottleMode) {
+
+        Write-Verbose "Legacy single-bucket throttle mode enabled. All requests will be tracked against the read bucket."
+
     }
 
     # Discover rate limits and initialise multi-bucket throttle state

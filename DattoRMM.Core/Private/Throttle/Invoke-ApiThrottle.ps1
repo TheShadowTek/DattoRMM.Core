@@ -33,7 +33,7 @@ function Invoke-ApiThrottle {
         $OperationName
     )
 
-    $IsRead = ($Method -eq 'Get')
+    $IsRead = ($Script:LegacyThrottleMode -or $Method -eq 'Get')
     $Now = [datetime]::UtcNow
     $WindowStart = $Now.AddSeconds(-$Script:RMMThrottle.WindowSizeSeconds)
 

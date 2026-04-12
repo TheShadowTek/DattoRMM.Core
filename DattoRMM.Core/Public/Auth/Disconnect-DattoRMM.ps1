@@ -49,6 +49,7 @@ function Disconnect-DattoRMM {
     $Script:APIUrl = $null
     $Script:API = $null
     $Script:PageSize = $null
+    $Script:LegacyThrottleMode = $false
 
     Write-Verbose "Disconnected from Datto RMM API."
 
