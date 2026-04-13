@@ -23,7 +23,7 @@ function Export-RMMObjectCsv {
 
         For DRMMDevice exports, the -IncludeUdf and -Udf parameters control whether user-defined
         fields are appended to the transform output. By default, UDFs are excluded to keep exports
-        clean. -IncludeUdf adds all UDF columns (Udf1-Udf30) for consistent schema across appends.
+        clean. -IncludeUdf adds all UDF columns (Udf1-Udf300) for consistent schema across appends.
         -Udf accepts a string array to include specific UDFs (e.g. 'Udf1', 'Udf5').
 
         Objects are written to disk individually in the process block. This streaming approach keeps
@@ -45,7 +45,7 @@ function Export-RMMObjectCsv {
         Adds an 'ExportTimestamp' column with the current UTC date and time to each row.
 
     .PARAMETER IncludeUdf
-        Includes all user-defined fields (UDF1-UDF30) in the export for consistent column schema.
+        Includes all user-defined fields (Udf1-Udf300) in the export for consistent column schema.
         Only valid for DRMMDevice objects. Ignored for other types.
 
     .PARAMETER Udf
@@ -73,7 +73,7 @@ function Export-RMMObjectCsv {
     .EXAMPLE
         Get-RMMDevice | Export-RMMObjectCsv -Path .\Devices.csv -IncludeUdf
 
-        Exports all devices with all UDF columns (Udf1-Udf30) appended.
+        Exports all devices with all UDF columns (Udf1-Udf300) appended.
 
     .EXAMPLE
         Get-RMMDevice | Export-RMMObjectCsv -Path .\Devices.csv -Udf 'Udf1', 'Udf5', 'Udf10'
@@ -295,9 +295,9 @@ function Export-RMMObjectCsv {
 
                 if ($IncludeUdf) {
 
-                    Write-Verbose "Including all UDF columns (Udf1-Udf30)"
+                    Write-Verbose "Including all UDF columns (Udf1-Udf$([DRMMDeviceUdfs]::MaxUdfCount))"
 
-                    for ($i = 1; $i -le 30; $i++) {
+                    for ($i = 1; $i -le [DRMMDeviceUdfs]::MaxUdfCount; $i++) {
 
                         $UdfName = "Udf$i"
 
@@ -313,10 +313,19 @@ function Export-RMMObjectCsv {
 
                     foreach ($UdfName in $Udf) {
 
-                        # Validate UDF name format
-                        if ($UdfName -notmatch '^Udf\d{1,3}$') {
+                        # Validate UDF name format and range
+                        if ($UdfName -notmatch '^Udf(\d{1,3})$') {
 
-                            Write-Warning "Skipping invalid UDF name '$UdfName'. Expected format: Udf1, Udf2, ... Udf30."
+                            Write-Warning "Skipping invalid UDF name '$UdfName'. Expected format: Udf1, Udf2, ... Udf$([DRMMDeviceUdfs]::MaxUdfCount)."
+                            continue
+
+                        }
+
+                        $UdfNum = [int]$Matches[1]
+
+                        if ($UdfNum -lt 1 -or $UdfNum -gt [DRMMDeviceUdfs]::MaxUdfCount) {
+
+                            Write-Warning "Skipping out-of-range UDF '$UdfName'. Valid range: Udf1-Udf$([DRMMDeviceUdfs]::MaxUdfCount)."
                             continue
 
                         }
