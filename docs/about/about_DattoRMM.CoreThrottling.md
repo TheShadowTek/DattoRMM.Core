@@ -159,3 +159,25 @@ Settings are stored at: `$HOME/.DattoRMM.Core/config.json`
 - The pause threshold defaults to the platform cutoff minus a configurable safety overhead
 - All profile settings can be adjusted at runtime without reconnecting
 - For best results across concurrent sessions, use the same profile on all active sessions targeting the same account
+
+## LEGACY SINGLE-BUCKET MODE
+
+Some Datto RMM accounts use a legacy rate-limit model with a single shared bucket instead of the modern read/write/operation model. If your account uses the legacy model, the default multi-bucket throttle engine will misclassify requests.
+
+To enable legacy compatibility, use the `-LegacyThrottle` switch when connecting:
+
+```powershell
+Connect-DattoRMM -Key "your-api-key" -Secret $Secret -LegacyThrottle
+```
+
+When enabled:
+
+- All API requests (including PUT, POST, DELETE) are tracked against the **read bucket only**
+- Write-specific counters, per-operation buckets, and write decay logic are bypassed
+- A single shared bucket is used for all rate-limit calculations
+- A diagnostic message is emitted confirming legacy mode is active
+
+Default behaviour (modern multi-bucket model) is unchanged when `-LegacyThrottle` is not specified.
+
+> [!NOTE]
+> This is a temporary compatibility mechanism. It will be deprecated once automatic detection of the rate-limit model is implemented. See Issue [#7](https://github.com/TheShadowTek/DattoRMM.Core/issues/7) and Issue [#33](https://github.com/TheShadowTek/DattoRMM.Core/issues/33) for details.

@@ -2,9 +2,9 @@
 
 A PowerShell module for the Datto RMM API v2. Provides typed, object-oriented access to devices, sites, alerts, jobs, filters, variables, and account management with built-in adaptive throttling and secure credential handling.
 
-> **⚠️ Known Compatibility Issue**
+> **⚠️ Legacy Rate-Limit Compatibility**
 > 
-> Some Datto RMM accounts use a legacy single-bucket rate-limit model. **This module is incompatible with that configuration** and will not operate correctly if your account uses it. See [Known Issues](#known-issues) for details and workarounds. Support for both models is planned for `v0.6.0-beta.1`.
+> Some Datto RMM accounts use a legacy single-bucket rate-limit model. Use the `-LegacyThrottle` switch on `Connect-DattoRMM` to enable compatibility. See [Known Issues](#known-issues) for details.
 
 > **Requires PowerShell 7.4 or later** (Core edition only).
 
@@ -122,9 +122,17 @@ The following known issue is currently being tracked. Additional items may be ad
 
 ### Legacy Single‑Bucket Rate‑Limit Model (Platform Configuration)
 
-Some Datto RMM accounts are currently configured to use the legacy single‑bucket rate‑limit model. The module requires the newer read/write/operation rate‑limit model and cannot operate correctly when the legacy model is active.
+Some Datto RMM accounts are configured to use the legacy single‑bucket rate‑limit model instead of the modern read/write/operation model.
 
-Support for both models is planned for `v0.6.0‑beta.1`.
+To connect with legacy compatibility:
+
+```powershell
+Connect-DattoRMM -Key "your-api-key" -Secret $Secret -LegacyThrottle
+```
+
+When `-LegacyThrottle` is enabled, all API requests (including writes) are tracked against the read bucket only. Write-specific counters, per-operation buckets, and write decay logic are bypassed.
+
+This is a temporary compatibility mechanism. It will be deprecated once automatic detection of the rate-limit model is implemented.
 
 See Issue [#7 Issue: Add Support for Legacy Single‑Bucket Rate‑Limit Model (Module Currently Incompatible)](https://github.com/TheShadowTek/DattoRMM.Core/issues/7#issue-4204729279) for details and progress.
 

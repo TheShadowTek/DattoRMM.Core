@@ -41,6 +41,9 @@ $Script:ApiMethodRetry = Import-PowerShellDataFile -Path "$PSScriptRoot\Private\
 # Initialize script-scoped auth object
 $Script:RMMAuth = $null
 
+# Legacy single-bucket throttle mode flag (set by Connect-DattoRMM -LegacyThrottle)
+$Script:LegacyThrottleMode = $false
+
 # Dot-source remaining .ps1 files in Private folder
 Get-ChildItem -Path $PSScriptRoot\Private -Filter *.ps1 -Recurse | Where-Object {$_.BaseName -ne 'howtothrottle'} | ForEach-Object {
 
@@ -103,6 +106,7 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
     }
     
     # Remove throttle state and module defaults
+    Remove-Variable -Name LegacyThrottleMode -Scope Script -ErrorAction SilentlyContinue
     Remove-Variable -Name RMMThrottle -Scope Script -ErrorAction SilentlyContinue
     Remove-Variable -Name ApiMethodRetry -Scope Script -ErrorAction SilentlyContinue
     Remove-Variable -Name ThrottleProfileDefaults -Scope Script -ErrorAction SilentlyContinue
