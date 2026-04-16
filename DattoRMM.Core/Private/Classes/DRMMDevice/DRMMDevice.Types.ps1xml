@@ -73,11 +73,11 @@
         <Name>ToString</Name>
         <Script>
             $Set = 0
-            for ($i = 1; $i -le 30; $i++) {
+            for ($i = 1; $i -le [DRMMDeviceUdfs]::MaxUdfCount; $i++) {
               $Val = $this."Udf$i"
               if (-not [string]::IsNullOrWhiteSpace($Val)) {$Set++}
             }
-            "$Set of 30 UDFs set"
+            "$Set of $([DRMMDeviceUdfs]::MaxUdfCount) UDFs set"
           </Script>
       </ScriptMethod>
     </Members>
