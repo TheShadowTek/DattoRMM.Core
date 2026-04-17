@@ -39,7 +39,6 @@ Manually set any of the following throttle values in your config JSON to overrid
     - DriftScalingFactor             : How aggressively interval shrinks with drift - default 2
     - ThrottleUtilisationThreshold   : Utilisation threshold to start delays - default 0.3
     - ThrottleCutOffOverhead         : Safety margin below pause threshold - default 0.05
-    - WriteDelayMultiplier           : Delay multiplier for write operations - default 1000
     - UnknownOperationSafetyFactor   : Fractional delay for unmapped writes - default 0.3
 
  Any of these keys present in your config file will override the corresponding module preset at startup.

@@ -21,25 +21,23 @@
 #   DriftFactor      = 1 / (1 + (DriftGap / DriftThreshold) * DriftScaling)
 #   Interval         = Max(Min, Base * ConfidenceFactor * DriftFactor)
 #
-# WriteDelayMultiplier: delay multiplier applied to write bucket pressure (separate from global read/write DelayMultiplier).
 # UnknownOperationSafetyFactor: fractional delay applied to write operations with no explicit operation mapping.
 # Note: Profiles tuned for up to 5 concurrent heavy-use sessions sharing the same API quota.
 
 @{
     'Cautious' = @{
-        DelayMultiplier = 1500
+        DelayMultiplier = 1000
         CalibrationBaseSeconds = 5
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 30
         DriftThresholdPercent = 0.01
         DriftScalingFactor = 3
-        ThrottleUtilisationThreshold = 0.15
-        ThrottleCutOffOverhead = 0.10
-        WriteDelayMultiplier = 1750
+        ThrottleUtilisationThreshold = 0.2
+        ThrottleCutOffOverhead = 0.08
         UnknownOperationSafetyFactor = 0.5
     }
     'Medium' = @{
-        DelayMultiplier = 750
+        DelayMultiplier = 500
         CalibrationBaseSeconds = 8
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 50
@@ -47,23 +45,21 @@
         DriftScalingFactor = 2
         ThrottleUtilisationThreshold = 0.3
         ThrottleCutOffOverhead = 0.05
-        WriteDelayMultiplier = 1000
         UnknownOperationSafetyFactor = 0.3
     }
     'Aggressive' = @{
-        DelayMultiplier = 300
+        DelayMultiplier = 250
         CalibrationBaseSeconds = 15
         CalibrationMinSeconds = 1
         CalibrationConfidenceCount = 80
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 1.5
-        ThrottleUtilisationThreshold = 0.5
+        ThrottleUtilisationThreshold = 0.45
         ThrottleCutOffOverhead = 0.04
-        WriteDelayMultiplier = 750
-        UnknownOperationSafetyFactor = 0.1
+        UnknownOperationSafetyFactor = 0.15
     }
     'DefaultProfile' = @{
-        DelayMultiplier = 750
+        DelayMultiplier = 500
         CalibrationBaseSeconds = 8
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 50
@@ -71,7 +67,6 @@
         DriftScalingFactor = 2
         ThrottleUtilisationThreshold = 0.3
         ThrottleCutOffOverhead = 0.05
-        WriteDelayMultiplier = 1000
         UnknownOperationSafetyFactor = 0.3
     }
 }

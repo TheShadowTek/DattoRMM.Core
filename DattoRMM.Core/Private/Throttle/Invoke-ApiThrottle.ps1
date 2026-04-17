@@ -180,13 +180,16 @@ function Invoke-ApiThrottle {
     if ($IsRead) {
 
         # Read requests: evaluate read bucket only
-        # Seed MaxDelay with the last calibration-determined value as a floor.
-        # This carries the API-reported picture forward between calibrations,
-        # preventing sessions with low local sample counts from being undercharged
-        # when other concurrent sessions are consuming shared quota.
+        # Seed MaxDelay with a decaying floor from the last calibration-determined value.
+        # This carries the API-reported picture forward between calibrations, preventing
+        # sessions with low local sample counts from being undercharged when other concurrent
+        # sessions are consuming shared quota. The floor decays linearly to zero over one
+        # calibration base interval, so late in the interval local pressure alone governs.
         if ($Script:RMMThrottle.ReadDelayMS -gt 0) {
 
-            $MaxDelay = $Script:RMMThrottle.ReadDelayMS
+            $CalibElapsed = ($Now - $Script:RMMThrottle.ReadLastCalibrationUtc).TotalSeconds
+            $DecayFactor = [math]::Max(0.0, 1.0 - ($CalibElapsed / [math]::Max($Script:RMMThrottle.CalibrationBaseSeconds, 1)))
+            $MaxDelay = $Script:RMMThrottle.ReadDelayMS * $DecayFactor
 
         }
 
@@ -206,10 +209,13 @@ function Invoke-ApiThrottle {
     } else {
 
         # Write requests: evaluate global write bucket + per-operation bucket
-        # Seed MaxDelay from calibration-determined write delay floor
+        # Seed MaxDelay with a decaying floor from the last calibration-determined value.
+        # Decays linearly to zero over one calibration base interval.
         if ($Script:RMMThrottle.WriteDelayMS -gt 0) {
 
-            $MaxDelay = $Script:RMMThrottle.WriteDelayMS
+            $CalibElapsed = ($Now - $Script:RMMThrottle.WriteLastCalibrationUtc).TotalSeconds
+            $DecayFactor = [math]::Max(0.0, 1.0 - ($CalibElapsed / [math]::Max($Script:RMMThrottle.CalibrationBaseSeconds, 1)))
+            $MaxDelay = $Script:RMMThrottle.WriteDelayMS * $DecayFactor
 
         }
 
@@ -226,7 +232,7 @@ function Invoke-ApiThrottle {
 
             } elseif ($WriteUtil -ge $Script:RMMThrottle.ThrottleUtilisationThreshold) {
 
-                $Delay = $WriteUtil * $Script:RMMThrottle.WriteDelayMultiplier
+                $Delay = $WriteUtil * $Script:RMMThrottle.DelayMultiplier
                 $MaxDelay = [math]::Max($MaxDelay, $Delay)
 
             }
@@ -251,7 +257,7 @@ function Invoke-ApiThrottle {
 
             } elseif ($OpUtil -ge $Script:RMMThrottle.ThrottleUtilisationThreshold) {
 
-                $Delay = $OpUtil * $Script:RMMThrottle.WriteDelayMultiplier
+                $Delay = $OpUtil * $Script:RMMThrottle.DelayMultiplier
                 $MaxDelay = [math]::Max($MaxDelay, $Delay)
 
             }
@@ -259,7 +265,7 @@ function Invoke-ApiThrottle {
         } elseif ($OperationName) {
 
             # Unknown write operation — apply conservative safety delay
-            $SafetyDelay = $Script:RMMThrottle.UnknownOperationSafetyFactor * $Script:RMMThrottle.WriteDelayMultiplier
+            $SafetyDelay = $Script:RMMThrottle.UnknownOperationSafetyFactor * $Script:RMMThrottle.DelayMultiplier
 
             if ($SafetyDelay -gt 0) {
 

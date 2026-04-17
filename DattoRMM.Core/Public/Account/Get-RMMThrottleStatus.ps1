@@ -77,8 +77,7 @@ function Get-RMMThrottleStatus {
         - Pause (bool): Whether hard pause is currently active
         - ReadDelayMs (double): Current computed read delay in milliseconds
         - WriteDelayMs (double): Current computed write delay in milliseconds
-        - DelayMultiplier (double): Configured read delay multiplier
-        - WriteDelayMultiplier (double): Configured write delay multiplier
+        - DelayMultiplier (double): Configured delay multiplier (used for both read and write)
         - ReadLastCalibrationUtc (datetime): UTC time of the last read calibration
         - WriteLastCalibrationUtc (datetime): UTC time of the last write calibration
         - ReadSamplesAtLastCalibration (int): Local read samples at last calibration
@@ -130,7 +129,6 @@ function Get-RMMThrottleStatus {
         $Result.ThrottleUtilisationThreshold = $Script:RMMThrottle.ThrottleUtilisationThreshold
         $Result.PauseThreshold = $RateInfo.accountCutOffRatio - $Script:RMMThrottle.ThrottleCutOffOverhead
         $Result.DelayMultiplier = $Script:RMMThrottle.DelayMultiplier
-        $Result.WriteDelayMultiplier = $Script:RMMThrottle.WriteDelayMultiplier
         $Result.ReadLastCalibrationUtc = $Script:RMMThrottle.ReadLastCalibrationUtc
         $Result.WriteLastCalibrationUtc = $Script:RMMThrottle.WriteLastCalibrationUtc
         $Result.ReadSamplesAtLastCalibration = $Script:RMMThrottle.ReadSamplesAtLastCalibration
@@ -171,7 +169,7 @@ function Get-RMMThrottleStatus {
 
         if ($WriteThrottle) {
 
-            $Result.WriteDelayMs = $Result.WriteUtilisation * $Script:RMMThrottle.WriteDelayMultiplier
+            $Result.WriteDelayMs = $Result.WriteUtilisation * $Script:RMMThrottle.DelayMultiplier
 
         } else {
 

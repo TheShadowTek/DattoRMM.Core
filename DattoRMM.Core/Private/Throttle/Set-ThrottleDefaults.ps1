@@ -34,7 +34,7 @@ function Set-ThrottleDefaults {
 
     $Script:RMMThrottle = [ordered]@{
         Profile = 'DefaultProfile'                                                      # Active throttle profile name
-        DelayMultiplier = 750                                                           # Delay multiplier for read bucket throttling
+        DelayMultiplier = 500                                                           # Delay multiplier for all bucket throttling (read and write)
         ThrottleCutOffOverhead = 0.05                                                   # Safety margin below accountCutOffRatio for pause trigger
         ThrottleUtilisationThreshold = 0.3                                              # Utilisation ratio at which throttling activates
         CalibrationBaseSeconds = 8                                                      # Ceiling interval at high confidence and zero drift
@@ -42,7 +42,6 @@ function Set-ThrottleDefaults {
         CalibrationConfidenceCount = 50                                                 # Local samples needed before interval reaches full base
         DriftThresholdPercent = 0.02                                                    # Drift gap at which accelerated calibration begins (2%)
         DriftScalingFactor = 2                                                          # How aggressively interval shrinks as drift exceeds threshold
-        WriteDelayMultiplier = 1000                                                     # Delay multiplier for write bucket throttling
         UnknownOperationSafetyFactor = 0.3                                              # Fractional delay for unmapped write operations
         WindowSizeSeconds = 60                                                          # Rolling window size (discovered from API)
         ReadLimit = 600                                                                 # Read (GET) rate limit (discovered from API as accountRateLimit)

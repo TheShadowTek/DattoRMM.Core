@@ -112,7 +112,7 @@ function Update-Throttle {
 
     if ($WriteThrottle) {
 
-        $Script:RMMThrottle.WriteDelayMS = $Script:RMMThrottle.WriteUtilisation * $Script:RMMThrottle.WriteDelayMultiplier
+        $Script:RMMThrottle.WriteDelayMS = $Script:RMMThrottle.WriteUtilisation * $Script:RMMThrottle.DelayMultiplier
 
     } else {
 
