@@ -239,10 +239,17 @@ function Invoke-ApiThrottle {
         }
 
         # Per-operation write bucket (if operation is tracked)
+        # Delay is scaled by the ratio of account write limit to operation limit so that
+        # low-limit operations (e.g. 100) get proportionally larger delays than high-limit
+        # ones (e.g. 600). This prevents small-bucket operations from racing toward pause
+        # because each request consumes a much larger fraction of a small bucket.
+        # The ratio is derived from live API-reported limits, so it self-tunes if Datto
+        # adjusts operation limits in future.
         if ($OperationName -and $Script:RMMThrottle.OperationBuckets.ContainsKey($OperationName)) {
 
             $OpBucket = $Script:RMMThrottle.OperationBuckets[$OperationName]
             $OpUtil = $OpBucket.LocalTimestamps.Count / [math]::Max($OpBucket.Limit, 1)
+            $LimitRatio = [math]::Max(1.0, $Script:RMMThrottle.WriteLimit / [math]::Max($OpBucket.Limit, 1))
 
             if ($OpUtil -ge $PauseThreshold) {
 
@@ -257,7 +264,7 @@ function Invoke-ApiThrottle {
 
             } elseif ($OpUtil -ge $Script:RMMThrottle.ThrottleUtilisationThreshold) {
 
-                $Delay = $OpUtil * $Script:RMMThrottle.DelayMultiplier
+                $Delay = $OpUtil * $Script:RMMThrottle.DelayMultiplier * $LimitRatio
                 $MaxDelay = [math]::Max($MaxDelay, $Delay)
 
             }
@@ -290,8 +297,8 @@ function Invoke-ApiThrottle {
             Write-Warning "High API utilisation detected ($PauseBucketLabel $([math]::Round($PauseBucketUtil * 100, 2))%). Pausing requests to avoid rate limiting."
             $WarningPreference = $SavedWarningPreference
 
-            Write-Debug "Throttle[$TrackLabel]: Pause triggered by '$PauseBucketLabel' at $([math]::Round($PauseBucketUtil * 100, 2))% (threshold $([math]::Round($PauseThreshold * 100, 2))%). Sleeping 60s."
-            Start-Sleep -Seconds 60
+            Write-Debug "Throttle[$TrackLabel]: Pause triggered by '$PauseBucketLabel' at $([math]::Round($PauseBucketUtil * 100, 2))% (threshold $([math]::Round($PauseThreshold * 100, 2))%). Sleeping 30s."
+            Start-Sleep -Seconds 30
             Write-Debug "Throttle[$TrackLabel]: Pause sleep completed. Re-evaluating all applicable buckets."
             Update-Throttle
 

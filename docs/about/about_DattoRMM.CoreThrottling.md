@@ -23,33 +23,57 @@ A read request only counts against the read limit. A write request only counts a
 
 ### Architecture
 
-Every request passes through a pre-request gate that evaluates pressure against the appropriate bucket(s) based on the HTTP method. Read requests are evaluated against the read bucket only. Write requests are evaluated against write buckets only.
+Every API request flows through a layered pipeline. The throttle gate sits inside the retry engine, evaluating pressure against the appropriate bucket(s) based on HTTP method before each attempt.
 
 ```
-  ┌──────────────────────────────────┐
-  │         Incoming Request         │
-  └─────────────────┬────────────────┘
-                    │
-        ┌───────────▼────────────┐
-        │    Pre-Request Gate    │
-        │  (method-based routing)│
-        └──┬──────────┬──────────┘
-           │          │
-  GET only │          │ PUT/POST/DELETE only
-           │          │
-  ┌────────▼──┐  ┌────▼───────────────────────────────┐
-  │   Read    │  │         Write (non-GET only)       │
-  │  Bucket   │  ├──────────────┬─────────────────────┤
-  │ (GET req) │  │ Global Write │ Per-Operation (×16) │
-  └───────────┘  └──────┬───────┴──────────┬──────────┘
-                        │                  │
-                        └──────────────────┘
-                              │
-                    ┌─────────▼──────────┐
-                    │  Highest pressure  │
-                    │   → delay applied  │
-                    └────────────────────┘
+  ┌─────────────────────────────────────────────────────────────┐
+  │                  Public Function Layer                      │
+  │           (Get-RMMDevice, Set-RMMDeviceUdf, ...)            │
+  └──────────────────────────┬──────────────────────────────────┘
+                             │
+  ┌──────────────────────────▼──────────────────────────────────┐
+  │                     Invoke-ApiMethod                        │
+  │  • Proactive token refresh (5-min buffer before expiry)     │
+  │  • URI + header + body assembly                             │
+  │  • Operation classification (Resolve-ThrottleOperationName) │
+  │  • Pagination loop (follows nextPageUrl until exhausted)    │
+  └──────────────────────────┬──────────────────────────────────┘
+                             │  (per page / per request)
+  ┌──────────────────────────▼──────────────────────────────────┐
+  │                   Invoke-ApiRestMethod                      │
+  │  ┌───────────────── Retry Loop ──────────────────────┐      │
+  │  │                                                   │      │
+  │  │  1. Invoke-ApiThrottle ◄── PRE-REQUEST GATE       │      │
+  │  │  2. Invoke-RestMethod  ◄── HTTP call              │      │
+  │  │  3. Add-ThrottleRequest ◄── record in window      │      │
+  │  │                                                   │      │
+  │  │  On error: retry / token refresh / 429 handling   │      │
+  │  └───────────────────────────────────────────────────┘      │
+  └─────────────────────────────────────────────────────────────┘
+                             │
+  ┌──────────────────────────▼──────────────────────────────────┐
+  │                    Invoke-ApiThrottle                       │
+  │               (Pre-Request Throttle Gate)                   │
+  │                                                             │
+  │  • Route by HTTP method (GET vs PUT/POST/DELETE)            │
+  │  • Evaluate calibration interval (confidence + drift)       │
+  │  • Trigger Update-Throttle when interval expires            │
+  │  • Evaluate all applicable buckets:                         │
+  │                                                             │
+  │     GET only           PUT/POST/DELETE only                 │
+  │    ┌──────────┐       ┌──────────────────────────────────┐  │
+  │    │  Read    │       │        Write (non-GET only)      │  │
+  │    │  Bucket  │       ├──────────────┬───────────────────┤  │
+  │    │          │       │ Global Write │ Per-Operation     │  │
+  │    └──────────┘       └──────────────┴───────────────────┘  │
+  │                                                             │
+  │  • Highest pressure across all applicable buckets           │
+  │    → delay (scaled by utilisation × DelayMultiplier)        │
+  │    → or pause if any bucket exceeds hard cutoff             │
+  └─────────────────────────────────────────────────────────────┘
 ```
+
+The throttle gate and the retry engine are deliberately separate concerns. The gate paces requests; the retry engine handles transient failures and token refresh. On HTTP 429 (rate limit exceeded), the retry engine triggers a calibration via `Update-Throttle` and waits 120 seconds before retrying.
 
 ### Local Tracking and Calibration
 
@@ -63,34 +87,54 @@ Read and write tracks maintain **independent calibration state** (confidence, dr
 - A write-heavy session calibrates based on write pressure; reads benefit from the shared data.
 - If both tracks are active, whichever is under more pressure triggers calibration more frequently.
 
-Calibration frequency per track adapts based on:
-- How much local data has been collected (early in a session, calibrations are more frequent)
-- Whether the local and API-reported figures have drifted apart (indicating concurrent activity)
-- How much delay is already being applied (if the system is already pacing heavily, it backs off on calibration frequency to avoid unnecessary overhead)
+Calibration frequency per track adapts based on three competing floors (highest wins):
 
-This means a session under sustained load will self-regulate naturally — delays pace the requests, and calibration intervals extend proportionally so the system isn't spending API budget on calibration calls it doesn't need.
+1. **Absolute minimum** (`CalibrationMinSeconds`) — prevents API spam regardless of other factors.
+2. **Confidence × Drift formula** (`CalibrationBaseSeconds × ConfidenceFactor × DriftFactor`) — few local samples or high drift produce shorter intervals; full confidence and low drift produce the full base interval.
+3. **Delay-pacing floor** (`CurrentDelayMS × 10`) — when delays are active, the calibration interval scales proportionally so enough paced requests pass between calibrations.
+
+A **request-count gate** also triggers early calibration when enough requests have passed since the last calibration, even if the time interval has not elapsed. This ensures the system detects concurrent sessions early in the session lifecycle when confidence is still building.
+
+Together these mechanisms mean a session under sustained load self-regulates naturally — delays pace the requests, calibration intervals extend proportionally, and the system avoids wasting API budget on calibration calls it doesn't need.
 
 ### Delay Behaviour
 
-When utilisation crosses the configured threshold, a delay is applied before each request. The delay scales with utilisation — higher utilisation produces a longer delay. The threshold and delay multiplier are controlled by the selected profile.
+When utilisation crosses the configured threshold, a delay is applied before each request. The delay scales linearly with utilisation — higher utilisation produces a longer delay. The threshold and a single unified `DelayMultiplier` are controlled by the selected profile. Both reads and writes use the same multiplier.
 
-Read and write delays are computed independently. Each track carries its own calibration-determined delay floor forward between calibrations. For write operations, the delay is calculated independently per applicable bucket (global write and per-operation), and the highest value across all write buckets is used. Write operations are treated more conservatively than reads by default.
+Read and write delays are computed independently against their respective buckets. Each track carries a **decaying calibration floor** forward between calibrations — the last calibration-determined delay decays linearly to zero over one calibration base interval. This prevents sessions with low local sample counts from being undercharged when concurrent sessions are consuming shared quota, while ensuring stale calibration data does not persist indefinitely.
 
-If utilisation on either track reaches the hard cutoff threshold (configurable via the profile), requests of that type are paused entirely until utilisation drops. This is a last-resort protection mechanism and should rarely trigger under normal operation with an appropriate profile selected.
+For write operations, the delay is calculated independently per applicable bucket (global write and per-operation), and the **highest value** across all write buckets governs the actual delay applied.
+
+#### Per-Operation Limit-Ratio Scaling
+
+Per-operation write delays are scaled by the ratio of the account write limit to the operation's own limit. This ensures that low-limit operations (e.g. site-create at 100) receive proportionally larger delays than high-limit operations (e.g. device-udf at 600), preventing small buckets from racing toward pause.
+
+```
+LimitRatio = Max(1.0, AccountWriteLimit / OperationLimit)
+Delay      = OperationUtilisation × DelayMultiplier × LimitRatio
+```
+
+The ratio is derived from live API-reported limits, so it self-tunes if Datto adjusts operation limits in future.
+
+#### Pause Behaviour
+
+If utilisation on any applicable bucket reaches the hard cutoff threshold (platform cutoff minus a configurable safety overhead), requests of that type are paused entirely. The system sleeps for 30 seconds, recalibrates via `Update-Throttle`, and re-evaluates all applicable buckets. The pause loop continues until every relevant bucket drops below the threshold. This is a last-resort protection mechanism and should rarely trigger under normal operation with an appropriate profile selected.
 
 ## PROFILES
 
 Three built-in profiles are available, tuned for different concurrency levels:
 
-| Profile   | Best For                        | Delay Onset | Write Conservatism |
-|-----------|---------------------------------|-------------|--------------------|
-| Aggressive | Single session, high throughput | ~50%        | Moderate           |
-| Medium     | 2-3 concurrent sessions        | ~30%        | Balanced           |
-| Cautious   | 3-5 concurrent sessions        | ~15%        | High               |
+| Profile    | Best For                         | Delay Onset | DelayMultiplier | Calibration Base | Target Utilisation |
+|------------|----------------------------------|-------------|-----------------|------------------|--------------------|
+| Aggressive | Single session, high throughput  | ~45%        | 250             | 5s               | 60–70%             |
+| Medium     | 2–3 concurrent sessions          | ~30%        | 500             | 8s               | 70–80%             |
+| Cautious   | 3–5 concurrent sessions          | ~20%        | 1000            | 5s               | Below 60%          |
 
 The `Medium` profile is the default. It provides a reasonable balance for interactive and lightly automated use.
 
-Choose `Cautious` for long-running automation, scheduled tasks, or any scenario where multiple sessions may be active simultaneously. It introduces delays earlier and detects shared quota contention more aggressively, keeping overall utilisation well below the platform limit to leave headroom for other workloads.
+The `Aggressive` profile uses a shorter calibration base interval and lower confidence count, allowing it to react quickly to utilisation dips and win bandwidth in mixed-profile scenarios. Its lower `DelayMultiplier` produces shorter delays per percentage point of utilisation, pushing throughput higher.
+
+Choose `Cautious` for long-running automation, scheduled tasks, or any scenario where multiple sessions may be active simultaneously. It introduces delays earlier, uses a high `DelayMultiplier` for steeper delay curves, and detects shared quota contention more aggressively — keeping overall utilisation well below the platform limit to leave headroom for other workloads.
 
 ## CONFIGURATION
 
@@ -115,7 +159,7 @@ Save-RMMConfig
 
 ## CONCURRENT USE
 
-All sessions using the same Datto RMM account share the same read and write quotas. The throttling system detects pressure from other sessions through calibration drift — when API-reported utilisation exceeds what local tracking expects, the system tightens its calibration cadence and applies a delay floor to carry that pressure forward until the next calibration. Read and write tracks detect drift independently.
+All sessions using the same Datto RMM account share the same read and write quotas. The throttling system detects pressure from other sessions through calibration drift — when API-reported utilisation exceeds what local tracking expects, the system tightens its calibration cadence. A decaying calibration floor carries the API-reported delay forward between calibrations, preventing undercharging when local sample counts are low. The floor decays linearly to zero over one calibration base interval, so stale data never persists. Read and write tracks detect drift independently.
 
 Recommended profiles by concurrency:
 
@@ -155,8 +199,10 @@ Settings are stored at: `$HOME/.DattoRMM.Core/config.json`
 
 ## NOTES
 
-- Throttling operates entirely pre-request; it does not react to HTTP errors after the fact
+- The throttle gate operates pre-request, proactively pacing requests before they are sent
+- If a 429 does occur, the retry engine triggers a calibration and waits 120 seconds before retrying
 - The pause threshold defaults to the platform cutoff minus a configurable safety overhead
+- Pause sleep is 30 seconds per loop iteration, with recalibration after each sleep
 - All profile settings can be adjusted at runtime without reconnecting
 - For best results across concurrent sessions, use the same profile on all active sessions targeting the same account
 

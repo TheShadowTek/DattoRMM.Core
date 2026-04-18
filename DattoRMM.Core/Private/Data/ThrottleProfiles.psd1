@@ -49,9 +49,9 @@
     }
     'Aggressive' = @{
         DelayMultiplier = 250
-        CalibrationBaseSeconds = 15
-        CalibrationMinSeconds = 1
-        CalibrationConfidenceCount = 80
+        CalibrationBaseSeconds = 5
+        CalibrationMinSeconds = 0.5
+        CalibrationConfidenceCount = 40
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 1.5
         ThrottleUtilisationThreshold = 0.45
