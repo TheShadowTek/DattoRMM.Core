@@ -101,7 +101,7 @@ Together these mechanisms mean a session under sustained load self-regulates nat
 
 When utilisation crosses the configured threshold, a delay is applied before each request. The delay scales linearly with utilisation — higher utilisation produces a longer delay. The threshold and a single unified `DelayMultiplier` are controlled by the selected profile. Both reads and writes use the same multiplier.
 
-Read and write delays are computed independently against their respective buckets. Each track carries a **decaying calibration floor** forward between calibrations — the last calibration-determined delay decays linearly to zero over one calibration base interval. This prevents sessions with low local sample counts from being undercharged when concurrent sessions are consuming shared quota, while ensuring stale calibration data does not persist indefinitely.
+Read and write delays are computed independently against their respective buckets. Each track carries a **calibration floor** forward between calibrations — the last API-reported delay is held flat until the next calibration fires. This prevents sessions with low local sample counts from being undercharged when concurrent sessions are consuming shared quota. The floor is reset on every calibration, so it always reflects the most recent API-reported pressure.
 
 For write operations, the delay is calculated independently per applicable bucket (global write and per-operation), and the **highest value** across all write buckets governs the actual delay applied.
 
@@ -159,7 +159,7 @@ Save-RMMConfig
 
 ## CONCURRENT USE
 
-All sessions using the same Datto RMM account share the same read and write quotas. The throttling system detects pressure from other sessions through calibration drift — when API-reported utilisation exceeds what local tracking expects, the system tightens its calibration cadence. A decaying calibration floor carries the API-reported delay forward between calibrations, preventing undercharging when local sample counts are low. The floor decays linearly to zero over one calibration base interval, so stale data never persists. Read and write tracks detect drift independently.
+All sessions using the same Datto RMM account share the same read and write quotas. The throttling system detects pressure from other sessions through calibration drift — when API-reported utilisation exceeds what local tracking expects, the system tightens its calibration cadence. A flat calibration floor carries the API-reported delay forward between calibrations, preventing undercharging when local sample counts are low. The floor is held at the calibration-determined value and reset on each calibration. Read and write tracks detect drift independently.
 
 Recommended profiles by concurrency:
 

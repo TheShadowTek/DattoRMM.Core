@@ -180,18 +180,10 @@ function Invoke-ApiThrottle {
     if ($IsRead) {
 
         # Read requests: evaluate read bucket only
-        # Seed MaxDelay with a decaying floor from the last calibration-determined value.
-        # This carries the API-reported picture forward between calibrations, preventing
-        # sessions with low local sample counts from being undercharged when other concurrent
-        # sessions are consuming shared quota. The floor decays linearly to zero over one
-        # calibration base interval, so late in the interval local pressure alone governs.
-        if ($Script:RMMThrottle.ReadDelayMS -gt 0) {
-
-            $CalibElapsed = ($Now - $Script:RMMThrottle.ReadLastCalibrationUtc).TotalSeconds
-            $DecayFactor = [math]::Max(0.0, 1.0 - ($CalibElapsed / [math]::Max($Script:RMMThrottle.CalibrationBaseSeconds, 1)))
-            $MaxDelay = $Script:RMMThrottle.ReadDelayMS * $DecayFactor
-
-        }
+        # Seed MaxDelay with the calibration-determined floor and hold it flat until next
+        # calibration. This prevents undercharging when local sample counts are low and
+        # other concurrent sessions are consuming shared quota.
+        $MaxDelay = $Script:RMMThrottle.ReadDelayMS
 
         if ($EffectiveUtil -ge $PauseThreshold) {
 
@@ -209,15 +201,8 @@ function Invoke-ApiThrottle {
     } else {
 
         # Write requests: evaluate global write bucket + per-operation bucket
-        # Seed MaxDelay with a decaying floor from the last calibration-determined value.
-        # Decays linearly to zero over one calibration base interval.
-        if ($Script:RMMThrottle.WriteDelayMS -gt 0) {
-
-            $CalibElapsed = ($Now - $Script:RMMThrottle.WriteLastCalibrationUtc).TotalSeconds
-            $DecayFactor = [math]::Max(0.0, 1.0 - ($CalibElapsed / [math]::Max($Script:RMMThrottle.CalibrationBaseSeconds, 1)))
-            $MaxDelay = $Script:RMMThrottle.WriteDelayMS * $DecayFactor
-
-        }
+        # Seed MaxDelay with the calibration-determined floor and hold it flat until next calibration.
+        $MaxDelay = $Script:RMMThrottle.WriteDelayMS
 
         # Global write bucket
         if ($Script:RMMThrottle.WriteLimit -gt 0) {
