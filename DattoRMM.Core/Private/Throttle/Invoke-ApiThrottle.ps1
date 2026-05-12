@@ -89,7 +89,19 @@ function Invoke-ApiThrottle {
 
     }
 
-    $DriftFactor = 1 / (1 + $DriftRatio * $Script:RMMThrottle.DriftScalingFactor)
+    # Drift guard: when no delays are active and utilisation is below threshold, drift is
+    # rolling-window oscillation (API window phase vs local window phase desynchronising
+    # naturally), not a concurrent-session signal. Suppress compression so single-session
+    # calibration intervals stay stable rather than collapsing to CalibrationMinSeconds.
+    if ($CurrentDelayMS -eq 0 -and $EffectiveUtil -lt $Script:RMMThrottle.ThrottleUtilisationThreshold) {
+
+        $DriftFactor = 1.0
+
+    } else {
+
+        $DriftFactor = 1 / (1 + $DriftRatio * $Script:RMMThrottle.DriftScalingFactor)
+
+    }
 
     # Delay-pacing floor: when delays are active, scale calibration interval so that
     # enough requests pass between calibrations to avoid wasting API calls on
@@ -232,8 +244,9 @@ function Invoke-ApiThrottle {
         # adjusts operation limits in future.
         if ($OperationName -and $Script:RMMThrottle.OperationBuckets.ContainsKey($OperationName)) {
 
-            $OpBucket = $Script:RMMThrottle.OperationBuckets[$OperationName]
-            $OpUtil = $OpBucket.LocalTimestamps.Count / [math]::Max($OpBucket.Limit, 1)
+            $OpBucket   = $Script:RMMThrottle.OperationBuckets[$OperationName]
+            $ApiOpUtil  = if ($OpBucket.ContainsKey('ApiUtilisation')) { $OpBucket.ApiUtilisation } else { 0.0 }
+            $OpUtil     = [math]::Max($ApiOpUtil, $OpBucket.LocalTimestamps.Count / [math]::Max($OpBucket.Limit, 1))
             $LimitRatio = [math]::Max(1.0, $Script:RMMThrottle.WriteLimit / [math]::Max($OpBucket.Limit, 1))
 
             if ($OpUtil -ge $PauseThreshold) {
@@ -323,8 +336,9 @@ function Invoke-ApiThrottle {
                 # Per-operation write bucket
                 if ($OperationName -and $Script:RMMThrottle.OperationBuckets.ContainsKey($OperationName)) {
 
-                    $OpBucket = $Script:RMMThrottle.OperationBuckets[$OperationName]
-                    $OpUtil = $OpBucket.LocalTimestamps.Count / [math]::Max($OpBucket.Limit, 1)
+                    $OpBucket  = $Script:RMMThrottle.OperationBuckets[$OperationName]
+                    $ApiOpUtil = if ($OpBucket.ContainsKey('ApiUtilisation')) { $OpBucket.ApiUtilisation } else { 0.0 }
+                    $OpUtil    = [math]::Max($ApiOpUtil, $OpBucket.LocalTimestamps.Count / [math]::Max($OpBucket.Limit, 1))
 
                     if ($OpUtil -ge $PauseThreshold) {
 

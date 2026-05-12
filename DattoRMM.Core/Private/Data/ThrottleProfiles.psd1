@@ -30,43 +30,43 @@
         CalibrationBaseSeconds = 5
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 30
-        DriftThresholdPercent = 0.01
+        DriftThresholdPercent = 0.015
         DriftScalingFactor = 3
         ThrottleUtilisationThreshold = 0.2
         ThrottleCutOffOverhead = 0.08
         UnknownOperationSafetyFactor = 0.5
     }
     'Medium' = @{
-        DelayMultiplier = 700
+        DelayMultiplier = 750
         CalibrationBaseSeconds = 6
         CalibrationMinSeconds = 0.7
         CalibrationConfidenceCount = 50
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 2
-        ThrottleUtilisationThreshold = 0.3
-        ThrottleCutOffOverhead = 0.05
+        ThrottleUtilisationThreshold = 0.27
+        ThrottleCutOffOverhead = 0.07
         UnknownOperationSafetyFactor = 0.3
     }
     'Aggressive' = @{
-        DelayMultiplier = 500
+        DelayMultiplier = 400
         CalibrationBaseSeconds = 5
         CalibrationMinSeconds = 0.5
-        CalibrationConfidenceCount = 40
+        CalibrationConfidenceCount = 35
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 1.5
-        ThrottleUtilisationThreshold = 0.45
-        ThrottleCutOffOverhead = 0.04
+        ThrottleUtilisationThreshold = 0.50
+        ThrottleCutOffOverhead = 0.05
         UnknownOperationSafetyFactor = 0.15
     }
     'DefaultProfile' = @{
-        DelayMultiplier = 700
+        DelayMultiplier = 750
         CalibrationBaseSeconds = 6
         CalibrationMinSeconds = 0.7
         CalibrationConfidenceCount = 50
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 2
-        ThrottleUtilisationThreshold = 0.3
-        ThrottleCutOffOverhead = 0.05
+        ThrottleUtilisationThreshold = 0.27
+        ThrottleCutOffOverhead = 0.07
         UnknownOperationSafetyFactor = 0.3
     }
 }
