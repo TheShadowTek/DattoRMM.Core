@@ -22,7 +22,7 @@
 #   Interval         = Max(Min, Base * ConfidenceFactor * DriftFactor)
 #
 # UnknownOperationSafetyFactor: fractional delay applied to write operations with no explicit operation mapping.
-# Note: Profiles tuned for up to 5 concurrent heavy-use sessions sharing the same API quota.
+# Note: Profiles tuned for up to 4 concurrent heavy-use sessions sharing the same API quota.
 
 @{
     'Cautious' = @{
@@ -37,9 +37,9 @@
         UnknownOperationSafetyFactor = 0.5
     }
     'Medium' = @{
-        DelayMultiplier = 500
-        CalibrationBaseSeconds = 8
-        CalibrationMinSeconds = 0.5
+        DelayMultiplier = 700
+        CalibrationBaseSeconds = 6
+        CalibrationMinSeconds = 0.7
         CalibrationConfidenceCount = 50
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 2
@@ -48,7 +48,7 @@
         UnknownOperationSafetyFactor = 0.3
     }
     'Aggressive' = @{
-        DelayMultiplier = 250
+        DelayMultiplier = 500
         CalibrationBaseSeconds = 5
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 40
@@ -59,9 +59,9 @@
         UnknownOperationSafetyFactor = 0.15
     }
     'DefaultProfile' = @{
-        DelayMultiplier = 500
-        CalibrationBaseSeconds = 8
-        CalibrationMinSeconds = 0.5
+        DelayMultiplier = 700
+        CalibrationBaseSeconds = 6
+        CalibrationMinSeconds = 0.7
         CalibrationConfidenceCount = 50
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 2
