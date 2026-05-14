@@ -93,9 +93,7 @@ Calibration frequency per track adapts based on three competing floors (highest 
 2. **Confidence × Drift formula** (`CalibrationBaseSeconds × ConfidenceFactor × DriftFactor`) — few local samples or high drift produce shorter intervals; full confidence and low drift produce the full base interval.
 3. **Delay-pacing floor** (`CurrentDelayMS × 10`) — when delays are active, the calibration interval scales proportionally so enough paced requests pass between calibrations.
 
-A **request-count gate** also triggers early calibration when enough requests have passed since the last calibration, even if the time interval has not elapsed. This ensures the system detects concurrent sessions early in the session lifecycle when confidence is still building.
-
-Together these mechanisms mean a session under sustained load self-regulates naturally — delays pace the requests, calibration intervals extend proportionally, and the system avoids wasting API budget on calibration calls it doesn't need.
+In addition, the base interval used in floor 2 is **stability-adaptive**. Once a session has reached full confidence and accumulated `CalibrationStabilityThreshold` consecutive calibrations with no instability signal — no drift above threshold, no active delays, utilisation below onset threshold — the effective base doubles, capped at `CalibrationMaxSeconds`. Any instability signal (drift, delay onset, utilisation spike) resets the stable count immediately and the interval returns to `CalibrationBaseSeconds`. This reduces calibration API call overhead in long-running single-session reporting extracts without sacrificing responsiveness to concurrent-session signals.
 
 ### Delay Behaviour
 
@@ -124,11 +122,11 @@ If utilisation on any applicable bucket reaches the hard cutoff threshold (platf
 
 Three built-in profiles are available, tuned for different concurrency levels:
 
-| Profile    | Best For                         | Delay Onset | DelayMultiplier | Calibration Base | Target Utilisation |
-|------------|----------------------------------|-------------|-----------------|------------------|--------------------|
-| Aggressive | Single session, high throughput  | ~45%        | 250             | 5s               | 60–70%             |
-| Medium     | 2–3 concurrent sessions          | ~30%        | 500             | 8s               | 70–80%             |
-| Cautious   | 3–5 concurrent sessions          | ~20%        | 1000            | 5s               | Below 60%          |
+| Profile    | Best For                         | Delay Onset | DelayMultiplier | Calibration Base | Calibration Max |
+|------------|----------------------------------|-------------|-----------------|------------------|-----------------|
+| Aggressive | Single session, high throughput  | ~50%        | 400             | 5s               | 10s             |
+| Medium     | 2–3 concurrent sessions          | ~30%        | 750             | 6s               | 20s             |
+| Cautious   | 3–5 concurrent sessions          | ~20%        | 1000            | 5s               | 30s             |
 
 The `Medium` profile is the default. It provides a reasonable balance for interactive and lightly automated use.
 

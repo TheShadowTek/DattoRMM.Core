@@ -110,17 +110,43 @@ function Invoke-ApiThrottle {
     # DelayMS 0 × 10 = 0 → no effect, confidence/drift formula governs.
     $DelayPacingFloorSeconds = ($CurrentDelayMS / 1000) * 10
 
+    # Stability-adaptive base: when a session has been stable (no drift, no delays, below
+    # threshold) for CalibrationStabilityThreshold consecutive calibrations, the effective
+    # base is allowed to double per threshold block, capped at CalibrationMaxSeconds.
+    # This reduces calibration API call overhead in long-running stable single-session
+    # extracts without sacrificing responsiveness — any instability signal resets the count
+    # immediately and the interval returns to CalibrationBaseSeconds on the next calibration.
+    $StableCount = if ($IsRead) {$Script:RMMThrottle.ReadStableCalibrationCount} else {$Script:RMMThrottle.WriteStableCalibrationCount}
+    $StabilityDoublings = [math]::Floor($StableCount / [math]::Max($Script:RMMThrottle.CalibrationStabilityThreshold, 1))
+    $ExtendedBaseSeconds = [math]::Min(
+        $Script:RMMThrottle.CalibrationMaxSeconds,
+        $Script:RMMThrottle.CalibrationBaseSeconds * [math]::Pow(2, $StabilityDoublings)
+    )
+
+    # Stability-adaptive base: when a session has been stable (no drift, no delays, below
+    # threshold) for CalibrationStabilityThreshold consecutive calibrations, the effective
+    # base is allowed to double per threshold block, capped at CalibrationMaxSeconds.
+    # This reduces calibration API call overhead in long-running stable single-session
+    # extracts without sacrificing responsiveness — any instability signal resets the count
+    # immediately and the interval returns to CalibrationBaseSeconds on the next calibration.
+    $StableCount = if ($IsRead) {$Script:RMMThrottle.ReadStableCalibrationCount} else {$Script:RMMThrottle.WriteStableCalibrationCount}
+    $StabilityDoublings = [math]::Floor($StableCount / [math]::Max($Script:RMMThrottle.CalibrationStabilityThreshold, 1))
+    $ExtendedBaseSeconds = [math]::Min(
+        $Script:RMMThrottle.CalibrationMaxSeconds,
+        $Script:RMMThrottle.CalibrationBaseSeconds * [math]::Pow(2, $StabilityDoublings)
+    )
+
     # Effective interval: highest of three floors:
     #   1. CalibrationMinSeconds: absolute floor to prevent API spam
-    #   2. Base × Confidence × DriftFactor: dynamic formula
+    #   2. ExtendedBase × Confidence × DriftFactor: dynamic formula using stability-adaptive base
     #   3. DelayPacingFloor: delay-correlated floor when throttling is active
     # Low confidence OR high drift → short interval → frequent calibration
-    # High confidence AND low drift → full base → minimal API overhead
+    # High confidence AND low drift AND stable → extended base → minimal API overhead
     # High delay → long interval → let paced requests breathe between calibrations
     $EffectiveInterval = [math]::Max(
         $Script:RMMThrottle.CalibrationMinSeconds,
         [math]::Max(
-            $Script:RMMThrottle.CalibrationBaseSeconds * $ConfidenceFactor * $DriftFactor,
+            $ExtendedBaseSeconds * $ConfidenceFactor * $DriftFactor,
             $DelayPacingFloorSeconds
         )
     )
@@ -175,6 +201,25 @@ function Invoke-ApiThrottle {
             $EffectiveUtil = [math]::Max($Script:RMMThrottle.WriteUtilisation, $LocalUtil)
 
         }
+
+        # Stability count: increment if this calibration was clean (no drift, no delays, below
+        # threshold); reset to 0 on any instability so the extended interval snaps back to base.
+        $CalibrationWasStable = (
+            $DriftGap -lt $Script:RMMThrottle.DriftThresholdPercent -and
+            $CurrentDelayMS -eq 0 -and
+            $EffectiveUtil -lt $Script:RMMThrottle.ThrottleUtilisationThreshold
+        )
+
+        if ($IsRead) {
+
+            $Script:RMMThrottle.ReadStableCalibrationCount = if ($CalibrationWasStable) {$Script:RMMThrottle.ReadStableCalibrationCount + 1} else {0}
+
+        } else {
+
+            $Script:RMMThrottle.WriteStableCalibrationCount = if ($CalibrationWasStable) {$Script:RMMThrottle.WriteStableCalibrationCount + 1} else {0}
+
+        }
+
     }
 
     # --- Calculate max delay across all applicable buckets for this request type ---

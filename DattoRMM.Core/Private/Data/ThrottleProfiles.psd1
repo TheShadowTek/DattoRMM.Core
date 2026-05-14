@@ -21,6 +21,13 @@
 #   DriftFactor      = 1 / (1 + (DriftGap / DriftThreshold) * DriftScaling)
 #   Interval         = Max(Min, Base * ConfidenceFactor * DriftFactor)
 #
+# Stability-adaptive calibration: once a session reaches full confidence and accumulates
+# CalibrationStabilityThreshold consecutive stable calibrations (no drift, no delays, below
+# threshold), the effective base is allowed to double, capped at CalibrationMaxSeconds.
+# Any instability signal (drift, delay onset, utilisation spike) resets the count immediately.
+# This reduces calibration API call overhead in long-running single-session reporting extracts
+# without sacrificing responsiveness to concurrent-session drift.
+#
 # UnknownOperationSafetyFactor: fractional delay applied to write operations with no explicit operation mapping.
 # Note: Profiles tuned for up to 4 concurrent heavy-use sessions sharing the same API quota.
 
@@ -30,7 +37,9 @@
         CalibrationBaseSeconds = 5
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 30
-        DriftThresholdPercent = 0.015
+        CalibrationMaxSeconds = 30
+        CalibrationStabilityThreshold = 3
+        DriftThresholdPercent = 0.02
         DriftScalingFactor = 3
         ThrottleUtilisationThreshold = 0.2
         ThrottleCutOffOverhead = 0.08
@@ -41,9 +50,11 @@
         CalibrationBaseSeconds = 6
         CalibrationMinSeconds = 0.7
         CalibrationConfidenceCount = 50
+        CalibrationMaxSeconds = 20
+        CalibrationStabilityThreshold = 4
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 2
-        ThrottleUtilisationThreshold = 0.27
+        ThrottleUtilisationThreshold = 0.30
         ThrottleCutOffOverhead = 0.07
         UnknownOperationSafetyFactor = 0.3
     }
@@ -52,6 +63,8 @@
         CalibrationBaseSeconds = 5
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 35
+        CalibrationMaxSeconds = 10
+        CalibrationStabilityThreshold = 5
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 1.5
         ThrottleUtilisationThreshold = 0.50
@@ -63,9 +76,11 @@
         CalibrationBaseSeconds = 6
         CalibrationMinSeconds = 0.7
         CalibrationConfidenceCount = 50
+        CalibrationMaxSeconds = 20
+        CalibrationStabilityThreshold = 4
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 2
-        ThrottleUtilisationThreshold = 0.27
+        ThrottleUtilisationThreshold = 0.30
         ThrottleCutOffOverhead = 0.07
         UnknownOperationSafetyFactor = 0.3
     }
