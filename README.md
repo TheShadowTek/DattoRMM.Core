@@ -130,7 +130,7 @@ To connect with legacy compatibility:
 Connect-DattoRMM -Key "your-api-key" -Secret $Secret -LegacyThrottle
 ```
 
-When `-LegacyThrottle` is enabled, all API requests (including writes) are tracked against the read bucket only. Write-specific counters, per-operation buckets, and write decay logic are bypassed.
+When `-LegacyThrottle` is enabled, all API requests (including writes) are tracked against the read bucket only. Write-specific counters and per-operation buckets are bypassed.
 
 This is a temporary compatibility mechanism. It will be deprecated once automatic detection of the rate-limit model is implemented.
 

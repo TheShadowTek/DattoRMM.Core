@@ -89,7 +89,19 @@ function Invoke-ApiThrottle {
 
     }
 
-    $DriftFactor = 1 / (1 + $DriftRatio * $Script:RMMThrottle.DriftScalingFactor)
+    # Drift guard: when no delays are active and utilisation is below threshold, drift is
+    # rolling-window oscillation (API window phase vs local window phase desynchronising
+    # naturally), not a concurrent-session signal. Suppress compression so single-session
+    # calibration intervals stay stable rather than collapsing to CalibrationMinSeconds.
+    if ($CurrentDelayMS -eq 0 -and $EffectiveUtil -lt $Script:RMMThrottle.ThrottleUtilisationThreshold) {
+
+        $DriftFactor = 1.0
+
+    } else {
+
+        $DriftFactor = 1 / (1 + $DriftRatio * $Script:RMMThrottle.DriftScalingFactor)
+
+    }
 
     # Delay-pacing floor: when delays are active, scale calibration interval so that
     # enough requests pass between calibrations to avoid wasting API calls on
@@ -98,17 +110,43 @@ function Invoke-ApiThrottle {
     # DelayMS 0 × 10 = 0 → no effect, confidence/drift formula governs.
     $DelayPacingFloorSeconds = ($CurrentDelayMS / 1000) * 10
 
+    # Stability-adaptive base: when a session has been stable (no drift, no delays, below
+    # threshold) for CalibrationStabilityThreshold consecutive calibrations, the effective
+    # base is allowed to double per threshold block, capped at CalibrationMaxSeconds.
+    # This reduces calibration API call overhead in long-running stable single-session
+    # extracts without sacrificing responsiveness — any instability signal resets the count
+    # immediately and the interval returns to CalibrationBaseSeconds on the next calibration.
+    $StableCount = if ($IsRead) {$Script:RMMThrottle.ReadStableCalibrationCount} else {$Script:RMMThrottle.WriteStableCalibrationCount}
+    $StabilityDoublings = [math]::Floor($StableCount / [math]::Max($Script:RMMThrottle.CalibrationStabilityThreshold, 1))
+    $ExtendedBaseSeconds = [math]::Min(
+        $Script:RMMThrottle.CalibrationMaxSeconds,
+        $Script:RMMThrottle.CalibrationBaseSeconds * [math]::Pow(2, $StabilityDoublings)
+    )
+
+    # Stability-adaptive base: when a session has been stable (no drift, no delays, below
+    # threshold) for CalibrationStabilityThreshold consecutive calibrations, the effective
+    # base is allowed to double per threshold block, capped at CalibrationMaxSeconds.
+    # This reduces calibration API call overhead in long-running stable single-session
+    # extracts without sacrificing responsiveness — any instability signal resets the count
+    # immediately and the interval returns to CalibrationBaseSeconds on the next calibration.
+    $StableCount = if ($IsRead) {$Script:RMMThrottle.ReadStableCalibrationCount} else {$Script:RMMThrottle.WriteStableCalibrationCount}
+    $StabilityDoublings = [math]::Floor($StableCount / [math]::Max($Script:RMMThrottle.CalibrationStabilityThreshold, 1))
+    $ExtendedBaseSeconds = [math]::Min(
+        $Script:RMMThrottle.CalibrationMaxSeconds,
+        $Script:RMMThrottle.CalibrationBaseSeconds * [math]::Pow(2, $StabilityDoublings)
+    )
+
     # Effective interval: highest of three floors:
     #   1. CalibrationMinSeconds: absolute floor to prevent API spam
-    #   2. Base × Confidence × DriftFactor: dynamic formula
+    #   2. ExtendedBase × Confidence × DriftFactor: dynamic formula using stability-adaptive base
     #   3. DelayPacingFloor: delay-correlated floor when throttling is active
     # Low confidence OR high drift → short interval → frequent calibration
-    # High confidence AND low drift → full base → minimal API overhead
+    # High confidence AND low drift AND stable → extended base → minimal API overhead
     # High delay → long interval → let paced requests breathe between calibrations
     $EffectiveInterval = [math]::Max(
         $Script:RMMThrottle.CalibrationMinSeconds,
         [math]::Max(
-            $Script:RMMThrottle.CalibrationBaseSeconds * $ConfidenceFactor * $DriftFactor,
+            $ExtendedBaseSeconds * $ConfidenceFactor * $DriftFactor,
             $DelayPacingFloorSeconds
         )
     )
@@ -163,6 +201,25 @@ function Invoke-ApiThrottle {
             $EffectiveUtil = [math]::Max($Script:RMMThrottle.WriteUtilisation, $LocalUtil)
 
         }
+
+        # Stability count: increment if this calibration was clean (no drift, no delays, below
+        # threshold); reset to 0 on any instability so the extended interval snaps back to base.
+        $CalibrationWasStable = (
+            $DriftGap -lt $Script:RMMThrottle.DriftThresholdPercent -and
+            $CurrentDelayMS -eq 0 -and
+            $EffectiveUtil -lt $Script:RMMThrottle.ThrottleUtilisationThreshold
+        )
+
+        if ($IsRead) {
+
+            $Script:RMMThrottle.ReadStableCalibrationCount = if ($CalibrationWasStable) {$Script:RMMThrottle.ReadStableCalibrationCount + 1} else {0}
+
+        } else {
+
+            $Script:RMMThrottle.WriteStableCalibrationCount = if ($CalibrationWasStable) {$Script:RMMThrottle.WriteStableCalibrationCount + 1} else {0}
+
+        }
+
     }
 
     # --- Calculate max delay across all applicable buckets for this request type ---
@@ -180,15 +237,10 @@ function Invoke-ApiThrottle {
     if ($IsRead) {
 
         # Read requests: evaluate read bucket only
-        # Seed MaxDelay with the last calibration-determined value as a floor.
-        # This carries the API-reported picture forward between calibrations,
-        # preventing sessions with low local sample counts from being undercharged
-        # when other concurrent sessions are consuming shared quota.
-        if ($Script:RMMThrottle.ReadDelayMS -gt 0) {
-
-            $MaxDelay = $Script:RMMThrottle.ReadDelayMS
-
-        }
+        # Seed MaxDelay with the calibration-determined floor and hold it flat until next
+        # calibration. This prevents undercharging when local sample counts are low and
+        # other concurrent sessions are consuming shared quota.
+        $MaxDelay = $Script:RMMThrottle.ReadDelayMS
 
         if ($EffectiveUtil -ge $PauseThreshold) {
 
@@ -206,12 +258,8 @@ function Invoke-ApiThrottle {
     } else {
 
         # Write requests: evaluate global write bucket + per-operation bucket
-        # Seed MaxDelay from calibration-determined write delay floor
-        if ($Script:RMMThrottle.WriteDelayMS -gt 0) {
-
-            $MaxDelay = $Script:RMMThrottle.WriteDelayMS
-
-        }
+        # Seed MaxDelay with the calibration-determined floor and hold it flat until next calibration.
+        $MaxDelay = $Script:RMMThrottle.WriteDelayMS
 
         # Global write bucket
         if ($Script:RMMThrottle.WriteLimit -gt 0) {
@@ -226,17 +274,25 @@ function Invoke-ApiThrottle {
 
             } elseif ($WriteUtil -ge $Script:RMMThrottle.ThrottleUtilisationThreshold) {
 
-                $Delay = $WriteUtil * $Script:RMMThrottle.WriteDelayMultiplier
+                $Delay = $WriteUtil * $Script:RMMThrottle.DelayMultiplier
                 $MaxDelay = [math]::Max($MaxDelay, $Delay)
 
             }
         }
 
         # Per-operation write bucket (if operation is tracked)
+        # Delay is scaled by the ratio of account write limit to operation limit so that
+        # low-limit operations (e.g. 100) get proportionally larger delays than high-limit
+        # ones (e.g. 600). This prevents small-bucket operations from racing toward pause
+        # because each request consumes a much larger fraction of a small bucket.
+        # The ratio is derived from live API-reported limits, so it self-tunes if Datto
+        # adjusts operation limits in future.
         if ($OperationName -and $Script:RMMThrottle.OperationBuckets.ContainsKey($OperationName)) {
 
-            $OpBucket = $Script:RMMThrottle.OperationBuckets[$OperationName]
-            $OpUtil = $OpBucket.LocalTimestamps.Count / [math]::Max($OpBucket.Limit, 1)
+            $OpBucket   = $Script:RMMThrottle.OperationBuckets[$OperationName]
+            $ApiOpUtil  = if ($OpBucket.ContainsKey('ApiUtilisation')) { $OpBucket.ApiUtilisation } else { 0.0 }
+            $OpUtil     = [math]::Max($ApiOpUtil, $OpBucket.LocalTimestamps.Count / [math]::Max($OpBucket.Limit, 1))
+            $LimitRatio = [math]::Max(1.0, $Script:RMMThrottle.WriteLimit / [math]::Max($OpBucket.Limit, 1))
 
             if ($OpUtil -ge $PauseThreshold) {
 
@@ -251,7 +307,7 @@ function Invoke-ApiThrottle {
 
             } elseif ($OpUtil -ge $Script:RMMThrottle.ThrottleUtilisationThreshold) {
 
-                $Delay = $OpUtil * $Script:RMMThrottle.WriteDelayMultiplier
+                $Delay = $OpUtil * $Script:RMMThrottle.DelayMultiplier * $LimitRatio
                 $MaxDelay = [math]::Max($MaxDelay, $Delay)
 
             }
@@ -259,7 +315,7 @@ function Invoke-ApiThrottle {
         } elseif ($OperationName) {
 
             # Unknown write operation — apply conservative safety delay
-            $SafetyDelay = $Script:RMMThrottle.UnknownOperationSafetyFactor * $Script:RMMThrottle.WriteDelayMultiplier
+            $SafetyDelay = $Script:RMMThrottle.UnknownOperationSafetyFactor * $Script:RMMThrottle.DelayMultiplier
 
             if ($SafetyDelay -gt 0) {
 
@@ -284,8 +340,8 @@ function Invoke-ApiThrottle {
             Write-Warning "High API utilisation detected ($PauseBucketLabel $([math]::Round($PauseBucketUtil * 100, 2))%). Pausing requests to avoid rate limiting."
             $WarningPreference = $SavedWarningPreference
 
-            Write-Debug "Throttle[$TrackLabel]: Pause triggered by '$PauseBucketLabel' at $([math]::Round($PauseBucketUtil * 100, 2))% (threshold $([math]::Round($PauseThreshold * 100, 2))%). Sleeping 60s."
-            Start-Sleep -Seconds 60
+            Write-Debug "Throttle[$TrackLabel]: Pause triggered by '$PauseBucketLabel' at $([math]::Round($PauseBucketUtil * 100, 2))% (threshold $([math]::Round($PauseThreshold * 100, 2))%). Sleeping 30s."
+            Start-Sleep -Seconds 30
             Write-Debug "Throttle[$TrackLabel]: Pause sleep completed. Re-evaluating all applicable buckets."
             Update-Throttle
 
@@ -325,8 +381,9 @@ function Invoke-ApiThrottle {
                 # Per-operation write bucket
                 if ($OperationName -and $Script:RMMThrottle.OperationBuckets.ContainsKey($OperationName)) {
 
-                    $OpBucket = $Script:RMMThrottle.OperationBuckets[$OperationName]
-                    $OpUtil = $OpBucket.LocalTimestamps.Count / [math]::Max($OpBucket.Limit, 1)
+                    $OpBucket  = $Script:RMMThrottle.OperationBuckets[$OperationName]
+                    $ApiOpUtil = if ($OpBucket.ContainsKey('ApiUtilisation')) { $OpBucket.ApiUtilisation } else { 0.0 }
+                    $OpUtil    = [math]::Max($ApiOpUtil, $OpBucket.LocalTimestamps.Count / [math]::Max($OpBucket.Limit, 1))
 
                     if ($OpUtil -ge $PauseThreshold) {
 

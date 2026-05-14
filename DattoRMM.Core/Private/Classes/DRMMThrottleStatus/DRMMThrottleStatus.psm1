@@ -96,10 +96,8 @@ class DRMMThrottleStatus : DRMMObject {
     [double]$ReadDelayMs
     # The current computed delay in milliseconds for write (POST/PUT/DELETE) requests. When throttling is active, this value increases proportionally with write utilisation to slow request rates.
     [double]$WriteDelayMs
-    # The configured multiplier (e.g., 750) used to calculate delay from read utilisation: ReadDelayMs = ReadUtilisation * DelayMultiplier.
+    # The configured multiplier (e.g., 500) used to calculate delay from utilisation: DelayMs = Utilisation * DelayMultiplier. Applied to both read and write tracks.
     [double]$DelayMultiplier
-    # The configured multiplier (e.g., 1000) used to calculate delay from write utilisation: WriteDelayMs = WriteUtilisation * WriteDelayMultiplier.
-    [double]$WriteDelayMultiplier
     # The UTC datetime of the last read-track throttle calibration, when local read state was synchronized with API-reported values.
     [Nullable[datetime]]$ReadLastCalibrationUtc
     # The UTC datetime of the last write-track throttle calibration, when local write state was synchronized with API-reported values.

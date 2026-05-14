@@ -34,15 +34,16 @@ function Set-ThrottleDefaults {
 
     $Script:RMMThrottle = [ordered]@{
         Profile = 'DefaultProfile'                                                      # Active throttle profile name
-        DelayMultiplier = 750                                                           # Delay multiplier for read bucket throttling
+        DelayMultiplier = 500                                                           # Delay multiplier for all bucket throttling (read and write)
         ThrottleCutOffOverhead = 0.05                                                   # Safety margin below accountCutOffRatio for pause trigger
         ThrottleUtilisationThreshold = 0.3                                              # Utilisation ratio at which throttling activates
         CalibrationBaseSeconds = 8                                                      # Ceiling interval at high confidence and zero drift
         CalibrationMinSeconds = 0.5                                                     # Absolute floor to prevent excessive API calibration calls
         CalibrationConfidenceCount = 50                                                 # Local samples needed before interval reaches full base
+        CalibrationMaxSeconds = 20                                                      # Ceiling for stability-extended calibration interval
+        CalibrationStabilityThreshold = 4                                               # Consecutive stable calibrations before interval begins extending
         DriftThresholdPercent = 0.02                                                    # Drift gap at which accelerated calibration begins (2%)
         DriftScalingFactor = 2                                                          # How aggressively interval shrinks as drift exceeds threshold
-        WriteDelayMultiplier = 1000                                                     # Delay multiplier for write bucket throttling
         UnknownOperationSafetyFactor = 0.3                                              # Fractional delay for unmapped write operations
         WindowSizeSeconds = 60                                                          # Rolling window size (discovered from API)
         ReadLimit = 600                                                                 # Read (GET) rate limit (discovered from API as accountRateLimit)
@@ -55,6 +56,8 @@ function Set-ThrottleDefaults {
         WriteLastCalibrationUtc = [datetime]::MinValue                                  # Pre-connect safe default; overwritten by Initialize-ThrottleState on connect
         ReadSamplesAtLastCalibration = 0                                                # Local read sample count at last calibration (for request gate)
         WriteSamplesAtLastCalibration = 0                                               # Local write sample count at last calibration (for request gate)
+        ReadStableCalibrationCount = 0                                                  # Consecutive stable read calibrations since last instability reset
+        WriteStableCalibrationCount = 0                                                 # Consecutive stable write calibrations since last instability reset
         ReadUtilisation = 0.0                                                           # Computed read utilisation (accountCount / accountRateLimit)
         WriteUtilisation = 0.0                                                          # Computed write utilisation (accountWriteCount / accountWriteRateLimit)
         ReadDelayMS = 0                                                                 # Current computed read delay in milliseconds

@@ -21,57 +21,67 @@
 #   DriftFactor      = 1 / (1 + (DriftGap / DriftThreshold) * DriftScaling)
 #   Interval         = Max(Min, Base * ConfidenceFactor * DriftFactor)
 #
-# WriteDelayMultiplier: delay multiplier applied to write bucket pressure (separate from global read/write DelayMultiplier).
+# Stability-adaptive calibration: once a session reaches full confidence and accumulates
+# CalibrationStabilityThreshold consecutive stable calibrations (no drift, no delays, below
+# threshold), the effective base is allowed to double, capped at CalibrationMaxSeconds.
+# Any instability signal (drift, delay onset, utilisation spike) resets the count immediately.
+# This reduces calibration API call overhead in long-running single-session reporting extracts
+# without sacrificing responsiveness to concurrent-session drift.
+#
 # UnknownOperationSafetyFactor: fractional delay applied to write operations with no explicit operation mapping.
-# Note: Profiles tuned for up to 5 concurrent heavy-use sessions sharing the same API quota.
+# Note: Profiles tuned for up to 4 concurrent heavy-use sessions sharing the same API quota.
 
 @{
     'Cautious' = @{
-        DelayMultiplier = 1500
+        DelayMultiplier = 1000
         CalibrationBaseSeconds = 5
         CalibrationMinSeconds = 0.5
         CalibrationConfidenceCount = 30
-        DriftThresholdPercent = 0.01
+        CalibrationMaxSeconds = 30
+        CalibrationStabilityThreshold = 3
+        DriftThresholdPercent = 0.02
         DriftScalingFactor = 3
-        ThrottleUtilisationThreshold = 0.15
-        ThrottleCutOffOverhead = 0.10
-        WriteDelayMultiplier = 1750
+        ThrottleUtilisationThreshold = 0.2
+        ThrottleCutOffOverhead = 0.08
         UnknownOperationSafetyFactor = 0.5
     }
     'Medium' = @{
         DelayMultiplier = 750
-        CalibrationBaseSeconds = 8
-        CalibrationMinSeconds = 0.5
+        CalibrationBaseSeconds = 6
+        CalibrationMinSeconds = 0.7
         CalibrationConfidenceCount = 50
+        CalibrationMaxSeconds = 20
+        CalibrationStabilityThreshold = 4
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 2
-        ThrottleUtilisationThreshold = 0.3
-        ThrottleCutOffOverhead = 0.05
-        WriteDelayMultiplier = 1000
+        ThrottleUtilisationThreshold = 0.30
+        ThrottleCutOffOverhead = 0.07
         UnknownOperationSafetyFactor = 0.3
     }
     'Aggressive' = @{
-        DelayMultiplier = 300
-        CalibrationBaseSeconds = 15
-        CalibrationMinSeconds = 1
-        CalibrationConfidenceCount = 80
+        DelayMultiplier = 400
+        CalibrationBaseSeconds = 5
+        CalibrationMinSeconds = 0.5
+        CalibrationConfidenceCount = 35
+        CalibrationMaxSeconds = 10
+        CalibrationStabilityThreshold = 5
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 1.5
-        ThrottleUtilisationThreshold = 0.5
-        ThrottleCutOffOverhead = 0.04
-        WriteDelayMultiplier = 750
-        UnknownOperationSafetyFactor = 0.1
+        ThrottleUtilisationThreshold = 0.50
+        ThrottleCutOffOverhead = 0.05
+        UnknownOperationSafetyFactor = 0.15
     }
     'DefaultProfile' = @{
         DelayMultiplier = 750
-        CalibrationBaseSeconds = 8
-        CalibrationMinSeconds = 0.5
+        CalibrationBaseSeconds = 6
+        CalibrationMinSeconds = 0.7
         CalibrationConfidenceCount = 50
+        CalibrationMaxSeconds = 20
+        CalibrationStabilityThreshold = 4
         DriftThresholdPercent = 0.02
         DriftScalingFactor = 2
-        ThrottleUtilisationThreshold = 0.3
-        ThrottleCutOffOverhead = 0.05
-        WriteDelayMultiplier = 1000
+        ThrottleUtilisationThreshold = 0.30
+        ThrottleCutOffOverhead = 0.07
         UnknownOperationSafetyFactor = 0.3
     }
 }

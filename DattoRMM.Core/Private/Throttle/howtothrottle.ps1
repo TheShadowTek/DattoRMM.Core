@@ -32,14 +32,15 @@ DO THIS AT YOUR OWN RISK.
 Manually set any of the following throttle values in your config JSON to override the module presets:
     - ThrottleProfile                : Set to "Custom" to enable custom values
     - DelayMultiplier                : Multiplier for delay calculation (in ms) - default 750
-    - CalibrationBaseSeconds         : Ceiling interval when confidence high and drift low - default 8
-    - CalibrationMinSeconds          : Absolute floor to prevent API spam - default 0.5
+    - CalibrationBaseSeconds         : Ceiling interval when confidence high and drift low - default 6
+    - CalibrationMinSeconds          : Absolute floor to prevent API spam - default 0.7
     - CalibrationConfidenceCount     : Samples required for full confidence - default 50
+    - CalibrationMaxSeconds          : Ceiling for stability-extended calibration interval - default 20
+    - CalibrationStabilityThreshold  : Consecutive stable calibrations before interval begins extending - default 4
     - DriftThresholdPercent          : Drift gap triggering accelerated calibration - default 0.02 (2%)
     - DriftScalingFactor             : How aggressively interval shrinks with drift - default 2
     - ThrottleUtilisationThreshold   : Utilisation threshold to start delays - default 0.3
-    - ThrottleCutOffOverhead         : Safety margin below pause threshold - default 0.05
-    - WriteDelayMultiplier           : Delay multiplier for write operations - default 1000
+    - ThrottleCutOffOverhead         : Safety margin below pause threshold - default 0.07
     - UnknownOperationSafetyFactor   : Fractional delay for unmapped writes - default 0.3
 
  Any of these keys present in your config file will override the corresponding module preset at startup.

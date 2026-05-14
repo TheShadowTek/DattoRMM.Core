@@ -92,6 +92,10 @@ function Initialize-ThrottleState {
                         $Script:RMMThrottle.OperationBuckets[$OpName].LocalTimestamps.Add($WindowStart.AddTicks($OpSeedStep.Ticks * $i))
 
                     }
+
+                    # Seed API-reported utilisation so the per-op floor is available before the first Update-Throttle fires
+                    $Script:RMMThrottle.OperationBuckets[$OpName].ApiUtilisation = $OpCount / [math]::Max([int]$_.Value.limit, 1)
+
                 }
             }
         }

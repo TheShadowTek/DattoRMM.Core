@@ -70,12 +70,15 @@ function Update-Throttle {
 
         $RateInfo.operationWriteStatus.PSObject.Properties | ForEach-Object {
 
-            $OpName = $_.Name
+            $OpName    = $_.Name
+            $ApiOpCount = [math]::Max(0, [int]$_.Value.count)
+            $ApiOpUtil  = $ApiOpCount / [math]::Max([int]$_.Value.limit, 1)
 
             if ($Script:RMMThrottle.OperationBuckets.ContainsKey($OpName)) {
 
-                # Update limit in case it changed dynamically
-                $Script:RMMThrottle.OperationBuckets[$OpName].Limit = $_.Value.limit
+                # Update limit and API-reported utilisation in case either changed dynamically
+                $Script:RMMThrottle.OperationBuckets[$OpName].Limit          = $_.Value.limit
+                $Script:RMMThrottle.OperationBuckets[$OpName].ApiUtilisation = $ApiOpUtil
 
             } else {
 
@@ -83,6 +86,7 @@ function Update-Throttle {
                 $Script:RMMThrottle.OperationBuckets[$OpName] = @{
                     Limit           = $_.Value.limit
                     LocalTimestamps = [System.Collections.Generic.List[datetime]]::new()
+                    ApiUtilisation  = $ApiOpUtil
                 }
 
             }
@@ -112,7 +116,7 @@ function Update-Throttle {
 
     if ($WriteThrottle) {
 
-        $Script:RMMThrottle.WriteDelayMS = $Script:RMMThrottle.WriteUtilisation * $Script:RMMThrottle.WriteDelayMultiplier
+        $Script:RMMThrottle.WriteDelayMS = $Script:RMMThrottle.WriteUtilisation * $Script:RMMThrottle.DelayMultiplier
 
     } else {
 
