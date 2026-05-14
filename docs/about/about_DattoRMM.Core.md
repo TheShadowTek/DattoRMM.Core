@@ -73,7 +73,7 @@ Query, audit, and manage devices across sites.
 - `Get-RMMEsxiHostAudit` — VMware ESXi host audit data.
 - `Get-RMMPrinterAudit` — Printer hardware, supply levels, and SNMP data.
 - `Move-RMMDevice` — Move a device to a different site.
-- `Set-RMMDeviceUDF` — Set user-defined fields (UDF1–UDF30).
+- `Set-RMMDeviceUdf` — Set user-defined fields (UDF1–UDF300).
 - `Set-RMMDeviceWarranty` — Set or clear warranty expiration date.
 
 ### Sites

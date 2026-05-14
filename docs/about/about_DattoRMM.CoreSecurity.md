@@ -90,7 +90,7 @@ Move-RMMDevice -DeviceUid "abc-123" -TargetSiteUid "def-456" -WhatIf
 
 ### Force and Confirm
 
-All mutating commands (`Move-RMMDevice`, `Set-RMMDeviceUDF`, `Resolve-RMMAlert`, `New-RMMQuickJob`, etc.) support:
+All mutating commands (`Move-RMMDevice`, `Set-RMMDeviceUdf`, `Resolve-RMMAlert`, `New-RMMQuickJob`, etc.) support:
 
 - `-Force` — Suppresses confirmation prompts for unattended execution.
 - `-WhatIf` — Simulates the operation without applying changes.

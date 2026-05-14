@@ -137,7 +137,7 @@ FunctionsToExport = @(
     'Resolve-RMMAlert',
     'Save-RMMConfig',
     'Set-RMMConfig',
-    'Set-RMMDeviceUDF',
+    'Set-RMMDeviceUdf',
     'Set-RMMDeviceWarranty',
     'Set-RMMSite',
     'Set-RMMSiteProxy',

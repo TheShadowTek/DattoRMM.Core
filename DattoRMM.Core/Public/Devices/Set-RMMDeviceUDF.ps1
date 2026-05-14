@@ -96,7 +96,7 @@ function Set-RMMDeviceUdf {
         - Consider using UDFs for: location, department, owner, cost center, project codes, etc.
 
     .LINK
-        https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUDF.md
+        https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUdf.md
 
     .LINK
         about_DRMMDevice

@@ -126,7 +126,7 @@ User-defined fields are excluded from the default transform to keep the output c
 
 ### -IncludeUdf
 
-Includes all 30 UDF columns (Udf1–Udf30) in every row, regardless of whether they contain values. This produces a consistent, fixed-width schema across all rows, which is important when using `-Append` to combine exports from multiple runs:
+Includes all 30 UDF columns (Udf1–Udf300) in every row, regardless of whether they contain values. This produces a consistent, fixed-width schema across all rows, which is important when using `-Append` to combine exports from multiple runs:
 
 ```powershell
 Get-RMMDevice | Export-RMMObjectCsv -Path .\Devices.csv -IncludeUdf
