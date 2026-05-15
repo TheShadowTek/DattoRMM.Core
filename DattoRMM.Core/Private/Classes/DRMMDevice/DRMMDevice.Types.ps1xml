@@ -72,13 +72,9 @@
       <ScriptMethod>
         <Name>ToString</Name>
         <Script>
-            $Set = 0
-            for ($i = 1; $i -le [DRMMDeviceUdfs]::MaxUdfCount; $i++) {
-              $Val = $this."Udf$i"
-              if (-not [string]::IsNullOrWhiteSpace($Val)) {$Set++}
-            }
-            "$Set of $([DRMMDeviceUdfs]::MaxUdfCount) UDFs set"
-          </Script>
+            $Set = ($this.PSObject.Properties.Where({$_.Name -like 'Udf*' -and -not [string]::IsNullOrWhiteSpace($_.Value)})).Count
+            "$Set of 300 UDFs set"
+        </Script>
       </ScriptMethod>
     </Members>
   </Type>
