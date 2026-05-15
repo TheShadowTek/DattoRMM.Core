@@ -82,10 +82,8 @@ class DRMMAlert : DRMMObject {
             }
         }
 
-        $ResolvedDate = [DRMMObject]::ParseApiDate($Response.resolvedOn)
-        $Alert.ResolvedOn = $ResolvedDate.DateTime
-        $TimestampDate = [DRMMObject]::ParseApiDate($Response.timestamp)
-        $Alert.Timestamp = $TimestampDate.DateTime
+        $Alert.ResolvedOn = [DRMMObject]::ParseApiDateTime($Response.resolvedOn)
+        $Alert.Timestamp = [DRMMObject]::ParseApiDateTime($Response.timestamp)
 
         return $Alert
 
@@ -670,7 +668,7 @@ class DRMMAlertContextEventLog : DRMMAlertContext {
         $Context.Source = $Response.source
         $Context.Description = $Response.description
         $Context.TriggerCount = $Response.triggerCount
-        $Context.LastTriggered = ([DRMMObject]::ParseApiDate($Response.lastTriggered)).DateTime
+        $Context.LastTriggered = [DRMMObject]::ParseApiDateTime($Response.lastTriggered)
         $Context.CausedSuspension = $Response.causedSuspension
 
         return $Context
@@ -1095,8 +1093,8 @@ class DRMMAlertContextRansomWare : DRMMAlertContext {
         $Context.AffectedDirectories = $Response.affectedDirectories
         $Context.WatchPaths = $Response.watchPaths
         $Context.Rwextension = $Response.rwextension
-        $Context.MetaAlertTime = ([DRMMObject]::ParseApiDate($Response.metaAlertTime)).DateTime
-        $Context.AlertTime = ([DRMMObject]::ParseApiDate($Response.alertTime)).DateTime
+        $Context.MetaAlertTime = [DRMMObject]::ParseApiDateTime($Response.metaAlertTime)
+        $Context.AlertTime = [DRMMObject]::ParseApiDateTime($Response.alertTime)
 
         return $Context
 
@@ -1593,8 +1591,7 @@ class DRMMAlertResponseAction : DRMMObject {
 
         $ResponseAction = [DRMMAlertResponseAction]::new()
 
-        $ActionDate = [DRMMObject]::ParseApiDate($Response.actionTime)
-        $ResponseAction.ActionTime = $ActionDate.DateTime
+        $ResponseAction.ActionTime = [DRMMObject]::ParseApiDateTime($Response.actionTime)
         $ResponseAction.ActionType = $Response.actionType
         $ResponseAction.Description = $Response.description
         $ResponseAction.ActionReference = $Response.actionReference
