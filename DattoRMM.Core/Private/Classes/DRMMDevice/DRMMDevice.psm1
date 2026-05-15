@@ -151,10 +151,10 @@ class DRMMDevice : DRMMObject {
         $Device.Udfs = [DRMMDeviceUdfs]::FromAPIMethod($Response.udf)
         $Device.Antivirus = [DRMMDeviceAntivirusInfo]::FromAPIMethod($Response.antivirus)
         $Device.PatchManagement = [DRMMDevicePatchManagement]::FromAPIMethod($Response.patchManagement)
-        $Device.LastSeen = ([DRMMObject]::ParseApiDate($Response.lastSeen)).DateTime
-        $Device.LastReboot = ([DRMMObject]::ParseApiDate($Response.lastReboot)).DateTime
-        $Device.LastAuditDate = ([DRMMObject]::ParseApiDate($Response.lastAuditDate)).DateTime
-        $Device.CreationDate = ([DRMMObject]::ParseApiDate($Response.creationDate)).DateTime
+        $Device.LastSeen = [DRMMObject]::ParseApiDateTime($Response.lastSeen)
+        $Device.LastReboot = [DRMMObject]::ParseApiDateTime($Response.lastReboot)
+        $Device.LastAuditDate = [DRMMObject]::ParseApiDateTime($Response.lastAuditDate)
+        $Device.CreationDate = [DRMMObject]::ParseApiDateTime($Response.creationDate)
 
         return $Device
 
