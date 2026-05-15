@@ -199,7 +199,7 @@ class DRMMActivityLogDetailsGeneric : DRMMActivityLogDetails {
 
         foreach ($Key in $ActivityLogDetail.Keys) {
 
-            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
 
                 try {
 
@@ -288,21 +288,22 @@ class DRMMActivityLogDetailsDeviceGeneric : DRMMActivityLogEntityDevice {
         # Populate entity-level properties
         [DRMMActivityLogEntityDevice]::PopulateEntityProperties($Details, $ActivityLogDetail)
 
-        # Define entity property keys to exclude from dynamic properties
-        $EntityPropertyKeys = @(
-            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid'
+        # O(1) membership test for known entity property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@('device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid'),
+            [System.StringComparer]::Ordinal
         )
 
         # Add any additional properties not in the entity base class
         foreach ($Key in $ActivityLogDetail.Keys) {
 
-            if ($EntityPropertyKeys -contains $Key) {
+            if ($ExcludedKeys.Contains($Key)) {
 
                 continue
 
             }
 
-            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
 
                 try {
 
@@ -385,21 +386,22 @@ class DRMMActivityLogDetailsUserGeneric : DRMMActivityLogEntityUser {
         # Populate entity-level properties
         [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
 
-        # Define entity property keys to exclude from dynamic properties
-        $EntityPropertyKeys = @(
-            'entity', 'event.action', 'event.category', 'uid'
+        # O(1) membership test for known entity property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@('entity', 'event.action', 'event.category', 'uid'),
+            [System.StringComparer]::Ordinal
         )
 
         # Add any additional properties not in the entity base class
         foreach ($Key in $ActivityLogDetail.Keys) {
 
-            if ($EntityPropertyKeys -contains $Key) {
+            if ($ExcludedKeys.Contains($Key)) {
 
                 continue
 
             }
 
-            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
 
                 try {
 
@@ -489,22 +491,25 @@ class DRMMActivityLogDetailsDeviceJobGeneric : DRMMActivityLogDetailsDeviceJob {
         # Populate base properties
         [DRMMActivityLogDetailsDeviceJob]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
-        # Define base property keys to exclude from dynamic properties
-        $BasePropertyKeys = @(
-            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid',
-            'job.id', 'job.name', 'job.status', 'job.uid', 'site.name'
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid',
+                'job.id', 'job.name', 'job.status', 'job.uid', 'site.name'
+            ),
+            [System.StringComparer]::Ordinal
         )
 
         # Add any additional properties not in the base class
         foreach ($Key in $ActivityLogDetail.Keys) {
 
-            if ($BasePropertyKeys -contains $Key) {
+            if ($ExcludedKeys.Contains($Key)) {
 
                 continue
 
             }
 
-            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
 
                 try {
 
@@ -767,24 +772,27 @@ class DRMMActivityLogDetailsDeviceRemoteGeneric : DRMMActivityLogDetailsDeviceRe
         # Populate base properties
         [DRMMActivityLogDetailsDeviceRemote]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
-        # Define base property keys to exclude from dynamic properties
-        $BasePropertyKeys = @(
-            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid',
-            'remote_session.id', 'remote_session.type', 'remote_session.start_date', 'remote_session.details',
-            'site.name', 'source.forwarded_ip',
-            'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username'
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid',
+                'remote_session.id', 'remote_session.type', 'remote_session.start_date', 'remote_session.details',
+                'site.name', 'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username'
+            ),
+            [System.StringComparer]::Ordinal
         )
 
         # Add any additional properties not in the base class
         foreach ($Key in $ActivityLogDetail.Keys) {
 
-            if ($BasePropertyKeys -contains $Key) {
+            if ($ExcludedKeys.Contains($Key)) {
 
                 continue
 
             }
 
-            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
 
                 try {
 
@@ -915,22 +923,22 @@ class DRMMActivityLogDetailsDeviceDeviceGeneric : DRMMActivityLogDetailsDeviceDe
         # Populate base properties
         [DRMMActivityLogDetailsDeviceDevice]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
-        # Define base property keys to exclude from dynamic properties
-        $BasePropertyKeys = @(
-            'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid',
-            'source.forwarded_ip'
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@('device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid', 'source.forwarded_ip'),
+            [System.StringComparer]::Ordinal
         )
 
         # Add any additional properties not in the base class
         foreach ($Key in $ActivityLogDetail.Keys) {
 
-            if ($BasePropertyKeys -contains $Key) {
+            if ($ExcludedKeys.Contains($Key)) {
 
                 continue
 
             }
 
-            if ($Key -match 'date' -and $null -ne $ActivityLogDetail[$Key]) {
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
 
                 try {
 
