@@ -260,7 +260,7 @@ Custom properties and methods added via `Types.ps1xml` are fully supported by th
 
 > For expressions that require cmdlets (e.g., `Get-Date`) or .NET type access, define a ScriptProperty in `Types.ps1xml` instead and reference it via `Path`.
 
-> A future update will support dynamic loading of `Types.ps1xml` and `Format.ps1xml` files from the module profile folder alongside the custom transforms file.
+Custom `Types.ps1xml` and `Format.ps1xml` files placed in the module profile folder are loaded automatically at module import. See [about_DattoRMM.CoreTypeExtensions](about_DattoRMM.CoreTypeExtensions.md) and [about_DattoRMM.CoreFormatExtensions](about_DattoRMM.CoreFormatExtensions.md).
 
 ---
 
@@ -352,6 +352,8 @@ Get-RMMDevice | Export-RMMObjectCsv -Path .\StatusReport.csv -TransformName Stat
 ## SEE ALSO
 
 - [Export-RMMObjectCsv](../commands/Export/Export-RMMObjectCsv.md)
+- [about_DattoRMM.CoreTypeExtensions](about_DattoRMM.CoreTypeExtensions.md)
+- [about_DattoRMM.CoreFormatExtensions](about_DattoRMM.CoreFormatExtensions.md)
 - [about_DattoRMM.Core](about_DattoRMM.Core.md)
 - [about_DattoRMM.CoreConfiguration](about_DattoRMM.CoreConfiguration.md)
 - [about_ClassIndex](./classes/about_ClassIndex.md)

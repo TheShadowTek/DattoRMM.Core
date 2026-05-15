@@ -88,6 +88,9 @@ Initialize-SavedConfig
 # Load built-in and user-defined export transforms
 Initialize-ExportTransforms
 
+# Load user-supplied Format and Types extensions from the profile folder
+Initialize-UserExtensions
+
 # Module removal handler - cleanup module variables
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 
