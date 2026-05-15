@@ -804,11 +804,9 @@ class DRMMSiteFilter : DRMMFilter {
         $Filter.SiteUid = $Site.Uid
         $Filter.PortalUrl = "https://$($Platform.ToLower()).rmm.datto.com/device-filter-results/$($Filter.Id)-$($Site.Id)"
 
-        $CreateDate = [DRMMObject]::ParseApiDate($Response.dateCreate)
-        $Filter.DateCreate = $CreateDate.DateTime
+        $Filter.DateCreate = [DRMMObject]::ParseApiDateTime($Response.dateCreate)
 
-        $UpdatedDate = [DRMMObject]::ParseApiDate($Response.lastUpdated)
-        $Filter.LastUpdated = $UpdatedDate.DateTime
+        $Filter.LastUpdated = [DRMMObject]::ParseApiDateTime($Response.lastUpdated)
 
         return $Filter
 

@@ -71,8 +71,7 @@ class DRMMActivityLog : DRMMObject {
         $Log.Details = [DRMMActivityLogDetails]::FromAPIMethod($Response.details, $LogContext, $UseExperimentalDetailClasses)
 
         # Parse the date
-        $DateValue = [DRMMObject]::ParseApiDate($Response.date)
-        $Log.Date = $DateValue.DateTime
+        $Log.Date = [DRMMObject]::ParseApiDateTime($Response.date)
 
         # Parse nested objects
         if ($null -ne $Response.site) {
@@ -203,8 +202,7 @@ class DRMMActivityLogDetailsGeneric : DRMMActivityLogDetails {
 
                 try {
 
-                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
-                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
 
                 } catch {
 
@@ -307,8 +305,7 @@ class DRMMActivityLogDetailsDeviceGeneric : DRMMActivityLogEntityDevice {
 
                 try {
 
-                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
-                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
 
                 } catch {
 
@@ -405,8 +402,7 @@ class DRMMActivityLogDetailsUserGeneric : DRMMActivityLogEntityUser {
 
                 try {
 
-                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
-                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
 
                 } catch {
 
@@ -513,8 +509,7 @@ class DRMMActivityLogDetailsDeviceJobGeneric : DRMMActivityLogDetailsDeviceJob {
 
                 try {
 
-                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
-                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
 
                 } catch {
 
@@ -617,7 +612,7 @@ class DRMMActivityLogDetailsDeviceJobCreate : DRMMActivityLogDetailsDeviceJob {
 
         if ($null -ne $ActivityLogDetail.'job.date_created') {
 
-            $Details.JobDateCreated = [DRMMObject]::ParseApiDate($ActivityLogDetail.'job.date_created').DateTime
+            $Details.JobDateCreated = [DRMMObject]::ParseApiDateTime($ActivityLogDetail.'job.date_created')
 
         } else {
 
@@ -721,7 +716,7 @@ class DRMMActivityLogDetailsDeviceRemote : DRMMActivityLogEntityDevice {
         # Parse remote_session.start_date
         if ($null -ne $ActivityLogDetail.'remote_session.start_date') {
 
-            $Details.RemoteSessionStartDate = [DRMMObject]::ParseApiDate($ActivityLogDetail.'remote_session.start_date').DateTime
+            $Details.RemoteSessionStartDate = [DRMMObject]::ParseApiDateTime($ActivityLogDetail.'remote_session.start_date')
 
         } else {
 
@@ -796,8 +791,7 @@ class DRMMActivityLogDetailsDeviceRemoteGeneric : DRMMActivityLogDetailsDeviceRe
 
                 try {
 
-                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
-                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
 
                 } catch {
 
@@ -942,8 +936,7 @@ class DRMMActivityLogDetailsDeviceDeviceGeneric : DRMMActivityLogDetailsDeviceDe
 
                 try {
 
-                    $DateResult = [DRMMObject]::ParseApiDate($ActivityLogDetail[$Key])
-                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $DateResult.DateTime
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
 
                 } catch {
 

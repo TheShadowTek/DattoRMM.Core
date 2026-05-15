@@ -51,8 +51,8 @@ class DRMMUser : DRMMObject {
         $User.Status = $Response.status
         $User.Disabled = $Response.disabled
 
-        $User.Created = ([DRMMObject]::ParseApiDate($Response.created)).DateTime
-        $User.LastAccess = ([DRMMObject]::ParseApiDate($Response.lastAccess)).DateTime
+        $User.Created = [DRMMObject]::ParseApiDateTime($Response.created)
+        $User.LastAccess = [DRMMObject]::ParseApiDateTime($Response.lastAccess)
 
         return $User
 

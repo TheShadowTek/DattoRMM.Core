@@ -34,7 +34,7 @@ class DRMMStatus : DRMMObject {
         $Result.Version = $Response.version
         $Result.Status = $Response.status
         
-        $Result.Started = ([DRMMObject]::ParseApiDate($Response.started)).DateTime
+        $Result.Started = [DRMMObject]::ParseApiDateTime($Response.started)
 
         return $Result
 

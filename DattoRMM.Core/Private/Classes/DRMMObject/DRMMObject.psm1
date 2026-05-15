@@ -7,7 +7,7 @@
 .SYNOPSIS
     Base class for all DattoRMM.Core domain objects, providing shared utility methods for API response parsing, property access, and data masking.
 .DESCRIPTION
-    The DRMMObject class is the root base class for all domain model classes in the DattoRMM.Core module. It provides a set of shared static utility methods used across the class hierarchy: safe property value retrieval (GetValue), API date parsing that handles both epoch timestamps and ISO 8601 strings (ParseApiDate), sensitive data masking (MaskString), and API response shape validation (ValidateShape). All domain classes inherit from DRMMObject and gain access to these utilities without needing to reimplement them.
+    The DRMMObject class is the root base class for all domain model classes in the DattoRMM.Core module. It provides a set of shared static utility methods used across the class hierarchy: safe property value retrieval (GetValue), API date parsing that handles both epoch timestamps and ISO 8601 strings (ParseApiDate, ParseApiDateTime), sensitive data masking (MaskString), and API response shape validation (ValidateShape). All domain classes inherit from DRMMObject and gain access to these utilities without needing to reimplement them.
 #>
 class DRMMObject {
 
@@ -131,6 +131,64 @@ class DRMMObject {
         } catch {
 
             return @{ DateTime = $null; Epoch = $null; Raw = $Value }
+
+        }
+    }
+
+    <#
+    .SYNOPSIS
+        Parses an API date value and returns a UTC DateTime directly, without allocating an intermediate hashtable.
+    .DESCRIPTION
+        The ParseApiDateTime method applies the same parsing logic as ParseApiDate — handling millisecond epoch, second epoch, ISO 8601 strings, and the DateTime.MinValue sentinel — but returns a Nullable[datetime] directly instead of a hashtable. Use this overload when only the DateTime value is needed. Use ParseApiDate when the Epoch or Raw values are also required.
+    .OUTPUTS
+        A UTC System.DateTime if the value can be parsed, or null if the value is null, the DateTime.MinValue sentinel, or cannot be parsed.
+    #>
+    static [Nullable[datetime]] ParseApiDateTime([object]$Value) {
+
+        if ($null -eq $Value) {
+
+            return $null
+
+        }
+
+        # Handle numeric epoch timestamps (int, long, double, or numeric strings)
+        if ($Value -is [int] -or $Value -is [long] -or $Value -is [double] -or ($Value -is [string] -and $Value -match '^\-?\d+(\.\d+)?$')) {
+
+            $Num = [double]$Value
+
+            # Treat DateTime.MinValue sentinel as null (-62135596800000 ms or -62135596800 seconds)
+            if ($Num -eq -62135596800000 -or $Num -eq -62135596800) {
+
+                return $null
+
+            }
+
+            if ($Num -gt 9999999999) {
+
+                # Milliseconds
+                return [DateTimeOffset]::FromUnixTimeMilliseconds([long]$Num).UtcDateTime
+
+            } elseif ($Num -lt -9999999999) {
+
+                # Negative milliseconds
+                return [DateTimeOffset]::FromUnixTimeMilliseconds([long]$Num).UtcDateTime
+
+            } else {
+
+                # Seconds (possibly with decimal milliseconds)
+                return [DateTimeOffset]::FromUnixTimeSeconds($Num).UtcDateTime
+
+            }
+
+        }
+
+        try {
+
+            return [DateTimeOffset]::Parse([string]$Value).UtcDateTime
+
+        } catch {
+
+            return $null
 
         }
     }
