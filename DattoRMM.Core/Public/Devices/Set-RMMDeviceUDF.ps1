@@ -17,7 +17,7 @@ function Set-RMMDeviceUdf {
           key-value pairs (e.g., @{udf1='Value1'; udf50='Value50'}).
         - Single mode: Use -UdfNumber and -UdfValue to update a single UDF by number.
 
-        Important behaviors:
+        Important behaviours:
         - Fields included in the request with empty values will be cleared (set to null)
         - Fields not included in the request will retain their current values
         - You only need to specify the fields you want to update
@@ -99,10 +99,16 @@ function Set-RMMDeviceUdf {
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUdf.md
 
     .LINK
+        Connect-DattoRMM
+
+    .LINK
         about_DRMMDevice
 
     .LINK
         Get-RMMDevice
+
+    .LINK
+        about_DRMMDeviceUdfs
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByDeviceUidHashtable', SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param (

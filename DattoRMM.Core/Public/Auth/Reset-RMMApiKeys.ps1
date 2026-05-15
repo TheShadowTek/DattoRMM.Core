@@ -78,6 +78,12 @@ function Reset-RMMApiKeys {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMApiKeys.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        about_DattoRMM.CoreAuthentication
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (

@@ -68,6 +68,9 @@ function Get-RMMUser {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMUser.md
+
+    .LINK
+        Connect-DattoRMM
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
 

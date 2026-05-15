@@ -35,7 +35,7 @@ function Remove-RMMVariable {
         Deletes an account-level variable by ID without prompting for confirmation.
 
     .EXAMPLE
-        Get-RMMSite -Name "Closed Office" | Get-RMMVariable | Remove-RMMVariable -Confirm
+        Get-RMMSite -SiteName "Closed Office" | Get-RMMVariable | Remove-RMMVariable -Confirm
 
         Deletes all variables from a site with confirmation prompts.
 
@@ -60,6 +60,18 @@ function Remove-RMMVariable {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Remove-RMMVariable.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        Get-RMMVariable
+
+    .LINK
+        New-RMMVariable
+
+    .LINK
+        Set-RMMVariable
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByVariableObject', SupportsShouldProcess, ConfirmImpact = 'High')]
     param (

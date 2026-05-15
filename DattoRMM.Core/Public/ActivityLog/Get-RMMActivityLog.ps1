@@ -98,7 +98,16 @@ function Get-RMMActivityLog {
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/ActivityLog/Get-RMMActivityLog.md
 
     .LINK
+        Connect-DattoRMM
+
+    .LINK
+        Get-RMMSite
+
+    .LINK
         about_DRMMActivityLog
+
+    .LINK
+        about_DattoRMM.CoreSecurity
     #>
 
     [CmdletBinding(

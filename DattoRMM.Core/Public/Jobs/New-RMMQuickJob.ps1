@@ -82,6 +82,23 @@ function New-RMMQuickJob {
     .OUTPUTS
         DRMMJob. Returns the created job object with its status and unique identifier.
 
+    .NOTES
+        This function requires an active connection to the Datto RMM API.
+        Use Connect-DattoRMM to authenticate before calling this function.
+
+        Best practices:
+        - Use descriptive job names to identify jobs in history
+        - Check component input variables with Component.GetInputVariables()
+        - Test components on a single device before running on multiple devices
+        - Monitor job status with Get-RMMJob to verify completion
+        - Use -WhatIf to preview job creation without executing
+
+    .LINK
+        https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/New-RMMQuickJob.md
+
+    .LINK
+        Connect-DattoRMM
+
     .LINK
         about_DRMMDevice
 
@@ -98,24 +115,7 @@ function New-RMMQuickJob {
         about_DRMMJob
 
     .LINK
-        Get-RMMComponent
-
-    .LINK
         about_DRMMComponent
-
-    .NOTES
-        This function requires an active connection to the Datto RMM API.
-        Use Connect-DattoRMM to authenticate before calling this function.
-
-        Best practices:
-        - Use descriptive job names to identify jobs in history
-        - Check component input variables with Component.GetInputVariables()
-        - Test components on a single device before running on multiple devices
-        - Monitor job status with Get-RMMJob to verify completion
-        - Use -WhatIf to preview job creation without executing
-
-    .LINK
-        https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/New-RMMQuickJob.md
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByDeviceUidWithComponentUid', SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param (

@@ -52,8 +52,10 @@ function Get-RMMStatus {
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMStatus.md
 
     .LINK
-        about_DRMMStatus
+        Connect-DattoRMM
 
+    .LINK
+        about_DRMMStatus
     #>
     [CmdletBinding()]
     param ()

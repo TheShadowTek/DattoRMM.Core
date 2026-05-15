@@ -30,7 +30,7 @@ function Remove-RMMSiteProxy {
         Removes proxy settings from the specified site (with confirmation prompt).
 
     .EXAMPLE
-        Get-RMMSite -Name "Branch Office" | Remove-RMMSiteProxy -Force
+        Get-RMMSite -SiteName "Branch Office" | Remove-RMMSiteProxy -Force
 
         Removes proxy settings from the site via pipeline without confirmation.
 

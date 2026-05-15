@@ -79,6 +79,18 @@ function New-RMMSite {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/New-RMMSite.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        Set-RMMSiteProxy
+
+    .LINK
+        about_DRMMSite
+
+    .LINK
+        Get-RMMSite
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
     param (

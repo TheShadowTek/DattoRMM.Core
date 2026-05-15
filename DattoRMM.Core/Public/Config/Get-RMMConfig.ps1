@@ -41,10 +41,16 @@ function Get-RMMConfig {
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Get-RMMConfig.md
 
     .LINK
+        Set-RMMConfig
+
+    .LINK
         Save-RMMConfig
+
+    .LINK
         Remove-RMMConfig
-        Set-RMMPageSize
-        Get-RMMPageSize
+
+    .LINK
+        about_DattoRMM.CoreConfiguration
     #>
 
     [CmdletBinding()]

@@ -64,7 +64,7 @@ function Set-RMMVariable {
         Updates both name and value of an account-level variable by ID.
 
     .EXAMPLE
-        Get-RMMSite -Name "Main Office" | Get-RMMVariable -Name "SiteCode" | Set-RMMVariable -Value "MO002"
+        Get-RMMSite -SiteName "Main Office" | Get-RMMVariable -Name "SiteCode" | Set-RMMVariable -Value "MO002"
 
         Updates a site-level variable via pipeline.
 
@@ -97,6 +97,21 @@ function Set-RMMVariable {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Set-RMMVariable.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        Get-RMMVariable
+
+    .LINK
+        New-RMMVariable
+
+    .LINK
+        Remove-RMMVariable
+
+    .LINK
+        Get-RMMSite
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByVariableObject', SupportsShouldProcess, ConfirmImpact = 'High')]
     param (

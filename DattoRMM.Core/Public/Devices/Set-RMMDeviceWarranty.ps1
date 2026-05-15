@@ -43,7 +43,7 @@ function Set-RMMDeviceWarranty {
         Clears the warranty date without confirmation.
 
     .EXAMPLE
-        $Site = Get-RMMSite -Name "Chicago Office"
+        $Site = Get-RMMSite -SiteName "Chicago Office"
         PS > $Filter = $Site | Get-RMMFilter | Where-Object {$_.Name -eq "Dell Latitude 7490"}
         PS > Get-RMMDevice -FilterId $Filter.FilterId | Set-RMMDeviceWarranty -WarrantyDate (Get-Date "2026-06-30")
 
@@ -67,7 +67,7 @@ function Set-RMMDeviceWarranty {
         # CSV format: SerialNumber,WarrantyDate
         # Example row: ABC123456,2028-03-15
 
-        $Site = Get-RMMSite -Name "Boston Office"
+        $Site = Get-RMMSite -SiteName "Boston Office"
         $Devices = Get-RMMDevice -SiteUid $Site.Uid
 
         foreach ($Item in $Warranties) {

@@ -25,7 +25,7 @@ function Get-RMMDeviceSoftware {
         Retrieves all installed software for device 12345.
 
     .EXAMPLE
-        $Device = Get-RMMDevice -Name "SERVER01"
+        $Device = Get-RMMDevice -Hostname "SERVER01"
         PS > Get-RMMDeviceSoftware -DeviceUid $Device.Uid
 
         Retrieves a device by name and then gets its installed software.

@@ -46,7 +46,7 @@ function Set-RMMSiteProxy {
 
     .EXAMPLE
         $ProxyPass = Read-Host -Prompt "Enter proxy password" -AsSecureString
-        Get-RMMSite -Name "Branch Office" | Set-RMMSiteProxy -ProxyHost "proxy.branch.com" -Port 3128 -Type http -Username "proxyuser" -Password $ProxyPass
+        Get-RMMSite -SiteName "Branch Office" | Set-RMMSiteProxy -ProxyHost "proxy.branch.com" -Port 3128 -Type http -Username "proxyuser" -Password $ProxyPass
 
         Configures an HTTP proxy with authentication via pipeline.
 

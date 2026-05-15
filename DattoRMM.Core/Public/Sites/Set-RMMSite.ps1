@@ -78,12 +78,12 @@ function Set-RMMSite {
         API default values because OverwriteAll bypasses property preservation.
 
     .EXAMPLE
-        Get-RMMSite -Name "Old Name" | Set-RMMSite -Name "New Name" -Description "Updated description"
+        Get-RMMSite -SiteName "Old Name" | Set-RMMSite -Name "New Name" -Description "Updated description"
 
         Updates the name and description of a site via pipeline.
 
     .EXAMPLE
-        $Site = Get-RMMSite -Name "Test Site"
+        $Site = Get-RMMSite -SiteName "Test Site"
         Set-RMMSite -Site $Site -Name "Test Site" -OnDemand -Force
 
         Enables on-demand for a site without confirmation prompt.

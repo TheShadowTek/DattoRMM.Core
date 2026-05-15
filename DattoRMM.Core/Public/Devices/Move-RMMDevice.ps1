@@ -40,12 +40,12 @@ function Move-RMMDevice {
         Moves a device by specifying both device and target site UIDs.
 
     .EXAMPLE
-        Get-RMMDevice -Hostname "SERVER01" | Move-RMMDevice -TargetSite (Get-RMMSite -Name "New Office")
+        Get-RMMDevice -Hostname "SERVER01" | Move-RMMDevice -TargetSite (Get-RMMSite -SiteName "New Office")
 
         Moves a device to a new site using site objects.
 
     .EXAMPLE
-        Get-RMMSite -Name "Old Site" | Get-RMMDevice | Move-RMMDevice -TargetSiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -Force
+        Get-RMMSite -SiteName "Old Site" | Get-RMMDevice | Move-RMMDevice -TargetSiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -Force
 
         Moves all devices from one site to another without confirmation prompts.
 

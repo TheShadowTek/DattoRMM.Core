@@ -82,7 +82,7 @@ function Get-RMMDevice {
         Retrieves devices with hostname containing "SERVER01".
 
     .EXAMPLE
-        Get-RMMSite -Name "Main Office" | Get-RMMDevice
+        Get-RMMSite -SiteName "Main Office" | Get-RMMDevice
 
         Gets all devices for the "Main Office" site.
 
@@ -108,7 +108,7 @@ function Get-RMMDevice {
         Retrieves all devices matching filter 12345 at the account level.
 
     .EXAMPLE
-        Get-RMMSite -Name "Main Office" | Get-RMMDevice -FilterId 12345
+        Get-RMMSite -SiteName "Main Office" | Get-RMMDevice -FilterId 12345
 
         Retrieves devices matching filter 12345 scoped to the "Main Office" site.
 
@@ -167,6 +167,9 @@ function Get-RMMDevice {
 
     .LINK
         Get-RMMSite
+
+    .LINK
+        Get-RMMDeviceAudit
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'Global', SupportsShouldProcess, ConfirmImpact = 'High')]

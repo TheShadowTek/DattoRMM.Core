@@ -21,7 +21,7 @@ function Get-RMMSiteSettings {
         The unique identifier (GUID) of the site to retrieve settings for.
 
     .EXAMPLE
-        Get-RMMSite -Name "Contoso" | Get-RMMSiteSettings
+        Get-RMMSite -SiteName "Contoso" | Get-RMMSiteSettings
 
         Retrieves settings for the "Contoso" site.
 

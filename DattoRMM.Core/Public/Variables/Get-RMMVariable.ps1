@@ -44,7 +44,7 @@ function Get-RMMVariable {
         Retrieves a global variable by exact name match.
 
     .EXAMPLE
-        Get-RMMSite -Name "Contoso" | Get-RMMVariable
+        Get-RMMSite -SiteName "Contoso" | Get-RMMVariable
 
         Gets all variables for the "Contoso" site.
 
@@ -94,6 +94,21 @@ function Get-RMMVariable {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Get-RMMVariable.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        New-RMMVariable
+
+    .LINK
+        Set-RMMVariable
+
+    .LINK
+        Remove-RMMVariable
+
+    .LINK
+        Get-RMMSite
     #>
     [CmdletBinding(DefaultParameterSetName = 'GlobalAll')]
     param (

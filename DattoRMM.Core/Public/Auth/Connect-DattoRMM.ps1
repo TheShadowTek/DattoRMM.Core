@@ -158,6 +158,12 @@ function Connect-DattoRMM {
 
     .LINK
         Disconnect-DattoRMM
+
+    .LINK
+        Request-RMMToken
+
+    .LINK
+        about_DattoRMM.CoreAuthentication
         Save-RMMConfig
     #>
 

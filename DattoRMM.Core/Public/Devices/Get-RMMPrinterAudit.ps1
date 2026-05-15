@@ -37,7 +37,7 @@ function Get-RMMPrinterAudit {
         Retrieves printer audit data using a specific device UID.
 
     .EXAMPLE
-        $Audit = Get-RMMDevice -Name "PRINTER01" | Get-RMMPrinterAudit
+        $Audit = Get-RMMDevice -Hostname "PRINTER01" | Get-RMMPrinterAudit
         PS > $Audit.Printers | Select-Object Name, Model, SupplyLevels
 
         Retrieves printer audit data and displays printer names, models, and supply levels.
@@ -87,6 +87,9 @@ function Get-RMMPrinterAudit {
 
     .LINK
         Get-RMMDeviceAudit
+
+    .LINK
+        Get-RMMEsxiHostAudit
     #>
     [CmdletBinding(DefaultParameterSetName = 'DeviceUid')]
     param (

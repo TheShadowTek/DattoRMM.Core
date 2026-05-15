@@ -54,6 +54,10 @@ function Get-RMMJob {
         about_DRMMJob
     .LINK
         Get-RMMActivityLog
+    .LINK
+        New-RMMQuickJob
+    .LINK
+        Get-RMMJobResult
     #>
     [CmdletBinding(DefaultParameterSetName = 'JobUid')]
     param (
@@ -64,7 +68,6 @@ function Get-RMMJob {
         [guid]
         $JobUid,
 
-        # Parameter help description
         [Parameter(
             ParameterSetName = 'ActivityLog',
             Mandatory = $true,

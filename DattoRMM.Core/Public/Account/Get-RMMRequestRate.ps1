@@ -26,6 +26,15 @@ function Get-RMMRequestRate {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMRequestRate.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        Get-RMMThrottleStatus
+
+    .LINK
+        about_DattoRMM.CoreThrottling
     #>
     [CmdletBinding()]
     

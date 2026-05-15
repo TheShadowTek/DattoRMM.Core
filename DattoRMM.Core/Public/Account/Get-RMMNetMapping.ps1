@@ -59,6 +59,9 @@ function Get-RMMNetMapping {
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMNetMapping.md
 
     .LINK
+        Connect-DattoRMM
+
+    .LINK
         about_DRMMNetMapping
     #>
     [CmdletBinding()]

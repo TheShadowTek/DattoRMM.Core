@@ -42,6 +42,9 @@ function Disconnect-DattoRMM {
 
     .LINK
         Connect-DattoRMM
+
+    .LINK
+        about_DattoRMM.CoreAuthentication
     #>
 
     $Script:RMMAuth = $null

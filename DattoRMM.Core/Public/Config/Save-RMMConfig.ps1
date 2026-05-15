@@ -11,7 +11,7 @@ function Save-RMMConfig {
     .DESCRIPTION
         Save-RMMConfig writes the current session's configuration (platform, page size, throttle profile, token expiry, etc.) to the persistent configuration file at $HOME/.DattoRMM.Core/config.json.
 
-        For removing the config file and resetting to defaults, use Reset-RMMConfig.
+        For removing the config file and resetting to defaults, use Remove-RMMConfig.
 
     .EXAMPLE
         Save-RMMConfig
@@ -26,17 +26,26 @@ function Save-RMMConfig {
 
     .NOTES
         Configuration is stored at: $HOME/.DattoRMM.Core/config.json
-        Use Reset-RMMConfig to delete the config file and reset persistent settings.
-        Current session values are not changed by Reset-RMMConfig.
+        Use Remove-RMMConfig to delete the config file and reset persistent settings.
+        Current session values are not changed by Remove-RMMConfig.
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Save-RMMConfig.md
 
     .LINK
         Set-RMMConfig
-        Reset-RMMConfig
+
+    .LINK
+        Remove-RMMConfig
+
+    .LINK
         Get-RMMConfig
+
+    .LINK
         about_DattoRMM.CoreThrottling
+
+    .LINK
+        about_DattoRMM.CoreConfiguration
     #>
 
     [CmdletBinding()]

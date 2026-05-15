@@ -121,6 +121,9 @@ function Export-RMMObjectCsv {
 
     .LINK
         Get-RMMAlert
+
+    .LINK
+        about_DattoRMM.CoreExport
     #>
 
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]

@@ -12,7 +12,7 @@ function Get-RMMFilter {
 
         Filters in Datto RMM are used to group devices based on criteria and can be applied when retrieving devices with Get-RMMDevice.
 
-        Filters are categorized as either "Default" (built-in system filters) or "Custom" (user-created filters).
+        Filters are categorised as either "Default" (built-in system filters) or "Custom" (user-created filters).
 
     .PARAMETER Site
         A DRMMSite object to retrieve filters for. Accepts pipeline input from Get-RMMSite.
@@ -48,7 +48,7 @@ function Get-RMMFilter {
         Retrieves a filter by exact name match.
 
     .EXAMPLE
-        Get-RMMSite -Name "Main Office" | Get-RMMFilter
+        Get-RMMSite -SiteName "Main Office" | Get-RMMFilter
 
         Gets all filters for the "Main Office" site.
 

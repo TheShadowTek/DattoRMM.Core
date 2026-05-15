@@ -82,6 +82,9 @@ function Request-RMMToken {
 
     .LINK
         Connect-DattoRMM
+
+    .LINK
+        about_DattoRMM.CoreAuthentication
     #>
 
     [CmdletBinding(DefaultParameterSetName = 'Key')]

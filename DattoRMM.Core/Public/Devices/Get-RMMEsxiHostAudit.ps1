@@ -31,7 +31,7 @@ function Get-RMMEsxiHostAudit {
         The unique identifier (GUID) of the ESXi host device to retrieve audit data for.
 
     .EXAMPLE
-        Get-RMMDevice -Name "ESXI-HOST-01" | Get-RMMEsxiHostAudit
+        Get-RMMDevice -Hostname "ESXI-HOST-01" | Get-RMMEsxiHostAudit
 
         Retrieves ESXi audit data for an ESXi host by name.
 

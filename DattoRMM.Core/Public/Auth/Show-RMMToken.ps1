@@ -12,7 +12,7 @@ function Show-RMMToken {
         WARNING: The access token is sensitive. Do not share or publish this information.
 
     .NOTES
-        This command requires confirmation and has ConfirmImpact set to Low.
+        This command requires confirmation and has ConfirmImpact set to High.
 
     .EXAMPLE
         Show-RMMToken
@@ -20,6 +20,15 @@ function Show-RMMToken {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Show-RMMToken.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        Disconnect-DattoRMM
+
+    .LINK
+        about_DattoRMM.CoreAuthentication
     #>
     [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='High')]
     param()

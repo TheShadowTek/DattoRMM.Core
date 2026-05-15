@@ -46,7 +46,9 @@ function Set-RMMConfig {
         Skips confirmation prompts for impactful actions (such as resetting or saving configuration). Use with -Default or -Persist to bypass -Confirm and proceed immediately.
 
     .NOTES
-        Confirmation logic is handled up front with early returns, ensuring efficient and predictable behavior.
+        Confirmation logic is handled up front with early returns, ensuring efficient and predictable behaviour.
+        Configuration is stored at: $HOME/.DattoRMM.Core/config.json
+        At least one parameter must be specified unless using -Default. Settings take effect immediately in the session. Use -Persist to save for future sessions.
 
     .EXAMPLE
         Set-RMMConfig -Platform Merlot
@@ -74,19 +76,26 @@ function Set-RMMConfig {
     .OUTPUTS
         None. This function updates the session and/or persistent configuration file.
 
-    .NOTES
-        Configuration is stored at: $HOME/.DattoRMM.Core/config.json At least one parameter must be specified unless using -Default. Settings take effect immediately in the session. Use -Persist to save for future sessions.
-
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Set-RMMConfig.md
 
     .LINK
         Connect-DattoRMM
+
+    .LINK
         Save-RMMConfig
+
+    .LINK
         Get-RMMConfig
-        Reset-RMMConfig
-        Set-RMMPageSize
+
+    .LINK
+        Remove-RMMConfig
+
+    .LINK
         about_DattoRMM.CoreThrottling
+
+    .LINK
+        about_DattoRMM.CoreConfiguration
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]

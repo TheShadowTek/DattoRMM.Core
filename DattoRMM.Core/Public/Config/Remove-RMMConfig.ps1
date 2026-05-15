@@ -39,8 +39,16 @@ function Remove-RMMConfig {
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Remove-RMMConfig.md
 
     .LINK
+        Set-RMMConfig
+
+    .LINK
         Save-RMMConfig
+
+    .LINK
         Get-RMMConfig
+
+    .LINK
+        about_DattoRMM.CoreConfiguration
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
