@@ -39,7 +39,7 @@ class DRMMJob : DRMMObject {
         $Job.Uid = $Response.uid
         $Job.Name = $Response.name
         $Job.Status = $Response.status
-        $Job.DateCreated = [DRMMObject]::ParseApiDate($Response.dateCreated).DateTime
+        $Job.DateCreated = [DRMMObject]::ParseApiDateTime($Response.dateCreated)
 
         return $Job
 
@@ -316,7 +316,7 @@ class DRMMJobResults : DRMMObject {
         $Results.JobUid = $Response.jobUid
         $Results.DeviceUid = $Response.deviceUid
         $Results.JobDeploymentStatus = $Response.jobDeploymentStatus
-        $Results.RanOn = ([DRMMObject]::ParseApiDate($Response.ranOn)).DateTime
+        $Results.RanOn = [DRMMObject]::ParseApiDateTime($Response.ranOn)
         $Results.StdOut = @()
         $Results.StdErr = @()
 
