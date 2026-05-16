@@ -11,11 +11,11 @@ using module '..\DRMMObject\DRMMObject.psm1'
 #>
 class DRMMStatus : DRMMObject {
 
-    # The version information.
+    # The version of the Datto RMM platform.
     [string]$Version
-    # The current status.
+    # The current operational status of the Datto RMM platform.
     [string]$Status
-    # The start time of the status.
+    # The UTC date and time when the Datto RMM service was started.
     [Nullable[datetime]]$Started
 
     DRMMStatus() : base() {

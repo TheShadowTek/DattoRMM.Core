@@ -143,7 +143,7 @@ class DRMMAlert : DRMMObject {
     .SYNOPSIS
         Gets a summary of the alert.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the alert's status, priority, device name, monitor category, and description.
+        The GetSummary method returns a string summarising the alert's status, priority, device name, monitor category, and description.
     .OUTPUTS
         A summary string combining key properties of the alert for easy display.
     #>
@@ -254,7 +254,7 @@ class DRMMAlertContext : DRMMObject {
     .SYNOPSIS
         Gets a summary of the alert context.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the alert context by including the class of the context. This provides a quick overview of the type of context associated with the alert, which can be useful for display purposes and when examining the alert's details in a list or summary view.
+        The GetSummary method returns a string summarising the alert context by including the class of the context. This provides a quick overview of the type of context associated with the alert, which can be useful for display purposes and when examining the alert's details in a list or summary view.
     .OUTPUTS
         A summary string of the alert context.
     #>

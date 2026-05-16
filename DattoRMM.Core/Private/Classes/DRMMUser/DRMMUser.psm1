@@ -76,7 +76,7 @@ class DRMMUser : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the user, including their full name, username, and disabled status.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the user's information, including their full name (constructed from the first and last name), username, and an indication of whether the user is disabled. If the user is disabled, the summary will include "(Disabled)" next to the username for clarity.
+        The GetSummary method returns a string summarising the user's information, including their full name (constructed from the first and last name), username, and an indication of whether the user is disabled. If the user is disabled, the summary will include "(Disabled)" next to the username for clarity.
     .OUTPUTS
         A summary string that includes the full name, username, and disabled status of the user.
     #>

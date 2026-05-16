@@ -73,7 +73,7 @@ class DRMMVariable : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the variable, including its name, scope, and value.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the variable's name, scope, and value. If the Scope property is not set, it defaults to 'Global'. The method also accounts for secret variables, which are masked in the API response.
+        The GetSummary method returns a string summarising the variable's name, scope, and value. If the Scope property is not set, it defaults to 'Global'. The method also accounts for secret variables, which are masked in the API response.
     .OUTPUTS
         A summary string that includes the name, scope, and value of the variable.
     #>

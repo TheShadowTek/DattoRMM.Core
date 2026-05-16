@@ -5,9 +5,9 @@
 using module '..\DRMMObject\DRMMObject.psm1'
 <#
 .SYNOPSIS
-    Represents the audit information of an ESXi host, including system info, guests, processors, network interfaces, physical memory, and datastores.
+    Represents a datastore associated with an ESXi host, including capacity, free space, file system, and status information.
 .DESCRIPTION
-    The DRMMEsxiHostAudit class encapsulates detailed information about an ESXi host, such as its unique identifier, portal URL, system information, guest virtual machines, processors, network interfaces, physical memory modules, and datastores. This class is typically used to represent the results of an ESXi host audit operation within the DRMM system.
+    The DRMMEsxiDatastore class models a datastore on an ESXi host, encapsulating properties such as DatastoreName, SubscriptionPercent, FreeSpace, Size, FileSystem, and Status. This class is typically used as part of the DRMMEsxiHostAudit to represent the storage datastores available to the ESXi host being audited.
 #>
 class DRMMEsxiDatastore : DRMMObject {
 

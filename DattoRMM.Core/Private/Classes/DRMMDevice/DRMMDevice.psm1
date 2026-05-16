@@ -67,7 +67,7 @@ class DRMMDevice : DRMMObject {
     [DRMMDeviceUdfs]$Udfs
     # Indicates whether SNMP is enabled on the device.
     [bool]$SnmpEnabled
-    # The class of the device, which may indicate its role or type within the organization.
+    # The class of the device, which may indicate its role or type within the organisation.
     [string]$DeviceClass
     # The URL to access the device's portal in the DRMM system.
     [string]$PortalUrl
@@ -179,6 +179,8 @@ class DRMMDevice : DRMMObject {
         Retrieves the alerts associated with the device, filtered by a specified status.
     .DESCRIPTION
         The GetAlerts method returns an array of DRMMAlert objects representing the alerts associated with the device, filtered by the specified status (e.g., 'Open', 'Resolved', 'All').
+    .OUTPUTS
+        An array of alerts associated with the device, filtered by the specified status.
     #>
     [DRMMAlert[]] GetAlerts([string]$Status) {
 
@@ -333,7 +335,7 @@ class DRMMDevice : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the device, including its hostname and device type.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the device's hostname and its device type category. If the device type information is not available, it defaults to 'Unknown'.
+        The GetSummary method returns a string summarising the device's hostname and its device type category. If the device type information is not available, it defaults to 'Unknown'.
     .OUTPUTS
         A summary string for the device, including its hostname and device type.
     #>
@@ -481,7 +483,7 @@ class DRMMDevice : DRMMObject {
     .SYNOPSIS
         Moves the device to a different site within the DRMM system.
     .DESCRIPTION
-        The Move method takes a target site unique identifier as input and moves the device to the specified
+        The Move method takes a target site unique identifier as input and moves the device to the specified site using the Move-RMMDevice cmdlet. The -Force parameter is used to bypass confirmation prompts.
     .OUTPUTS
         This method does not return a value. It performs an action to move the device to the specified site.
     #>

@@ -67,9 +67,9 @@ class DRMMFilter : DRMMObject {
 
     <#
     .SYNOPSIS
-        Determines if the variable is global in scope.
+        Determines if the filter is global in scope.
     .DESCRIPTION
-        The IsGlobal method checks the Scope property of the variable to determine if it is global in scope. It returns true if the Scope is equal to 'Global', and false otherwise.
+        The IsGlobal method checks the Scope property of the filter to determine if it is global in scope. It returns true if the Scope is equal to 'Global', and false otherwise.
     .OUTPUTS
         A boolean value indicating whether the filter is global in scope.
     #>
@@ -81,9 +81,9 @@ class DRMMFilter : DRMMObject {
 
     <#
     .SYNOPSIS
-        Determines if the variable is site-specific in scope.
+        Determines if the filter is site-specific in scope.
     .DESCRIPTION
-        The IsSite method checks the Scope property of the variable to determine if it is site-specific in scope. It returns true if the Scope is equal to 'Site', and false otherwise.
+        The IsSite method checks the Scope property of the filter to determine if it is site-specific in scope. It returns true if the Scope is equal to 'Site', and false otherwise.
     .OUTPUTS
         A boolean value indicating whether the filter is site-specific in scope.
     #>
@@ -146,7 +146,7 @@ class DRMMFilter : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the filter, including its name, scope, and type.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the filter's name, scope, and type. If the Scope property is not set, it defaults to 'Global'. If the Type property is not set, it defaults to '-'.
+        The GetSummary method returns a string summarising the filter's name, scope, and type. If the Scope property is not set, it defaults to 'Global'. If the Type property is not set, it defaults to '-'.
     .OUTPUTS
         A summary string that includes the filter's name, scope, and type.
     #>
@@ -243,6 +243,8 @@ class DRMMFilter : DRMMObject {
         Retrieves the alerts associated with the filter.
     .DESCRIPTION
         The GetAlerts method returns an array of DRMMAlert objects associated with the filter. It retrieves alerts for each device associated with the filter, optionally filtered by status. The status parameter allows filtering alerts by their status (e.g., 'Open', 'Resolved', 'All').
+    .OUTPUTS
+        A list of alerts associated with the filter, filtered by the specified status.
     #>
     [DRMMAlert[]] GetAlerts([string]$Status) {
 

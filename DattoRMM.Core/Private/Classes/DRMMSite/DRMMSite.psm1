@@ -105,7 +105,7 @@ class DRMMSite : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the site, including its name, unique identifier, and device count.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the site's name, unique identifier (UID), and the count of devices associated with the site. If the device count information is not available, it defaults to '0'.
+        The GetSummary method returns a string summarising the site's name, unique identifier (UID), and the count of devices associated with the site. If the device count information is not available, it defaults to '0'.
     .OUTPUTS
         A summary string that includes the name, unique identifier, and device count for the site.
     #>
@@ -123,7 +123,7 @@ class DRMMSite : DRMMObject {
     .DESCRIPTION
         The Set method takes a hashtable of property names and values, constructs a parameter set for the Set-RMMSite cmdlet, and updates the site's properties accordingly. The -Force parameter is included to bypass confirmation prompts during the update process. The method returns the updated site object after the changes have been applied.
     .OUTPUTS
-        This method does not return a value. It performs an action to update the properties of the site based on the provided hashtable of property names and values.
+        The updated DRMMSite object after the changes have been applied.
     #>
     [DRMMSite] Set([hashtable]$Properties) {
 
@@ -169,6 +169,8 @@ class DRMMSite : DRMMObject {
         Retrieves alerts associated with the site, optionally filtered by status.
     .DESCRIPTION
         The GetAlerts method fetches alerts for the site using the Get-RMMAlert cmdlet. If no status is specified, it retrieves all alerts. If a status is provided, it filters alerts based on the given status. The method returns an array of DRMMAlert objects or an empty array if no alerts are found.
+    .OUTPUTS
+        A collection of alerts associated with the site, filtered by the specified status.
     #>
     [DRMMAlert[]] GetAlerts([string]$Status) {
 
@@ -232,6 +234,8 @@ class DRMMSite : DRMMObject {
         Retrieves devices associated with the site, optionally filtered by a specific filter ID.
     .DESCRIPTION
         The GetDevices method fetches devices for the site using the Get-RMMDevice cmdlet. Retrieves devices that match the specified filter criteria. The method returns an array of DRMMDevice objects or an empty array if no devices are found.
+    .OUTPUTS
+        A collection of devices associated with the site that match the specified filter.
     #>
     [DRMMDevice[]] GetDevices([long]$FilterId) {
 
@@ -330,6 +334,8 @@ class DRMMSite : DRMMObject {
         Creates a new variable associated with the site, with an option to mask the value.
     .DESCRIPTION
         The NewVariable method creates a new variable for the site using the New-RMMVariable cmdlet. It takes the variable name, value, and a boolean parameter to indicate whether the value should be masked (secret). The method returns a DRMMVariable object representing the newly created variable.
+    .OUTPUTS
+        The newly created variable associated with the site.
     #>
     [DRMMVariable] NewVariable([string]$Name, [string]$Value, [bool]$Masked) {
 
@@ -401,7 +407,7 @@ class DRMMSite : DRMMObject {
     .DESCRIPTION
         The SetProxy method configures the proxy settings for the site using the Set-RMMSiteProxy cmdlet. It takes the proxy host, port, and type as parameters and returns a DRMMSiteSettings object representing the updated site settings.
     .OUTPUTS
-        This method does not return a value. It performs an action to set the proxy settings for the site, including authentication credentials.
+        This method does not return a value. It performs an action to set the proxy settings for the site.
     #>
     [DRMMSiteSettings] SetProxy([string]$ProxyHost, [int]$Port, [string]$Type) {
 
@@ -414,6 +420,8 @@ class DRMMSite : DRMMObject {
         Sets the proxy settings for the site, including authentication credentials.
     .DESCRIPTION
         The SetProxy method configures the proxy settings for the site using the Set-RMMSiteProxy cmdlet. It takes the proxy host, port, type, username, and password as parameters and returns a DRMMSiteSettings object representing the updated site settings with proxy authentication.
+    .OUTPUTS
+        This method does not return a value. It performs an action to set the proxy settings for the site, including authentication credentials.
     #>
     [DRMMSiteSettings] SetProxy([string]$ProxyHost, [int]$Port, [string]$Type, [string]$Username, [SecureString]$Password) {
 
@@ -477,7 +485,7 @@ class DRMMSiteGeneralSettings : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the general settings, including the on-demand status.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the general settings of the site, specifically indicating whether the site is configured for on-demand access. The summary includes the OnDemand property value.
+        The GetSummary method returns a string summarising the general settings of the site, specifically indicating whether the site is configured for on-demand access. The summary includes the OnDemand property value.
     .OUTPUTS
         A summary string that includes the on-demand status of the site's general settings.
     #>
@@ -631,7 +639,7 @@ class DRMMSiteProxySettings : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the proxy settings, including the type, host, and port information.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the proxy settings for the site. It includes the proxy type, host, and port information if available. If the host is not set, it returns null to indicate that proxy settings are not configured.
+        The GetSummary method returns a string summarising the proxy settings for the site. It includes the proxy type, host, and port information if available. If the host is not set, it returns null to indicate that proxy settings are not configured.
     .OUTPUTS
         A summary string that includes the type, host, and port information of the site's proxy settings.
     #>
@@ -654,10 +662,10 @@ class DRMMSiteSettings : DRMMObject {
     # The general settings of the site.
     [DRMMSiteGeneralSettings]$GeneralSettings
     # The proxy settings for the site.
-    [DRMMSiteProxySettings]$ProxySettings  # Reuse existing class
-    # Reuse existing class
+    [DRMMSiteProxySettings]$ProxySettings
+    # The mail recipients configured for site notifications.
     [DRMMSiteMailRecipient[]]$MailRecipients
-    # Reuse existing class
+    # The unique identifier (UID) of the site these settings belong to.
     [guid]$SiteUid
 
     DRMMSiteSettings() : base() {
@@ -704,7 +712,7 @@ class DRMMSiteSettings : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the site's settings, including on-demand status, proxy information, and mail recipient count.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the site's settings, including the on-demand status from the general settings, proxy information from the proxy settings, and the count of mail recipients. If any of these components are not available, it provides default values in the summary string to indicate their absence.
+        The GetSummary method returns a string summarising the site's settings, including the on-demand status from the general settings, proxy information from the proxy settings, and the count of mail recipients. If any of these components are not available, it provides default values in the summary string to indicate their absence.
     .OUTPUTS
         A summary string that includes the on-demand status, proxy information, and mail recipient count for the site.
     #>
@@ -759,7 +767,7 @@ class DRMMDevicesStatus : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the device status, including counts of total devices, online devices, and offline devices.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the device status for the site, including the total number of devices, the number of online devices, and the number of offline devices. This summary provides a quick overview of the device status for the site, allowing for easy monitoring and assessment of the site's device health.
+        The GetSummary method returns a string summarising the device status for the site, including the total number of devices, the number of online devices, and the number of offline devices. This summary provides a quick overview of the device status for the site, allowing for easy monitoring and assessment of the site's device health.
     .OUTPUTS
         A summary string that includes the total number of devices, the number of online devices, and the number of offline devices for the site.
     #>
@@ -816,7 +824,7 @@ class DRMMSiteFilter : DRMMFilter {
     .SYNOPSIS
         Generates a summary string for the site filter, including its name, site name, and type.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the filter's name, associated site name, and type. If the Type property is not set, it defaults to '-'.
+        The GetSummary method returns a string summarising the filter's name, associated site name, and type. If the Type property is not set, it defaults to '-'.
     .OUTPUTS
         A summary string that includes the filter's name, site name, and type.
     #>

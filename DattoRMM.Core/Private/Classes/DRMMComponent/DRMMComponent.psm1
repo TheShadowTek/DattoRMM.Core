@@ -110,7 +110,7 @@ class DRMMComponent : DRMMObject {
     .SYNOPSIS
         Opens the component's portal URL in the default web browser.
     .DESCRIPTION
-        The OpenPortal method of the DRMMComponent class checks if the PortalUrl property is set and, if so, opens it in the default web browser using Start-Process. If the PortalUrl is not available, it writes a warning message to the console indicating that the portal URL is not available for the component's site.
+        The OpenPortal method of the DRMMComponent class checks if the PortalUrl property is set and, if so, opens it in the default web browser using Start-Process. If the PortalUrl is not available, it writes a warning message to the console indicating that the portal URL is not available for the component.
     .OUTPUTS
         This method does not return a value. It performs an action to open the portal URL in the default web browser.
     #>
@@ -131,7 +131,7 @@ class DRMMComponent : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the component, including its name, variable count, credentials requirement, and category.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing key information about the component, such as its name, the number of variables it contains, whether credentials are required, and its category code.
+        The GetSummary method returns a string summarising key information about the component, such as its name, the number of variables it contains, whether credentials are required, and its category code.
     .OUTPUTS
         A summary string for the component, including its name, variable count, credentials requirement, and category.
     #>

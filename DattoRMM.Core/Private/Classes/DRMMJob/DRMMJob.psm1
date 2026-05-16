@@ -111,7 +111,7 @@ class DRMMJob : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the job.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the job's name, status, and age. The age is calculated based on the job's creation date and is formatted to show days, hours, or minutes ago.
+        The GetSummary method returns a string summarising the job's name, status, and age. The age is calculated based on the job's creation date and is formatted to show days, hours, or minutes ago.
     .OUTPUTS
         A summary string representing the job.
     #>
