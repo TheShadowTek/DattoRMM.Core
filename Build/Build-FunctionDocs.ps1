@@ -359,11 +359,13 @@ try {
                 # Normalise to LF before comparison and write (eliminates CRLF drift from PlatyPS on Windows)
                 $Content = $Content -replace '\r\n', "`n" -replace '\r', "`n"
 
-                # Idempotent write: only flag as generated when content actually changed.
-                # Re-signing updates .ps1 LastWriteTime without changing help text; without this
-                # check every function doc would be rewritten with identical content on the next
-                # build run, producing spurious git changes.
-                if ($Content -ne $OldContent) {
+                # Idempotent write: only write when content actually changed (case-sensitive).
+                # Re-signing updates .ps1 LastWriteTime without changing help text; skipping the
+                # Set-Content call when content is identical preserves the markdown LastWriteTime
+                # so the timestamp check correctly skips these files on the next build run.
+                # Case-sensitive comparison (-cne) ensures changes like UserName -> Username are
+                # detected rather than swallowed by PowerShell's default case-insensitive -ne.
+                if ($Content -cne $OldContent) {
                     Set-Content -Path $MarkdownFile -Value $Content -NoNewline
                     if ($Changes.Count -gt 0) {
                         Write-Host "    Changes: $($Changes -join ', ')" -ForegroundColor Gray
@@ -371,7 +373,6 @@ try {
                     Write-Host "    ✓ Generated (content changed)" -ForegroundColor Green
                     $Generated++
                 } else {
-                    Set-Content -Path $MarkdownFile -Value $Content -NoNewline
                     Write-Host "    → Unchanged (source reprocessed, content identical)" -ForegroundColor DarkGray
                     $Unchanged++
                 }

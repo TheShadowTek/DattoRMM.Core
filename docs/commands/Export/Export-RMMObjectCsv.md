@@ -44,43 +44,43 @@ large exports.
 
 ## EXAMPLES
 
-EXAMPLE 1
-```powershell
+### EXAMPLE 1
+```
 Get-RMMSite | Export-RMMObjectCsv -Path .\Sites.csv
 ```
 
 Exports all sites using the default transform.
 
-EXAMPLE 2
-```powershell
+### EXAMPLE 2
+```
 Get-RMMDevice | Export-RMMObjectCsv -Path .\Devices.csv -TransformName Summary
 ```
 
 Exports all devices using the Summary transform (fewer columns).
 
-EXAMPLE 3
-```powershell
+### EXAMPLE 3
+```
 Get-RMMAlert -Status All | Export-RMMObjectCsv -Path .\Alerts.csv -IncludeTimestamp
 ```
 
 Exports all alerts with a UTC timestamp column appended to each row.
 
-EXAMPLE 4
-```powershell
+### EXAMPLE 4
+```
 Get-RMMDevice | Export-RMMObjectCsv -Path .\Devices.csv -IncludeUdf
 ```
 
 Exports all devices with all UDF columns (Udf1-Udf300) appended.
 
-EXAMPLE 5
-```powershell
+### EXAMPLE 5
+```
 Get-RMMDevice | Export-RMMObjectCsv -Path .\Devices.csv -Udf 'Udf1', 'Udf5', 'Udf10'
 ```
 
 Exports all devices with specific UDF columns appended.
 
-EXAMPLE 6
-```powershell
+### EXAMPLE 6
+```
 Get-RMMSite | Export-RMMObjectCsv -Path .\Sites.csv -Append
 ```
 
@@ -236,6 +236,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -TransformName
 {{ Fill TransformName Description }}
 
@@ -251,16 +266,16 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-CommonParameters
+### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-DRMMObject. Accepts any DattoRMM.Core typed object via pipeline. Built-in transforms are
-provided for DRMMSite, DRMMDevice, and DRMMAlert. Custom transforms can be defined for any class.
+### DRMMObject. Accepts any DattoRMM.Core typed object via pipeline. Built-in transforms are
+### provided for DRMMSite, DRMMDevice, and DRMMAlert. Custom transforms can be defined for any class.
 ## OUTPUTS
 
-None. Writes output to the specified CSV file.
+### None. Writes output to the specified CSV file.
 ## NOTES
 Custom export transforms can be defined by creating an ExportTransforms.psd1 file in
 $HOME/.DattoRMM.Core/.
@@ -285,9 +300,13 @@ Restart the module to pick up changes.
 
 ## RELATED LINKS
 
+[https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Export/Export-RMMObjectCsv.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Export/Export-RMMObjectCsv.md)
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Export/Export-RMMObjectCsv.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Export/Export-RMMObjectCsv.md))
-- [Get-RMMSite](../Sites/Get-RMMSite.md)
-- [Get-RMMDevice](../Devices/Get-RMMDevice.md)
-- [Get-RMMAlert](../Alerts/Get-RMMAlert.md)
-- [about_DattoRMM.CoreExport](../../about/about_DattoRMM.CoreExport.md)
+[Get-RMMSite]()
+
+[Get-RMMDevice]()
+
+[Get-RMMAlert]()
+
+[about_DattoRMM.CoreExport]()
+
