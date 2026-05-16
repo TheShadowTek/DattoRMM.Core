@@ -122,9 +122,12 @@ Get-RMMUser
 $NewKeys = Reset-RMMAPIKeys -ReturnNewKey
 ```
 
-### Token Visibility
+### Token Clipboard Copy
 
-`Show-RMMToken` displays the current session token and authentication details. This is a security-sensitive operation and supports `-WhatIf` and `-Confirm`.
+`Set-RMMTokenClipboard` copies the current session access token to the system clipboard. No token value is written to the console or captured by transcripts. This is a security-sensitive operation and supports `-WhatIf`, `-Confirm`, and `-Force`.
+
+> [!WARNING]
+> Clear the clipboard after use (`Set-Clipboard -Value $null`). If Windows Cloud Clipboard synchronisation is enabled, the token may be transmitted to Microsoft servers.
 
 ## PROXY CREDENTIAL SECURITY
 

@@ -133,6 +133,7 @@ try {
     }
     Write-Host "  Found $($FunctionLookup.Count) functions and $($AboutLookup.Count) about docs" -ForegroundColor Gray
         $Generated = 0
+    $Unchanged = 0
     $Skipped = 0
     $Failed = 0
     
@@ -185,6 +186,14 @@ try {
             Write-Host "    Reason: $Reason" -ForegroundColor Gray
             
             try {
+                # Capture existing content before PlatyPS overwrites the file.
+                # Used below for idempotent write — prevents spurious git changes after re-signing.
+                $OldContent = if (Test-Path $MarkdownFile) {
+                    (Get-Content $MarkdownFile -Raw) -replace '\r\n', "`n" -replace '\r', "`n"
+                } else {
+                    $null
+                }
+
                 # Generate markdown (suppress warnings about type resolution)
                 Write-Host "    Generating with PlatyPS..." -ForegroundColor Gray
                 $Result = New-MarkdownHelp -Command $FunctionName -OutputFolder $OutputSubFolder -Force -NoMetadata -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
@@ -347,14 +356,25 @@ try {
                     }
                 })
                 
-                # Save cleaned content
-                Set-Content -Path $MarkdownFile -Value $Content -NoNewline
-                
-                if ($Changes.Count -gt 0) {
-                    Write-Host "    Changes: $($Changes -join ', ')" -ForegroundColor Gray
+                # Normalise to LF before comparison and write (eliminates CRLF drift from PlatyPS on Windows)
+                $Content = $Content -replace '\r\n', "`n" -replace '\r', "`n"
+
+                # Idempotent write: only flag as generated when content actually changed.
+                # Re-signing updates .ps1 LastWriteTime without changing help text; without this
+                # check every function doc would be rewritten with identical content on the next
+                # build run, producing spurious git changes.
+                if ($Content -ne $OldContent) {
+                    Set-Content -Path $MarkdownFile -Value $Content -NoNewline
+                    if ($Changes.Count -gt 0) {
+                        Write-Host "    Changes: $($Changes -join ', ')" -ForegroundColor Gray
+                    }
+                    Write-Host "    ✓ Generated (content changed)" -ForegroundColor Green
+                    $Generated++
+                } else {
+                    Set-Content -Path $MarkdownFile -Value $Content -NoNewline
+                    Write-Host "    → Unchanged (source reprocessed, content identical)" -ForegroundColor DarkGray
+                    $Unchanged++
                 }
-                Write-Host "    ✓ Generated successfully" -ForegroundColor Green
-                $Generated++
                 
             } catch {
                 Write-Warning "    Failed to process $FunctionName : $_"
@@ -424,6 +444,7 @@ try {
     # Summary
     Write-Host "`n=== Summary ===" -ForegroundColor Cyan
     Write-Host "  Generated: $Generated" -ForegroundColor Green
+    Write-Host "  Unchanged: $Unchanged" -ForegroundColor DarkGray
     Write-Host "  Skipped:   $Skipped" -ForegroundColor Yellow
     Write-Host "  Failed:    $Failed" -ForegroundColor $(if ($Failed -gt 0) { 'Red' } else { 'Gray' })
     Write-Host "  Total:     $($PublicFunctions.Count)`n" -ForegroundColor Gray

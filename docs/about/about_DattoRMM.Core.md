@@ -54,7 +54,7 @@ Connect, disconnect, and manage API credentials and tokens.
 - `Disconnect-DattoRMM` — Clear session token and credentials from memory.
 - `Request-RMMToken` — Generate a token and return it as a `DRMMToken` object without storing it in module state.
 - `Reset-RMMAPIKeys` — Regenerate API keys (invalidates current session).
-- `Show-RMMToken` — Display current token details (security-sensitive).
+- `Set-RMMTokenClipboard` — Copy the current access token to the clipboard (security-sensitive).
 
 ### Configuration
 Manage module settings for the current session or persistently.
