@@ -37,7 +37,7 @@ Removes proxy settings from the specified site (with confirmation prompt).
 
 EXAMPLE 2
 ```powershell
-Get-RMMSite -Name "Branch Office" | Remove-RMMSiteProxy -Force
+Get-RMMSite -SiteName "Branch Office" | Remove-RMMSiteProxy -Force
 ```
 
 Removes proxy settings from the site via pipeline without confirmation.
@@ -73,12 +73,12 @@ The unique identifier (GUID) of the site from which to remove proxy settings.
 ```yaml
 Type: Guid
 Parameter Sets: ByUid
-Aliases: Uid
+Aliases:
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

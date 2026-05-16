@@ -41,7 +41,7 @@ Filters can be retrieved by ID, name, or all filters at a given scope.
 
 Filters in Datto RMM are used to group devices based on criteria and can be applied when retrieving devices with Get-RMMDevice.
 
-Filters are categorized as either "Default" (built-in system filters) or "Custom" (user-created filters).
+Filters are categorised as either "Default" (built-in system filters) or "Custom" (user-created filters).
 
 ## EXAMPLES
 
@@ -75,7 +75,7 @@ Retrieves a filter by exact name match.
 
 EXAMPLE 5
 ```powershell
-Get-RMMSite -Name "Main Office" | Get-RMMFilter
+Get-RMMSite -SiteName "Main Office" | Get-RMMFilter
 ```
 
 Gets all filters for the "Main Office" site.

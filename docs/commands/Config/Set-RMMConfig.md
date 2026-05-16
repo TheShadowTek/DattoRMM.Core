@@ -9,8 +9,8 @@ Set
 ```
 Set-RMMConfig [-Platform <RMMPlatform>] [-PageSize <Int32>] [-ThrottleProfile <RMMThrottleProfile>]
  [-TokenExpireHours <Int32>] [-ApiMaxRetries <Int32>] [-ApiRetryIntervalSeconds <Int32>]
- [-ApiTimeoutSeconds <Int32>] [-Persist] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-ApiTimeoutSeconds <Int32>] [-TokenRefreshBufferMinutes <Int32>] [-Persist] [-Force]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 Default
@@ -189,6 +189,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -TokenRefreshBufferMinutes
+Sets the number of minutes before token expiry at which the module will proactively refresh the token.
+Valid range: 1-60.
+Default is 10.
+This prevents long-running paginated operations from failing due to mid-request token expiry.
+Use -Persist to save as the default for future sessions.
+
+```yaml
+Type: Int32
+Parameter Sets: Set
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Persist
 If specified, saves the provided settings to the configuration file for future sessions.
 Without -Persist, changes apply only to the current session.
@@ -276,7 +295,9 @@ None. You cannot pipe objects to Set-RMMConfig.
 
 None. This function updates the session and/or persistent configuration file.
 ## NOTES
-Configuration is stored at: $HOME/.DattoRMM.Core/config.json At least one parameter must be specified unless using -Default.
+Confirmation logic is handled up front with early returns, ensuring efficient and predictable behaviour.
+Configuration is stored at: $HOME/.DattoRMM.Core/config.json
+At least one parameter must be specified unless using -Default.
 Settings take effect immediately in the session.
 Use -Persist to save for future sessions.
 
@@ -284,7 +305,9 @@ Use -Persist to save for future sessions.
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Set-RMMConfig.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Set-RMMConfig.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [Save-RMMConfig](./Save-RMMConfig.md)
 - [Get-RMMConfig](./Get-RMMConfig.md)
-- [Reset-RMMConfig](../Reset-RMMConfig.md)
-- [Set-RMMPageSize](../Set-RMMPageSize.md)
+- [Remove-RMMConfig](./Remove-RMMConfig.md)
+- [about_DattoRMM.CoreThrottling](../../about/about_DattoRMM.CoreThrottling.md)
+- [about_DattoRMM.CoreConfiguration](../../about/about_DattoRMM.CoreConfiguration.md)

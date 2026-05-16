@@ -1,0 +1,138 @@
+TOPIC
+    about_DattoRMM.CoreTypeExtensions
+
+SHORT DESCRIPTION
+    Describes how to supply custom `Types.ps1xml` files from the module profile folder to add or override extended type members on DattoRMM.Core objects.
+
+LONG DESCRIPTION
+DattoRMM.Core ships with built-in `Types.ps1xml` definitions that add extended type members (`ScriptProperty`, `ScriptMethod`, etc.) to typed objects such as `DRMMDevice`, `DRMMSite`, and `DRMMAlert`. These definitions are loaded automatically when the module imports.
+
+The module also supports a user-owned extension point: any `Types.ps1xml` files you place in the module profile folder are detected and loaded after the module-shipped definitions, allowing you to add your own extended members or override module defaults without modifying module files.
+
+### Why custom type files
+
+- Add computed `ScriptProperty` members that combine or transform existing properties
+- Add `ScriptMethod` members that encapsulate reusable logic on an object
+- Create `AliasProperty` shortcuts for frequently accessed nested paths
+- Expose custom properties that are accessible by the export transform system via `Path` and `Method`
+- Persist type extensions across module updates
+
+### Profile folder and naming convention
+
+Place custom type files in:
+
+```
+$HOME/.DattoRMM.Core/
+```
+
+Files must match the naming convention:
+
+```
+DattoRMM.Core.<name>.Types.ps1xml
+```
+
+Files that do not match this pattern are silently ignored. The `<name>` segment is freeform — use it to describe the file's purpose or scope (e.g., `DattoRMM.Core.DeviceExtensions.Types.ps1xml`).
+
+### Load order and precedence
+
+Module-shipped type definitions are loaded first via the module manifest. User-supplied files are loaded second using `Update-TypeData -PrependPath`, which places your definitions at higher precedence than the module defaults.
+
+When a type has a conflicting member definition in both a module-shipped file and a user-supplied file, PowerShell uses the user-supplied definition.
+
+### Multiple files
+
+Multiple matching files are supported. Files are loaded in alphabetical order by filename. To control load order explicitly, prefix filenames with a numeric segment:
+
+```
+DattoRMM.Core.10-Base.Types.ps1xml
+DattoRMM.Core.20-Custom.Types.ps1xml
+```
+
+### Member types reference
+
+    Member type      Description                             
+    ---------------- ----------------------------------------
+    `ScriptProperty` Computed property evaluated on access...
+    `ScriptMethod`   Method invoked explicitly using `$obj...
+    `AliasProperty`  Maps a new property name to an existi...
+    `NoteProperty`   Attaches a static value to the type. ...
+    `PropertySet`    Groups multiple properties under a si...
+    `MemberSet`      Defines a named set of members (inclu...
+### Example: adding a ScriptProperty to DRMMDevice
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<Types>
+  <Type>
+    <Name>DRMMDevice</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>DeviceAge</Name>
+        <GetScriptBlock>((Get-Date) - $this.LastSeen).Days</GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+</Types>
+```
+
+Save this as `DattoRMM.Core.DeviceExtensions.Types.ps1xml` in `$HOME/.DattoRMM.Core/`. After the next module import, `DeviceAge` is available on every `DRMMDevice` object:
+
+```powershell
+Get-RMMDevice | Select-Object Hostname, DeviceAge
+```
+
+### Example: adding a ScriptMethod to DRMMAlert
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<Types>
+  <Type>
+    <Name>DRMMAlert</Name>
+    <Members>
+      <ScriptMethod>
+        <Name>GetStatusLabel</Name>
+        <Script>if ($this.Resolved) {'Resolved'} else {'Open'}</Script>
+      </ScriptMethod>
+    </Members>
+  </Type>
+</Types>
+```
+
+After loading, the method is callable on any `DRMMAlert`:
+
+```powershell
+$Alert = Get-RMMAlert -Status All | Select-Object -First 1
+$Alert.GetStatusLabel()
+```
+
+### Integration with export transforms
+
+Extended members defined in user-supplied `Types.ps1xml` files are accessible by the export transform system in `ExportTransforms.psd1`:
+
+- A `ScriptProperty` is referenced using the `Path` key — it is accessed like any other property
+- A `ScriptMethod` is referenced using the `Method` key — it is called with no arguments at export time
+
+```powershell
+# ExportTransforms.psd1 — referencing a user-defined ScriptProperty and ScriptMethod
+@{Name = 'DeviceAge';    Path   = 'DeviceAge'}
+@{Name = 'Status';       Method = 'GetStatusLabel'}
+```
+
+User-defined type extensions are loaded before `Export-RMMObjectCsv` is called, so they are available to the transform pipeline without any additional steps.
+
+For further details on the export transform system see about_DattoRMM.CoreExport.
+
+### Signing
+
+User-supplied files in `$HOME/.DattoRMM.Core/` are user-owned and are not expected to be code-signed. Module-shipped type files are signed as part of the module release process and are unaffected by user extension loading.
+
+---
+
+## SEE ALSO
+
+- about_DattoRMM.CoreFormatExtensions
+- about_DattoRMM.CoreExport
+- about_DattoRMM.Core
+- about_Types.ps1xml
+SEE ALSO
+    https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/about_DattoRMM.CoreTypeExtensions.md

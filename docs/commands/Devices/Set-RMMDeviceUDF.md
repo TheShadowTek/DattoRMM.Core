@@ -1,100 +1,96 @@
-# Set-RMMDeviceUDF
+# Set-RMMDeviceUdf
 
 ## SYNOPSIS
 Sets user-defined fields on a device in Datto RMM.
 
 ## SYNTAX
 
-ByDeviceUidIndividual (Default)
+ByDeviceUidHashtable (Default)
 ```
-Set-RMMDeviceUDF -DeviceUid <Guid> [-UDF1 <String>] [-UDF2 <String>] [-UDF3 <String>] [-UDF4 <String>]
- [-UDF5 <String>] [-UDF6 <String>] [-UDF7 <String>] [-UDF8 <String>] [-UDF9 <String>] [-UDF10 <String>]
- [-UDF11 <String>] [-UDF12 <String>] [-UDF13 <String>] [-UDF14 <String>] [-UDF15 <String>] [-UDF16 <String>]
- [-UDF17 <String>] [-UDF18 <String>] [-UDF19 <String>] [-UDF20 <String>] [-UDF21 <String>] [-UDF22 <String>]
- [-UDF23 <String>] [-UDF24 <String>] [-UDF25 <String>] [-UDF26 <String>] [-UDF27 <String>] [-UDF28 <String>]
- [-UDF29 <String>] [-UDF30 <String>] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Set-RMMDeviceUdf -DeviceUid <Guid> -UdfFields <Hashtable> [-Force] [-ProgressAction <ActionPreference>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+ByDeviceObjectSingle
+```
+Set-RMMDeviceUdf -Device <DRMMDevice> -UdfNumber <Int32> -UdfValue <String> [-Force]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ByDeviceObjectHashtable
 ```
-Set-RMMDeviceUDF -Device <DRMMDevice> -UDFFields <Hashtable> [-Force] [-ProgressAction <ActionPreference>]
+Set-RMMDeviceUdf -Device <DRMMDevice> -UdfFields <Hashtable> [-Force] [-ProgressAction <ActionPreference>]
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
-ByDeviceObjectIndividual
+ByDeviceUidSingle
 ```
-Set-RMMDeviceUDF -Device <DRMMDevice> [-UDF1 <String>] [-UDF2 <String>] [-UDF3 <String>] [-UDF4 <String>]
- [-UDF5 <String>] [-UDF6 <String>] [-UDF7 <String>] [-UDF8 <String>] [-UDF9 <String>] [-UDF10 <String>]
- [-UDF11 <String>] [-UDF12 <String>] [-UDF13 <String>] [-UDF14 <String>] [-UDF15 <String>] [-UDF16 <String>]
- [-UDF17 <String>] [-UDF18 <String>] [-UDF19 <String>] [-UDF20 <String>] [-UDF21 <String>] [-UDF22 <String>]
- [-UDF23 <String>] [-UDF24 <String>] [-UDF25 <String>] [-UDF26 <String>] [-UDF27 <String>] [-UDF28 <String>]
- [-UDF29 <String>] [-UDF30 <String>] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
-```
-
-ByDeviceUidHashtable
-```
-Set-RMMDeviceUDF -DeviceUid <Guid> -UDFFields <Hashtable> [-Force] [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-RMMDeviceUdf -DeviceUid <Guid> -UdfNumber <Int32> -UdfValue <String> [-Force]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Set-RMMDeviceUDF function updates one or more user-defined fields (UDF1-UDF30) on a
+The Set-RMMDeviceUdf function updates one or more user-defined fields (Udf1-Udf300) on a
 device in the Datto RMM system.
 UDFs are custom fields that can store additional metadata
 about devices for organisational and reporting purposes.
 
-Important behaviors:
+The function supports two modes of operation:
+- Hashtable mode: Use -UdfFields to update multiple UDFs at once with a hashtable of
+  key-value pairs (e.g., @{udf1='Value1'; udf50='Value50'}).
+- Single mode: Use -UdfNumber and -UdfValue to update a single UDF by number.
+
+Important behaviours:
 - Fields included in the request with empty values will be cleared (set to null)
 - Fields not included in the request will retain their current values
 - You only need to specify the fields you want to update
+- UDF values are limited to 255 characters
 
 ## EXAMPLES
 
 EXAMPLE 1
 ```powershell
-Set-RMMDeviceUDF -DeviceUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -UDF1 "Department: IT" -UDF2 "Owner: John"
+Set-RMMDeviceUdf -DeviceUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -UdfNumber 1 -UdfValue "Department: IT"
 ```
 
-Sets UDF1 and UDF2 on a device, leaving other UDFs unchanged.
+Sets Udf1 on a device, leaving other UDFs unchanged.
 
 EXAMPLE 2
 ```powershell
-Get-RMMDevice -Hostname "SERVER01" | Set-RMMDeviceUDF -UDF5 "Production" -UDF10 "Critical"
-```
-
-Updates UDF5 and UDF10 via pipeline.
-
-EXAMPLE 3
-```powershell
-Set-RMMDeviceUDF -DeviceUid $DeviceUid -UDF1 "" -Force
-```
-
-Clears UDF1 (sets to null) without confirmation.
-
-EXAMPLE 4
-```powershell
-Get-RMMDevice -FilterId 100 | Set-RMMDeviceUDF -UDF3 "Datacenter: East"
-```
-
-Updates UDF3 for all devices in filter 100.
-
-EXAMPLE 5
-```powershell
-Set-RMMDeviceUDF -DeviceUid $DeviceUid -UDFFields @{udf1='IT Department'; udf2='John Smith'; udf5=''}
+Set-RMMDeviceUdf -DeviceUid $DeviceUid -UdfFields @{udf1='IT Department'; udf2='John Smith'; udf5=''}
 ```
 
 Updates multiple UDF fields using a hashtable.
-UDF5 is cleared.
+Udf5 is cleared.
 
-EXAMPLE 6
+EXAMPLE 3
 ```powershell
-$UDFs = @{udf10='Production'; udf15='Critical'; udf20='Datacenter: West'}
-Get-RMMDevice -Hostname "SERVER*" | Set-RMMDeviceUDF -UDFFields $UDFs -Force
+Set-RMMDeviceUdf -DeviceUid $DeviceUid -UdfNumber 1 -UdfValue '' -Force
+```
+
+Clears Udf1 (sets to null) without confirmation.
+
+EXAMPLE 4
+```powershell
+Get-RMMDevice -FilterId 100 | Set-RMMDeviceUdf -UdfNumber 3 -UdfValue "Datacenter: East"
+```
+
+Updates Udf3 for all devices in filter 100.
+
+EXAMPLE 5
+```powershell
+$UDFs = @{udf10='Production'; udf15='Critical'; udf200='Datacenter: West'}
+Get-RMMDevice -Hostname "SERVER*" | Set-RMMDeviceUdf -UdfFields $UDFs -Force
 ```
 
 Updates multiple UDF fields on all servers matching the hostname pattern without confirmation.
+
+EXAMPLE 6
+```powershell
+Set-RMMDeviceUdf -DeviceUid $DeviceUid -UdfFields @{udf150='Custom Data'; udf275='Extended'}
+```
+
+Sets high-numbered UDFs (available since Datto RMM 14.9.0).
 
 ## PARAMETERS
 
@@ -104,7 +100,7 @@ Accepts pipeline input from Get-RMMDevice.
 
 ```yaml
 Type: DRMMDevice
-Parameter Sets: ByDeviceObjectHashtable, ByDeviceObjectIndividual
+Parameter Sets: ByDeviceObjectSingle, ByDeviceObjectHashtable
 Aliases:
 
 Required: True
@@ -119,25 +115,26 @@ The unique identifier (GUID) of the device to update.
 
 ```yaml
 Type: Guid
-Parameter Sets: ByDeviceUidIndividual, ByDeviceUidHashtable
-Aliases: Uid
+Parameter Sets: ByDeviceUidHashtable, ByDeviceUidSingle
+Aliases:
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UDFFields
+### -UdfFields
 A hashtable of UDF fields to update.
 Keys should be in the format 'udf1', 'udf2', etc.
+Values are limited to 255 characters each.
 Example: @{udf1='Value1'; udf5='Value5'; udf10=''}
-Cannot be used with individual UDF parameters.
+Cannot be used with -UdfNumber/-UdfValue parameters.
 
 ```yaml
 Type: Hashtable
-Parameter Sets: ByDeviceObjectHashtable, ByDeviceUidHashtable
+Parameter Sets: ByDeviceUidHashtable, ByDeviceObjectHashtable
 Aliases:
 
 Required: True
@@ -147,450 +144,36 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UDF1
-{{ Fill UDF1 Description }}
+### -UdfNumber
+The UDF number (1-300) to update.
+Must be used with -UdfValue.
+Cannot be used with -UdfFields parameter.
 
 ```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
+Type: Int32
+Parameter Sets: ByDeviceObjectSingle, ByDeviceUidSingle
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UDF2
-{{ Fill UDF2 Description }}
+### -UdfValue
+The value to set for the specified UDF.
+Limited to 255 characters.
+Set to empty string to clear the field.
+Must be used with -UdfNumber.
+Cannot be used with -UdfFields parameter.
 
 ```yaml
 Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
+Parameter Sets: ByDeviceObjectSingle, ByDeviceUidSingle
 Aliases:
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF3
-{{ Fill UDF3 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF4
-{{ Fill UDF4 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF5
-{{ Fill UDF5 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF6
-{{ Fill UDF6 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF7
-{{ Fill UDF7 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF8
-{{ Fill UDF8 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF9
-{{ Fill UDF9 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF10
-{{ Fill UDF10 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF11
-{{ Fill UDF11 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF12
-{{ Fill UDF12 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF13
-{{ Fill UDF13 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF14
-{{ Fill UDF14 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF15
-{{ Fill UDF15 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF16
-{{ Fill UDF16 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF17
-{{ Fill UDF17 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF18
-{{ Fill UDF18 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF19
-{{ Fill UDF19 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF20
-{{ Fill UDF20 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF21
-{{ Fill UDF21 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF22
-{{ Fill UDF22 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF23
-{{ Fill UDF23 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF24
-{{ Fill UDF24 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF25
-{{ Fill UDF25 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF26
-{{ Fill UDF26 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF27
-{{ Fill UDF27 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF28
-{{ Fill UDF28 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF29
-{{ Fill UDF29 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UDF30
-{{ Fill UDF30 Description }}
-
-```yaml
-Type: String
-Parameter Sets: ByDeviceUidIndividual, ByDeviceObjectIndividual
-Aliases:
-
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -663,6 +246,8 @@ Best practices for UDF usage:
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUDF.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUDF.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUdf.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUdf.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
 - [Get-RMMDevice](./Get-RMMDevice.md)
+- [about_DRMMDeviceUdfs](../../about/classes/DRMMDevice/about_DRMMDeviceUdfs.md)

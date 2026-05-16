@@ -100,7 +100,7 @@ Retrieves devices with hostname containing "SERVER01".
 
 EXAMPLE 3
 ```powershell
-Get-RMMSite -Name "Main Office" | Get-RMMDevice
+Get-RMMSite -SiteName "Main Office" | Get-RMMDevice
 ```
 
 Gets all devices for the "Main Office" site.
@@ -137,7 +137,7 @@ Retrieves all devices matching filter 12345 at the account level.
 
 EXAMPLE 8
 ```powershell
-Get-RMMSite -Name "Main Office" | Get-RMMDevice -FilterId 12345
+Get-RMMSite -SiteName "Main Office" | Get-RMMDevice -FilterId 12345
 ```
 
 Retrieves devices matching filter 12345 scoped to the "Main Office" site.
@@ -470,3 +470,4 @@ objects in the pipeline.
 - [about_DRMMFilter](../../about/classes/DRMMFilter/about_DRMMFilter.md)
 - [Get-RMMFilter](../Filter/Get-RMMFilter.md)
 - [Get-RMMSite](../Sites/Get-RMMSite.md)
+- [Get-RMMDeviceAudit](./Get-RMMDeviceAudit.md)

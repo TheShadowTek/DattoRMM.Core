@@ -86,7 +86,7 @@ Retrieves a global variable by exact name match.
 
 EXAMPLE 4
 ```powershell
-Get-RMMSite -Name "Contoso" | Get-RMMVariable
+Get-RMMSite -SiteName "Contoso" | Get-RMMVariable
 ```
 
 Gets all variables for the "Contoso" site.
@@ -150,7 +150,7 @@ Aliases: Uid
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -210,3 +210,8 @@ Site-level variables override global variables with the same name.
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Get-RMMVariable.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Get-RMMVariable.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
+- [New-RMMVariable](./New-RMMVariable.md)
+- [Set-RMMVariable](./Set-RMMVariable.md)
+- [Remove-RMMVariable](./Remove-RMMVariable.md)
+- [Get-RMMSite](../Sites/Get-RMMSite.md)

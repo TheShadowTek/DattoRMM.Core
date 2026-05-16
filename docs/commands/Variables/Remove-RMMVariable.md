@@ -43,7 +43,7 @@ Deletes an account-level variable by ID without prompting for confirmation.
 
 EXAMPLE 3
 ```powershell
-Get-RMMSite -Name "Closed Office" | Get-RMMVariable | Remove-RMMVariable -Confirm
+Get-RMMSite -SiteName "Closed Office" | Get-RMMVariable | Remove-RMMVariable -Confirm
 ```
 
 Deletes all variables from a site with confirmation prompts.
@@ -84,7 +84,7 @@ Aliases:
 Required: True
 Position: Named
 Default value: 0
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -101,7 +101,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -155,3 +155,7 @@ deleted from the Datto RMM system.
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Remove-RMMVariable.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Remove-RMMVariable.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
+- [Get-RMMVariable](./Get-RMMVariable.md)
+- [New-RMMVariable](./New-RMMVariable.md)
+- [Set-RMMVariable](./Set-RMMVariable.md)

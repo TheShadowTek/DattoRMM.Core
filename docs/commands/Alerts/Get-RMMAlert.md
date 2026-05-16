@@ -66,7 +66,7 @@ Gets all devices matching filter 12345 and retrieves their resolved alerts.
 
 EXAMPLE 3
 ```powershell
-Get-RMMSite -Name "Contoso" | Get-RMMAlert -Status All
+Get-RMMSite -SiteName "Contoso" | Get-RMMAlert -Status All
 ```
 
 Gets the site named "Contoso" and retrieves all alerts for that site (open and resolved).
@@ -97,7 +97,7 @@ Useful when the alert's status is unknown but the UID is available.
 
 EXAMPLE 7
 ```powershell
-$Site = Get-RMMSite -Name "Main Office"
+$Site = Get-RMMSite -SiteName "Main Office"
 Get-RMMAlert -SiteUid $Site.Uid
 ```
 

@@ -28,8 +28,7 @@ The DRMMThrottleStatus class exposes the following properties:
 | Pause                         | bool                 | Boolean indicating whether hard pause is currently active. True when either ReadUtilisation or WriteUtilisation exceeds PauseThreshold, causing all API requests to be blocked. |
 | ReadDelayMs                   | double               | The current computed delay in milliseconds for read (GET) requests. When throttling is active, this value increases proportionally with read utilisation to slow request rates. |
 | WriteDelayMs                  | double               | The current computed delay in milliseconds for write (POST/PUT/DELETE) requests. When throttling is active, this value increases proportionally with write utilisation to slow request rates. |
-| DelayMultiplier               | double               | The configured multiplier (e.g., 750) used to calculate delay from read utilisation: ReadDelayMs = ReadUtilisation * DelayMultiplier. |
-| WriteDelayMultiplier          | double               | The configured multiplier (e.g., 1000) used to calculate delay from write utilisation: WriteDelayMs = WriteUtilisation * WriteDelayMultiplier. |
+| DelayMultiplier               | double               | The configured multiplier (e.g., 500) used to calculate delay from utilisation: DelayMs = Utilisation * DelayMultiplier. Applied to both read and write tracks. |
 | ReadLastCalibrationUtc        | Nullable[datetime]   | The UTC datetime of the last read-track throttle calibration, when local read state was synchronized with API-reported values. |
 | WriteLastCalibrationUtc       | Nullable[datetime]   | The UTC datetime of the last write-track throttle calibration, when local write state was synchronized with API-reported values. |
 | ReadSamplesAtLastCalibration  | int                  | The number of local read request samples recorded at the time of the last read-track calibration, used to track read state stability. |

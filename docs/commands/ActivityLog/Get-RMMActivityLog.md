@@ -298,4 +298,7 @@ DRMMActivityLog. Returns activity log objects with details about the activity.
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/ActivityLog/Get-RMMActivityLog.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/ActivityLog/Get-RMMActivityLog.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
+- [Get-RMMSite](../Sites/Get-RMMSite.md)
 - [about_DRMMActivityLog](../../about/classes/DRMMActivityLog/about_DRMMActivityLog.md)
+- [about_DattoRMM.CoreSecurity](../../about/about_DattoRMM.CoreSecurity.md)

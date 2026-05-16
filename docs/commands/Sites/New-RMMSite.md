@@ -251,3 +251,7 @@ Proxy settings can be configured during site creation or added later using Set-R
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/New-RMMSite.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/New-RMMSite.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
+- [Set-RMMSiteProxy](./Set-RMMSiteProxy.md)
+- [about_DRMMSite](../../about/classes/DRMMSite/about_DRMMSite.md)
+- [Get-RMMSite](./Get-RMMSite.md)

@@ -42,7 +42,7 @@ The DRMMDevice class exposes the following properties:
 | CreationDate               | Nullable[datetime]        | The date when the device was created in the DRMM system. |
 | Udfs                       | DRMMDeviceUdfs            | User-defined fields associated with the device. |
 | SnmpEnabled                | bool                      | Indicates whether SNMP is enabled on the device. |
-| DeviceClass                | string                    | The class of the device, which may indicate its role or type within the organization. |
+| DeviceClass                | string                    | The class of the device, which may indicate its role or type within the organisation. |
 | PortalUrl                  | string                    | The URL to access the device's portal in the DRMM system. |
 | WarrantyDate               | string                    | The date when the device's warranty expires. |
 | Antivirus                  | DRMMDeviceAntivirusInfo   | Information about the device's antivirus software. |
@@ -138,16 +138,16 @@ Gets the software information for this device.
 
 **Returns:** `DRMMDeviceAuditSoftware[]` - Represents the software information of a device in a device audit, including its name and version.
 
-### SetUDF([Hashtable]$UDFFields)
+### SetUdf([Hashtable]$UdfFields)
 
 Sets the value of one or more User-Defined Fields (UDFs) for the device.
 
 **Returns:** `DRMMDevice` - Represents a device in the DRMM system, encapsulating properties and methods for interacting with the device.
 
 **Parameters:**
-- `[Hashtable]$UDFFields` - TODO: Describe this parameter
+- `[Hashtable]$UdfFields` - TODO: Describe this parameter
 
-### ClearUDF([Int32]$UdfNumber)
+### ClearUdf([Int32]$UdfNumber)
 
 Clears the value of a specified User-Defined Field (UDF) for the device.
 
@@ -156,7 +156,7 @@ Clears the value of a specified User-Defined Field (UDF) for the device.
 **Parameters:**
 - `[Int32]$UdfNumber` - TODO: Describe this parameter
 
-### ClearUDFs()
+### ClearUdfs()
 
 Clears the values of all User-Defined Fields (UDFs) for the device.
 

@@ -36,7 +36,7 @@ object or DeviceUid.
 
 EXAMPLE 1
 ```powershell
-Get-RMMDevice -Name "ESXI-HOST-01" | Get-RMMEsxiHostAudit
+Get-RMMDevice -Hostname "ESXI-HOST-01" | Get-RMMEsxiHostAudit
 ```
 
 Retrieves ESXi audit data for an ESXi host by name.

@@ -13,11 +13,11 @@ This class inherits from DRMMObject.
 
 The DRMMStatus class exposes the following properties:
 
-    Property   Type               Description                  
-    ---------- ------------------ -----------------------------
-    Version    string             The version information.     
-    Status     string             The current status.          
-    Started    Nullable[datetime] The start time of the status.
+    Property   Type               Description                             
+    ---------- ------------------ ----------------------------------------
+    Version    string             The version of the Datto RMM platform.  
+    Status     string             The current operational status of the...
+    Started    Nullable[datetime] The UTC date and time when the Datto ...
 ## METHODS
 
 The DRMMStatus class provides the following methods:

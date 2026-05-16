@@ -16,9 +16,9 @@ The DRMMStatus class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Version | string             | The version information. |
-| Status  | string             | The current status. |
-| Started | Nullable[datetime] | The start time of the status. |
+| Version | string             | The version of the Datto RMM platform. |
+| Status  | string             | The current operational status of the Datto RMM platform. |
+| Started | Nullable[datetime] | The UTC date and time when the Datto RMM service was started. |
 
 ## METHODS
 

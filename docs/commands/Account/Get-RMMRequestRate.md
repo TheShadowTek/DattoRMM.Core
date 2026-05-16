@@ -42,3 +42,6 @@ For more details on the API request rate limits, refer to the Datto RMM API docu
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMRequestRate.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMRequestRate.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
+- [Get-RMMThrottleStatus](./Get-RMMThrottleStatus.md)
+- [about_DattoRMM.CoreThrottling](../../about/about_DattoRMM.CoreThrottling.md)

@@ -97,8 +97,7 @@ DRMMThrottleStatus. Returns a throttle status object with the following properti
 - Pause (bool): Whether hard pause is currently active
 - ReadDelayMs (double): Current computed read delay in milliseconds
 - WriteDelayMs (double): Current computed write delay in milliseconds
-- DelayMultiplier (double): Configured read delay multiplier
-- WriteDelayMultiplier (double): Configured write delay multiplier
+- DelayMultiplier (double): Configured delay multiplier (used for both read and write)
 - ReadLastCalibrationUtc (datetime): UTC time of the last read calibration
 - WriteLastCalibrationUtc (datetime): UTC time of the last write calibration
 - ReadSamplesAtLastCalibration (int): Local read samples at last calibration

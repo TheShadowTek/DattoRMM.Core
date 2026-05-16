@@ -5,60 +5,78 @@ Resolves a Datto RMM alert.
 
 ## SYNTAX
 
+Alert (Default)
 ```
-Resolve-RMMAlert [-AlertUid] <Guid> [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+Resolve-RMMAlert -Alert <DRMMAlert> [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
+```
+
+AlertUid
+```
+Resolve-RMMAlert -AlertUid <Guid> [-Force] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 The Resolve-RMMAlert function marks an alert as resolved in Datto RMM.
-The alert is identified by its unique alert UID (GUID).
+Accepts either full \`DRMMAlert\` objects via pipeline or specific alert UIDs (GUIDs).
 
 ## EXAMPLES
 
 EXAMPLE 1
+```powershell
+Get-RMMAlert | Where-Object { $_.Priority -eq 'Low' } | Resolve-RMMAlert
+```
+
+Resolves all low priority alerts with confirmation prompts (medium impact).
+
+EXAMPLE 2
+```powershell
+Get-RMMAlert  | Where-Object { $_.Priority -eq 'High' }  | Resolve-RMMAlert -Force
+```
+
+Resolves all high priority alerts without confirmation prompts.
+
+EXAMPLE 3
 ```powershell
 Resolve-RMMAlert -AlertUid '12345678-1234-1234-1234-123456789012'
 ```
 
 Resolves the alert with the specified UID.
 
-EXAMPLE 2
-```powershell
-Get-RMMAlert -Scope Global | Where-Object Priority -eq 'Critical' | Resolve-RMMAlert
-```
-
-Resolves all critical global alerts with confirmation prompts.
-
-EXAMPLE 3
-```powershell
-Get-RMMAlert -Scope Global | Where-Object Priority -eq 'Critical' | Resolve-RMMAlert -Force
-```
-
-Resolves all critical global alerts without confirmation prompts.
-
-EXAMPLE 4
-```powershell
-$Alert.Resolve()
-```
-
-If $Alert is a DRMMAlert object, you can use its Resolve() method directly.
-
 ## PARAMETERS
 
-### -AlertUid
-The unique identifier (GUID) of the alert to resolve.
-This can be obtained from Get-RMMAlert or from the AlertUid property of an alert object.
+### -Alert
+A DRMMAlert object to resolve.
+Accepts pipeline input.
+Obtained from Get-RMMAlert or passed directly from alert queries.
 
 ```yaml
-Type: Guid
-Parameter Sets: (All)
+Type: DRMMAlert
+Parameter Sets: Alert
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -AlertUid
+The unique identifier (GUID) of the alert to resolve.
+Use this parameter when not piping a DRMMAlert object.
+Can be obtained from Get-RMMAlert or the AlertUid property of an alert object.
+
+```yaml
+Type: Guid
+Parameter Sets: AlertUid
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -110,7 +128,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-System.Guid. You can pipe alert UIDs or alert objects (AlertUid property is extracted automatically) to this function.
+DRMMAlert. You can pipe alert objects from Get-RMMAlert to this function.
 ## OUTPUTS
 
 None. This function does not return any output on success.

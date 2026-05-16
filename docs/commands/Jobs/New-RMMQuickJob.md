@@ -114,7 +114,7 @@ Aliases: Uid
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -257,10 +257,10 @@ Best practices:
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/New-RMMQuickJob.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/New-RMMQuickJob.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
 - [Get-RMMDevice](../Devices/Get-RMMDevice.md)
 - [Get-RMMComponent](../Component/Get-RMMComponent.md)
 - [Get-RMMJob](./Get-RMMJob.md)
 - [about_DRMMJob](../../about/classes/DRMMJob/about_DRMMJob.md)
-- [Get-RMMComponent](../Component/Get-RMMComponent.md)
 - [about_DRMMComponent](../../about/classes/DRMMComponent/about_DRMMComponent.md)
