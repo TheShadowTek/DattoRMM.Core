@@ -144,7 +144,7 @@ A reference index of all classes and enums defined in the DattoRMM.Core module, 
 
 | Class | Synopsis |
 | ----- | -------- |
-| [`DRMMEsxiDatastore`](DRMMEsxiHostAudit/about_DRMMEsxiDatastore.md) | Represents the audit information of an ESXi host, including system info, guests, processors, network interfaces, physical memory, and datastores. |
+| [`DRMMEsxiDatastore`](DRMMEsxiHostAudit/about_DRMMEsxiDatastore.md) | Represents a datastore associated with an ESXi host, including capacity, free space, file system, and status information. |
 | [`DRMMEsxiGuest`](DRMMEsxiHostAudit/about_DRMMEsxiGuest.md) | Represents a guest virtual machine on an ESXi host, including its name, processor speed, memory size, number of snapshots, and datastores. |
 | [`DRMMEsxiHostAudit`](DRMMEsxiHostAudit/about_DRMMEsxiHostAudit.md) | Represents the audit information of an ESXi host, including system info, guests, processors, network interfaces, physical memory, and datastores. |
 | [`DRMMEsxiNic`](DRMMEsxiHostAudit/about_DRMMEsxiNic.md) | Represents a network interface card (NIC) on an ESXi host, including its name, IP addresses, MAC address, speed, and type. |

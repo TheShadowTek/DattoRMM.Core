@@ -57,7 +57,7 @@ Creates a masked variable using SecureString for secure input and transport.
 
 EXAMPLE 4
 ```powershell
-Get-RMMSite -Name "Main Office" | New-RMMVariable -Name "SiteCode" -Value "MO001"
+Get-RMMSite -SiteName "Main Office" | New-RMMVariable -Name "SiteCode" -Value "MO001"
 ```
 
 Creates a site-level variable via pipeline.
@@ -98,7 +98,7 @@ Aliases: Uid
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -217,10 +217,15 @@ Use Connect-DattoRMM to authenticate before calling this function.
 Variable names must be unique within their scope (account or site).
 The Masked property can only be set during creation and cannot be changed later.
 
-API Behavior: The Datto API does not return the created variable object, so this
+API Behaviour: The Datto API does not return the created variable object, so this
 function fetches it using Get-RMMVariable by name.
 
 ## RELATED LINKS
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/New-RMMVariable.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/New-RMMVariable.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
+- [Get-RMMVariable](./Get-RMMVariable.md)
+- [Set-RMMVariable](./Set-RMMVariable.md)
+- [Remove-RMMVariable](./Remove-RMMVariable.md)
+- [Get-RMMSite](../Sites/Get-RMMSite.md)

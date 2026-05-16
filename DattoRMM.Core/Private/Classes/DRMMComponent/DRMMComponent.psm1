@@ -110,7 +110,7 @@ class DRMMComponent : DRMMObject {
     .SYNOPSIS
         Opens the component's portal URL in the default web browser.
     .DESCRIPTION
-        The OpenPortal method of the DRMMComponent class checks if the PortalUrl property is set and, if so, opens it in the default web browser using Start-Process. If the PortalUrl is not available, it writes a warning message to the console indicating that the portal URL is not available for the component's site.
+        The OpenPortal method of the DRMMComponent class checks if the PortalUrl property is set and, if so, opens it in the default web browser using Start-Process. If the PortalUrl is not available, it writes a warning message to the console indicating that the portal URL is not available for the component.
     .OUTPUTS
         This method does not return a value. It performs an action to open the portal URL in the default web browser.
     #>
@@ -131,7 +131,7 @@ class DRMMComponent : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the component, including its name, variable count, credentials requirement, and category.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing key information about the component, such as its name, the number of variables it contains, whether credentials are required, and its category code.
+        The GetSummary method returns a string summarising key information about the component, such as its name, the number of variables it contains, whether credentials are required, and its category code.
     .OUTPUTS
         A summary string for the component, including its name, variable count, credentials requirement, and category.
     #>
@@ -205,8 +205,8 @@ class DRMMComponentVariable : DRMMObject {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDkgZ09mo6RkYmR
-# Lbzp5nc+dbVUIR6yAL9fDxNyHKyydKCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBzZIhJfrg7Hfjf
+# 2gvmw4FSHWN9X/WNEVu2QVeImbPVfaCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -228,11 +228,11 @@ class DRMMComponentVariable : DRMMObject {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIFQWlCJTlVGvrfkmyuUiOZcT0A8H
-# uGFe7TbZTFE4C2QSMA0GCSqGSIb3DQEBAQUABIIBAALrIepwF1B/NpcL9G4777hw
-# wz5VkJ99Ly3/N+g/lya9xqvFMDPh7UuFbACyYff34ss9JLPeqPZGaW+dzWbJGxHN
-# Kki4XnjPnt9rqmg/ZV0qI7/gc1v7r5hCH19myXIiL9Hfww9kn/NYyDWAIeDTqcfb
-# ALIeYMV9RdssycBVuUzI8bVBtR7uRqnkCthElYt1EMB6OH2YK2H3ECYiQ8H+6fsC
-# hvB/u5gbsMBxqYXuxOUUem2upiReOE+5UmFhEKROHiHXQk7rTcVTaQajG6kIBB6Y
-# GcXaVU9ZWU1Jbxg741dI6yfe/Yr3sjO6/X+skWp4i1Cee82ClLEIx/UK1R29E8Y=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIHvtRjckTBpuwQboqw/WzaXylbxQ
+# l3wWUfklCpdpJwnRMA0GCSqGSIb3DQEBAQUABIIBAAOlnECcu7spRvR/ZmGW0WLj
+# i2FuJg1jiR93VMrZIU9v/Ep2EFuMZ4pa7qONPqu9q85cMIlztO9eCJloyt5h+7d/
+# IR7IJU3UvWvIEU+EkwO37ZQZZlo/pbD1xKysa67l9UIpHneWkjosMdg6wwh5niTE
+# 1UhI+Mc6Qgy5khEnstsh8me57VzRLctZMugkGTb/uSECYNakIOAjxcXCMfO30qoO
+# NMFX7R8Vxen+tdKovrmxE0lQl/0rYBtxTdeVvH9zqM21t+hELA+ukFCASFTBE0ya
+# JElvXG6GGVOLRNR80WrnP7VQ/qlm7Y//aqVlhQs55j4LeqGFVzSSEktLiHTKN1A=
 # SIG # End signature block

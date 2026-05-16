@@ -57,7 +57,7 @@ function New-RMMVariable {
         Creates a masked variable using SecureString for secure input and transport.
 
     .EXAMPLE
-        Get-RMMSite -Name "Main Office" | New-RMMVariable -Name "SiteCode" -Value "MO001"
+        Get-RMMSite -SiteName "Main Office" | New-RMMVariable -Name "SiteCode" -Value "MO001"
 
         Creates a site-level variable via pipeline.
 
@@ -80,11 +80,26 @@ function New-RMMVariable {
         Variable names must be unique within their scope (account or site).
         The Masked property can only be set during creation and cannot be changed later.
 
-        API Behavior: The Datto API does not return the created variable object, so this
+        API Behaviour: The Datto API does not return the created variable object, so this
         function fetches it using Get-RMMVariable by name.
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/New-RMMVariable.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        Get-RMMVariable
+
+    .LINK
+        Set-RMMVariable
+
+    .LINK
+        Remove-RMMVariable
+
+    .LINK
+        Get-RMMSite
     #>
     [CmdletBinding(DefaultParameterSetName = 'Global', SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
@@ -225,8 +240,8 @@ function New-RMMVariable {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDv0D+7Zos+2D/i
-# Ko2HMvYflcKaZa0nPR5siRLqHYxeGaCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDY/h92wmxY8Phv
+# Hf9Fh24M9KScAvJXWocEZFIwwHyCz6CCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -248,11 +263,11 @@ function New-RMMVariable {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIJdb/dyLGb2FJ4d4jcSCna0JXshN
-# /4w+PW0Q/VmH6MGNMA0GCSqGSIb3DQEBAQUABIIBAFEbJqc48anqpcF1EN37sIKg
-# MNDYlYonJevjVwyfIBIdvLEELxUcrmf8Qkoyz6dk43fES2CgWQVB7fxtH33/4DAR
-# RxdPbRqMqu5pGN71fiYYBlQ2F1hXb6edo2ZR6ev+gskw4Mq/wJFwGcGjbQgJ9FNg
-# nEzOq08n/2WbmeeTHQDM5fceCPClRquVKmPpV+Eczf74reyJcECTfwDlpuZHqzq8
-# yA/j/Wki5pIIFIWfgHrjeHSSEpXKStdE9Nc/7FqLKJM+fyyir0QaCuUrxTH4vFo8
-# 5ViSzlyLFCAWqnI/n/sgl/ig3uAFp86hmsf0WP/52WZ1ipwMXMCWf/xBI2Vh61U=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIM4ODiT+9cixV3cvMG7INEgkfSII
+# seOnCVhVydRKgo39MA0GCSqGSIb3DQEBAQUABIIBACmWNfKuCGQComF4iyLpcbGs
+# cYwziHc7dyFVSF0Fe5hSXMdjZWMoxz5qTj2LfJT1qtPmHjL9eEE0AaJFI5la4hRy
+# dqzobJhdgeuhQAOEYlkGM67EZe8ctn/aIUPQbTTPggE7BgvCpndk8fxK7ej4V+qN
+# FZa/cuNBAWfJ7CaT5cyncZ9xzrDQFrftkZzdhiIoMdoX82Fw2UfGxXj9mEtWScKs
+# iEW2PD5zmj7W3Z6o4ocHxLny1E87xvZEyD85DxUS/L8yZNgaBUDABUB5kc8Nz62E
+# e8W3qQDkz50HUDat6euk5kaE+hm6DZNt0Oi/Gfhgnqzm8f7+q84gqhkiu8UQ8BE=
 # SIG # End signature block

@@ -13,12 +13,12 @@ This class inherits from DRMMObject.
 
 The DRMMSiteSettings class exposes the following properties:
 
-    Property        Type                    Description                      
-    --------------- ----------------------- ---------------------------------
-    GeneralSettings DRMMSiteGeneralSettings The general settings of the site.
-    ProxySettings   DRMMSiteProxySettings   The proxy settings for the site. 
-    MailRecipients  DRMMSiteMailRecipient[] Reuse existing class             
-    SiteUid         guid                    Reuse existing class             
+    Property        Type                    Description                             
+    --------------- ----------------------- ----------------------------------------
+    GeneralSettings DRMMSiteGeneralSettings The general settings of the site.       
+    ProxySettings   DRMMSiteProxySettings   The proxy settings for the site.        
+    MailRecipients  DRMMSiteMailRecipient[] The mail recipients configured for si...
+    SiteUid         guid                    The unique identifier (UID) of the si...
 ## METHODS
 
 The DRMMSiteSettings class provides the following methods:

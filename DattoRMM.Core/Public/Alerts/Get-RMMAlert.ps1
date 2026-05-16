@@ -45,7 +45,7 @@ function Get-RMMAlert {
         Gets all devices matching filter 12345 and retrieves their resolved alerts.
 
     .EXAMPLE
-        Get-RMMSite -Name "Contoso" | Get-RMMAlert -Status All
+        Get-RMMSite -SiteName "Contoso" | Get-RMMAlert -Status All
 
         Gets the site named "Contoso" and retrieves all alerts for that site (open and resolved).
 
@@ -66,7 +66,7 @@ function Get-RMMAlert {
         (open or resolved). Useful when the alert's status is unknown but the UID is available.
 
     .EXAMPLE
-        $Site = Get-RMMSite -Name "Main Office"
+        $Site = Get-RMMSite -SiteName "Main Office"
         PS > Get-RMMAlert -SiteUid $Site.Uid
 
         Retrieves open alerts for a specific site using its UID.
@@ -249,8 +249,8 @@ function Get-RMMAlert {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAQuYlE4E4jnR+2
-# 1f1BWLxngkqLOuff+ugBBeRjYBVnFaCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDBPFYtWVM6qN2B
+# ow8BKNtfKwxUSm1EFP6/GEmVc8BO/qCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -272,11 +272,11 @@ function Get-RMMAlert {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICSdVpchpsPUuf7mS7UXRsT6v+Ow
-# fvwvizjgBO5e6M4lMA0GCSqGSIb3DQEBAQUABIIBAF5Ne9yV6Rp/7Op/0xr485J1
-# P0IIj7/pPEUvwnbIrpS4Ffr+T4sP4kccS2iycPf1JcDuMJgUsVBwCFayXR2LmKlB
-# Rp/jcEinxjEQWyZT4PHj3IbuqoE/0DqWkdz75xfUDXCfSK96EsBGGxKbHkaeu2F4
-# dH5HBzq4m3P0XynoN9w0cTtShmpISUC4/ckPgMEMDBcBUjeTh5V0VDV5qyXEVznP
-# UHvH9DDMBV/JhX2goXUfP5dLJkIIbRzkEDfuW00mcr1tPC4+BqEz9QM91bx87EPF
-# NOZABWwcUNeu86DGCMKm9fH2bfJmgumG5PyF94dqR8lMtGh48QpG2bl9DSKX+mw=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICY5Bo1ciSDtxY2Wi1FyB2V7GJW0
+# X526YXy1Q/dq+j5uMA0GCSqGSIb3DQEBAQUABIIBABTRCJ9ZTwzb4FLwfTiPAKYW
+# dQvE3k6cFrUj2yS1LnZ+zAUDiZA/FT2ImoIdqJlYNH8NU5PjXW9oHiVQRE/DHyfh
+# NZp+4OEBQSO9jVq5n+B7Wcw7c9A75XchoEr+7Xq2PKUXR1xpK2gHxDYN1fNwKQAK
+# yr1AhGJpxwYk9gEZvfLpS6Cmn0LCNITlbU5md09wf90var1VobKnJqAKsvwH0OoD
+# GKd5E2aPDL3krG51djvIAhPhx9xEFuVdsDeMqcgW+EeYSkZpKso2QvUXnCrQDD0r
+# D785dNbkPr9JXUdCiVpiYukTp09SCHBn74Jhsb+mek7GaP4hE+ml7yFvW8xZQZU=
 # SIG # End signature block

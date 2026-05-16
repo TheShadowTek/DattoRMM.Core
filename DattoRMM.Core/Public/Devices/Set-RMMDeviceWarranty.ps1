@@ -43,7 +43,7 @@ function Set-RMMDeviceWarranty {
         Clears the warranty date without confirmation.
 
     .EXAMPLE
-        $Site = Get-RMMSite -Name "Chicago Office"
+        $Site = Get-RMMSite -SiteName "Chicago Office"
         PS > $Filter = $Site | Get-RMMFilter | Where-Object {$_.Name -eq "Dell Latitude 7490"}
         PS > Get-RMMDevice -FilterId $Filter.FilterId | Set-RMMDeviceWarranty -WarrantyDate (Get-Date "2026-06-30")
 
@@ -67,7 +67,7 @@ function Set-RMMDeviceWarranty {
         # CSV format: SerialNumber,WarrantyDate
         # Example row: ABC123456,2028-03-15
 
-        $Site = Get-RMMSite -Name "Boston Office"
+        $Site = Get-RMMSite -SiteName "Boston Office"
         $Devices = Get-RMMDevice -SiteUid $Site.Uid
 
         foreach ($Item in $Warranties) {
@@ -194,8 +194,8 @@ function Set-RMMDeviceWarranty {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBq0Y8vGcqrvkBU
-# iEqgGZ+6u6T6jn/CD8y1yty4hK/5YaCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDZJDl/RIvgbTLh
+# hutTdUT6rjdKV8xDf0mRdjZ67bFw2aCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -217,11 +217,11 @@ function Set-RMMDeviceWarranty {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIHufb+KmpaBTWuPxAQr/8c+3oEpD
-# 31gps0rwhYA+NGbdMA0GCSqGSIb3DQEBAQUABIIBACtpdTwG8cuErje0SThXLfGw
-# 4EQRy4la7NNb9399IE/kqKo/eGnqJyWYpvj1p2ub9tZNWvBUnq1PE2QcCFRUoj0e
-# dv/yGV2TwVekHtmBmxQ/BJhGP8tClq5DvTWRXCpWW69fdUD0146Ikv4azfV9D5Dq
-# 7cr5ThKUo3FrZo8FRIL3f5t0UmCfxNiGn/fTIN5TeuDN38CrtN0AgRt7w30JhqHQ
-# P0JL3j/r/+cRR20icNyMaOQ15ALQNmtsFY2yJNR4qiY2EDyDxqxn9ovuKtw+/iGd
-# WFMyG+wabUQJP+XLRpDT/aD9b56ue1yxPwbNHhGaieU4tjvJ9wKcnOTkaw2hjHE=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIKufhkrsPSRndEPkXsGjYQXeNde7
+# e8W2Cr/aJZA/PbPMMA0GCSqGSIb3DQEBAQUABIIBAEd1THYeFc0YaMfdDYmh2YVB
+# pz9iEHnwkAg8YUBeQ9LAWUCX+OBBtoYc6uPsMkYGTrfHjYlA5inLhTjNVG7Ca5gY
+# nrAhgjlHk8bf+zzWkpJAJARA3N/71MSEHvUOfQ0CCsf7Gd8kKrhACVTDkY3bbpfI
+# ieAO7Vl+pIT0w6j26ACRpjfk6VUjFmbL5p6BY9pd1GTfD5D80DG2OTHV4P+ULRjy
+# MDk9S8zr5GIhM2OInklykAVG0AuC/a3V3Q3hwhRVGIghaAbahqIUmKJKURY0a3PV
+# aWvZZkhq/xJX54z8m6qH4rb+ct1RpLL7AhsZwQSWvOyl+ZRKAKWJD7vcwWHYB6A=
 # SIG # End signature block

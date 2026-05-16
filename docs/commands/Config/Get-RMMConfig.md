@@ -51,5 +51,7 @@ The output shows:
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Get-RMMConfig.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Get-RMMConfig.md))
+- [Set-RMMConfig](./Set-RMMConfig.md)
+- [Save-RMMConfig](./Save-RMMConfig.md)
 - [Remove-RMMConfig](./Remove-RMMConfig.md)
-- [Set-RMMPageSize](../Set-RMMPageSize.md)
+- [about_DattoRMM.CoreConfiguration](../../about/about_DattoRMM.CoreConfiguration.md)

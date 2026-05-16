@@ -47,7 +47,7 @@ Retrieves printer audit data using a specific device UID.
 
 EXAMPLE 3
 ```powershell
-$Audit = Get-RMMDevice -Name "PRINTER01" | Get-RMMPrinterAudit
+$Audit = Get-RMMDevice -Hostname "PRINTER01" | Get-RMMPrinterAudit
 $Audit.Printers | Select-Object Name, Model, SupplyLevels
 ```
 
@@ -132,3 +132,4 @@ When piping a DRMMDevice object to Get-RMMDeviceAudit, devices with DeviceClass
 - [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
 - [Get-RMMDevice](./Get-RMMDevice.md)
 - [Get-RMMDeviceAudit](./Get-RMMDeviceAudit.md)
+- [Get-RMMEsxiHostAudit](./Get-RMMEsxiHostAudit.md)

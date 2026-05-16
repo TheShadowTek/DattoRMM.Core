@@ -18,8 +18,8 @@ The DRMMSiteSettings class exposes the following properties:
 |----------|------|-------------|
 | GeneralSettings | DRMMSiteGeneralSettings | The general settings of the site. |
 | ProxySettings   | DRMMSiteProxySettings   | The proxy settings for the site. |
-| MailRecipients  | DRMMSiteMailRecipient[] | Reuse existing class |
-| SiteUid         | guid                    | Reuse existing class |
+| MailRecipients  | DRMMSiteMailRecipient[] | The mail recipients configured for site notifications. |
+| SiteUid         | guid                    | The unique identifier (UID) of the site these settings belong to. |
 
 ## METHODS
 

@@ -64,7 +64,7 @@ function Set-RMMVariable {
         Updates both name and value of an account-level variable by ID.
 
     .EXAMPLE
-        Get-RMMSite -Name "Main Office" | Get-RMMVariable -Name "SiteCode" | Set-RMMVariable -Value "MO002"
+        Get-RMMSite -SiteName "Main Office" | Get-RMMVariable -Name "SiteCode" | Set-RMMVariable -Value "MO002"
 
         Updates a site-level variable via pipeline.
 
@@ -97,6 +97,21 @@ function Set-RMMVariable {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Set-RMMVariable.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        Get-RMMVariable
+
+    .LINK
+        New-RMMVariable
+
+    .LINK
+        Remove-RMMVariable
+
+    .LINK
+        Get-RMMSite
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByVariableObject', SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
@@ -323,8 +338,8 @@ function Set-RMMVariable {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAvQWwLvAMjNrvR
-# 8DuF9NnG5TlwTf3oL8CMoXPcws+PjqCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAtytE+A4pqe5Ia
+# Yt5yWErB8cScXqMEEm5T9E70cyBGI6CCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -346,11 +361,11 @@ function Set-RMMVariable {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEINANga4HX7MNY/TTJ/aALnG9L6gX
-# YyzoA5iceCRmZuJIMA0GCSqGSIb3DQEBAQUABIIBAFy7IoVXn1zmGQvw1lffqPl6
-# NfSansB+DINnH0BQ3M7ZUVitPQx3V0MXQ/XjLFen2KUJNcD2pRH1asktRlK2zbew
-# OZXVmmB3fCwFXTW6PuWSth5IYwNRTw+RnO2NCFo6a8r235BKFDnVS0ReMHwptzJo
-# XcTKxyFp8yypiu6741j9imu7S0d7U2pznggRgA6k2xBO21dHyaufS2Lzf8rXMbVy
-# A5QCRkefzFEwY5n4ZCEmhJh6c1Pz/W9SvhwJNdiv2o5r3x+5FuBB0jWF3vUvLsed
-# lVEqBKmicKdMCJgmLmpR4cr/YsDO24c1nC2+4fadUcEoaWqKdwl0M8whn9JojmU=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIBdm6GUQv5D8dOZ9hZNJ53HTQA5a
+# gAJddp52SPhi71VQMA0GCSqGSIb3DQEBAQUABIIBAAA2ClXic1KaL3iacirW0RpW
+# tGh7ACqL3+2bzszFetcM1NPPiyGJabF/WEnRuodd687vIEBoUZG9DP/1x1KRuId5
+# S2EoBKN7QM/0hbwimOCFhv/R3QATiDnzjGpvRrFtQWEotP9XLxccqcr+oQW6viFZ
+# 2++D6pRSNuRNXBkc33SkLpyz+79yb0XqiuDu/E9PvJ7HdYzyBpPWfX4wxtp9jEB4
+# LarTB1FXV9LCC7AHk2L5Q83EwiKjROF4mCbOYrF9XNktPDeM/pF5F0eVLjr5IQ77
+# tAqp27F0WbIzNJWhjgRqNN2IagrMquYDF4f01rSLu6WPj9D/ksWHnF2zCOIQQfM=
 # SIG # End signature block

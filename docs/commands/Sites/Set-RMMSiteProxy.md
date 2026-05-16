@@ -40,7 +40,7 @@ Configures an HTTP proxy without authentication for the specified site.
 EXAMPLE 2
 ```powershell
 $ProxyPass = Read-Host -Prompt "Enter proxy password" -AsSecureString
-Get-RMMSite -Name "Branch Office" | Set-RMMSiteProxy -ProxyHost "proxy.branch.com" -Port 3128 -Type http -Username "proxyuser" -Password $ProxyPass
+Get-RMMSite -SiteName "Branch Office" | Set-RMMSiteProxy -ProxyHost "proxy.branch.com" -Port 3128 -Type http -Username "proxyuser" -Password $ProxyPass
 ```
 
 Configures an HTTP proxy with authentication via pipeline.
@@ -81,7 +81,7 @@ Aliases: Uid
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

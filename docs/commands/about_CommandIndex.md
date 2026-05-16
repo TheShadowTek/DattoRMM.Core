@@ -86,8 +86,6 @@ A reference index of all public functions in the DattoRMM.Core module, organised
 | ------- | -------- |
 | [`Export-RMMObjectCsv`](Export/Export-RMMObjectCsv.md) | Exports DattoRMM.Core objects to a flattened CSV file using named transforms. |
 
-See [about_DattoRMM.CoreExport](../about/about_DattoRMM.CoreExport.md) for details on transform authoring and custom transforms.
-
 ## Filter
 
 | Command | Synopsis |

@@ -5,8 +5,14 @@ Retrieves installed software for a specific device.
 
 ## SYNTAX
 
+Device
 ```
-Get-RMMDeviceSoftware [-DeviceUid] <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-RMMDeviceSoftware -Device <DRMMDevice> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+DeviceUid
+```
+Get-RMMDeviceSoftware -DeviceUid <Guid> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,7 +35,7 @@ Retrieves all installed software for device 12345.
 
 EXAMPLE 2
 ```powershell
-$Device = Get-RMMDevice -Name "SERVER01"
+$Device = Get-RMMDevice -Hostname "SERVER01"
 Get-RMMDeviceSoftware -DeviceUid $Device.Uid
 ```
 
@@ -60,6 +66,21 @@ Retrieves software and groups by publisher to see which vendors have the most ap
 
 ## PARAMETERS
 
+### -Device
+{{ Fill Device Description }}
+
+```yaml
+Type: DRMMDevice
+Parameter Sets: Device
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -DeviceUid
 The unique identifier (GUID) of the device to retrieve software for.
 Accepts pipeline
@@ -67,13 +88,13 @@ input from Get-RMMDevice.
 
 ```yaml
 Type: Guid
-Parameter Sets: (All)
+Parameter Sets: DeviceUid
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

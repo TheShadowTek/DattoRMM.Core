@@ -12,7 +12,7 @@ function Get-RMMFilter {
 
         Filters in Datto RMM are used to group devices based on criteria and can be applied when retrieving devices with Get-RMMDevice.
 
-        Filters are categorized as either "Default" (built-in system filters) or "Custom" (user-created filters).
+        Filters are categorised as either "Default" (built-in system filters) or "Custom" (user-created filters).
 
     .PARAMETER Site
         A DRMMSite object to retrieve filters for. Accepts pipeline input from Get-RMMSite.
@@ -48,7 +48,7 @@ function Get-RMMFilter {
         Retrieves a filter by exact name match.
 
     .EXAMPLE
-        Get-RMMSite -Name "Main Office" | Get-RMMFilter
+        Get-RMMSite -SiteName "Main Office" | Get-RMMFilter
 
         Gets all filters for the "Main Office" site.
 
@@ -285,8 +285,8 @@ function Get-RMMFilter {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDXaBf0Gtt0vCm2
-# MWnJtswWkMZ0r2h2fkh64tN5YSsAa6CCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAlZgFtZNGcKHV1
+# /wL/1GW/qKapnEbigpftCDqLx2B0SqCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -308,11 +308,11 @@ function Get-RMMFilter {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIK0dQBL2IDvMBWcekhihyr0E7VXz
-# ixc9x4w8UGcmsik9MA0GCSqGSIb3DQEBAQUABIIBAAkFn9A4XEq+hDYmqAKsa4vx
-# ijTGXD9p1ZrAODqMtUrnOWbKH9eFAHQNKgo1l202hFblgls5zrB8U9hBJZ8Z0dVe
-# QAm1v9ShjvK3KUzy7C9vu9CZ1+Kc3rmWFgF+cADxsXEF8ahv+EgnGKVd6RjPwl9u
-# OKDxZjXbNVaYJo0Zq7eOt2C8TpqJdHDUV5q37fYcAhAnfQ2JOzndin5ax6MxbvX8
-# Sg9ZWqeiJcYhQ7tn56PDb503+w+SeOH/VTANcdicjvFxkDZ2PNwRFkbXAwAX4m0N
-# fXVCBwEwVVQrUee1VAItMuIehSe6bzJUNot3Z3zSCV70RDK4AQvuE5BDjGh8uo4=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIH/hz0uvnYc4ICmpBluV2NZBeelg
+# s8+hRiLjwdtdshebMA0GCSqGSIb3DQEBAQUABIIBAGiRzr5fosRswF9Ew7sTL1oD
+# 5S/Fhhnp0FAd6FJ2H4eTLQr33iZ5F7U2Qh++wUKBYKV/pcqns+SHF7XfOV10DSum
+# cXDVuR3N1PwEBXsh7hAu1BHHdwtM2VmZNKrHH69NYn/Oxdcdn1e924L82lRYhszQ
+# kUIZu1m4QhVucSIyfxDweOmcwvMjgxapGTkWzPY17YbbYAI9m82b1mLowdDnNqiv
+# o+PvM+YEF7V4vo3cNN4tPd7dD+USfiYH4aLEB41IzAi55MpEU5vDO41gT0ExZRMm
+# JeHtrcVosUkK5eOa52IWetqo89Wp2sXDUlPmrsAvxUZN17a45116R4rmSKeuX80=
 # SIG # End signature block

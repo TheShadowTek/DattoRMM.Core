@@ -78,12 +78,12 @@ function Set-RMMSite {
         API default values because OverwriteAll bypasses property preservation.
 
     .EXAMPLE
-        Get-RMMSite -Name "Old Name" | Set-RMMSite -Name "New Name" -Description "Updated description"
+        Get-RMMSite -SiteName "Old Name" | Set-RMMSite -Name "New Name" -Description "Updated description"
 
         Updates the name and description of a site via pipeline.
 
     .EXAMPLE
-        $Site = Get-RMMSite -Name "Test Site"
+        $Site = Get-RMMSite -SiteName "Test Site"
         Set-RMMSite -Site $Site -Name "Test Site" -OnDemand -Force
 
         Enables on-demand for a site without confirmation prompt.
@@ -310,8 +310,8 @@ function Set-RMMSite {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBgRt9FBEnVOwWj
-# FmNJGEv6ORhuTYQywn8I6oWJg3TWT6CCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAavup2nc49TafB
+# pGoG2Nl/n+Rq8i6VJSoJO1ctAENLo6CCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -333,11 +333,11 @@ function Set-RMMSite {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIHxued/o3HwOvpaGwON6hsFue9sC
-# l9ABPyseyK2WXzW3MA0GCSqGSIb3DQEBAQUABIIBAHq58kxD+R2tfJAJQuC8TX32
-# jWs4gZQ0zrKzLlMUtl5IM+xtEkTphrsCOFBZhYhR35JfVjE8+BoiffpQYr4nCx/2
-# GXA+mcKdRplqnQEFCSAFgVvyTCIVU0wX/w29txH8UVlWXOgHa0Pts/45KWPwtKPR
-# T/7koaFjCBGmG2MxvhAwZlafc+t7GOqu4ge6bbNBLtCzuSG9VJu29iX6F2/IXW8U
-# J8/IZinrKkMriH3bxryhJmX6PBk3HA+JWqqndeEOd/lZstj63sHU55OOR20ZAqEH
-# dR50lWXdo/2r4t/gSiDORIjWhSXVfcHIRLtRs3nyHKcbe0TPzNirfBTkkYNHuVw=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIMoF3sxiuZP1pPsCQART0OFAz+xL
+# DIHuuva0sXQkOLnoMA0GCSqGSIb3DQEBAQUABIIBAG/TW0iTNI7IakP0aRpuR2B/
+# Ij9WO6VCOs7qSBEDC2ydFXLC6Sg/Okaq5PlG3kAD/Qmt2HM4LS9OLjzwV1jDkcuA
+# h+8M9/UPnL8bytSkhKRZuD/ljgOPd4EfI3Hn3eg49MULqeC3itbqt973/ACwVUuP
+# xcxRISF4yXQg7hjFfS1Wdrb6ec1UJ1EAvUBuAHwevXRZEmRQshRwFUbPRaiSkGDG
+# zUugZfeEBuhHxsMYEmY8U+TWPp3PgD6t9Vsf1ZDY+hyM6d5nf3IAFf/0kSps4YqG
+# Zp2SSkMgleM15KV1a564v3UNGdLxIfgQE0GympDHbLoc/9dCnq5e/+HUgq8542I=
 # SIG # End signature block

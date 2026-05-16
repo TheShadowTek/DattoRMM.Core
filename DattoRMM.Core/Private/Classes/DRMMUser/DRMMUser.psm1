@@ -76,7 +76,7 @@ class DRMMUser : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the user, including their full name, username, and disabled status.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the user's information, including their full name (constructed from the first and last name), username, and an indication of whether the user is disabled. If the user is disabled, the summary will include "(Disabled)" next to the username for clarity.
+        The GetSummary method returns a string summarising the user's information, including their full name (constructed from the first and last name), username, and an indication of whether the user is disabled. If the user is disabled, the summary will include "(Disabled)" next to the username for clarity.
     .OUTPUTS
         A summary string that includes the full name, username, and disabled status of the user.
     #>
@@ -92,8 +92,8 @@ class DRMMUser : DRMMObject {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCB7xCFkG9+vsakZ
-# 4F6QTZaBDg1k5udJrA5ovR5gM8zL+aCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCB9KcvbWHiyTgfd
+# mK/rW6S4mlOrlPGj58uCb8yIuOoJzaCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -115,11 +115,11 @@ class DRMMUser : DRMMObject {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICrpfoqrXujAB+lxx0OXuHDXfE9U
-# Jptdx446lfiYagRBMA0GCSqGSIb3DQEBAQUABIIBADmml813x4jr8kKbiT562QnZ
-# Ch8juodG5r8etQ6KnN0sJyDeTfB94lH21UTdXKh6yxHV/Wy3D8h48uxTE4OAyH3U
-# 7cVpKR8zHb7DmuHFiJIxyUzqfvQzFFIZ83ch9bBWQQ8MUtwEUiLrVTOiXdAbgRsW
-# 9WhlHj2LE9hm2SRqz+ctfZxvXKqGmpctabSULOmeb5hSiY6VwC5wva8hynO1Sx04
-# fU/Jsod7gUBdEKuiZOCJkOJZlyjuo9VGS6JUxnsX6h5BL30t6yw29hSOjFXvZq9u
-# i4Ql7NBM+O1PVSJCEXJuF6pH3EW2wMo1oh1XsVcN4blT9+FtGQlPD/IRy98kgHc=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICnonUuKZUlTui/2HNSNdB2McSss
+# hGfPlW7atRXh3REzMA0GCSqGSIb3DQEBAQUABIIBAEwhYVQ8qXYS1ebvf2mr2Oru
+# Hpa/deoqRED6ftecfES7rgI1PFeP2enf0ALmp8LEhhMg13bp4zL8Pl54uEOY1YuL
+# iyo78QrNAgj4jqDUe9uvXyix4PwEo42Ax3vODOVvFgYqgsaf9sObLD3iY0vIEuIP
+# 6CFJ9k97mnv6zmbw5p7iO3X/c/UjO1QyhDFAhv8m6EB64hslR9ig0DIni+tdDmcE
+# BaAJHOkJWAXebhnYDEceZR5jl4NAm0IEYT0kOSpdY6wXCdUYHARGIhXbslq+0P07
+# lZAz8N2QL6L/m6Gsa5ApZlfwQJq2C6pFKCHCZN1K7eD91aVo2i5ukLlDIrwB4QY=
 # SIG # End signature block

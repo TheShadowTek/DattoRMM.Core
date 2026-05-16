@@ -11,6 +11,7 @@ using module '..\DRMMObject\DRMMObject.psm1'
     The DRMMNetworkInterface class models network interface information returned as part of a device audit in the Datto RMM platform. It captures the instance identifier, IPv4 and IPv6 addresses, MAC address, and interface type. Instances are created from API responses via the static FromAPIMethod factory method and are typically used as elements within device audit network interface collections on DRMMDevice and DRMMDeviceAudit objects.
 #>
 class DRMMNetworkInterface : DRMMObject {
+    # The instance identifier of the network interface.
     [string]$Instance
     # The IPv4 address of the network interface.
     [string]$Ipv4
@@ -37,8 +38,8 @@ class DRMMNetworkInterface : DRMMObject {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCHsvLx56Q98Lwk
-# mQ2huhInWqseCJwAPIubGdLYvodUo6CCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCRltm6N6Rncefb
+# EtpY1HkE8iEJ13yymp4C4dUYwEEbm6CCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -60,11 +61,11 @@ class DRMMNetworkInterface : DRMMObject {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIKl263GGqUdwi9isoB/YJ52BE/r2
-# d4eG7uvwap9at84pMA0GCSqGSIb3DQEBAQUABIIBAFBsbiwuiVMpfjS4tG1fdBWz
-# molHWV91z+ijm1ALWLHSrDlnX1k5HkeiJXc0m0f2BLkydG+PLvqDV6Y3MCF2Qvlo
-# qDTQCr2Zge4X6qE2kawGXwGwEe63knk0gkLtm5B9ONvcTRRZheBRzxE8leidLtLp
-# apxfdsVgkjFEwCRKjpxrKBbZmwF2F19plR1UwKnoW6QQoT52tC9UEIs2LtvVsmDc
-# yKCVU/fUIdpGt9lhiaYLYQ20BFPGUpenOD5hElw0Jc0f3cL3bvYcoDTix1p4Ny1+
-# zY9cfGwqXUmgS27xoWC/TJ4AXYh/tgZElKd4RUfIYRrs82Z7DUlzL43JBNtDAEM=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICLEMpQo09WDHxL3dEWCPejnPLEi
+# 4AqTk4hPFtfmCmjpMA0GCSqGSIb3DQEBAQUABIIBAEh0gZoJGDeIwUFXITMjUzdZ
+# OzoTX4G8YWA0O/k6db5SYjvdb97G6g75arX3cZpphREJJqKSOCkF+wiFcxpyAOxR
+# J775uNEE13Y4o1VRghAjJaR3ayY0qk3ISzNKqnKoX3qNFiqu+cHf3dEb9XDScAHr
+# qDqN1wzbrWfdOFqTGUQ+5FbcjK3NU4bkQ/f6rVR5wbgFTgV5TaTDUaPhTuGbsCG2
+# vdFHHm3pf4qTnBFhflyERb2d2G2l2HCkssU8AXTdJohOOOwXHWtLqYm1p+dto2M2
+# d1A6JngqrAgfgMMu1CMUR+twg4/1n5mms56lsrMQvO2DnAoX+6+sB/ZDU+G2kOo=
 # SIG # End signature block

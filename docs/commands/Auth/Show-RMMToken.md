@@ -60,9 +60,12 @@ Accept wildcard characters: False
 ## OUTPUTS
 
 ## NOTES
-This command requires confirmation and has ConfirmImpact set to Low.
+This command requires confirmation and has ConfirmImpact set to High.
 
 ## RELATED LINKS
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Show-RMMToken.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Show-RMMToken.md))
+- [Connect-DattoRMM](./Connect-DattoRMM.md)
+- [Disconnect-DattoRMM](./Disconnect-DattoRMM.md)
+- [about_DattoRMM.CoreAuthentication](../../about/about_DattoRMM.CoreAuthentication.md)

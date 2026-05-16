@@ -73,4 +73,5 @@ This function is only relevant if your account uses Datto Networking.
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMNetMapping.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMNetMapping.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [about_DRMMNetMapping](../../about/classes/DRMMNetMapping/about_DRMMNetMapping.md)

@@ -26,7 +26,7 @@ This function can accept either a site object from Get-RMMSite or a site UID dir
 
 EXAMPLE 1
 ```powershell
-Get-RMMSite -Name "Contoso" | Get-RMMSiteSettings
+Get-RMMSite -SiteName "Contoso" | Get-RMMSiteSettings
 ```
 
 Retrieves settings for the "Contoso" site.
@@ -85,12 +85,12 @@ The unique identifier (GUID) of the site to retrieve settings for.
 ```yaml
 Type: Guid
 Parameter Sets: Uid
-Aliases: Uid
+Aliases:
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

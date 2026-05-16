@@ -7,19 +7,20 @@ Connects to the Datto RMM API and authenticates using API credentials.
 
 Key (Default)
 ```
-Connect-DattoRMM -Key <String> -Secret <SecureString> [-AutoRefresh] [-Platform <RMMPlatform>] [-Proxy <Uri>]
- [-ProxyCredential <PSCredential>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Connect-DattoRMM -Key <String> -Secret <SecureString> [-AutoRefresh] [-Platform <RMMPlatform>]
+ [-LegacyThrottle] [-Proxy <Uri>] [-ProxyCredential <PSCredential>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 Cred
 ```
-Connect-DattoRMM -Credential <PSCredential> [-AutoRefresh] [-Platform <RMMPlatform>] [-Proxy <Uri>]
- [-ProxyCredential <PSCredential>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Connect-DattoRMM -Credential <PSCredential> [-AutoRefresh] [-Platform <RMMPlatform>] [-LegacyThrottle]
+ [-Proxy <Uri>] [-ProxyCredential <PSCredential>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ApiToken
 ```
-Connect-DattoRMM -ApiToken <SecureString> [-Platform <RMMPlatform>] [-Proxy <Uri>]
+Connect-DattoRMM -ApiToken <SecureString> [-Platform <RMMPlatform>] [-LegacyThrottle] [-Proxy <Uri>]
  [-ProxyCredential <PSCredential>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
@@ -225,6 +226,32 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -LegacyThrottle
+Forces the throttle engine to operate in legacy single-bucket mode.
+When enabled, all API
+requests (including writes) are tracked against the read bucket only.
+Write-specific counters,
+per-operation buckets, and write decay logic are bypassed.
+
+Use this switch if your Datto RMM account uses the legacy single-bucket rate-limit model.
+Default behaviour (modern multi-bucket model) is unchanged when this switch is not specified.
+
+This is a temporary compatibility mechanism.
+It will be deprecated once automatic detection
+of the rate-limit model is implemented.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Proxy
 Specifies a proxy server for the request, rather than connecting directly to the Datto RMM API.
 Enter the URI of a network proxy server.
@@ -292,3 +319,5 @@ You can still override these defaults by explicitly specifying the -Platform par
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Connect-DattoRMM.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Connect-DattoRMM.md))
+- [Disconnect-DattoRMM](./Disconnect-DattoRMM.md)
+- [Request-RMMToken](./Request-RMMToken.md)

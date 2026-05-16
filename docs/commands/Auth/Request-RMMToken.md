@@ -180,3 +180,4 @@ To authenticate the module for API calls, use Connect-DattoRMM.
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Request-RMMToken.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Request-RMMToken.md))
 - [Connect-DattoRMM](./Connect-DattoRMM.md)
+- [about_DattoRMM.CoreAuthentication](../../about/about_DattoRMM.CoreAuthentication.md)

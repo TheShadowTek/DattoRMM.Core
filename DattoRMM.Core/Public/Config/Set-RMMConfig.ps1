@@ -46,7 +46,9 @@ function Set-RMMConfig {
         Skips confirmation prompts for impactful actions (such as resetting or saving configuration). Use with -Default or -Persist to bypass -Confirm and proceed immediately.
 
     .NOTES
-        Confirmation logic is handled up front with early returns, ensuring efficient and predictable behavior.
+        Confirmation logic is handled up front with early returns, ensuring efficient and predictable behaviour.
+        Configuration is stored at: $HOME/.DattoRMM.Core/config.json
+        At least one parameter must be specified unless using -Default. Settings take effect immediately in the session. Use -Persist to save for future sessions.
 
     .EXAMPLE
         Set-RMMConfig -Platform Merlot
@@ -74,19 +76,26 @@ function Set-RMMConfig {
     .OUTPUTS
         None. This function updates the session and/or persistent configuration file.
 
-    .NOTES
-        Configuration is stored at: $HOME/.DattoRMM.Core/config.json At least one parameter must be specified unless using -Default. Settings take effect immediately in the session. Use -Persist to save for future sessions.
-
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Set-RMMConfig.md
 
     .LINK
         Connect-DattoRMM
+
+    .LINK
         Save-RMMConfig
+
+    .LINK
         Get-RMMConfig
-        Reset-RMMConfig
-        Set-RMMPageSize
+
+    .LINK
+        Remove-RMMConfig
+
+    .LINK
         about_DattoRMM.CoreThrottling
+
+    .LINK
+        about_DattoRMM.CoreConfiguration
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
@@ -436,8 +445,8 @@ function Set-RMMConfig {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCA6v45mvyhS8xZX
-# JKd15MnkDMW8fbHDUSa1cUZ8DitqG6CCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDBYUSqq9Yh8rOl
+# eM0pOEhwjDrA8y4MxMMjhL48zps0S6CCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -459,11 +468,11 @@ function Set-RMMConfig {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIFVXKZdMZrId5Mnu5K+HDzT06mZ9
-# kos8E2fYL0LA2thlMA0GCSqGSIb3DQEBAQUABIIBADiClNXTda67QpyQJY/jDN6s
-# UBiZYW7tgGJxLdjHFnVxSQ5JQ44FdtCrdhpjG4VmEbVmSkOiDXMLT+E51AMoP0Bh
-# RrFmoRuz7Y8imJ8TNasvU5OrNXH+9IGgN+DoLm3XqlOxhImPjR6j02YgP4YZYXFT
-# 8nIv1M3jP+hbb3OW1rPTL+SAWJw5epo0JANOH6fvedzwP0yJSWbHVsxpt8dOLcXh
-# YggEGh39v0EZ1MHebD3XiMz6/L4QHk3Lml+Lnqjy3Q/5wPjYhpDYuOua7ks9EID9
-# JnQHN9XcCI6c0p+k+W6D0jxY+VdwVP+1ybB5zyzFrgs7dhWakkNhGCGDdVgx06I=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICR3pjT6gaDcHq6n1U7OHdJDnqcg
+# sie8cRAHBLpdoU7lMA0GCSqGSIb3DQEBAQUABIIBACVSKVy+S+OHQCvntCRBfSm2
+# 16yTZeiLWSh7vJVDp7jOs8WIsWunvVFGXEiyt0+j810vDe1XMEfDrVBnTreb+lBt
+# kYiLdQBdBRYPfFids2ZoFVoZgp0UB6qkhw/5kJjKW2dJVGQKIaONUjk/DIwenhFG
+# hJltAuIVcyM5wKouT/D3eYIevPxE/2z8FgpTQdr6aHms9AD30Bqn+10y2xFjopoQ
+# sRV4nB1BayDXkrNJ3GrNcnXbXKh7ucacHJe8x9VxuhW+n/8gFbEBOzLl1D5HBwSq
+# vQrwcgrxemsPTK/WyhdMUSYRO7VoOhIo83sBVONAelsV2Qz4kUAorYSSyIiDPgM=
 # SIG # End signature block

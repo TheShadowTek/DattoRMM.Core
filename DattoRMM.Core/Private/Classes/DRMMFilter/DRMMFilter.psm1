@@ -67,9 +67,9 @@ class DRMMFilter : DRMMObject {
 
     <#
     .SYNOPSIS
-        Determines if the variable is global in scope.
+        Determines if the filter is global in scope.
     .DESCRIPTION
-        The IsGlobal method checks the Scope property of the variable to determine if it is global in scope. It returns true if the Scope is equal to 'Global', and false otherwise.
+        The IsGlobal method checks the Scope property of the filter to determine if it is global in scope. It returns true if the Scope is equal to 'Global', and false otherwise.
     .OUTPUTS
         A boolean value indicating whether the filter is global in scope.
     #>
@@ -81,9 +81,9 @@ class DRMMFilter : DRMMObject {
 
     <#
     .SYNOPSIS
-        Determines if the variable is site-specific in scope.
+        Determines if the filter is site-specific in scope.
     .DESCRIPTION
-        The IsSite method checks the Scope property of the variable to determine if it is site-specific in scope. It returns true if the Scope is equal to 'Site', and false otherwise.
+        The IsSite method checks the Scope property of the filter to determine if it is site-specific in scope. It returns true if the Scope is equal to 'Site', and false otherwise.
     .OUTPUTS
         A boolean value indicating whether the filter is site-specific in scope.
     #>
@@ -146,7 +146,7 @@ class DRMMFilter : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the filter, including its name, scope, and type.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the filter's name, scope, and type. If the Scope property is not set, it defaults to 'Global'. If the Type property is not set, it defaults to '-'.
+        The GetSummary method returns a string summarising the filter's name, scope, and type. If the Scope property is not set, it defaults to 'Global'. If the Type property is not set, it defaults to '-'.
     .OUTPUTS
         A summary string that includes the filter's name, scope, and type.
     #>
@@ -243,6 +243,8 @@ class DRMMFilter : DRMMObject {
         Retrieves the alerts associated with the filter.
     .DESCRIPTION
         The GetAlerts method returns an array of DRMMAlert objects associated with the filter. It retrieves alerts for each device associated with the filter, optionally filtered by status. The status parameter allows filtering alerts by their status (e.g., 'Open', 'Resolved', 'All').
+    .OUTPUTS
+        A list of alerts associated with the filter, filtered by the specified status.
     #>
     [DRMMAlert[]] GetAlerts([string]$Status) {
 
@@ -267,8 +269,8 @@ class DRMMFilter : DRMMObject {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBtiPKdp40hldkB
-# eoYPUUaMAo/GcfLPP7uFGXvwsr83k6CCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAC7PRMdMp7f59s
+# +9snGeMudR2UjMUOS09l6dDn8nfr56CCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -290,11 +292,11 @@ class DRMMFilter : DRMMObject {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEILknU3pePkdrQ1S1yZbkXFjn90Jy
-# z88wCHpf2Vi6wmo8MA0GCSqGSIb3DQEBAQUABIIBAAy+ifDbr57yhbWhUg16cT3L
-# h4nszmuVAcWXhxtlzulmZsMc0ZwNQkIzLshjHDS6YITi31gJW4df3wu+OmuHLwjI
-# gFhgy9mvY/nFVHu7FU0OKvOAo0Tr7Um7vScCJtOrBvz9mBqnXlcixr8IQ86WFptR
-# PzLMBvRdAx1c0eWq6OdkBiVu542QjB2fjrc6U+ZeCxIhXes4GN1aqV3cvi2ZztVf
-# GZA+dS00zhkpmXlhBxWaZeEvAZpArKazGQYYbeWOp81sJxYAPi5Q/REBx7XhspK7
-# BA0achcu0AB/rMaGw5RjDarHdOEuh1PNY2sg/HIl6aBlyZX+H4Fcoj+Rpe1uuow=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIO03zTLUJF3yzBOMTD35Ps0vCukx
+# FdNX9YMLE1TLln6gMA0GCSqGSIb3DQEBAQUABIIBAGfje5ul/XuMSnnbYXYc9smz
+# wt/4O8f+tH2YR42nh1UvQbZ3dLDgWuOIr9zmYCo/bto+O2/fk/wFXRjCs+AUxdSn
+# gbU2XwcST8mLwm9RwfZqe6DcbIA4sx5186Gt2X2lFCmbBPTvDJ/ol3HZ1CJomPv1
+# wgzaCdikaPoXhUgJmc1ZLRxMCwcVL1Hr5971zhYw68E0vZxjg3wdRbpj9Ii26GGs
+# jF9M7P4J5puZoGhozHwGB0nf27DvhE/U3SR6pPDYZeytCpolC5+dxG+KYsutJjjL
+# Svz+ePR9+jT8ngKakWxxMoylpq+/BWTO5G3DH3dZBjFg7jZi/xA6Mbb8UV/Wgq0=
 # SIG # End signature block

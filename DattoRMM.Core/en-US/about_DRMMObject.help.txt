@@ -47,6 +47,15 @@ Parses an API date value that may be an epoch timestamp (milliseconds or seconds
 **Parameters:**
 - `[Object]$Value` - TODO: Describe this parameter
 
+### static ParseApiDateTime([Object]$Value)
+
+Parses an API date value and returns a UTC DateTime directly, without allocating an intermediate hashtable.
+
+**Returns:** `Nullable[datetime]` - Returns Nullable[datetime]
+
+**Parameters:**
+- `[Object]$Value` - TODO: Describe this parameter
+
 ### static MaskString([String]$Value, [Int32]$VisibleChars, [String]$MaskChar)
 
 Masks a string value by replacing characters beyond a specified visible count with a mask character, used to obscure sensitive data such as API keys or secrets.

@@ -133,3 +133,4 @@ Handle user data in compliance with your organisation's privacy policies.
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMUser.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMUser.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)

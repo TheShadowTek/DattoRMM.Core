@@ -17,7 +17,7 @@ function Set-RMMDeviceUdf {
           key-value pairs (e.g., @{udf1='Value1'; udf50='Value50'}).
         - Single mode: Use -UdfNumber and -UdfValue to update a single UDF by number.
 
-        Important behaviors:
+        Important behaviours:
         - Fields included in the request with empty values will be cleared (set to null)
         - Fields not included in the request will retain their current values
         - You only need to specify the fields you want to update
@@ -99,10 +99,16 @@ function Set-RMMDeviceUdf {
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUdf.md
 
     .LINK
+        Connect-DattoRMM
+
+    .LINK
         about_DRMMDevice
 
     .LINK
         Get-RMMDevice
+
+    .LINK
+        about_DRMMDeviceUdfs
     #>
     [CmdletBinding(DefaultParameterSetName = 'ByDeviceUidHashtable', SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param (
@@ -255,8 +261,8 @@ function Set-RMMDeviceUdf {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCL44i16jiRWxHX
-# 9erdvHLA7xA1B0CIhP3c/WGkCmBoJ6CCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAGF5FdsUEdtaSC
+# hMV3p9+zo1K7/F8+X2kZSRDPd6jBdKCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -278,11 +284,11 @@ function Set-RMMDeviceUdf {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIDbQJo2cc1Uyqrv/I83Um/OuG9pU
-# Xbwx5ybEReMvqx3aMA0GCSqGSIb3DQEBAQUABIIBAGZuW0JS8vpUEAdEsa2X+baD
-# z8QTG/SqXJqWheAaIy+7+UE1t2Wku/xUCGJA1oePGTGdf6l6jIhTBMF83SGTrZ8c
-# zj4wjQtcdZZ4tK00gB/LXbvG1KB7qymLDTc7tlcF10lDHBy3GI2NnOZiI9FgGDeD
-# RpE8GTE/zjXFUYwaOj5m+GIcgGtTjAGwDabz61oMKyfjP39HNbjOaIkXTFR9g1aZ
-# 5o/u1kGUULuUwODiAHzsYQXajzYV7rWOrbuq70qtb/DbGlugUReNSlEqAcbF41kW
-# XuTCGtKOBzvg4u6nGgbVKyVTpc7j4Roil3WgCJYa5iizgt5e0xbRzKUowcqoAP8=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIOLIPg52JXrH9P8AENxe+IB1NPQN
+# uU5olWnSrldEaufaMA0GCSqGSIb3DQEBAQUABIIBAKEN+pkF3jDVj33rxCBDZZpb
+# XV/v3fyEXNcoRZy0dPlwRyDVywIzpF1ZZCb4KljgaIKD4FXay0hxfyvlR2jLdRqM
+# d2u6ng1cw8+S2U/EhB7ZAIkXax9EtNyxhxN5r4AhB4Yna9ZaK419w7fSzbWLYRDo
+# jBCEKNQjKmpdQW1C7cyf8RqbxgkHuiMbe0Pu7MrAy6m/anja/OBFEZ/yUve7SFGX
+# D+mwhq+fbYFZmsHAp2DYU+lI0iP3+BdojCK0WMvHtkHI0O60Fu5pGjBm1wjgM+ir
+# rZhrTr+vcwW4VpXvsL4DDNovMynyxW4miI+uZ0cW6Ft4fXNpMQwrMIhh8XOxJIM=
 # SIG # End signature block

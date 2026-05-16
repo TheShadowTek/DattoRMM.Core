@@ -143,7 +143,7 @@ class DRMMAlert : DRMMObject {
     .SYNOPSIS
         Gets a summary of the alert.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the alert's status, priority, device name, monitor category, and description.
+        The GetSummary method returns a string summarising the alert's status, priority, device name, monitor category, and description.
     .OUTPUTS
         A summary string combining key properties of the alert for easy display.
     #>
@@ -254,7 +254,7 @@ class DRMMAlertContext : DRMMObject {
     .SYNOPSIS
         Gets a summary of the alert context.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the alert context by including the class of the context. This provides a quick overview of the type of context associated with the alert, which can be useful for display purposes and when examining the alert's details in a list or summary view.
+        The GetSummary method returns a string summarising the alert context by including the class of the context. This provides a quick overview of the type of context associated with the alert, which can be useful for display purposes and when examining the alert's details in a list or summary view.
     .OUTPUTS
         A summary string of the alert context.
     #>
@@ -1621,8 +1621,8 @@ class DRMMAlertResponseAction : DRMMObject {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCA1lGF64Ooe+QsS
-# XHeOq8ZBNjUDn9IOf+nDUIeY73cgc6CCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCrRNc0CJHWc8fd
+# hSdX50X3KRw+iGmzX/12G651XsbaeaCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -1644,11 +1644,11 @@ class DRMMAlertResponseAction : DRMMObject {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEII1hFlgyGZ9gNjzRQ3VYZt3x1KDw
-# ECnNSeVNIeWHoFLPMA0GCSqGSIb3DQEBAQUABIIBAJ1jY62bF7KmYTvNSM14mccV
-# 4wzGYLG8PR7g1UqL5mKkbE9mag74519ylRJUiBLPYEfy0TW6VA4TQAciz5L36wAf
-# j/1OUqk4HyjmeDLmikJgArn4jNWhzmb1y74nj6POwRNZRwzvfHx06p11tuQXl0uQ
-# BRy+uTFx2jLPBWnjyJqjKQQt2LvtYqFPyZc7N5UtzyYWDzTjdEMSVYZk70XjVzjy
-# gYtqX6UAKJafU+Nmkv0xRrVHTdvIOoMYFq/M7eNR6/hemX03cZcx5QSjaeG1kDwd
-# e04V//HQ0lV9Xy/git1px9/HILCfUasDkX9iHwcVIetyX/J95uyuM9o/6jy1r+w=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIKzDPLVyG3HoU2rct1BcD4Mxr8gf
+# V53/BmFUMaAO5tTDMA0GCSqGSIb3DQEBAQUABIIBAC3YujJqGGBr2IpEBv/BKvlO
+# +Hd36c2Qcg3Ci4amQFD+Yn6ggY/IOT4wf6+4VudYaGmvsm073jYBUrKs3QO3DQsH
+# 6KckODHNEDSowzxRjif7NBaoZutLPxvIKw+m5MUZejPgpx7RlVSC0n5jiaHrcTM1
+# IXNTwCEpNvfFqjGAPGuZJWz8+oYqkbLlVTlvL6XQcqkK37PJoHDGtBjkEUvH/uDX
+# Xgp37gpOcFcL65TlogjeSd/fio9VhlVg00SUcGVDXhL3dJ14NiR8NEm3AM1rRMLL
+# YIKsiAFxuiUiUDa+5SUUZjfKR/lPXlY90UqQsILB4J+QKk65AtqEUnHnLzrTEqc=
 # SIG # End signature block

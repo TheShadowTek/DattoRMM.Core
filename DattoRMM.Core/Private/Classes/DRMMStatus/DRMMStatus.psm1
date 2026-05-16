@@ -11,11 +11,11 @@ using module '..\DRMMObject\DRMMObject.psm1'
 #>
 class DRMMStatus : DRMMObject {
 
-    # The version information.
+    # The version of the Datto RMM platform.
     [string]$Version
-    # The current status.
+    # The current operational status of the Datto RMM platform.
     [string]$Status
-    # The start time of the status.
+    # The UTC date and time when the Datto RMM service was started.
     [Nullable[datetime]]$Started
 
     DRMMStatus() : base() {
@@ -43,8 +43,8 @@ class DRMMStatus : DRMMObject {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAs6mWsQKW76bBu
-# PNAuq/sQ3tcCZIZCc7Yq7A38X4qNwaCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCpnW2zSsxfUhts
+# Lc9aJ/TUjMqsdVEigJQjTHiJrcklRKCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -66,11 +66,11 @@ class DRMMStatus : DRMMObject {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIHZtf8XCNZW0TKayAQNz7xOibQIe
-# AFfBEUWcdECxR0e8MA0GCSqGSIb3DQEBAQUABIIBACVNkF/k7b1kk9n4KVp8pjcJ
-# ETV3REyG6XoMzJ7/fXdxc2Gc5JdFFSPgXCdIva4gWJCKKnKke8BKDt8OkYeddr7t
-# FzKuWvvE7krSLQwVMXX9zE25xSp7F1utOqsozoVj4c4Ov1By4aQnr80e9lpbbrw6
-# VcW2UEPYlGBZyU97BlTuutJzWimjU86FiIjLJjdUFsmndkUx8sZIVwG2s1kZR2cl
-# xnkgJ7Bu84gYDk2m7NiYDlshumBhcSlYk1r4tQkqxlb5EojsZPVVcyXfS6Ze7Aij
-# IeTpsHW8GWRA+LAIzwxZF9+ZIIvzWi1/YiGaELatmhmzNMvzIYyprf8cdWkaVhY=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICmw4cR5c0hWfqgpXT01zrD+aLDO
+# XRq3f7vIZWBzYtJKMA0GCSqGSIb3DQEBAQUABIIBACUlbybQOlrIxz74tvMM3ipE
+# oOhHIJ4RiLC6WP83iMKjBJVjIyuNgr5zCwrbfJzF0EmU7Vkwh10JBYRxFl59+jrA
+# ZJj6sLmtNcur+eR4m8RTSaw7ACOnJAOY5bzzptY4QYtXKG/kzolLpBBATnwuVqb+
+# lYdl3BJqksbPEZrDjOJXaw//V9u3W2sPUjBKI9ouioT3jinRI9mqqHNdo8m1llB+
+# etjdLqLvm7UEuAlZWqulVR2qW501sUI2MUueyBchXZWAmD9ffFlVobbjnneKZgLy
+# dFqj/TzuhRxgR3q5ruqQas8WTTZL/uF+2DTDgQaMAzCg21jvj29Q0fVqCti52+M=
 # SIG # End signature block

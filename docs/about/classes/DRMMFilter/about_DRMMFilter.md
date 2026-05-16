@@ -33,13 +33,13 @@ The DRMMFilter class provides the following methods:
 
 ### IsGlobal()
 
-Determines if the variable is global in scope.
+Determines if the filter is global in scope.
 
 **Returns:** `bool` - Returns bool
 
 ### IsSite()
 
-Determines if the variable is site-specific in scope.
+Determines if the filter is site-specific in scope.
 
 **Returns:** `bool` - Returns bool
 

@@ -93,3 +93,7 @@ Current session values remain unchanged until the module is reloaded.
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Remove-RMMConfig.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Remove-RMMConfig.md))
+- [Set-RMMConfig](./Set-RMMConfig.md)
+- [Save-RMMConfig](./Save-RMMConfig.md)
+- [Get-RMMConfig](./Get-RMMConfig.md)
+- [about_DattoRMM.CoreConfiguration](../../about/about_DattoRMM.CoreConfiguration.md)

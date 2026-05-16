@@ -67,7 +67,7 @@ class DRMMDevice : DRMMObject {
     [DRMMDeviceUdfs]$Udfs
     # Indicates whether SNMP is enabled on the device.
     [bool]$SnmpEnabled
-    # The class of the device, which may indicate its role or type within the organization.
+    # The class of the device, which may indicate its role or type within the organisation.
     [string]$DeviceClass
     # The URL to access the device's portal in the DRMM system.
     [string]$PortalUrl
@@ -179,6 +179,8 @@ class DRMMDevice : DRMMObject {
         Retrieves the alerts associated with the device, filtered by a specified status.
     .DESCRIPTION
         The GetAlerts method returns an array of DRMMAlert objects representing the alerts associated with the device, filtered by the specified status (e.g., 'Open', 'Resolved', 'All').
+    .OUTPUTS
+        An array of alerts associated with the device, filtered by the specified status.
     #>
     [DRMMAlert[]] GetAlerts([string]$Status) {
 
@@ -333,7 +335,7 @@ class DRMMDevice : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the device, including its hostname and device type.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the device's hostname and its device type category. If the device type information is not available, it defaults to 'Unknown'.
+        The GetSummary method returns a string summarising the device's hostname and its device type category. If the device type information is not available, it defaults to 'Unknown'.
     .OUTPUTS
         A summary string for the device, including its hostname and device type.
     #>
@@ -481,7 +483,7 @@ class DRMMDevice : DRMMObject {
     .SYNOPSIS
         Moves the device to a different site within the DRMM system.
     .DESCRIPTION
-        The Move method takes a target site unique identifier as input and moves the device to the specified
+        The Move method takes a target site unique identifier as input and moves the device to the specified site using the Move-RMMDevice cmdlet. The -Force parameter is used to bypass confirmation prompts.
     .OUTPUTS
         This method does not return a value. It performs an action to move the device to the specified site.
     #>
@@ -1644,8 +1646,8 @@ class DRMMDevicePatchManagement : DRMMObject {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDaRcdRGaZel0Nu
-# c4SzCNBRtfYIY37jOr1QzcLG2W6R4qCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDVMVeX5Ynvdv5E
+# 5l8oPPv2lwxLvSeQm7u4HowDTqtZbKCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -1667,11 +1669,11 @@ class DRMMDevicePatchManagement : DRMMObject {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEINqk634L+fIY7utGlBzQXmFjOS54
-# MMCo8kxZ0N8jWzMuMA0GCSqGSIb3DQEBAQUABIIBAACuvufeV5/d1FgDFJvnLmUM
-# 0AsjxUO/dMTbbNqRIPmkYE6WNT7JjRqQuejRqyExu1dJnJT4WeUPyvUXS8dYHcBT
-# sY5O7dsFTsPn0/20M9xGCw2MUY3cQe3bfmGrRRikRLlGp8a8bOEPgxLx+KmxmFP+
-# qe2S0DNbyzbnGPSAQLCEkyNDILrGJFCFzgZoBQ6KpDZQYkiQ4ReW2jXg5najOxqS
-# KKIRFSEoW1Y0rPiC0DSDTBzABPuV6jRWp2t+fT+rceYRj+AGdxSHkGfMTd7l9XQ6
-# 8VGKUYdGpwIlpcHCA9CWm5CVJQWigZktydye3gmHTiqliuYSZNt3uMvo7OGJnzc=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIADsQbmTCdbnrsLDZIKAGQ3xZGZx
+# IQCr1hh90frZE7pvMA0GCSqGSIb3DQEBAQUABIIBAFt1WXp+O50FDwUYiStcbKW+
+# RIC7KGnT9ORxAgtA9JWyBEB7EFLFWTMmFKUm+FGbYaUisLT8LuLk/8qcy5Yq/rNO
+# gVufsMn6Xuf8XScMiK9LuJDIdEc94clOvtaSRasACE3GY2V9jdAKUngzs+c3qxy6
+# E5u9gtR4iS1z6TlN/Ry5LhF5eUZksL9f1kUS8tHjVJ1e5Upo5BNpDQsh9oQCQBRz
+# jBKRoJPjBpMOwk0LKTZsB37uCC+i1dNzWDinWv8nTWnfPX9vBh03B8BZwtgHdA9a
+# YwvATEvKKwd7S1B5xYN+tKV1HG9s81goiWIVjPpntbdKJ6NFFFyLIl2iD2IP5Gc=
 # SIG # End signature block

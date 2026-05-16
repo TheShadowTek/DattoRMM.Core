@@ -12,7 +12,7 @@ function Show-RMMToken {
         WARNING: The access token is sensitive. Do not share or publish this information.
 
     .NOTES
-        This command requires confirmation and has ConfirmImpact set to Low.
+        This command requires confirmation and has ConfirmImpact set to High.
 
     .EXAMPLE
         Show-RMMToken
@@ -20,6 +20,15 @@ function Show-RMMToken {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Show-RMMToken.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        Disconnect-DattoRMM
+
+    .LINK
+        about_DattoRMM.CoreAuthentication
     #>
     [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='High')]
     param()
@@ -56,8 +65,8 @@ function Show-RMMToken {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCD8a6G6foDhDuDs
-# B04Nb+aSKeKdCADXjaOuZWqlB355OqCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAN8Q1StgWqjiDt
+# lTCFReLwkvsynZK1ry4rjfR/Ss+QkKCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -79,11 +88,11 @@ function Show-RMMToken {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIObBdpgHRxWAdKO+GHP/2uiwhh5m
-# s9d8E5hUoh8WHyTiMA0GCSqGSIb3DQEBAQUABIIBACwUpG4WDMRrBamevK4g+rTT
-# R2GQwfj+4/OEw/vuP5zSVM4j6ucGM84ZnYDlrEdMaCe9Zf1iCqFWSteX1Pe3w4Kv
-# IVl5qj/WMgv2tM9mZnGGpoITffcMJevudYNsKekPMxiMu+yaBpGRbT/9gZ44UL0K
-# g06Ld3p2fNhydbt82Q5W+xA4Q7wSbwjrr3RlHE4e2N8+H3ERDO1V4Ph1AK4fD+/q
-# WGp3PHZzGgW1OKbNJAejbSiyfCsEg4zJBY7m0l/r3PSV13SVAJNkGL1TSoqXhl4i
-# VuwIGSeukITRACNc9G61HllMwMRCJSnFSMOevCNuu+2RdLSqpLp4jjsgcfmFF2A=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICRIs/8jRVupBGNoIYoZvWumqaa8
+# /TaxZpxBqapzLpRmMA0GCSqGSIb3DQEBAQUABIIBAHPSUEJx2zn7KdvxP+IAyIlC
+# 6yh2NgIcNigcfRsrKfXxhI7ureN2W+y6jV9tpObWBZ2VcKxdAcqHANmL31IGSKAt
+# ZbmZ3BC2QXAza3wVNioAjH0CzjXbOhdugE/3GrU1qSvR0DjDoAjB10xNjQ20OvHA
+# TtHnle0EDAgqQK/IODAKNMtcJ9BwzLu16sRHAMhIycS4djGM4AfvVRsf0v3BTqua
+# GH+RHJTNdOOgsSU+jPl/rfTxxVeF+NWGqncOsu17tzwuRvT9GwaBWpLrGSotvvch
+# b8qIDBvypAISzphGUodZqaK8dMsQ8UUiMnjnjGlR4hjrD3jUIM+baJco2JKA7K0=
 # SIG # End signature block

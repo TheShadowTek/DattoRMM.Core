@@ -111,7 +111,7 @@ class DRMMJob : DRMMObject {
     .SYNOPSIS
         Generates a summary string for the job.
     .DESCRIPTION
-        The GetSummary method returns a string summarizing the job's name, status, and age. The age is calculated based on the job's creation date and is formatted to show days, hours, or minutes ago.
+        The GetSummary method returns a string summarising the job's name, status, and age. The age is calculated based on the job's creation date and is formatted to show days, hours, or minutes ago.
     .OUTPUTS
         A summary string representing the job.
     #>
@@ -508,8 +508,8 @@ class DRMMJobStdData : DRMMObject {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCA89lZS2Zxy1M8
-# m5rJ8KhRMMIdoV7OeUOgnNdqArsNjaCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCrDfLV+wAmqn6F
+# R9FPF1dlwSn3tqcfF2hQCwSE+nIAcaCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -531,11 +531,11 @@ class DRMMJobStdData : DRMMObject {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIJSS7cVzU6/m/lWH7sUmSJKU3JO8
-# 6tG7eWr3PjhSzH+2MA0GCSqGSIb3DQEBAQUABIIBABQO3UscQC1sth0VbEKM0qn1
-# kj1mrhpu3ZbjS6D+z6138WnB7k5FEDsiJA28WisekrT0uxcE4bZi9+/lAmVth0L7
-# WDlZ7FYvetv1F8ercdKOV1im29o3Dt6cYrQOimqLRBYGTaGDQgQZ+OuZ/uRZimpd
-# xxExkWQAwENBw+nmCvMDxp1LL9Gh7X35p6B8slcG8KmLy8tyJu+hwcfQ7JpdRoI9
-# +7CMScYZsEvhpYGxF3kawESeukA08+hMD9dFOZnNouRYC3T6EpQibtX5WpwyBwCY
-# 60MWA62D3bmKoHxEwslwx1z9cvX5sRJLHHf/6CxlofNUV6UuKDtYe/6d5wiCVkk=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEINfsY08t20o5X6Lld49nT3wkAFoz
+# s6/e8FIOzZvWQ92IMA0GCSqGSIb3DQEBAQUABIIBAApzIz7IaQs2lW8fqHHoJCSq
+# CXp0j0sZoO8SCbVs/i5/EpbUYrHjuFuiuZLX7hfbFEq8LXUAuhsLK2+GJ6ZwnJ0s
+# gxZ1egH+Kzq7U8LbZ5ZfZkTafact9i2wTdpmVQxSbtw/c5UZ4H1jmTzFo0eJ8d7D
+# 54H6YJ24EgW17fXAQy/OKWiZRT2teSxYZirwLb+3Ti2XhHqu2ADA8xT2I20pAaeO
+# C4Qo2ObFuEg8cUTE1BUjYwi/LKMH4yXb0AaqiAX4pZt7Cq/CypsKm1ESQ7r8nj4e
+# aGG4zJCe4Ktid3kXErB0qOpQigIQBSO0X1L0uiWMn/aHmZdG7oYjtlNAKnUHyEs=
 # SIG # End signature block

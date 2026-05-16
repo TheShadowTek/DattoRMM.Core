@@ -16,7 +16,7 @@ The DRMMNetworkInterface class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Instance   | string | Represents a network interface attached to a device in the Datto RMM platform. |
+| Instance   | string | The instance identifier of the network interface. |
 | Ipv4       | string | The IPv4 address of the network interface. |
 | Ipv6       | string | The IPv6 address of the network interface. |
 | MacAddress | string | The MAC address of the network interface. |

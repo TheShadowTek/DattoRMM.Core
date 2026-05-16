@@ -144,3 +144,5 @@ Best practices:
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMApiKeys.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMApiKeys.md))
+- [Connect-DattoRMM](./Connect-DattoRMM.md)
+- [about_DattoRMM.CoreAuthentication](../../about/about_DattoRMM.CoreAuthentication.md)

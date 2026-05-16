@@ -78,6 +78,12 @@ function Reset-RMMApiKeys {
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Reset-RMMApiKeys.md
+
+    .LINK
+        Connect-DattoRMM
+
+    .LINK
+        about_DattoRMM.CoreAuthentication
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
@@ -157,8 +163,8 @@ Are you sure you want to reset your API keys? This action is irreversible unless
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCnId8L3wVptMSq
-# GYnhwUuVCrRmO93AWwTjYlNdKz+47KCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDkJgOJypXjJbXP
+# KzBKvtxmqm/NEFVZzBo8GnV/S7bcj6CCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -180,11 +186,11 @@ Are you sure you want to reset your API keys? This action is irreversible unless
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICOiapuZu6yrzxJBFJrdoNosRC0V
-# 0zHefFm9gmxTWZWDMA0GCSqGSIb3DQEBAQUABIIBAAjYQM/g1tm37CdNdFtUkla1
-# ipSeSgDTPnXTmmfUC7u3bJs3BGl46dfwVIj55BV3mWjXWKzQovz78CzM2zaKX+Sp
-# L+Yr6EA/2/E1fqCefM/5G38eaqBVsBTlZMlVlT6fXRMdJjVVtBG75l9lsD+k6mfh
-# 5+c/JGp8wpykTlk/nV44zHZGr+oyGWgUQZjOIx4fxmpxvgf5bbTZT3GDYTKypDrs
-# NAxHLZNL8X13AJuvREy2SMyfRErqvB2VPzVJW9U6xj1mpGNfQ2RwKgRXTS+7jEI8
-# e0Dw9KnKToqIAEatVHOrSVRgbE1VzbBcos+wrQNRtGanwZSQjDZJuLsg97f6/mA=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIFUw0Et8cLPsPzPMlHbAPS1jP4RB
+# J46qLeYg0uVIJervMA0GCSqGSIb3DQEBAQUABIIBAC5wVUGCfOpLdau5D/+fA7e8
+# rRSDYYWaPkdsQta0gff4HxBRc2kcWXYGHG6f6uxZtjp4fCGMnDrgmeCUtgKZZbtw
+# 7RvUcWOE5q2LpA3qnhyDcRD2I/Kc3iNXV0+X11KKm7CZDFytfeYC0/6nr2mW1L3J
+# OUsVxxj9Kgmg4pc97CsvDV9N7EmXNI2sNshlIexjBD3J74nLdWfitrV5mcK764e7
+# I0/0RbslKQJMQFM7YBi2cDHEbRd+zysV1QEhU8bdo3ZCeD8wfRM1C8oYfv2T/PWZ
+# llCIcURvqZGZA052Gq3mn3N6cFpLjUseYDJXo8mxyK7yQlLNuLfRrcAt6li08do=
 # SIG # End signature block

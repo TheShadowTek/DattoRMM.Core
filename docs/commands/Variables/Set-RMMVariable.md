@@ -62,7 +62,7 @@ Updates both name and value of an account-level variable by ID.
 
 EXAMPLE 4
 ```powershell
-Get-RMMSite -Name "Main Office" | Get-RMMVariable -Name "SiteCode" | Set-RMMVariable -Value "MO002"
+Get-RMMSite -SiteName "Main Office" | Get-RMMVariable -Name "SiteCode" | Set-RMMVariable -Value "MO002"
 ```
 
 Updates a site-level variable via pipeline.
@@ -254,3 +254,8 @@ the user if the object is out of date compared to the current platform value.
 
 
 - [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Set-RMMVariable.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Set-RMMVariable.md))
+- [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
+- [Get-RMMVariable](./Get-RMMVariable.md)
+- [New-RMMVariable](./New-RMMVariable.md)
+- [Remove-RMMVariable](./Remove-RMMVariable.md)
+- [Get-RMMSite](../Sites/Get-RMMSite.md)

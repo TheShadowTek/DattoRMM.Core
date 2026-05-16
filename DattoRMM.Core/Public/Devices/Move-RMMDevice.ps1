@@ -40,12 +40,12 @@ function Move-RMMDevice {
         Moves a device by specifying both device and target site UIDs.
 
     .EXAMPLE
-        Get-RMMDevice -Hostname "SERVER01" | Move-RMMDevice -TargetSite (Get-RMMSite -Name "New Office")
+        Get-RMMDevice -Hostname "SERVER01" | Move-RMMDevice -TargetSite (Get-RMMSite -SiteName "New Office")
 
         Moves a device to a new site using site objects.
 
     .EXAMPLE
-        Get-RMMSite -Name "Old Site" | Get-RMMDevice | Move-RMMDevice -TargetSiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -Force
+        Get-RMMSite -SiteName "Old Site" | Get-RMMDevice | Move-RMMDevice -TargetSiteUid "a1b2c3d4-e5f6-7890-abcd-ef1234567890" -Force
 
         Moves all devices from one site to another without confirmation prompts.
 
@@ -180,8 +180,8 @@ function Move-RMMDevice {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBWoOhBK5i8o7qV
-# x+j69lbjTqjWy0xOnQOY0YFX3yE+M6CCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAsttT27LPdD9Pa
+# Z2rIgP4hjb6DI9kjtvDytClMETCWBKCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -203,11 +203,11 @@ function Move-RMMDevice {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIIyQ0qv8erq+QDeXS8XIDqNgPjtq
-# uPPRWu+MeNj4XTHfMA0GCSqGSIb3DQEBAQUABIIBADvq5dHcGaPvkgrLWSr1YYRP
-# wVqC4JcwPAOKRbM7tulsxREc7HcX4kyOSDNuOc1p9bM7UsfzswoVG4ocVcUNTvvO
-# ZLVE+ZhqImGft5+5PycotZQIfnh0Q1l0/4ZAltFbzthEcZQLMnELRMoh8uACzUbn
-# h8Qud9YxbJ74vlOAFaJGHzE2/4kX13A73HTCR2EwMBvqladZBdBf1Et579MBOb4p
-# jVW6sYMS5me//sWywK3KdtK0YdWd3evQ9GW19FWIY9TEvqGFZQPdCzEEIykK3gc/
-# bozymyRld1lS4vJIOujmA/sZRMyRYTLALb58NO2i4IPJu3NLja7gGhkHIbPgpN4=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIHObrqDZEUsKgCqUjdzaNciBRKs0
+# 0T9n597K6KpZsDcqMA0GCSqGSIb3DQEBAQUABIIBAC8CeoSNlo6y1MUeut6mkKUi
+# H5j9x9iFwsjSdVbRX1N881nbuyB90LdicuNt33q0alMZsN7Qp3HAgkUPDIbyfQnq
+# Hgv+Rr38TttH/QTV4o0SOX2oVjseiEZmI3dpna2dHzx0DPcNsX/xnKJ0Zy6RHK74
+# TVUKlROc500GvTs1ia0YcXIWpYS/qrTsinhvnwRqAizhHoWMmayNXxLKyJGxX9Xm
+# vNDIC+A7IsL0OaXm0lscShNSEzIt1j6yhu9saBv3u2R8dyeiVaUp0vDv30pJRldh
+# e1euO4Qt+1y09m+MgRu7UEN6wps61bDm5oMsJGjyUtVet2GRmScs6uHGM52zRZE=
 # SIG # End signature block
