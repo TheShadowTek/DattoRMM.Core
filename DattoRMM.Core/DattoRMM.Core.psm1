@@ -85,11 +85,14 @@ $Script:ConfigPath = Join-Path (Join-Path $HOME '.DattoRMM.Core') 'config.json'
 # Load and apply any saved configuration from disk
 Initialize-SavedConfig
 
+# Load user-supplied Format and Types extensions from the profile folder
+# Must run before Initialize-ExportTransforms so that ScriptProperty members
+# defined in user Types.ps1xml files are registered before transform paths
+# that reference them are resolved at export time.
+Initialize-UserExtensions
+
 # Load built-in and user-defined export transforms
 Initialize-ExportTransforms
-
-# Load user-supplied Format and Types extensions from the profile folder
-Initialize-UserExtensions
 
 # Module removal handler - cleanup module variables
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
@@ -121,8 +124,8 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCXV+NwjXc/X19/
-# 42M9GD0QeM2ngsBRlIF/BQKKTKNWGqCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAoB89HEd0DcZmp
+# oO0np/OZaTApKRUOV+A+pFCrkgjP7KCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -144,11 +147,11 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIEza7lmIPaHI50WtSp4tSnYc/oh7
-# TgsRSLkRriPZURAhMA0GCSqGSIb3DQEBAQUABIIBAJpIgFrAmZS+0OOs8A5BB5pA
-# dv+gezVvS6xR6dU/atsKZpGC0aPe5nPVk25fnPbuhXXk7MAs+C5L2RGgeCQKl38B
-# Nj5NSv3LZS57a1DGF2GIi+p9mdRIjPCpziEjTt6dHzHPd4Pfu5iNh+dNfVeIbTew
-# Q61pmLPHH6vo2kUnlAruxKg2Eb3eLVaHcgy2Zg9B0DlNmCpNjkwwtpFjoHEHwi3I
-# WSU2YzFlqDd6+BI7QN7z/TcbtKe38KdXFwxHr5YKcVpBJjVwQrebAlYBKaxVsdLi
-# OvX2Y6nRYm62Uvf2vVTTck5Vt3VSAkZrJCyDU7f9HCivluG8enUF/SKqBuXo1P0=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICsDnWE9Imp5Zqx3s6/oKw6QxMn2
+# rxZPiKYjfmdShvUXMA0GCSqGSIb3DQEBAQUABIIBAFFdxWMuogrOVg249XbePEI+
+# hnQEfndm9Nv4OhkgPKaYxGtWT6bFMqRNmWhGoeCxqFPt88L8KqdFJ7LRvh6hQCQK
+# V0k+K5PhkxdP5yXR12ZuDbUjbOkYUq1Z8xv5HHZfUbQl20LK55kMziUKIz6xLxK+
+# ltMuK1yK9JISA9cWyIXGDOe4nCnjH1Hf3IHrw2HKoEyTRIV5L+hagoGevkLKEta1
+# Uf9ufA9urvHAagNcaXQGVF8eXE5aiJAs+LI9AnryrttPa9PeK9orVDTvT4nVuish
+# aTNc8p4rHULEejjUXhlsDeyN7bd960nfYnw0x52QhTK2qxoCKTbAuyBsQ6Of+AU=
 # SIG # End signature block

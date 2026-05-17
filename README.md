@@ -102,6 +102,7 @@ Run `Get-Help <CommandName>` for detailed parameter and usage information, or se
 | [Throttling](docs/about/about_DattoRMM.CoreThrottling.md) | Adaptive throttling, profiles, concurrent use, and API rate limit details |
 | [Security](docs/about/about_DattoRMM.CoreSecurity.md) | Credential lifecycle, PII handling philosophy, SecureString cross-platform behaviour |
 | [Export](docs/about/about_DattoRMM.CoreExport.md) | CSV export, built-in transforms, custom transform authoring, UDF handling |
+| [PII-Safe Output Pack](docs/examples/PII-Safe-Output-Pack/README.md) | Reference example: PII masking via type, format, and export-transform extensions |
 | [Alert Context Discovery (Beta)](docs/about/about_DattoRMM.CoreAlertContextDiscovery.md) | Guidance for collecting unrecognised alert context schema data during beta |
 | [Beta Overview](docs/beta/about_DattoRMM.CoreBeta.md) | Beta status, expectations, and roadmap to v1 |
 | [Beta Guide](docs/beta/DattoRMM.Core-Beta-Guide.md) | Getting started with the beta, usage tips, and feedback |

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    DattoRMM.Core.PII-Safe.Format.ps1xml
+    PII-Safe Output Pack — Format Extensions
+
+    Overrides the default DRMMUser and DRMMDevice console views so that
+    PII-bearing properties are replaced by their masked equivalents in all
+    standard table and list output.
+
+    IMPORTANT: This file must be loaded AFTER the module, and with -PrependPath
+    (or via the profile folder) so its views take precedence.
+
+    Installation:
+        Copy to: $HOME\.DattoRMM.Core\DattoRMM.Core.PII-Safe.Format.ps1xml
+        The module loads *.Format.ps1xml files from that folder on import.
+
+    Alternatively, load manually in-session after importing the module:
+        Update-FormatData -PrependPath .\DattoRMM.Core.PII-Safe.Format.ps1xml
+
+    This file ALSO requires DattoRMM.Core.PII-Safe.Types.ps1xml to be loaded,
+    as the masked properties must exist before they can be referenced in views.
+
+    Customisation:
+        - Add or remove TableColumnHeader / TableColumnItem pairs to adjust columns.
+        - Adjust column Width values to suit your terminal width.
+        - Rename <Label> values to change the column headings shown in output.
+        - To add a second masked UDF column, add a matching header and item
+          referencing MaskedUdf12 (or whichever property you defined in Types).
+
+    See README.md in this folder for full usage guidance.
+-->
+<Configuration>
+  <ViewDefinitions>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- DRMMUser — PII-Safe views                                          -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!--
+        These views replace the module defaults when this file is loaded first.
+        All five identity fields (Username, FirstName, LastName, Email, Telephone)
+        are replaced by their masked equivalents.
+        Status, Disabled, Created, and LastAccess are non-PII and shown as-is.
+    -->
+
+    <View>
+      <Name>DRMMUser.List</Name>
+      <ViewSelectedBy><TypeName>DRMMUser</TypeName></ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem><Label>Username</Label><PropertyName>MaskedUsername</PropertyName></ListItem>
+              <ListItem><Label>FirstName</Label><PropertyName>MaskedFirstName</PropertyName></ListItem>
+              <ListItem><Label>LastName</Label><PropertyName>MaskedLastName</PropertyName></ListItem>
+              <ListItem><Label>Email</Label><PropertyName>MaskedEmail</PropertyName></ListItem>
+              <ListItem><Label>Telephone</Label><PropertyName>MaskedTelephone</PropertyName></ListItem>
+              <ListItem><Label>Status</Label><PropertyName>Status</PropertyName></ListItem>
+              <ListItem><Label>Disabled</Label><PropertyName>Disabled</PropertyName></ListItem>
+              <ListItem><Label>Created</Label><PropertyName>Created</PropertyName></ListItem>
+              <ListItem><Label>LastAccess</Label><PropertyName>LastAccess</PropertyName></ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <View>
+      <Name>DRMMUser.Table</Name>
+      <ViewSelectedBy><TypeName>DRMMUser</TypeName></ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader><Label>Username</Label><Width>20</Width></TableColumnHeader>
+          <TableColumnHeader><Label>FirstName</Label><Width>12</Width></TableColumnHeader>
+          <TableColumnHeader><Label>LastName</Label><Width>12</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Email</Label><Width>25</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Telephone</Label><Width>18</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Status</Label><Width>10</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Disabled</Label><Width>8</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Created</Label><Width>20</Width></TableColumnHeader>
+          <TableColumnHeader><Label>LastAccess</Label><Width>20</Width></TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem><PropertyName>MaskedUsername</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>MaskedFirstName</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>MaskedLastName</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>MaskedEmail</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>MaskedTelephone</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Status</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Disabled</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Created</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>LastAccess</PropertyName></TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- DRMMDevice — PII-Safe views                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!--
+        List view:
+          - LastLoggedInUser is replaced by MaskedLastLoggedInUser.
+          - MaskedUdf5 is appended after the Udfs summary so you can see at a
+            glance that the PII-bearing UDF is masked. Change MaskedUdf5 to
+            match whatever property you defined in Types if your PII is in a
+            different UDF.
+
+        Table view:
+          - The default table omits LastLoggedInUser and UDF data. This override
+            adds MaskedLastLoggedInUser and MaskedUdf5 as the final two columns
+            so they appear when -IncludeLastLoggedInUser is used and UDF data
+            is present. All other default columns are preserved.
+    -->
+
+    <View>
+      <Name>DRMMDevice.List</Name>
+      <ViewSelectedBy><TypeName>DRMMDevice</TypeName></ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <ListItem><Label>Hostname</Label><PropertyName>Hostname</PropertyName></ListItem>
+              <ListItem><Label>Uid</Label><PropertyName>Uid</PropertyName></ListItem>
+              <ListItem><Label>Id</Label><PropertyName>Id</PropertyName></ListItem>
+              <ListItem><Label>SiteName</Label><PropertyName>SiteName</PropertyName></ListItem>
+              <ListItem><Label>SiteUid</Label><PropertyName>SiteUid</PropertyName></ListItem>
+              <ListItem><Label>DeviceType</Label><ScriptBlock>if ($_.DeviceType) {"$($_.DeviceType.Category)/$($_.DeviceType.Type)"} else {''}</ScriptBlock></ListItem>
+              <ListItem><Label>Online</Label><PropertyName>Online</PropertyName></ListItem>
+              <ListItem><Label>OperatingSystem</Label><PropertyName>OperatingSystem</PropertyName></ListItem>
+              <ListItem><Label>IntIpAddress</Label><PropertyName>IntIpAddress</PropertyName></ListItem>
+              <ListItem><Label>ExtIpAddress</Label><PropertyName>ExtIpAddress</PropertyName></ListItem>
+              <ListItem><Label>Domain</Label><PropertyName>Domain</PropertyName></ListItem>
+              <!-- LastLoggedInUser replaced with masked equivalent -->
+              <ListItem><Label>LastLoggedInUser</Label><PropertyName>MaskedLastLoggedInUser</PropertyName></ListItem>
+              <ListItem><Label>LastSeen</Label><PropertyName>LastSeen</PropertyName></ListItem>
+              <ListItem><Label>LastReboot</Label><PropertyName>LastReboot</PropertyName></ListItem>
+              <ListItem><Label>LastAuditDate</Label><PropertyName>LastAuditDate</PropertyName></ListItem>
+              <ListItem><Label>CreationDate</Label><PropertyName>CreationDate</PropertyName></ListItem>
+              <ListItem><Label>Description</Label><PropertyName>Description</PropertyName></ListItem>
+              <ListItem><Label>CagVersion</Label><PropertyName>CagVersion</PropertyName></ListItem>
+              <ListItem><Label>A64Bit</Label><PropertyName>A64Bit</PropertyName></ListItem>
+              <ListItem><Label>RebootRequired</Label><PropertyName>RebootRequired</PropertyName></ListItem>
+              <ListItem><Label>Suspended</Label><PropertyName>Suspended</PropertyName></ListItem>
+              <ListItem><Label>Deleted</Label><PropertyName>Deleted</PropertyName></ListItem>
+              <ListItem><Label>SnmpEnabled</Label><PropertyName>SnmpEnabled</PropertyName></ListItem>
+              <ListItem><Label>NetworkProbe</Label><PropertyName>NetworkProbe</PropertyName></ListItem>
+              <ListItem><Label>DeviceClass</Label><PropertyName>DeviceClass</PropertyName></ListItem>
+              <ListItem><Label>SoftwareStatus</Label><PropertyName>SoftwareStatus</PropertyName></ListItem>
+              <ListItem><Label>WarrantyDate</Label><PropertyName>WarrantyDate</PropertyName></ListItem>
+              <ListItem><Label>Antivirus</Label><ScriptBlock>if ($_.Antivirus) {$_.Antivirus.GetSummary()} else {''}</ScriptBlock></ListItem>
+              <ListItem><Label>PatchManagement</Label><ScriptBlock>if ($_.PatchManagement) {$_.PatchManagement.ToString()} else {''}</ScriptBlock></ListItem>
+              <ListItem><Label>Udfs</Label><ScriptBlock>if ($_.Udfs) {$_.Udfs.ToString()} else {''}</ScriptBlock></ListItem>
+              <!-- PII-bearing UDF masked — change MaskedUdf5 to match your Types definition -->
+              <ListItem><Label>MaskedUdf5</Label><PropertyName>MaskedUdf5</PropertyName></ListItem>
+              <ListItem><Label>PortalUrl</Label><PropertyName>PortalUrl</PropertyName></ListItem>
+              <ListItem><Label>WebRemoteUrl</Label><PropertyName>WebRemoteUrl</PropertyName></ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+
+    <View>
+      <Name>DRMMDevice.Table</Name>
+      <ViewSelectedBy><TypeName>DRMMDevice</TypeName></ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader><Label>Hostname</Label><Width>20</Width></TableColumnHeader>
+          <TableColumnHeader><Label>SiteName</Label><Width>20</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Online</Label><Width>6</Width></TableColumnHeader>
+          <TableColumnHeader><Label>DeviceType</Label><Width>18</Width></TableColumnHeader>
+          <TableColumnHeader><Label>OperatingSystem</Label><Width>25</Width></TableColumnHeader>
+          <TableColumnHeader><Label>IntIpAddress</Label><Width>15</Width></TableColumnHeader>
+          <TableColumnHeader><Label>ExtIpAddress</Label><Width>15</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Domain</Label><Width>18</Width></TableColumnHeader>
+          <TableColumnHeader><Label>LastSeen</Label><Width>20</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Reboot</Label><Width>7</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Antivirus</Label><Width>30</Width></TableColumnHeader>
+          <!-- LastLoggedInUser and UDF5 added as PII-safe masked columns -->
+          <TableColumnHeader><Label>LastLoggedInUser</Label><Width>20</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Udf5</Label><Width>20</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Uid</Label><Width>36</Width></TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem><PropertyName>Hostname</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>SiteName</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Online</PropertyName></TableColumnItem>
+              <TableColumnItem><ScriptBlock>if ($_.DeviceType) {"$($_.DeviceType.Category)/$($_.DeviceType.Type)"} else {''}</ScriptBlock></TableColumnItem>
+              <TableColumnItem><PropertyName>OperatingSystem</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>IntIpAddress</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>ExtIpAddress</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Domain</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>LastSeen</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>RebootRequired</PropertyName></TableColumnItem>
+              <TableColumnItem><ScriptBlock>if ($_.Antivirus) {$_.Antivirus.GetSummary()} else {''}</ScriptBlock></TableColumnItem>
+              <!-- Masked values — empty string when the raw field is not populated -->
+              <TableColumnItem><PropertyName>MaskedLastLoggedInUser</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>MaskedUdf5</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Uid</PropertyName></TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+  </ViewDefinitions>
+</Configuration>

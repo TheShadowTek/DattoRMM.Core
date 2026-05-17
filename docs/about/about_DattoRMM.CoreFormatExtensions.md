@@ -122,4 +122,5 @@ User-supplied files in `$HOME/.DattoRMM.Core/` are user-owned and are not expect
 - [about_DattoRMM.CoreTypeExtensions](about_DattoRMM.CoreTypeExtensions.md)
 - [about_DattoRMM.CoreExport](about_DattoRMM.CoreExport.md)
 - [about_DattoRMM.Core](about_DattoRMM.Core.md)
+- [PII-Safe Output Pack](../examples/PII-Safe-Output-Pack/README.md) — worked example overriding default views with masked properties
 - [about_Format.ps1xml](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_format.ps1xml)

@@ -353,6 +353,7 @@ Get-RMMDevice | Export-RMMObjectCsv -Path .\StatusReport.csv -TransformName Stat
 - about_DattoRMM.CoreFormatExtensions
 - about_DattoRMM.Core
 - about_DattoRMM.CoreConfiguration
+- PII-Safe Output Pack — worked example using export transform overrides with masked ScriptProperties
 - about_ClassIndex
 SEE ALSO
     https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/about_DattoRMM.CoreExport.md

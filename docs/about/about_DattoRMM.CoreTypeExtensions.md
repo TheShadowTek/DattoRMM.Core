@@ -135,4 +135,5 @@ User-supplied files in `$HOME/.DattoRMM.Core/` are user-owned and are not expect
 - [about_DattoRMM.CoreFormatExtensions](about_DattoRMM.CoreFormatExtensions.md)
 - [about_DattoRMM.CoreExport](about_DattoRMM.CoreExport.md)
 - [about_DattoRMM.Core](about_DattoRMM.Core.md)
+- [PII-Safe Output Pack](../examples/PII-Safe-Output-Pack/README.md) — worked example using ScriptProperty masking
 - [about_Types.ps1xml](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_types.ps1xml)

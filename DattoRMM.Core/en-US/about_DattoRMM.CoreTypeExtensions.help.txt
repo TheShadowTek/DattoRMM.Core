@@ -133,6 +133,7 @@ User-supplied files in `$HOME/.DattoRMM.Core/` are user-owned and are not expect
 - about_DattoRMM.CoreFormatExtensions
 - about_DattoRMM.CoreExport
 - about_DattoRMM.Core
+- PII-Safe Output Pack — worked example using ScriptProperty masking
 - about_Types.ps1xml
 SEE ALSO
     https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/about/about_DattoRMM.CoreTypeExtensions.md

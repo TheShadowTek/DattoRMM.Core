@@ -75,7 +75,7 @@ Use the custom type/format extension system:
 
 See about_DattoRMM.CoreTypeExtensions and about_DattoRMM.CoreFormatExtensions for examples.
 
-A reference implementation is provided in `docs/examples/PII-Safe-Output-Pack/`.
+A reference example is provided in docs/examples/PII-Safe-Output-Pack/.
 
 ### WhatIf Support
 
