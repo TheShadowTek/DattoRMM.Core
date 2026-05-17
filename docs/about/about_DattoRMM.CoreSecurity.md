@@ -2,11 +2,11 @@
 
 ## SHORT DESCRIPTION
 
-Describes the security model of the DattoRMM.Core module, including credential handling, PII protection, SecureString behaviour, and safe automation patterns.
+Describes the security model of the DattoRMM.Core module, including credential handling, PII handling philosophy, SecureString behaviour, and safe automation patterns.
 
 ## LONG DESCRIPTION
 
-Security is a core design principle of the DattoRMM.Core module. The module handles API credentials, access tokens, and personally identifiable information (PII) with deliberate safeguards throughout the session lifecycle.
+Security is a core design principle of the DattoRMM.Core module. The module handles API credentials and access tokens with deliberate safeguards throughout the session lifecycle. API data — including fields that may contain personally identifiable information (PII) — is returned exactly as provided by the Datto RMM API. PII governance is the caller's responsibility.
 
 ## CREDENTIAL HANDLING
 
@@ -50,39 +50,39 @@ In all cases, sensitive variables are cleared from scope as soon as they are no 
 > [!NOTE]
 > This is a .NET Core platform limitation, not specific to this module. On non-Windows platforms, `SecureString` provides reduced protection compared to Windows.
 
-## PII PROTECTION
+## PII HANDLING
 
-Several API endpoints return personally identifiable information (e.g., usernames, email addresses, last logged-in user). The module applies deliberate safeguards to these operations.
+### Philosophy
 
-### High-Impact Confirmation
+DattoRMM.Core is an SDK — a neutral data layer. It returns Datto RMM API data exactly as provided, without filtering, masking, or confirmation prompts on read operations.
 
-Commands that return PII use PowerShell's `ConfirmImpact` system. By default, these commands prompt for confirmation before executing:
+Read operations such as `Get-RMMUser`, `Get-RMMDevice`, and `Get-RMMActivityLog` behave like standard SDK cmdlets (comparable to Microsoft Graph, AzureAD, or Exchange Online PowerShell). No confirmation prompt is applied.
 
-- `Get-RMMUser` — Returns user accounts with names, emails, and phone numbers.
-- `Get-RMMDevice -IncludeLastLoggedInUser` — Includes the last logged-in username for each device.
-- `Get-RMMActivityLog` — Returns activity logs that may include user identifiers.
+The reasons for this approach:
 
-### Bypassing Confirmation
+- **Consistency** — All data flows (object properties, CSV exports, pipeline, console output, transcripts) would require coordinated masking. Partial masking creates false security.
+- **User control** — PII governance is the caller's responsibility, not the SDK's. Different organisations have different policies.
+- **Discoverability** — Data masked by default hides legitimate values from legitimate users.
+- **Extensibility** — The module provides type and format extension points for users who need PII protection without requiring changes to the module itself.
 
-For automation, use `-Force` to suppress the confirmation prompt:
+### If You Need PII Protection
 
-```powershell
-Get-RMMUser -Force
-Get-RMMDevice -IncludeLastLoggedInUser -Force
-```
+Use the custom type/format extension system:
 
-Or use `-Confirm:$false` for the same effect:
+- **Types.ps1xml** — Define masked `ScriptProperty` members (e.g., `MaskedEmail`, `MaskedTelephone`) and reference them in pipelines or export transforms.
+- **Format.ps1xml** — Override default table views to display only masked properties.
+- **Profile folder** — Place files in `$HOME/.DattoRMM.Core/` following the `DattoRMM.Core.*.Types.ps1xml` and `DattoRMM.Core.*.Format.ps1xml` naming convention.
+- **MaskString utility** — `[DRMMObject]::MaskString($value, $visibleChars, $maskChar)` is available as a static method for use in custom type properties.
 
-```powershell
-Get-RMMUser -Confirm:$false
-```
+See [about_DattoRMM.CoreTypeExtensions](about_DattoRMM.CoreTypeExtensions.md) and [about_DattoRMM.CoreFormatExtensions](about_DattoRMM.CoreFormatExtensions.md) for examples.
+
+A reference implementation is provided in `docs/examples/PII-Safe-Output-Pack/`.
 
 ### WhatIf Support
 
-All PII-sensitive and mutating commands support `-WhatIf` to preview what would happen without making changes:
+Mutating commands support `-WhatIf` to preview what would happen without making changes:
 
 ```powershell
-Get-RMMUser -WhatIf
 Move-RMMDevice -DeviceUid "abc-123" -TargetSiteUid "def-456" -WhatIf
 ```
 
@@ -102,12 +102,12 @@ For bulk automation, you can set `$ConfirmPreference` to control confirmation be
 
 ```powershell
 $ConfirmPreference = 'None'
-# All commands run without confirmation prompts
-Get-RMMUser
+# All mutating commands run without confirmation prompts
+Get-RMMSite -Name "Staging" | Get-RMMDevice | Move-RMMDevice -Site $Target
 ```
 
 > [!WARNING]
-> Setting `$ConfirmPreference` to `None` disables all confirmation prompts. Use this only in controlled automation scripts where you understand every operation being performed.
+> Setting `$ConfirmPreference` to `None` disables all confirmation prompts, including for destructive operations. Use this only in controlled automation scripts where you understand every operation being performed.
 
 ## API KEY SECURITY
 
@@ -151,16 +151,10 @@ Get-RMMSite -Name "Staging" | Get-RMMDevice | Move-RMMDevice -Site $TargetSite -
 Get-RMMAlert -Status Open | Resolve-RMMAlert -Force
 ```
 
-### Example 3: Check PII-sensitive data before committing
-
-```powershell
-Get-RMMUser -WhatIf
-# Review what would be returned, then:
-Get-RMMUser -Force
-```
-
 ## SEE ALSO
 
 - [about_DattoRMM.Core](about_DattoRMM.Core.md)
 - [about_DattoRMM.CoreAuthentication](about_DattoRMM.CoreAuthentication.md)
 - [about_DattoRMM.CoreConfiguration](about_DattoRMM.CoreConfiguration.md)
+- [about_DattoRMM.CoreTypeExtensions](about_DattoRMM.CoreTypeExtensions.md)
+- [about_DattoRMM.CoreFormatExtensions](about_DattoRMM.CoreFormatExtensions.md)

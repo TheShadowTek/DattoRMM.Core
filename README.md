@@ -13,7 +13,7 @@ A PowerShell module for the Datto RMM API v2. Provides typed, object-oriented ac
 - **Typed Object Model** — All API responses are returned as strongly-typed PowerShell classes with properties, methods, and pipeline support.
 - **Full Pipeline Integration** — Chain commands naturally: `Get-RMMSite | Get-RMMDevice | Get-RMMAlert`.
 - **Adaptive Throttling** — Automatic rate-limit management with configurable profiles (Aggressive, Medium, Cautious) for safe single or concurrent use.
-- **Secure by Default** — Credentials handled via `SecureString` and `PSCredential`; tokens held in memory only; PII-sensitive operations require explicit confirmation.
+- **Secure by Default** — Credentials handled via `SecureString` and `PSCredential`; tokens held in memory only; PII governance is user-controlled via the custom type/format extension system.
 - **Persistent Configuration** — Platform region, throttle profile, page size, and retry settings saved to a JSON config file for consistent behaviour across sessions.
 - **Opinionated CSV Export** — Export Sites, Devices, and Alerts to flattened CSV using named column transforms. Supports user defined transformations.
 - **Comprehensive Coverage** — 43 commands across 12 domains: Account, Activity Log, Alerts, Auth, Components, Config, Devices, Export, Filters, Jobs, Sites, and Variables.
@@ -100,7 +100,7 @@ Run `Get-Help <CommandName>` for detailed parameter and usage information, or se
 | [Authentication](docs/about/about_DattoRMM.CoreAuthentication.md) | All authentication methods, credential storage, and automation scenarios |
 | [Configuration](docs/about/about_DattoRMM.CoreConfiguration.md) | Platform regions, page size, retry settings, and persistent configuration |
 | [Throttling](docs/about/about_DattoRMM.CoreThrottling.md) | Adaptive throttling, profiles, concurrent use, and API rate limit details |
-| [Security](docs/about/about_DattoRMM.CoreSecurity.md) | PII handling, credential lifecycle, SecureString cross-platform behaviour |
+| [Security](docs/about/about_DattoRMM.CoreSecurity.md) | Credential lifecycle, PII handling philosophy, SecureString cross-platform behaviour |
 | [Export](docs/about/about_DattoRMM.CoreExport.md) | CSV export, built-in transforms, custom transform authoring, UDF handling |
 | [Alert Context Discovery (Beta)](docs/about/about_DattoRMM.CoreAlertContextDiscovery.md) | Guidance for collecting unrecognised alert context schema data during beta |
 | [Beta Overview](docs/beta/about_DattoRMM.CoreBeta.md) | Beta status, expectations, and roadmap to v1 |

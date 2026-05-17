@@ -19,7 +19,7 @@ The DattoRMM.Core module provides an object-oriented interface to the Datto RMM 
 - **Typed Object Model** — API responses are returned as strongly-typed classes (`DRMMDevice`, `DRMMSite`, `DRMMAlert`, etc.) with helper methods and consistent property access.
 - **Pipeline Integration** — Commands accept and produce typed objects for natural chaining: sites to devices, devices to alerts, devices to jobs.
 - **Adaptive Throttling** — Automatic request pacing that adjusts in real time based on API utilisation, with configurable profiles for single and concurrent use.
-- **Secure Credential Handling** — API secrets handled via `SecureString` and `PSCredential`; tokens stored in memory only; PII-sensitive operations require explicit confirmation.
+- **Secure Credential Handling** — API secrets handled via `SecureString` and `PSCredential`; tokens stored in memory only; PII governance is user-controlled via the custom type/format extension system.
 - **Persistent Configuration** — Platform region, throttle profile, page size, and API resilience settings saved to a JSON config file.
 - **Auto-Pagination** — Paginated API endpoints are handled transparently, streaming results into the pipeline.
 - **Automatic Token Refresh** — Optional credential retention for long-running automation without manual re-authentication.
@@ -43,7 +43,7 @@ Retrieve account information, platform status, network mappings, and user accoun
 
 - `Get-RMMAccount` — Account details, billing descriptor, and device counts.
 - `Get-RMMStatus` — Platform operational status and health.
-- `Get-RMMUser` — User accounts (PII-protected, requires confirmation or `-Force`).
+- `Get-RMMUser` — User accounts including names, email addresses, and phone numbers.
 - `Get-RMMNetMapping` — Datto Networking site mappings.
 - `Get-RMMRequestRate` — Current API request rate.
 
@@ -112,7 +112,7 @@ Retrieve reusable automation components.
 ### Activity Log
 Retrieve activity logs with date, entity, and category filtering.
 
-- `Get-RMMActivityLog` — Activity logs globally or per site (PII-protected).
+- `Get-RMMActivityLog` — Activity logs globally or per site.
 
 ### Variables
 Manage account-level and site-level variables.
