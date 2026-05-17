@@ -85,22 +85,11 @@ class DRMMDevice : DRMMObject {
     [bool]$NetworkProbe
     # Indicates whether the device was onboarded via network monitoring.
     [bool]$OnboardedViaNetworkMonitor
-    # Indicates whether the last logged in user information is revealed for the device.
-    [bool]$RevealLastLoggedInUser
 
-    DRMMDevice() : base() {
+    DRMMDevice() : base() {}
 
-        $this.RevealLastLoggedInUser = $false
-
-    }
 
     static [DRMMDevice] FromAPIMethod([pscustomobject]$Response) {
-
-        return [DRMMDevice]::FromAPIMethod($Response, $false)
-
-    }
-
-    static [DRMMDevice] FromAPIMethod([pscustomobject]$Response, [bool]$RevealLastLoggedInUser) {
 
         if ($null -eq $Response) {
 
@@ -117,18 +106,7 @@ class DRMMDevice : DRMMObject {
         $Device.Hostname = $Response.hostname
         $Device.IntIpAddress = $Response.intIpAddress
         $Device.OperatingSystem = $Response.operatingSystem
-        $Device.RevealLastLoggedInUser = $RevealLastLoggedInUser
-
-        if ($RevealLastLoggedInUser) {
-
-            $Device.LastLoggedInUser = $Response.lastLoggedInUser
-
-        } else {
-
-            $Device.LastLoggedInUser = [DRMMObject]::MaskString([string]$Response.lastLoggedInUser, 2, '*')
-
-        }
-
+        $Device.LastLoggedInUser = $Response.lastLoggedInUser
         $Device.Domain = $Response.domain
         $Device.CagVersion = $Response.cagVersion
         $Device.DisplayVersion = $Response.displayVersion

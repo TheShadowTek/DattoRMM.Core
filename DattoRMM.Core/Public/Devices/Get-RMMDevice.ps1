@@ -18,9 +18,6 @@ function Get-RMMDevice {
         When specifying a Filter, site-scoped filters automatically route to the appropriate site
         endpoint. Global-scoped filters route to the account endpoint.
 
-        When using -IncludeLastLoggedInUser, the function will prompt for confirmation due to
-        privacy implications unless -Force is specified.
-
     .PARAMETER Site
         A DRMMSite object to retrieve devices for. Accepts pipeline input from Get-RMMSite.
 
@@ -61,12 +58,6 @@ function Get-RMMDevice {
 
     .PARAMETER SiteName
         Filter devices by site name (partial match supported). Only available at global scope.
-
-    .PARAMETER IncludeLastLoggedInUser
-        Include the last logged in user information. Requires confirmation unless -Force is specified.
-
-    .PARAMETER Force
-        Suppress the confirmation prompt when using -IncludeLastLoggedInUser.
 
     .PARAMETER NetSummary
         Retrieve network interface summary for devices at a site. Returns DRMMDeviceNetworkInterface objects.
@@ -122,11 +113,6 @@ function Get-RMMDevice {
 
         Gets network interface information for devices at all sites.
 
-    .EXAMPLE
-        Get-RMMDevice -DeviceUid $guid -IncludeLastLoggedInUser -Force
-
-        Retrieves a device with last logged in user information without confirmation prompt.
-
     .INPUTS
         DRMMSite. You can pipe site objects from Get-RMMSite.
         DRMMDevice. You can pipe device objects from Get-RMMDevice.
@@ -147,12 +133,6 @@ function Get-RMMDevice {
         This function requires an active connection to the Datto RMM API.
         Use Connect-DattoRMM to authenticate before calling this function.
 
-        The -IncludeLastLoggedInUser parameter requires explicit confirmation due to privacy
-        implications. Use -Force to bypass the confirmation prompt.
-
-        When piping sites or filters, the IncludeLastLoggedInUser parameter applies to all
-        objects in the pipeline.
-
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDevice.md
 
@@ -172,7 +152,7 @@ function Get-RMMDevice {
         Get-RMMDeviceAudit
     #>
 
-    [CmdletBinding(DefaultParameterSetName = 'Global', SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding(DefaultParameterSetName = 'Global', SupportsShouldProcess)]
     param (
         [Parameter(
             ParameterSetName = 'Site',
@@ -270,42 +250,11 @@ function Get-RMMDevice {
         [string]
         $SiteName,
 
-        [Parameter(ParameterSetName = 'Global')]
-        [Parameter(ParameterSetName = 'Site')]
-        [Parameter(ParameterSetName = 'SiteUid')]
-        [Parameter(ParameterSetName = 'Device')]
-        [Parameter(ParameterSetName = 'DeviceUid')]
-        [Parameter(ParameterSetName = 'DeviceId')]
-        [Parameter(ParameterSetName = 'DeviceMac')]
-        [Parameter(ParameterSetName = 'Filter')]
-        [switch]
-        $IncludeLastLoggedInUser,
-
-        [Parameter(ParameterSetName = 'Global')]
-        [Parameter(ParameterSetName = 'Site')]
-        [Parameter(ParameterSetName = 'SiteUid')]
-        [Parameter(ParameterSetName = 'Device')]
-        [Parameter(ParameterSetName = 'DeviceUid')]
-        [Parameter(ParameterSetName = 'DeviceId')]
-        [Parameter(ParameterSetName = 'DeviceMac')]
-        [Parameter(ParameterSetName = 'Filter')]
-        [switch]
-        $Force,
-
         [Parameter(ParameterSetName = 'SiteNetSummary', Mandatory = $true)]
         [Parameter(ParameterSetName = 'SiteUidNetSummary', Mandatory = $true)]
         [switch]
         $NetSummary
     )
-
-    begin {
-
-        if ($IncludeLastLoggedInUser -and -not $Force -and -not $PSCmdlet.ShouldProcess("Device information", "Retrieve last logged in user data")) {
-
-            return
-
-        }
-    }
 
     process {
 
@@ -451,7 +400,7 @@ function Get-RMMDevice {
 
             Invoke-ApiMethod @APIMethod | ForEach-Object {
 
-                [DRMMDevice]::FromAPIMethod($_, $IncludeLastLoggedInUser.IsPresent)
+                [DRMMDevice]::FromAPIMethod($_)
 
             }
 
@@ -459,7 +408,7 @@ function Get-RMMDevice {
 
             $Response = Invoke-ApiMethod @APIMethod
 
-            [DRMMDevice]::FromAPIMethod($Response, $IncludeLastLoggedInUser.IsPresent)
+            [DRMMDevice]::FromAPIMethod($Response)
 
         }
     }
