@@ -217,7 +217,7 @@ The function retrieves alerts in batches and automatically handles pagination.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md)
 - [Resolve-RMMAlert](./Resolve-RMMAlert.md)
 - [about_DRMMAlert](../../about/classes/DRMMAlert/about_DRMMAlert.md)
 - [Get-RMMDevice](../Devices/Get-RMMDevice.md)

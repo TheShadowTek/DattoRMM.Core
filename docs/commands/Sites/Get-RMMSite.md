@@ -236,7 +236,7 @@ Only request extended properties when needed.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Get-RMMSite.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Get-RMMSite.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Get-RMMSite.md)
 - [about_DRMMSite](../../about/classes/DRMMSite/about_DRMMSite.md)
 - [Get-RMMDevice](../Devices/Get-RMMDevice.md)
 - [Get-RMMFilter](../Filter/Get-RMMFilter.md)

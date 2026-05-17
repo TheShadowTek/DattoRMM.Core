@@ -81,7 +81,7 @@ Use Connect-DattoRMM to authenticate before calling this function.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Component/Get-RMMComponent.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Component/Get-RMMComponent.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Component/Get-RMMComponent.md)
 - [about_DRMMComponent](../../about/classes/DRMMComponent/about_DRMMComponent.md)
 - [New-RMMQuickJob](../Jobs/New-RMMQuickJob.md)
 - [Get-RMMJob](../Jobs/Get-RMMJob.md)

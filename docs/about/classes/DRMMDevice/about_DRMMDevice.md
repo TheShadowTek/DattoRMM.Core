@@ -51,7 +51,6 @@ The DRMMDevice class exposes the following properties:
 | WebRemoteUrl               | string                    | The URL for web remote access to the device. |
 | NetworkProbe               | bool                      | Information about the device's network probe status. |
 | OnboardedViaNetworkMonitor | bool                      | Indicates whether the device was onboarded via network monitoring. |
-| RevealLastLoggedInUser     | bool                      | Indicates whether the last logged in user information is revealed for the device. |
 
 ## METHODS
 

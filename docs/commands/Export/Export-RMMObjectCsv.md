@@ -286,7 +286,7 @@ Restart the module to pick up changes.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Export/Export-RMMObjectCsv.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Export/Export-RMMObjectCsv.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Export/Export-RMMObjectCsv.md)
 - [Get-RMMSite](../Sites/Get-RMMSite.md)
 - [Get-RMMDevice](../Devices/Get-RMMDevice.md)
 - [Get-RMMAlert](../Alerts/Get-RMMAlert.md)

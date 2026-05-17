@@ -262,7 +262,7 @@ try {
                     $OnlineDocUrl = $null
                     foreach ($line in $block -split "`n") {
                         $line = $line.Trim()
-                        if ($line -match '(https?://[^\s]+)') {
+                        if ($line -match '(https?://[^\s\]\)]+)') {
                             $OnlineDocUrl = $matches[1]
                             break
                         }
@@ -347,13 +347,16 @@ try {
                     }
                 })
                 
-                # Save cleaned content
+                # Normalise to LF (eliminates CRLF drift from PlatyPS on Windows)
+                $Content = $Content -replace '\r\n', "`n" -replace '\r', "`n"
+
+                # Always write post-processed content — PlatyPS already overwrote the file with raw
+                # output via New-MarkdownHelp -Force, so we must always write back the clean version.
                 Set-Content -Path $MarkdownFile -Value $Content -NoNewline
-                
                 if ($Changes.Count -gt 0) {
                     Write-Host "    Changes: $($Changes -join ', ')" -ForegroundColor Gray
                 }
-                Write-Host "    ✓ Generated successfully" -ForegroundColor Green
+                Write-Host "    ✓ Generated" -ForegroundColor Green
                 $Generated++
                 
             } catch {

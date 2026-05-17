@@ -216,8 +216,6 @@ try {
     Write-Host "  Found $($DomainFiles.Count) domain file(s)" -ForegroundColor Gray
     $DomainFiles | ForEach-Object { Write-Host "    $($_.Name)" -ForegroundColor Gray }
 
-    $NewestClassFile = $DomainFiles | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-
     # Build Regions by processing each domain file independently.
     # The folder name comes from the file's parent directory, not from #region markers.
     Write-Host "`nParsing domain files..." -ForegroundColor Yellow
@@ -249,10 +247,11 @@ try {
 
         if (-not $Region) {
             $Region = [PSCustomObject]@{
-                Name      = $FolderName
+                Name       = $FolderName
                 FolderName = $FolderName
-                StartLine = 0
-                Classes   = [System.Collections.Generic.List[object]]::new()
+                StartLine  = 0
+                SourceFile = $DomainFile
+                Classes    = [System.Collections.Generic.List[object]]::new()
             }
             $Regions.Add($Region)
         }
@@ -428,7 +427,7 @@ try {
                 if (-not (Test-Path $MarkdownFile)) {
                     $ShouldGenerate = $true
                     $Reason = "new file"
-                } elseif ($NewestClassFile.LastWriteTime -gt (Get-Item $MarkdownFile).LastWriteTime) {
+                } elseif ($Region.SourceFile.LastWriteTime -gt (Get-Item $MarkdownFile).LastWriteTime) {
                     $ShouldGenerate = $true
                     $Reason = "source modified"
                 }

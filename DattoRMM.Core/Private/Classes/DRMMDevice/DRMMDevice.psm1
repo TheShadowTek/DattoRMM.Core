@@ -85,22 +85,11 @@ class DRMMDevice : DRMMObject {
     [bool]$NetworkProbe
     # Indicates whether the device was onboarded via network monitoring.
     [bool]$OnboardedViaNetworkMonitor
-    # Indicates whether the last logged in user information is revealed for the device.
-    [bool]$RevealLastLoggedInUser
 
-    DRMMDevice() : base() {
+    DRMMDevice() : base() {}
 
-        $this.RevealLastLoggedInUser = $false
-
-    }
 
     static [DRMMDevice] FromAPIMethod([pscustomobject]$Response) {
-
-        return [DRMMDevice]::FromAPIMethod($Response, $false)
-
-    }
-
-    static [DRMMDevice] FromAPIMethod([pscustomobject]$Response, [bool]$RevealLastLoggedInUser) {
 
         if ($null -eq $Response) {
 
@@ -117,18 +106,7 @@ class DRMMDevice : DRMMObject {
         $Device.Hostname = $Response.hostname
         $Device.IntIpAddress = $Response.intIpAddress
         $Device.OperatingSystem = $Response.operatingSystem
-        $Device.RevealLastLoggedInUser = $RevealLastLoggedInUser
-
-        if ($RevealLastLoggedInUser) {
-
-            $Device.LastLoggedInUser = $Response.lastLoggedInUser
-
-        } else {
-
-            $Device.LastLoggedInUser = [DRMMObject]::MaskString([string]$Response.lastLoggedInUser, 2, '*')
-
-        }
-
+        $Device.LastLoggedInUser = $Response.lastLoggedInUser
         $Device.Domain = $Response.domain
         $Device.CagVersion = $Response.cagVersion
         $Device.DisplayVersion = $Response.displayVersion
@@ -1646,8 +1624,8 @@ class DRMMDevicePatchManagement : DRMMObject {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDVMVeX5Ynvdv5E
-# 5l8oPPv2lwxLvSeQm7u4HowDTqtZbKCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDbeJ6D2zPsH8Jy
+# PV5uvXO+RnV55Dhf/EJqlLmS1CW3AKCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -1669,11 +1647,11 @@ class DRMMDevicePatchManagement : DRMMObject {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIADsQbmTCdbnrsLDZIKAGQ3xZGZx
-# IQCr1hh90frZE7pvMA0GCSqGSIb3DQEBAQUABIIBAFt1WXp+O50FDwUYiStcbKW+
-# RIC7KGnT9ORxAgtA9JWyBEB7EFLFWTMmFKUm+FGbYaUisLT8LuLk/8qcy5Yq/rNO
-# gVufsMn6Xuf8XScMiK9LuJDIdEc94clOvtaSRasACE3GY2V9jdAKUngzs+c3qxy6
-# E5u9gtR4iS1z6TlN/Ry5LhF5eUZksL9f1kUS8tHjVJ1e5Upo5BNpDQsh9oQCQBRz
-# jBKRoJPjBpMOwk0LKTZsB37uCC+i1dNzWDinWv8nTWnfPX9vBh03B8BZwtgHdA9a
-# YwvATEvKKwd7S1B5xYN+tKV1HG9s81goiWIVjPpntbdKJ6NFFFyLIl2iD2IP5Gc=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIBM6Q+ghDy5JEX7shv63DtF/uQr6
+# CZlrZIvC8EIz4LiFMA0GCSqGSIb3DQEBAQUABIIBAJnkLmVtdiuXDRYCNbDsZh00
+# GOIKvPzDiPwzdn6Pn822QspiA7ViOou14qW7+86VFSfz3uJHeSmwLibGJ8AjiCkB
+# EmNNSAdU9A9oQSW8O2PVEig4es8ZBuwxE1V2/17DNKxWZ16KERA3WQ7q8O0VG5R7
+# SrRWkcnqE+LyjDEndl+qgq99JtExrmPUZf/bkISqogo1sz6W6QJMRr67KYuYrAfe
+# 9koZF8MTw6Cw++t2B0pyMpaiUN9X3ckRvSkw7thFXiAMEyz6DleDUcx7n+CCKGCj
+# CbhgufgOA3AyDu0QSKXaslX40zdmKvpIMm7uobFSJv6BM55xMYYf7Uk0f9A74mk=
 # SIG # End signature block

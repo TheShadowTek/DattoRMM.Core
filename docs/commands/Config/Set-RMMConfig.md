@@ -304,7 +304,7 @@ Use -Persist to save for future sessions.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Set-RMMConfig.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Set-RMMConfig.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Set-RMMConfig.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [Save-RMMConfig](./Save-RMMConfig.md)
 - [Get-RMMConfig](./Get-RMMConfig.md)

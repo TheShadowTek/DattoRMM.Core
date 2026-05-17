@@ -186,7 +186,7 @@ Alternatively, use Get-RMMDevice -FilterId to retrieve devices by numeric filter
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Filter/Get-RMMFilter.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Filter/Get-RMMFilter.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Filter/Get-RMMFilter.md)
 - [about_DRMMFilter](../../about/classes/DRMMFilter/about_DRMMFilter.md)
 - [Get-RMMDevice](../Devices/Get-RMMDevice.md)
 - [Get-RMMSite](../Sites/Get-RMMSite.md)

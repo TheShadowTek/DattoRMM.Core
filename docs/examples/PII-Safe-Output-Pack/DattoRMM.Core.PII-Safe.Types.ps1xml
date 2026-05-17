@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    DattoRMM.Core.PII-Safe.Types.ps1xml
+    PII-Safe Output Pack — Type Extensions
+
+    Adds masked ScriptProperty members to DRMMUser and DRMMDevice.
+    Raw API values are unchanged; masked properties are additive.
+
+    Installation:
+        Copy to: $HOME\.DattoRMM.Core\DattoRMM.Core.PII-Safe.Types.ps1xml
+        The module loads *.Types.ps1xml files from that folder on import.
+
+    Alternatively, load manually in-session:
+        Update-TypeData -PrependPath .\DattoRMM.Core.PII-Safe.Types.ps1xml
+
+    Customisation:
+        - VisibleChars controls how many leading characters are revealed.
+        - MaskChar can be changed to any single character (default: '*').
+        - Duplicate a ScriptProperty block to add masking for additional UDFs.
+
+    See README.md in this folder for full usage guidance.
+-->
+<Types>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- DRMMUser — Mask identity fields                                    -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!--
+      Masked properties are added alongside the raw properties.
+      The Format override (DattoRMM.Core.PII-Safe.Format.ps1xml) replaces
+      the default console views so only the masked versions are shown.
+      Raw values remain fully accessible via $user.Email, $user.FirstName, etc.
+  -->
+  <Type>
+    <Name>DRMMUser</Name>
+    <Members>
+
+      <!--
+          MaskedUsername
+          Reveals the first 2 characters of the username.
+          Example: "jsmith" → "js****"
+      -->
+      <ScriptProperty>
+        <Name>MaskedUsername</Name>
+        <GetScriptBlock>[DRMMObject]::MaskString($this.Username, 2, '*')</GetScriptBlock>
+      </ScriptProperty>
+
+      <!--
+          MaskedFirstName
+          Reveals the first initial only.
+          Example: "Jane" → "J***"
+      -->
+      <ScriptProperty>
+        <Name>MaskedFirstName</Name>
+        <GetScriptBlock>[DRMMObject]::MaskString($this.FirstName, 1, '*')</GetScriptBlock>
+      </ScriptProperty>
+
+      <!--
+          MaskedLastName
+          Reveals the first initial only.
+          Example: "Smith" → "S****"
+      -->
+      <ScriptProperty>
+        <Name>MaskedLastName</Name>
+        <GetScriptBlock>[DRMMObject]::MaskString($this.LastName, 1, '*')</GetScriptBlock>
+      </ScriptProperty>
+
+      <!--
+          MaskedEmail
+          Reveals the first 2 characters of the full address.
+          Example: "jane.smith@contoso.com" → "ja********************"
+          Note: Domain is masked along with the rest of the address.
+                Increase VisibleChars if partial-domain visibility is acceptable in your environment.
+      -->
+      <ScriptProperty>
+        <Name>MaskedEmail</Name>
+        <GetScriptBlock>[DRMMObject]::MaskString($this.Email, 2, '*')</GetScriptBlock>
+      </ScriptProperty>
+
+      <!--
+          MaskedTelephone
+          Reveals the first 3 characters (typically a country or area code prefix).
+          Example: "+44 7700 900123" → "+44************"
+      -->
+      <ScriptProperty>
+        <Name>MaskedTelephone</Name>
+        <GetScriptBlock>[DRMMObject]::MaskString($this.Telephone, 3, '*')</GetScriptBlock>
+      </ScriptProperty>
+
+    </Members>
+  </Type>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- DRMMDevice — Mask last logged-in user and a PII-bearing UDF        -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!--
+      LastLoggedInUser is only populated when Get-RMMDevice is called with
+      -IncludeLastLoggedInUser. The masked property is safe to access at all
+      times; it returns '***' when the raw value is empty or null.
+
+      UDF masking:
+        The example below masks UDF5, chosen here as a stand-in for any UDF
+        your organisation uses to store PII (contact email, assigned user,
+        ticket owner, etc.).
+
+        To mask a different UDF:
+          1. Change the property name  (MaskedUdf5  → MaskedUdf12, etc.)
+          2. Change the Udfs reference ($this.Udfs.Udf5 → $this.Udfs.Udf12, etc.)
+
+        To mask multiple UDFs, duplicate the ScriptProperty block for each one.
+
+        UDF numbers run from Udf1 to Udf300.
+  -->
+  <Type>
+    <Name>DRMMDevice</Name>
+    <Members>
+
+      <!--
+          MaskedLastLoggedInUser
+          Reveals the first 2 characters of the username.
+          Example: "CONTOSO\jsmith" → "CO************"
+      -->
+      <ScriptProperty>
+        <Name>MaskedLastLoggedInUser</Name>
+        <GetScriptBlock>[DRMMObject]::MaskString($this.LastLoggedInUser, 2, '*')</GetScriptBlock>
+      </ScriptProperty>
+
+      <!--
+          MaskedUdf5
+          Masks the value stored in UDF5.
+          Change Udf5 to the UDF number that contains PII in your environment.
+          Returns an empty string when Udfs is null (device retrieved without UDF data)
+          or when UDF5 has not been set; returns '***' when the value is an empty string.
+      -->
+      <ScriptProperty>
+        <Name>MaskedUdf5</Name>
+        <GetScriptBlock>
+          if ($null -eq $this.Udfs) {return [string]::Empty}
+          [DRMMObject]::MaskString($this.Udfs.Udf5, 2, '*')
+        </GetScriptBlock>
+      </ScriptProperty>
+
+    </Members>
+  </Type>
+
+</Types>

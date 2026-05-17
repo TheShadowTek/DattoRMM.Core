@@ -103,7 +103,7 @@ class DRMMActivityLog : DRMMObject {
         $EntityStr = if ($this.Entity) { $this.Entity } else { 'Unknown' }
         $CategoryStr = if ($this.Category) { $this.Category } else { 'Unknown' }
         $ActionStr = if ($this.Action) { $this.Action } else { 'Unknown' }
-        $TargetStr = if ($this.Hostname) { $this.Hostname } elseif ($this.User) { $this.User.UserName } else { '' }
+        $TargetStr = if ($this.Hostname) { $this.Hostname } elseif ($this.User) { $this.User.Username } else { '' }
 
         return "[$EntityStr] ${CategoryStr}: ${ActionStr} - $TargetStr"
 
@@ -1070,7 +1070,7 @@ class DRMMActivityLogUser : DRMMObject {
     # The unique identifier for the user associated with the activity log entry.
     [long]$Id
     # The username of the user associated with the activity log entry.
-    [string]$UserName
+    [string]$Username
     # The first name of the user associated with the activity log entry.
     [string]$FirstName
     # The last name of the user associated with the activity log entry.
@@ -1090,7 +1090,7 @@ class DRMMActivityLogUser : DRMMObject {
 
         $User = [DRMMActivityLogUser]::new()
         $User.Id = $Response.id
-        $User.UserName = $Response.userName
+        $User.Username = $Response.userName
         $User.FirstName = $Response.firstName
         $User.LastName = $Response.lastName
 
@@ -1110,11 +1110,11 @@ class DRMMActivityLogUser : DRMMObject {
 
         if ($this.FirstName -and $this.LastName) {
 
-            return "$($this.FirstName) $($this.LastName) ($($this.UserName))"
+            return "$($this.FirstName) $($this.LastName) ($($this.Username))"
 
-        } elseif ($this.UserName) {
+        } elseif ($this.Username) {
 
-            return $this.UserName
+            return $this.Username
 
         } else {
 
@@ -1126,8 +1126,8 @@ class DRMMActivityLogUser : DRMMObject {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDDvMuNZ099CfkW
-# 6c/05nkCZGySGTUagc5+Y0JayHFHL6CCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCA0X9mHAzNmQe8L
+# odeQuzMHUHfzVG5kTx/bDcfc2O1C0qCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -1149,11 +1149,11 @@ class DRMMActivityLogUser : DRMMObject {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIBxnovwE+Co9nAyiZWnFPbQrnSNJ
-# YkAR8ECK/nqm+GgIMA0GCSqGSIb3DQEBAQUABIIBAHdGaG/dJrn1OGCON/rVDiqy
-# aXdbXML4/uCmiBLXbt7udPYehcAW8CVDYDSF5PT3bBAFwHjHlIZnMsDs7T+vLOdZ
-# PetGlWnde+p8CaFH60DM7DVmBeUVS1TwTOVc3q978j/U4cdTDgwX5FLioeqpdIqR
-# Q7f1ZaCl5JDQmfdR8lSFhQe1n+l6gQRBe73hbNLjJYSIX3UShgy0Ge9UMQc7glkW
-# psffrSYk+rLWyQIFizrf7ARBd7mBSp0q5r0QBjdf7Q8e5Z0PKAePrUBMm2MsszaP
-# RyX5HxqAWg/sP7mQcA+jgjbxPSGEhvW8dJZuQmOHrOKlNQhKoStQYocyF++EFLU=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIGssY3+GRsOjarApo/0LmxdNyyRl
+# d2tAi4269wDbl/ORMA0GCSqGSIb3DQEBAQUABIIBACA2+tmUCDyxeJ5fFIKu+H1l
+# vFok3XTQa7kY3Tt++xzRSJSkd/m9SlhIfcZa3XIt0ry9yAm/Bj+csMDomZ+D9rgR
+# EmXoBuA6iUCNrYFSKt4UDtwDM6j/oNzykWejadJESW770/GTpkS9Ux0cZL+26IU3
+# 4qWQIe3IWd+XvBoeGg7pJSSKqnRjn1f9naKlM0e8O6vwujVlTXI4x6x3/6Him12h
+# Fd+f7rArx/BLPcJoalJG5MYIRqoANf/biE7GaLvwuLBA1qTT2ANbn6oSxxnwmWpg
+# uc7/RglX6Prj50+V5pIz3hphsu/aQBTFm/KCWI9M0CmpaCHVLLQF/rMWaC0+duM=
 # SIG # End signature block

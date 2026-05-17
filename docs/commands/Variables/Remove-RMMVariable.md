@@ -154,7 +154,7 @@ deleted from the Datto RMM system.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Remove-RMMVariable.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Remove-RMMVariable.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Remove-RMMVariable.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [Get-RMMVariable](./Get-RMMVariable.md)
 - [New-RMMVariable](./New-RMMVariable.md)

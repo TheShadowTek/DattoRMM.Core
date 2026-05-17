@@ -114,7 +114,7 @@ Site settings control how the Datto RMM agent behaves for devices in that site.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Get-RMMSiteSettings.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Get-RMMSiteSettings.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Get-RMMSiteSettings.md)
 - [about_DRMMSite](../../about/classes/DRMMSite/about_DRMMSite.md)
 - [Get-RMMSite](./Get-RMMSite.md)
 - [Set-RMMSiteProxy](./Set-RMMSiteProxy.md)

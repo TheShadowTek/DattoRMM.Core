@@ -50,7 +50,7 @@ The output shows:
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Get-RMMConfig.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Get-RMMConfig.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Get-RMMConfig.md)
 - [Set-RMMConfig](./Set-RMMConfig.md)
 - [Save-RMMConfig](./Save-RMMConfig.md)
 - [Remove-RMMConfig](./Remove-RMMConfig.md)

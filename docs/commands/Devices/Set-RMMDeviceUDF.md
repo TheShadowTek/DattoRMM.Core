@@ -246,7 +246,7 @@ Best practices for UDF usage:
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUdf.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUdf.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Set-RMMDeviceUdf.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
 - [Get-RMMDevice](./Get-RMMDevice.md)

@@ -223,7 +223,7 @@ function fetches it using Get-RMMVariable by name.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/New-RMMVariable.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/New-RMMVariable.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/New-RMMVariable.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [Get-RMMVariable](./Get-RMMVariable.md)
 - [Set-RMMVariable](./Set-RMMVariable.md)

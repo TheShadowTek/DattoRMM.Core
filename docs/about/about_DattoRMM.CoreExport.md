@@ -356,4 +356,5 @@ Get-RMMDevice | Export-RMMObjectCsv -Path .\StatusReport.csv -TransformName Stat
 - [about_DattoRMM.CoreFormatExtensions](about_DattoRMM.CoreFormatExtensions.md)
 - [about_DattoRMM.Core](about_DattoRMM.Core.md)
 - [about_DattoRMM.CoreConfiguration](about_DattoRMM.CoreConfiguration.md)
+- [PII-Safe Output Pack](../examples/PII-Safe-Output-Pack/README.md) — worked example using export transform overrides with masked ScriptProperties
 - [about_ClassIndex](./classes/about_ClassIndex.md)

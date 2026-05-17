@@ -152,7 +152,7 @@ routes to an ESXi or printer audit endpoint, the -Software switch is ignored.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDeviceAudit.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDeviceAudit.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDeviceAudit.md)
 - [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
 - [Get-RMMDevice](./Get-RMMDevice.md)
 - [Get-RMMDeviceSoftware](./Get-RMMDeviceSoftware.md)

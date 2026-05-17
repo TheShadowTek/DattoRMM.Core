@@ -191,8 +191,8 @@
                 <PropertyName>Id</PropertyName>
               </ListItem>
               <ListItem>
-                <Label>UserName</Label>
-                <PropertyName>UserName</PropertyName>
+                <Label>Username</Label>
+                <PropertyName>Username</PropertyName>
               </ListItem>
               <ListItem>
                 <Label>FirstName</Label>
@@ -213,8 +213,8 @@
 <!-- SIG # Begin signature block -->
 <!-- MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor -->
 <!-- BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG -->
-<!-- KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBL/LyZE4yozbaR -->
-<!-- aFLu43SFUlzc5RR7kJZa38kHMd+/KKCCA04wggNKMIICMqADAgECAhB464iXHfI6 -->
+<!-- KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBS5VvGXf2VgQ0s -->
+<!-- UZUsNudl+nKHWfj6zLIdX9Ydm9e4KqCCA04wggNKMIICMqADAgECAhB464iXHfI6 -->
 <!-- gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk -->
 <!-- ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz -->
 <!-- MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl -->
@@ -236,11 +236,11 @@
 <!-- IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE -->
 <!-- kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC -->
 <!-- gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG -->
-<!-- CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIPbD8V9iEtiZuT0qnamyR83uFBlI -->
-<!-- 5CwQqLGlfjifgU3vMA0GCSqGSIb3DQEBAQUABIIBAFCu5C3vuKSAm6K+HplqSODW -->
-<!-- 9gs+KfektiOJLLDzfDygo2s35oAhsOVIyJ13kWmIXX5wC06a0+nUPEjWxHqtehpj -->
-<!-- 1xoY/I4q86ez8lC/rTEDPMlM56CXfCQCx1w7MnxssI6jppN1GUwjM+WHxbMGUxT8 -->
-<!-- BKIjT+aiBvaDUB4fIbK/0nSl+mru9JA4nSl6DR1OxfD68Ct9SBoHXkCkM9UiFhJK -->
-<!-- tuHrGxUyTLJxfRmH1hUygSn+V/9JQZ84pOwHN+ALKVJkIx4HMUQXHwiJOKxUs7Dx -->
-<!-- Len7jI7+XqfKgYN8Qj7tS7fuA0+f2gLn4syOK67DNpsbfSm0m1q+yHYvDb7zogY= -->
+<!-- CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIBGyl7kSvVgRpyZSvefnYlKRm+x9 -->
+<!-- FR5Ni7/c6jyYKlbNMA0GCSqGSIb3DQEBAQUABIIBAGY/0LdXeUdOQ4K4KU7h1LhL -->
+<!-- ktXuoi6n5iIlUnvjrrtOLxYXVww7XWAOLje4U6rXAQlinc0NQkOpe+uzIGsqh7J3 -->
+<!-- R6OLazL4Ms+OXnJ9HWjgnLr2Xcilql/oOrTRsDJEpnLI7dBjOtEsCr3lLOnVdMjo -->
+<!-- PU/XVe1J45VPR3zF44jvino3tYT3TDbUOci0xcFL/L7e2SkaayWsDEIy+iLOKyvW -->
+<!-- bo4Y+fcRcpoyIDiwl3pga1A/ZcnmFEptmihyNn8TrtgArcdtiD5IsKpFgWwuReJx -->
+<!-- /E6GHBH7LBIeSyBmQIQ3yDpWZ2KveUY5m43fEsxui1B0NQDts4K7t2a6DnlWLao= -->
 <!-- SIG # End signature block -->

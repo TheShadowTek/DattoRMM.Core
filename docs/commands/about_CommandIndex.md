@@ -50,7 +50,7 @@ A reference index of all public functions in the DattoRMM.Core module, organised
 | [`Disconnect-DattoRMM`](Auth/Disconnect-DattoRMM.md) | Disconnects from the Datto RMM API and clears authentication information. |
 | [`Request-RMMToken`](Auth/Request-RMMToken.md) | Requests a new Datto RMM API access token and returns a DRMMToken object. |
 | [`Reset-RMMApiKeys`](Auth/Reset-RMMApiKeys.md) | Resets the authenticated user's API access and secret keys in Datto RMM. |
-| [`Show-RMMToken`](Auth/Show-RMMToken.md) | Displays the current Datto RMM API token and authentication details. |
+| [`Set-RMMTokenClipboard`](Auth/Set-RMMTokenClipboard.md) | Copies the current Datto RMM API access token to the clipboard. |
 
 ## Component
 

@@ -17,7 +17,7 @@ The DRMMActivityLogUser class exposes the following properties:
 | Property | Type | Description |
 |----------|------|-------------|
 | Id        | long   | The unique identifier for the user associated with the activity log entry. |
-| UserName  | string | The username of the user associated with the activity log entry. |
+| Username  | string | The username of the user associated with the activity log entry. |
 | FirstName | string | The first name of the user associated with the activity log entry. |
 | LastName  | string | The last name of the user associated with the activity log entry. |
 

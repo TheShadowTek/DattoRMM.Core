@@ -131,7 +131,7 @@ For details on -UseExperimentalDetailClasses, see Get-RMMActivityLog help.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJobResult.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJobResult.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/Get-RMMJobResult.md)
 - [about_DRMMJobResult](../../about/about_DRMMJobResult.md)
 - [Get-RMMActivityLog](../ActivityLog/Get-RMMActivityLog.md)
 - [Get-RMMJob](./Get-RMMJob.md)
