@@ -11,37 +11,24 @@ function Get-RMMUser {
         The Get-RMMUser function retrieves all user accounts in the Datto RMM system. This
         includes user information such as email addresses, phone numbers, roles, and access levels.
 
-        PRIVACY NOTICE: This function retrieves personally identifiable information (PII)
-        including user email addresses and phone numbers. By default, this function requires
-        confirmation before executing. Use -Force to bypass the confirmation prompt.
-
-    .PARAMETER Force
-        Bypasses the confirmation prompt. Use this when automating scripts where interactive
-        confirmation is not possible.
-
     .EXAMPLE
         Get-RMMUser
 
         Retrieves all users after confirmation.
 
     .EXAMPLE
-        Get-RMMUser -Force
-
-        Retrieves all users without confirmation prompt.
-
-    .EXAMPLE
-        Get-RMMUser -Force | Where-Object {$_.Role -eq 'Administrator'}
+        Get-RMMUser | Where-Object {$_.Role -eq 'Administrator'}
 
         Retrieves all administrator users.
 
     .EXAMPLE
-        Get-RMMUser -Force | Select-Object Name, Email, Role
+        Get-RMMUser | Select-Object Name, Email, Role
 
         Retrieves all users and displays selected properties.
 
     .EXAMPLE
-        $Users = Get-RMMUser -Force
-        PS > $Users | Group-Object Role | Select-Object Name, Count
+        $Users = Get-RMMUser
+        PS > $Users | Group-Object Role | Select-Object Name, Count | Format-Table -AutoSize
 
         Retrieves users and groups them by role to show user counts per role.
 
@@ -63,48 +50,31 @@ function Get-RMMUser {
         This function requires an active connection to the Datto RMM API.
         Use Connect-DattoRMM to authenticate before calling this function.
 
-        This function retrieves PII and requires high-impact confirmation by default.
-        Handle user data in compliance with your organisation's privacy policies.
-
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMUser.md
 
     .LINK
         Connect-DattoRMM
     #>
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding()]
 
-    param (
-        [switch]
-        $Force
-    )
+    param ()
 
-    begin {
+    Write-Debug "Getting RMM users"
 
-        if (-not $Force -and -not $PSCmdlet.ShouldProcess("Account users", "Retrieve user information including email addresses and phone numbers")) {
-
-            return
-
-        }
+    $APIMethod = @{
+        Path = 'account/users'
+        Method = 'Get'
+        Paginate = $true
+        PageElement = 'users'
     }
 
-    process {
+    Write-Debug "Getting all account users"
 
-        Write-Debug "Getting RMM users"
+    Invoke-ApiMethod @APIMethod | ForEach-Object {
 
-        $APIMethod = @{
-            Path = 'account/users'
-            Method = 'Get'
-            Paginate = $true
-            PageElement = 'users'
-        }
+        [DRMMUser]::FromAPIMethod($_)
 
-        Write-Debug "Getting all account users"
-        Invoke-ApiMethod @APIMethod | ForEach-Object {
-
-            [DRMMUser]::FromAPIMethod($_)
-
-        }
     }
 }
 
