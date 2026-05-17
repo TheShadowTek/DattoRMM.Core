@@ -209,7 +209,7 @@ Site-level variables override global variables with the same name.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Get-RMMVariable.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Get-RMMVariable.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Variables/Get-RMMVariable.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [New-RMMVariable](./New-RMMVariable.md)
 - [Set-RMMVariable](./Set-RMMVariable.md)

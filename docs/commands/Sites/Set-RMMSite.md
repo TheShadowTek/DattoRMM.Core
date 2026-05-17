@@ -325,7 +325,7 @@ Remove-RMMSiteProxy for proxy configuration changes.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Set-RMMSite.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Set-RMMSite.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Sites/Set-RMMSite.md)
 - [about_DRMMSite](../../about/classes/DRMMSite/about_DRMMSite.md)
 - [Get-RMMSite](./Get-RMMSite.md)
 - [Set-RMMSiteProxy](./Set-RMMSiteProxy.md)

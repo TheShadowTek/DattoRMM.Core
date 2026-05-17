@@ -312,7 +312,7 @@ prefer using the typed function for a richer, documented experience.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Invoke-RMMApiMethod.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Invoke-RMMApiMethod.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Invoke-RMMApiMethod.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [Get-RMMDevice](../Devices/Get-RMMDevice.md)
 - [Get-RMMSite](../Sites/Get-RMMSite.md)

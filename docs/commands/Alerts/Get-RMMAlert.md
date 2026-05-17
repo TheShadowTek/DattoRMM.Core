@@ -5,32 +5,32 @@ Retrieves alerts from the Datto RMM API.
 
 ## SYNTAX
 
-### Global (Default)
+Global (Default)
 ```
 Get-RMMAlert [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### Site
+Site
 ```
 Get-RMMAlert -Site <DRMMSite> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### SiteUid
+SiteUid
 ```
 Get-RMMAlert -SiteUid <Guid> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### Device
+Device
 ```
 Get-RMMAlert -Device <DRMMDevice> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### DeviceUid
+DeviceUid
 ```
 Get-RMMAlert -DeviceUid <Guid> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### Alert
+Alert
 ```
 Get-RMMAlert -AlertUid <Guid> [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
@@ -50,43 +50,43 @@ retrieve alerts for filtered sets of sites or devices.
 
 ## EXAMPLES
 
-### EXAMPLE 1
-```
+EXAMPLE 1
+```powershell
 Get-RMMAlert
 ```
 
 Retrieves all open alerts at the account level.
 
-### EXAMPLE 2
-```
+EXAMPLE 2
+```powershell
 Get-RMMDevice -FilterId 12345 | Get-RMMAlert -Status Resolved
 ```
 
 Gets all devices matching filter 12345 and retrieves their resolved alerts.
 
-### EXAMPLE 3
-```
+EXAMPLE 3
+```powershell
 Get-RMMSite -SiteName "Contoso" | Get-RMMAlert -Status All
 ```
 
 Gets the site named "Contoso" and retrieves all alerts for that site (open and resolved).
 
-### EXAMPLE 4
-```
+EXAMPLE 4
+```powershell
 Get-RMMSite | Where-Object {$_.Name -like "Branch*"} | Get-RMMAlert
 ```
 
 Gets all sites with names starting with "Branch" and retrieves all open alerts.
 
-### EXAMPLE 5
-```
+EXAMPLE 5
+```powershell
 Get-RMMDevice -Hostname "SERVER01" | Get-RMMAlert
 ```
 
 Gets the device named "SERVER01" and retrieves all its open alerts.
 
-### EXAMPLE 6
-```
+EXAMPLE 6
+```powershell
 Get-RMMAlert -AlertUid "0e6cf376-e60a-4dc2-95b3-daa122e74de9"
 ```
 
@@ -95,10 +95,10 @@ Returns the alert regardless of its state
 (open or resolved).
 Useful when the alert's status is unknown but the UID is available.
 
-### EXAMPLE 7
-```
+EXAMPLE 7
+```powershell
 $Site = Get-RMMSite -SiteName "Main Office"
-PS > Get-RMMAlert -SiteUid $Site.Uid
+Get-RMMAlert -SiteUid $Site.Uid
 ```
 
 Retrieves open alerts for a specific site using its UID.
@@ -199,31 +199,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
-
 ## INPUTS
 
-### DRMMSite. You can pipe site objects from Get-RMMSite.
-### You can also pipe objects with DeviceUid or SiteUid properties.
+DRMMSite. You can pipe site objects from Get-RMMSite.
+You can also pipe objects with DeviceUid or SiteUid properties.
 ## OUTPUTS
 
-### DRMMAlert. Returns alert objects with details about the alert status, priority, source, and more.
+DRMMAlert. Returns alert objects with details about the alert status, priority, source, and more.
 ## NOTES
 This function requires an active connection to the Datto RMM API.
 Use Connect-DattoRMM to authenticate before calling this function.
@@ -234,13 +216,9 @@ The function retrieves alerts in batches and automatically handles pagination.
 
 ## RELATED LINKS
 
-[https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md)
 
-[Resolve-RMMAlert]()
-
-[about_DRMMAlert]()
-
-[Get-RMMDevice]()
-
-[Get-RMMSite]()
-
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Get-RMMAlert.md)
+- [Resolve-RMMAlert](./Resolve-RMMAlert.md)
+- [about_DRMMAlert](../../about/classes/DRMMAlert/about_DRMMAlert.md)
+- [Get-RMMDevice](../Devices/Get-RMMDevice.md)
+- [Get-RMMSite](../Sites/Get-RMMSite.md)

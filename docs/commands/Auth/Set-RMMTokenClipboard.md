@@ -26,14 +26,14 @@ sensitive environments.
 
 ## EXAMPLES
 
-### EXAMPLE 1
-```
+EXAMPLE 1
+```powershell
 Set-RMMTokenClipboard
 Copies the current API access token to the clipboard after confirmation.
 ```
 
-### EXAMPLE 2
-```
+EXAMPLE 2
+```powershell
 Set-RMMTokenClipboard -Force
 Copies the token to the clipboard without prompting for confirmation.
 ```
@@ -86,24 +86,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
-
 ## INPUTS
 
 ## OUTPUTS
@@ -114,11 +96,8 @@ Use -Force to suppress the confirmation prompt in automation scripts.
 
 ## RELATED LINKS
 
-[https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Set-RMMTokenClipboard.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Set-RMMTokenClipboard.md)
 
-[Connect-DattoRMM]()
-
-[Disconnect-DattoRMM]()
-
-[about_DattoRMM.CoreAuthentication]()
-
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Auth/Set-RMMTokenClipboard.md)
+- [Connect-DattoRMM](./Connect-DattoRMM.md)
+- [Disconnect-DattoRMM](./Disconnect-DattoRMM.md)
+- [about_DattoRMM.CoreAuthentication](../../about/about_DattoRMM.CoreAuthentication.md)

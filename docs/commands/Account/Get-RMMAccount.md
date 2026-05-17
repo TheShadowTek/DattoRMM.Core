@@ -76,7 +76,7 @@ string showing online/total devices and percentage.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMAccount.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMAccount.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMAccount.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [Get-RMMDevice](../Devices/Get-RMMDevice.md)
 - [about_DRMMAccount](../../about/classes/DRMMAccount/about_DRMMAccount.md)

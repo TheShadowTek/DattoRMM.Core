@@ -9,21 +9,21 @@ Global (Default)
 ```
 Get-RMMActivityLog [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>] [-Category <String[]>]
  [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-UseExperimentalDetailClasses]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 Site
 ```
 Get-RMMActivityLog [-Site <DRMMSite[]>] [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
  [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
- [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 SiteId
 ```
 Get-RMMActivityLog [-SiteId <Int64[]>] [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
  [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
- [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,10 +38,6 @@ You can specify sites by:
 - Passing SiteId(s) directly
 - Omitting both for global (all sites) scope
 
-The function prompts for confirmation before retrieving logs for each site, including in global
-mode.
-Supports Yes/No/Yes to All/No to All responses for safe handling of PII.
-
 ## EXAMPLES
 
 EXAMPLE 1
@@ -50,7 +46,6 @@ Get-RMMActivityLog -Start "2024-01-01T00:00:00Z" -End "2024-01-02T00:00:00Z"
 ```
 
 Retrieves activity logs for all sites for January 1st, 2024.
-Prompts for each site.
 
 EXAMPLE 2
 ```powershell
@@ -60,7 +55,6 @@ Get-RMMSite -SiteName "Main Office" | Get-RMMActivityLog -Start $Start -End $End
 ```
 
 Retrieves activity logs for the "Main Office" site.
-Prompts for confirmation.
 
 EXAMPLE 3
 ```powershell
@@ -68,7 +62,6 @@ Get-RMMActivityLog -SiteId 1234,5678 -Start (Get-Date '2024-01-01') -End (Get-Da
 ```
 
 Retrieves activity logs for sites with IDs 1234 and 5678.
-Prompts for each site.
 
 EXAMPLE 4
 ```powershell
@@ -76,7 +69,6 @@ Get-RMMSite | Get-RMMActivityLog
 ```
 
 Retrieves activity logs for last 24 hours for all sites.
-Prompts for each site, or select Yes to All to proceed without further prompts.
 
 ## PARAMETERS
 
@@ -250,37 +242,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ## INPUTS
 
 DRMMSite. You can pipe site objects from Get-RMMSite (uses the Id property).
@@ -290,15 +251,13 @@ DRMMActivityLog. Returns activity log objects with details about the activity.
 ## NOTES
 - Requires an active connection to the Datto RMM API (use Connect-DattoRMM first).
 - Site IDs are batched in groups of 100 to avoid API/query length limits.
-- Confirmation prompt appears for each site (Yes/No/Yes to All/No to All supported).
 - The API uses integer IDs (not UIDs) for sites and users in this endpoint.
 - Results are paginated automatically.
 
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/ActivityLog/Get-RMMActivityLog.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/ActivityLog/Get-RMMActivityLog.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/ActivityLog/Get-RMMActivityLog.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [Get-RMMSite](../Sites/Get-RMMSite.md)
 - [about_DRMMActivityLog](../../about/classes/DRMMActivityLog/about_DRMMActivityLog.md)
-- [about_DattoRMM.CoreSecurity](../../about/about_DattoRMM.CoreSecurity.md)

@@ -39,7 +39,7 @@ Current session values are not changed by Remove-RMMConfig.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Save-RMMConfig.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Save-RMMConfig.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Config/Save-RMMConfig.md)
 - [Set-RMMConfig](./Set-RMMConfig.md)
 - [Remove-RMMConfig](./Remove-RMMConfig.md)
 - [Get-RMMConfig](./Get-RMMConfig.md)

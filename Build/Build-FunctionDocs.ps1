@@ -133,7 +133,6 @@ try {
     }
     Write-Host "  Found $($FunctionLookup.Count) functions and $($AboutLookup.Count) about docs" -ForegroundColor Gray
         $Generated = 0
-    $Unchanged = 0
     $Skipped = 0
     $Failed = 0
     
@@ -186,14 +185,6 @@ try {
             Write-Host "    Reason: $Reason" -ForegroundColor Gray
             
             try {
-                # Capture existing content before PlatyPS overwrites the file.
-                # Used below for idempotent write — prevents spurious git changes after re-signing.
-                $OldContent = if (Test-Path $MarkdownFile) {
-                    (Get-Content $MarkdownFile -Raw) -replace '\r\n', "`n" -replace '\r', "`n"
-                } else {
-                    $null
-                }
-
                 # Generate markdown (suppress warnings about type resolution)
                 Write-Host "    Generating with PlatyPS..." -ForegroundColor Gray
                 $Result = New-MarkdownHelp -Command $FunctionName -OutputFolder $OutputSubFolder -Force -NoMetadata -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
@@ -271,7 +262,7 @@ try {
                     $OnlineDocUrl = $null
                     foreach ($line in $block -split "`n") {
                         $line = $line.Trim()
-                        if ($line -match '(https?://[^\s]+)') {
+                        if ($line -match '(https?://[^\s\]\)]+)') {
                             $OnlineDocUrl = $matches[1]
                             break
                         }
@@ -356,26 +347,17 @@ try {
                     }
                 })
                 
-                # Normalise to LF before comparison and write (eliminates CRLF drift from PlatyPS on Windows)
+                # Normalise to LF (eliminates CRLF drift from PlatyPS on Windows)
                 $Content = $Content -replace '\r\n', "`n" -replace '\r', "`n"
 
-                # Idempotent write: only write when content actually changed (case-sensitive).
-                # Re-signing updates .ps1 LastWriteTime without changing help text; skipping the
-                # Set-Content call when content is identical preserves the markdown LastWriteTime
-                # so the timestamp check correctly skips these files on the next build run.
-                # Case-sensitive comparison (-cne) ensures changes like UserName -> Username are
-                # detected rather than swallowed by PowerShell's default case-insensitive -ne.
-                if ($Content -cne $OldContent) {
-                    Set-Content -Path $MarkdownFile -Value $Content -NoNewline
-                    if ($Changes.Count -gt 0) {
-                        Write-Host "    Changes: $($Changes -join ', ')" -ForegroundColor Gray
-                    }
-                    Write-Host "    ✓ Generated (content changed)" -ForegroundColor Green
-                    $Generated++
-                } else {
-                    Write-Host "    → Unchanged (source reprocessed, content identical)" -ForegroundColor DarkGray
-                    $Unchanged++
+                # Always write post-processed content — PlatyPS already overwrote the file with raw
+                # output via New-MarkdownHelp -Force, so we must always write back the clean version.
+                Set-Content -Path $MarkdownFile -Value $Content -NoNewline
+                if ($Changes.Count -gt 0) {
+                    Write-Host "    Changes: $($Changes -join ', ')" -ForegroundColor Gray
                 }
+                Write-Host "    ✓ Generated" -ForegroundColor Green
+                $Generated++
                 
             } catch {
                 Write-Warning "    Failed to process $FunctionName : $_"
@@ -445,7 +427,6 @@ try {
     # Summary
     Write-Host "`n=== Summary ===" -ForegroundColor Cyan
     Write-Host "  Generated: $Generated" -ForegroundColor Green
-    Write-Host "  Unchanged: $Unchanged" -ForegroundColor DarkGray
     Write-Host "  Skipped:   $Skipped" -ForegroundColor Yellow
     Write-Host "  Failed:    $Failed" -ForegroundColor $(if ($Failed -gt 0) { 'Red' } else { 'Gray' })
     Write-Host "  Total:     $($PublicFunctions.Count)`n" -ForegroundColor Gray

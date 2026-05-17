@@ -63,6 +63,6 @@ Consider checking system status before running bulk operations or automated task
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMStatus.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMStatus.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMStatus.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [about_DRMMStatus](../../about/classes/DRMMStatus/about_DRMMStatus.md)

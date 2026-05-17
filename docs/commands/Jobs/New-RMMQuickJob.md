@@ -256,7 +256,7 @@ Best practices:
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/New-RMMQuickJob.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/New-RMMQuickJob.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Jobs/New-RMMQuickJob.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
 - [Get-RMMDevice](../Devices/Get-RMMDevice.md)

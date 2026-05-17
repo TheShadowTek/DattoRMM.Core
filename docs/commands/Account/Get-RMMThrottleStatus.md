@@ -117,7 +117,7 @@ engine may adjust utilisation values during calibration cycles.
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMThrottleStatus.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMThrottleStatus.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Account/Get-RMMThrottleStatus.md)
 - [Get-RMMRequestRate](./Get-RMMRequestRate.md)
 - [Connect-DattoRMM](../Auth/Connect-DattoRMM.md)
 - [about_DattoRMM.CoreThrottling](../../about/about_DattoRMM.CoreThrottling.md)

@@ -8,8 +8,7 @@ Retrieves device information from the Datto RMM API.
 Global (Default)
 ```
 Get-RMMDevice [-FilterId <Int64>] [-Hostname <String>] [-DeviceType <String>] [-OperatingSystem <String>]
- [-SiteName <String>] [-IncludeLastLoggedInUser] [-Force] [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-SiteName <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 SiteNetSummary
@@ -20,8 +19,8 @@ Get-RMMDevice -Site <DRMMSite> [-NetSummary] [-ProgressAction <ActionPreference>
 
 Site
 ```
-Get-RMMDevice -Site <DRMMSite> [-FilterId <Int64>] [-IncludeLastLoggedInUser] [-Force]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Get-RMMDevice -Site <DRMMSite> [-FilterId <Int64>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 SiteUidNetSummary
@@ -32,38 +31,36 @@ Get-RMMDevice -SiteUid <Guid> [-NetSummary] [-ProgressAction <ActionPreference>]
 
 SiteUid
 ```
-Get-RMMDevice -SiteUid <Guid> [-FilterId <Int64>] [-IncludeLastLoggedInUser] [-Force]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Get-RMMDevice -SiteUid <Guid> [-FilterId <Int64>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 Device
 ```
-Get-RMMDevice -Device <DRMMDevice> [-IncludeLastLoggedInUser] [-Force] [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Get-RMMDevice -Device <DRMMDevice> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 DeviceUid
 ```
-Get-RMMDevice -DeviceUid <Guid> [-IncludeLastLoggedInUser] [-Force] [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Get-RMMDevice -DeviceUid <Guid> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 DeviceId
 ```
-Get-RMMDevice -DeviceId <Int32> [-IncludeLastLoggedInUser] [-Force] [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Get-RMMDevice -DeviceId <Int32> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 DeviceMac
 ```
-Get-RMMDevice -MacAddress <String> [-IncludeLastLoggedInUser] [-Force] [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Get-RMMDevice -MacAddress <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 Filter
 ```
-Get-RMMDevice -Filter <DRMMFilter> [-IncludeLastLoggedInUser] [-Force] [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Get-RMMDevice -Filter <DRMMFilter> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -78,9 +75,6 @@ making it easy to retrieve devices for filtered sets of sites or filter definiti
 When specifying a Filter, site-scoped filters automatically route to the appropriate site
 endpoint.
 Global-scoped filters route to the account endpoint.
-
-When using -IncludeLastLoggedInUser, the function will prompt for confirmation due to
-privacy implications unless -Force is specified.
 
 ## EXAMPLES
 
@@ -155,13 +149,6 @@ Get-RMMSite | Get-RMMDevice -NetSummary
 ```
 
 Gets network interface information for devices at all sites.
-
-EXAMPLE 11
-```powershell
-Get-RMMDevice -DeviceUid $guid -IncludeLastLoggedInUser -Force
-```
-
-Retrieves a device with last logged in user information without confirmation prompt.
 
 ## PARAMETERS
 
@@ -358,37 +345,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IncludeLastLoggedInUser
-Include the last logged in user information.
-Requires confirmation unless -Force is specified.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Global, Site, SiteUid, Device, DeviceUid, DeviceId, DeviceMac, Filter
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Force
-Suppress the confirmation prompt when using -IncludeLastLoggedInUser.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Global, Site, SiteUid, Device, DeviceUid, DeviceId, DeviceMac, Filter
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -NetSummary
 Retrieve network interface summary for devices at a site.
 Returns DRMMDeviceNetworkInterface objects.
@@ -455,17 +411,10 @@ When -NetSummary is specified, returns DRMMDeviceNetworkInterface objects with n
 This function requires an active connection to the Datto RMM API.
 Use Connect-DattoRMM to authenticate before calling this function.
 
-The -IncludeLastLoggedInUser parameter requires explicit confirmation due to privacy
-implications.
-Use -Force to bypass the confirmation prompt.
-
-When piping sites or filters, the IncludeLastLoggedInUser parameter applies to all
-objects in the pipeline.
-
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDevice.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDevice.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Devices/Get-RMMDevice.md)
 - [about_DRMMDevice](../../about/classes/DRMMDevice/about_DRMMDevice.md)
 - [about_DRMMFilter](../../about/classes/DRMMFilter/about_DRMMFilter.md)
 - [Get-RMMFilter](../Filter/Get-RMMFilter.md)

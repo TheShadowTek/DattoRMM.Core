@@ -144,6 +144,6 @@ The function will throw an error if:
 ## RELATED LINKS
 
 
-- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Resolve-RMMAlert.md](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Resolve-RMMAlert.md))
+- [Online Documentation](https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/Alerts/Resolve-RMMAlert.md)
 - [Get-RMMAlert](./Get-RMMAlert.md)
 - [about_DRMMAlert](../../about/classes/DRMMAlert/about_DRMMAlert.md)
