@@ -17,9 +17,6 @@ function Get-RMMActivityLog {
         - Passing SiteId(s) directly
         - Omitting both for global (all sites) scope
 
-        The function prompts for confirmation before retrieving logs for each site, including in global
-        mode. Supports Yes/No/Yes to All/No to All responses for safe handling of PII.
-
     .PARAMETER Site
         One or more DRMMSite objects (from Get-RMMSite) to retrieve activity logs for. Accepts pipeline
         input.
@@ -62,24 +59,24 @@ function Get-RMMActivityLog {
     .EXAMPLE
         Get-RMMActivityLog -Start "2024-01-01T00:00:00Z" -End "2024-01-02T00:00:00Z"
 
-        Retrieves activity logs for all sites for January 1st, 2024. Prompts for each site.
+        Retrieves activity logs for all sites for January 1st, 2024.
 
     .EXAMPLE
         $Start = Get-Date '2024-01-01T00:00:00Z'
         PS > $End = Get-Date '2024-01-02T00:00:00Z'
         PS > Get-RMMSite -SiteName "Main Office" | Get-RMMActivityLog -Start $Start -End $End
 
-        Retrieves activity logs for the "Main Office" site. Prompts for confirmation.
+        Retrieves activity logs for the "Main Office" site.
 
     .EXAMPLE
         Get-RMMActivityLog -SiteId 1234,5678 -Start (Get-Date '2024-01-01') -End (Get-Date '2024-01-02')
 
-        Retrieves activity logs for sites with IDs 1234 and 5678. Prompts for each site.
+        Retrieves activity logs for sites with IDs 1234 and 5678.
 
     .EXAMPLE
         Get-RMMSite | Get-RMMActivityLog
 
-        Retrieves activity logs for last 24 hours for all sites. Prompts for each site, or select Yes to All to proceed without further prompts.
+        Retrieves activity logs for last 24 hours for all sites.
 
     .INPUTS
         DRMMSite. You can pipe site objects from Get-RMMSite (uses the Id property).
@@ -90,7 +87,6 @@ function Get-RMMActivityLog {
     .NOTES
         - Requires an active connection to the Datto RMM API (use Connect-DattoRMM first).
         - Site IDs are batched in groups of 100 to avoid API/query length limits.
-        - Confirmation prompt appears for each site (Yes/No/Yes to All/No to All supported).
         - The API uses integer IDs (not UIDs) for sites and users in this endpoint.
         - Results are paginated automatically.
 
@@ -106,15 +102,9 @@ function Get-RMMActivityLog {
     .LINK
         about_DRMMActivityLog
 
-    .LINK
-        about_DattoRMM.CoreSecurity
     #>
 
-    [CmdletBinding(
-        DefaultParameterSetName='Global',
-        SupportsShouldProcess = $true,
-        ConfirmImpact='High'
-    )]
+    [CmdletBinding(DefaultParameterSetName = 'Global')]
 
     param(
         [Parameter(
@@ -205,14 +195,8 @@ function Get-RMMActivityLog {
         
         }
         
-        # Remove duplicate site IDs to limit unnecessary API calls
-        if ($SiteId) {
-
-            $SiteID = $SiteId | Sort-Object -Unique
-
-        }
-
         [array]$AllSites = @()
+        [array]$AllSiteIds = @()
 
     }
 
@@ -222,7 +206,7 @@ function Get-RMMActivityLog {
         switch ($PSCmdlet.ParameterSetName) {
 
             'Site' {[array]$AllSites += $Site}
-            'SiteId' {[array]$AllSites = Get-RMMSite | Where-Object {$_.Id -in $SiteId}}
+            'SiteId' {$AllSiteIds = $SiteId | Sort-Object -Unique}
             'Global' {[array]$AllSites = Get-RMMSite}
 
         }
@@ -230,30 +214,24 @@ function Get-RMMActivityLog {
 
     end {
 
-        # Remove duplicate sites (if any) and confirm processing for each site
-        [array]$AllSites = $AllSites | Sort-Object -Property Id -Unique
-        $ProcessSites = @()
+        # Normalize site IDs for batching
+        if ($PSCmdlet.ParameterSetName -eq 'SiteId') {
 
-        foreach ($SiteObject in $AllSites) {
+            $BatchableIds = $AllSiteIds
 
-            if ($PSCmdlet.ShouldProcess("Activity logs for site: $($SiteObject.Name) may contain PII or sensitive information. Do you want to continue?", "Confirm Activity Log Retrieval for $($SiteObject.Name)")) {
+        } else {
 
-                $ProcessSites += $SiteObject
+            $BatchableIds = ($AllSites | Sort-Object -Property Id -Unique).Id
 
-            } else {
-                
-                Write-Warning "Skipping activity log retrieval for site: $($SiteObject.Name)"
-
-            }
         }
 
         # Batch sites (default 100 per batch)
         $BatchSize = 100
 
-        for ($BatchIndex = 0; $BatchIndex -lt $ProcessSites.Count; $BatchIndex += $BatchSize) {
+        for ($BatchIndex = 0; $BatchIndex -lt $BatchableIds.Count; $BatchIndex += $BatchSize) {
 
-            $BatchSites = $ProcessSites[$BatchIndex..([Math]::Min($BatchIndex+$BatchSize-1, $ProcessSites.Count-1))]
-            $Parameters['siteIds'] = ($BatchSites | ForEach-Object {$_.Id}) -join ','
+            $BatchIds = $BatchableIds[$BatchIndex..([Math]::Min($BatchIndex + $BatchSize - 1, $BatchableIds.Count - 1))]
+            $Parameters['siteIds'] = $BatchIds -join ','
             $Path = 'activity-logs'
 
             Invoke-ApiMethod -Method 'GET' -Path $Path -Parameters $Parameters -Paginate -PageElement 'activities' | ForEach-Object {
