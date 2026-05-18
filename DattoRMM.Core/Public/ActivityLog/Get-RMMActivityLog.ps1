@@ -50,6 +50,12 @@ function Get-RMMActivityLog {
         Specifies the order in which records are returned by creation date. Valid values: 'asc', 'desc'.
         Default is 'desc'.
 
+    .PARAMETER SearchQuery
+        Filters activity logs using an advanced Lucene-style search expression, identical to the
+        Activity Log UI search bar. Accepts field searches, wildcards, boolean operators, fuzzy
+        matching, and grouped expressions. Passed through verbatim — no client-side parsing or
+        validation is applied.
+
     .PARAMETER UseExperimentalDetailClasses
         Enables experimental entity/category-specific detail classes for activity logs. When specified,
         details are parsed into strongly-typed classes based on entity, category, and action combinations
@@ -77,6 +83,12 @@ function Get-RMMActivityLog {
         Get-RMMSite | Get-RMMActivityLog
 
         Retrieves activity logs for last 24 hours for all sites.
+
+    .EXAMPLE
+        Get-RMMActivityLog -Start (Get-Date).AddDays(-7) -End (Get-Date) -SearchQuery 'data.filter_id : "filterId" AND device.hostname : "hostname"'
+
+        Retrieves activity logs for the past 7 days matching a specific filter ID and hostname using
+        a Lucene-style search expression.
 
     .INPUTS
         DRMMSite. You can pipe site objects from Get-RMMSite (uses the Id property).
@@ -173,6 +185,12 @@ function Get-RMMActivityLog {
         [Parameter(
             Mandatory = $false
         )]
+        [string]
+        $SearchQuery,
+
+        [Parameter(
+            Mandatory = $false
+        )]
         [switch]
         $UseExperimentalDetailClasses
     )
@@ -192,6 +210,7 @@ function Get-RMMActivityLog {
             'Action' {$Parameters['actions'] = ($Action | ForEach-Object { $_.ToLower() }) -join ','}
             'UserId' {$Parameters['userIds'] = $UserId -join ','}
             'Order' {$Parameters['order'] = $Order}
+            'SearchQuery' {$Parameters['searchQuery'] = $SearchQuery}
         
         }
         
@@ -247,8 +266,8 @@ function Get-RMMActivityLog {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAi+Ne4UOvhjvB7
-# gfQJAmtMNMzx8F9vNEFBUV6kQX9SraCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAfFk/hT5FOnxhr
+# GtPHILf/bUNFHyUfujW4Jf2NkuZcdKCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -270,11 +289,11 @@ function Get-RMMActivityLog {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIKTqCS7mW6FuMWiSbaj4BNPE6uqY
-# 26zasjUg0qTp2y6AMA0GCSqGSIb3DQEBAQUABIIBACPhmhAHF2/TKwtIn35t6O6U
-# N35JOixpqL83vYBvkAVV7S2yxbpkp7HRFDomOD4XXET5C6rgtIJWinmePmA0K3Bf
-# dNuJuuK8pKiWcQEVUd2cqa5972eGUDZcTYbKlbRpkZ4TYvPR9R4t1eaSbzrnAjPW
-# 3m0yX+Y21QCeLJ63CalRyu9wjJvmCMKXxrIlaTZHurLTl+nzWaqZ+aQ5y+HiBdjY
-# Pg7YJAWOCzrGOUVuqv83cETjE2TXKJl0bA6C55+1XgyoJGjJqPQ1YfuW6uAw+gGP
-# t16I9K7MoX/rqGA8rrkyT85IIFOt5h/3THNRgyF7n5BEGM+25ucUhKZxPyWQCI4=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEINQf9fw5fJL8I/8avuTYX/VOH3/R
+# //1L0Mdpj4xksc5nMA0GCSqGSIb3DQEBAQUABIIBAHI9zdOrmlbNNzoUXF+DV7bS
+# 8QehRwlN6+EfjbVWJ4E9awmMv3MTnFsam9g4PgFs639NKGVhhGvB3ySnsWde87Bh
+# h+WqZiX5QWIreyra3bwMq38puMlhzkzExUzFTUiiZA+l5O6Hox0N9S75YSVXbDQH
+# Wg/ZUaw8gM4Cjmg6RPDM81nFiwnNMjLEua69a4LEZoXw8RoLXVmBiMswWTv1Inat
+# 8/EIu/jr5Jd9zksYLD1B7yIcj6QWcMYnrlDdtbaYksmArmSZ2AbI4OpecgpWju6y
+# E7POO/A7zWWDoFUX16ZX2y9shVoivhOxK5VcFbKhqQaV3X0Os6ObdIE+02WvH/Y=
 # SIG # End signature block

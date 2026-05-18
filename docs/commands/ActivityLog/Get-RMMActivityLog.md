@@ -8,21 +8,21 @@ Retrieves activity logs from the Datto RMM API.
 Global (Default)
 ```
 Get-RMMActivityLog [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>] [-Category <String[]>]
- [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-UseExperimentalDetailClasses]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-SearchQuery <String>]
+ [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 Site
 ```
 Get-RMMActivityLog [-Site <DRMMSite[]>] [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
- [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
+ [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-SearchQuery <String>]
  [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 SiteId
 ```
 Get-RMMActivityLog [-SiteId <Int64[]>] [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
- [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
+ [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-SearchQuery <String>]
  [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
@@ -69,6 +69,14 @@ Get-RMMSite | Get-RMMActivityLog
 ```
 
 Retrieves activity logs for last 24 hours for all sites.
+
+EXAMPLE 5
+```powershell
+Get-RMMActivityLog -Start (Get-Date).AddDays(-7) -End (Get-Date) -SearchQuery 'data.filter_id : "filterId" AND device.hostname : "hostname"'
+```
+
+Retrieves activity logs for the past 7 days matching a specific filter ID and hostname using
+a Lucene-style search expression.
 
 ## PARAMETERS
 
@@ -218,6 +226,26 @@ Aliases:
 Required: False
 Position: Named
 Default value: Desc
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SearchQuery
+Filters activity logs using an advanced Lucene-style search expression, identical to the
+Activity Log UI search bar.
+Accepts field searches, wildcards, boolean operators, fuzzy
+matching, and grouped expressions.
+Passed through verbatim - no client-side parsing or
+validation is applied.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
