@@ -18,11 +18,10 @@ function Get-RMMActivityLog {
         - Omitting both for global (all sites) scope
 
     .PARAMETER Site
-        One or more DRMMSite objects (from Get-RMMSite) to retrieve activity logs for. Accepts pipeline
-        input.
+        A DRMMSite object to retrieve activity logs for. Accepts pipeline input from Get-RMMSite.
 
     .PARAMETER SiteId
-        One or more site IDs (integer) to retrieve activity logs for.
+        The numeric ID of a site to retrieve activity logs for.
 
     .PARAMETER Start
         Start date/time for fetching data. Accepts local or UTC; local times are automatically converted
@@ -98,9 +97,10 @@ function Get-RMMActivityLog {
 
     .NOTES
         - Requires an active connection to the Datto RMM API (use Connect-DattoRMM first).
-        - Site IDs are batched in groups of 100 to avoid API/query length limits.
         - The API uses integer IDs (not UIDs) for sites and users in this endpoint.
         - Results are paginated automatically.
+        - UserId accepts up to 750 values. This safely stays within URL length limits
+          (750 × 7 chars ≈ 5,250 chars, well within the 6KB safe threshold).
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/ActivityLog/Get-RMMActivityLog.md
@@ -121,15 +121,17 @@ function Get-RMMActivityLog {
     param(
         [Parameter(
             ParameterSetName = 'Site',
+            Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [DRMMSite[]]
+        [DRMMSite]
         $Site,
 
         [Parameter(
-            ParameterSetName = 'SiteId'
+            ParameterSetName = 'SiteId',
+            Mandatory = $true
         )]
-        [long[]]
+        [long]
         $SiteId,
 
         [Parameter(
@@ -169,6 +171,7 @@ function Get-RMMActivityLog {
         [Parameter(
             Mandatory = $false
         )]
+        [ValidateCount(1, 750)]
         [long[]]
         $UserId,
 
@@ -197,12 +200,15 @@ function Get-RMMActivityLog {
 
     begin {
 
-        # Build query parameters (excluding siteIds), initializing with required date range parameters
+        Write-Verbose "Getting activity logs with parameter set: $($PSCmdlet.ParameterSetName)"
+
+        # Build query parameters with required date range
         $Parameters = @{
             from = $Start.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
             until = $End.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
         }
 
+        # Add optional filter parameters
         switch ($PSBoundParameters.Keys) {
 
             'Entity' {$Parameters['entities'] = ($Entity | ForEach-Object { $_.ToLower() }) -join ','}
@@ -211,53 +217,32 @@ function Get-RMMActivityLog {
             'UserId' {$Parameters['userIds'] = $UserId -join ','}
             'Order' {$Parameters['order'] = $Order}
             'SearchQuery' {$Parameters['searchQuery'] = $SearchQuery}
-        
-        }
-        
-        [array]$AllSites = @()
-        [array]$AllSiteIds = @()
 
+        }
     }
 
     process {
 
-        # Collect sites based on parameter set
+        # Set siteIds parameter based on scope
         switch ($PSCmdlet.ParameterSetName) {
 
-            'Site' {[array]$AllSites += $Site}
-            'SiteId' {$AllSiteIds = $SiteId | Sort-Object -Unique}
-            'Global' {[array]$AllSites = Get-RMMSite}
-
-        }
-    }
-
-    end {
-
-        # Normalize site IDs for batching
-        if ($PSCmdlet.ParameterSetName -eq 'SiteId') {
-
-            $BatchableIds = $AllSiteIds
-
-        } else {
-
-            $BatchableIds = ($AllSites | Sort-Object -Property Id -Unique).Id
+            'Site' {$Parameters['siteIds'] = $Site.Id}
+            'SiteId' {$Parameters['siteIds'] = $SiteId}
 
         }
 
-        # Batch sites (default 100 per batch)
-        $BatchSize = 100
+        $InvokeParams = @{
+            Method = 'GET'
+            Path = 'activity-logs'
+            Parameters = $Parameters
+            Paginate = $true
+            PageElement = 'activities'
+        }
 
-        for ($BatchIndex = 0; $BatchIndex -lt $BatchableIds.Count; $BatchIndex += $BatchSize) {
+        Invoke-ApiMethod @InvokeParams | ForEach-Object {
 
-            $BatchIds = $BatchableIds[$BatchIndex..([Math]::Min($BatchIndex + $BatchSize - 1, $BatchableIds.Count - 1))]
-            $Parameters['siteIds'] = $BatchIds -join ','
-            $Path = 'activity-logs'
+            [DRMMActivityLog]::FromAPIMethod($_, $UseExperimentalDetailClasses.IsPresent)
 
-            Invoke-ApiMethod -Method 'GET' -Path $Path -Parameters $Parameters -Paginate -PageElement 'activities' | ForEach-Object {
-
-                [DRMMActivityLog]::FromAPIMethod($_, $UseExperimentalDetailClasses.IsPresent)
-
-            }
         }
     }
 }
