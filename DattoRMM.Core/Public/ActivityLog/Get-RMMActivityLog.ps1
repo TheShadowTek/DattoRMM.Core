@@ -55,6 +55,8 @@ function Get-RMMActivityLog {
         matching, and grouped expressions. Passed through verbatim — no client-side parsing or
         validation is applied.
 
+        See https://rmm.datto.com/help/en/Content/3NEWUI/Analytics/ActivityLog.htm for supported fields and syntax.
+
     .PARAMETER UseExperimentalDetailClasses
         Enables experimental entity/category-specific detail classes for activity logs. When specified,
         details are parsed into strongly-typed classes based on entity, category, and action combinations
@@ -251,8 +253,8 @@ function Get-RMMActivityLog {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAfFk/hT5FOnxhr
-# GtPHILf/bUNFHyUfujW4Jf2NkuZcdKCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCC0LjeBftgUCLst
+# pE9mIiOpF8qp8q1QDMGeFBqeuIfxg6CCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -274,11 +276,11 @@ function Get-RMMActivityLog {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEINQf9fw5fJL8I/8avuTYX/VOH3/R
-# //1L0Mdpj4xksc5nMA0GCSqGSIb3DQEBAQUABIIBAHI9zdOrmlbNNzoUXF+DV7bS
-# 8QehRwlN6+EfjbVWJ4E9awmMv3MTnFsam9g4PgFs639NKGVhhGvB3ySnsWde87Bh
-# h+WqZiX5QWIreyra3bwMq38puMlhzkzExUzFTUiiZA+l5O6Hox0N9S75YSVXbDQH
-# Wg/ZUaw8gM4Cjmg6RPDM81nFiwnNMjLEua69a4LEZoXw8RoLXVmBiMswWTv1Inat
-# 8/EIu/jr5Jd9zksYLD1B7yIcj6QWcMYnrlDdtbaYksmArmSZ2AbI4OpecgpWju6y
-# E7POO/A7zWWDoFUX16ZX2y9shVoivhOxK5VcFbKhqQaV3X0Os6ObdIE+02WvH/Y=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIDmnt54jLBV2PZE2pbRWOEPAunNM
+# XTJ7tDe/gmVN/E8aMA0GCSqGSIb3DQEBAQUABIIBAIFX029C4jOxceddn1Up1wSh
+# TYJ2p382HL+rOKOTDR4hViQRe5qU/9VIOzx1/tv9HCSDhULQXflvY35yoH+4PQvk
+# xXimOK52LjKYcIlNz9qoG9AjnsI0OlgPjy9g6iv6E/6nLkdex5WPoObxVVJwXyjl
+# JTRHFdsmD6FaYS4RxdfR2qWr40JtccIqZUIuIEaykpfKO6uqRiWu8DdjE90xXhMN
+# Fi0NH2JMAwkFr4sR0oHEJ5MHfVbkHVqlKrYdl7zAF1LWJbG5dOw9h2Vq8THaYwsv
+# GAiBY1MS+vWtJhOtpztMoFzdNffPHuoBDdEHtSZThVFFDbbH+cZt4He6HeB6PJM=
 # SIG # End signature block
