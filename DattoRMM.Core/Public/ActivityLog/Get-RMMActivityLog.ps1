@@ -18,11 +18,10 @@ function Get-RMMActivityLog {
         - Omitting both for global (all sites) scope
 
     .PARAMETER Site
-        One or more DRMMSite objects (from Get-RMMSite) to retrieve activity logs for. Accepts pipeline
-        input.
+        A DRMMSite object to retrieve activity logs for. Accepts pipeline input from Get-RMMSite.
 
     .PARAMETER SiteId
-        One or more site IDs (integer) to retrieve activity logs for.
+        The numeric ID of a site to retrieve activity logs for.
 
     .PARAMETER Start
         Start date/time for fetching data. Accepts local or UTC; local times are automatically converted
@@ -49,6 +48,14 @@ function Get-RMMActivityLog {
     .PARAMETER Order
         Specifies the order in which records are returned by creation date. Valid values: 'asc', 'desc'.
         Default is 'desc'.
+
+    .PARAMETER SearchQuery
+        Filters activity logs using an advanced Lucene-style search expression, identical to the
+        Activity Log UI search bar. Accepts field searches, wildcards, boolean operators, fuzzy
+        matching, and grouped expressions. Passed through verbatim — no client-side parsing or
+        validation is applied.
+
+        See https://rmm.datto.com/help/en/Content/3NEWUI/Analytics/ActivityLog.htm for supported fields and syntax.
 
     .PARAMETER UseExperimentalDetailClasses
         Enables experimental entity/category-specific detail classes for activity logs. When specified,
@@ -78,6 +85,12 @@ function Get-RMMActivityLog {
 
         Retrieves activity logs for last 24 hours for all sites.
 
+    .EXAMPLE
+        Get-RMMActivityLog -Start (Get-Date).AddDays(-7) -End (Get-Date) -SearchQuery 'data.filter_id : "filterId" AND device.hostname : "hostname"'
+
+        Retrieves activity logs for the past 7 days matching a specific filter ID and hostname using
+        a Lucene-style search expression.
+
     .INPUTS
         DRMMSite. You can pipe site objects from Get-RMMSite (uses the Id property).
 
@@ -86,9 +99,10 @@ function Get-RMMActivityLog {
 
     .NOTES
         - Requires an active connection to the Datto RMM API (use Connect-DattoRMM first).
-        - Site IDs are batched in groups of 100 to avoid API/query length limits.
         - The API uses integer IDs (not UIDs) for sites and users in this endpoint.
         - Results are paginated automatically.
+        - UserId accepts up to 750 values. This safely stays within URL length limits
+          (750 × 7 chars ≈ 5,250 chars, well within the 6KB safe threshold).
 
     .LINK
         https://github.com/TheShadowTek/DattoRMM.Core/blob/main/docs/commands/ActivityLog/Get-RMMActivityLog.md
@@ -109,15 +123,17 @@ function Get-RMMActivityLog {
     param(
         [Parameter(
             ParameterSetName = 'Site',
+            Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [DRMMSite[]]
+        [DRMMSite]
         $Site,
 
         [Parameter(
-            ParameterSetName = 'SiteId'
+            ParameterSetName = 'SiteId',
+            Mandatory = $true
         )]
-        [long[]]
+        [long]
         $SiteId,
 
         [Parameter(
@@ -157,6 +173,7 @@ function Get-RMMActivityLog {
         [Parameter(
             Mandatory = $false
         )]
+        [ValidateCount(1, 750)]
         [long[]]
         $UserId,
 
@@ -173,18 +190,27 @@ function Get-RMMActivityLog {
         [Parameter(
             Mandatory = $false
         )]
+        [string]
+        $SearchQuery,
+
+        [Parameter(
+            Mandatory = $false
+        )]
         [switch]
         $UseExperimentalDetailClasses
     )
 
     begin {
 
-        # Build query parameters (excluding siteIds), initializing with required date range parameters
+        Write-Verbose "Getting activity logs with parameter set: $($PSCmdlet.ParameterSetName)"
+
+        # Build query parameters with required date range
         $Parameters = @{
             from = $Start.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
             until = $End.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
         }
 
+        # Add optional filter parameters
         switch ($PSBoundParameters.Keys) {
 
             'Entity' {$Parameters['entities'] = ($Entity | ForEach-Object { $_.ToLower() }) -join ','}
@@ -192,53 +218,33 @@ function Get-RMMActivityLog {
             'Action' {$Parameters['actions'] = ($Action | ForEach-Object { $_.ToLower() }) -join ','}
             'UserId' {$Parameters['userIds'] = $UserId -join ','}
             'Order' {$Parameters['order'] = $Order}
-        
-        }
-        
-        [array]$AllSites = @()
-        [array]$AllSiteIds = @()
+            'SearchQuery' {$Parameters['searchQuery'] = $SearchQuery}
 
+        }
     }
 
     process {
 
-        # Collect sites based on parameter set
+        # Set siteIds parameter based on scope
         switch ($PSCmdlet.ParameterSetName) {
 
-            'Site' {[array]$AllSites += $Site}
-            'SiteId' {$AllSiteIds = $SiteId | Sort-Object -Unique}
-            'Global' {[array]$AllSites = Get-RMMSite}
-
-        }
-    }
-
-    end {
-
-        # Normalize site IDs for batching
-        if ($PSCmdlet.ParameterSetName -eq 'SiteId') {
-
-            $BatchableIds = $AllSiteIds
-
-        } else {
-
-            $BatchableIds = ($AllSites | Sort-Object -Property Id -Unique).Id
+            'Site' {$Parameters['siteIds'] = $Site.Id}
+            'SiteId' {$Parameters['siteIds'] = $SiteId}
 
         }
 
-        # Batch sites (default 100 per batch)
-        $BatchSize = 100
+        $InvokeParams = @{
+            Method = 'GET'
+            Path = 'activity-logs'
+            Parameters = $Parameters
+            Paginate = $true
+            PageElement = 'activities'
+        }
 
-        for ($BatchIndex = 0; $BatchIndex -lt $BatchableIds.Count; $BatchIndex += $BatchSize) {
+        Invoke-ApiMethod @InvokeParams | ForEach-Object {
 
-            $BatchIds = $BatchableIds[$BatchIndex..([Math]::Min($BatchIndex + $BatchSize - 1, $BatchableIds.Count - 1))]
-            $Parameters['siteIds'] = $BatchIds -join ','
-            $Path = 'activity-logs'
+            [DRMMActivityLog]::FromAPIMethod($_, $UseExperimentalDetailClasses.IsPresent)
 
-            Invoke-ApiMethod -Method 'GET' -Path $Path -Parameters $Parameters -Paginate -PageElement 'activities' | ForEach-Object {
-
-                [DRMMActivityLog]::FromAPIMethod($_, $UseExperimentalDetailClasses.IsPresent)
-
-            }
         }
     }
 }
@@ -247,8 +253,8 @@ function Get-RMMActivityLog {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAi+Ne4UOvhjvB7
-# gfQJAmtMNMzx8F9vNEFBUV6kQX9SraCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCC0LjeBftgUCLst
+# pE9mIiOpF8qp8q1QDMGeFBqeuIfxg6CCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -270,11 +276,11 @@ function Get-RMMActivityLog {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIKTqCS7mW6FuMWiSbaj4BNPE6uqY
-# 26zasjUg0qTp2y6AMA0GCSqGSIb3DQEBAQUABIIBACPhmhAHF2/TKwtIn35t6O6U
-# N35JOixpqL83vYBvkAVV7S2yxbpkp7HRFDomOD4XXET5C6rgtIJWinmePmA0K3Bf
-# dNuJuuK8pKiWcQEVUd2cqa5972eGUDZcTYbKlbRpkZ4TYvPR9R4t1eaSbzrnAjPW
-# 3m0yX+Y21QCeLJ63CalRyu9wjJvmCMKXxrIlaTZHurLTl+nzWaqZ+aQ5y+HiBdjY
-# Pg7YJAWOCzrGOUVuqv83cETjE2TXKJl0bA6C55+1XgyoJGjJqPQ1YfuW6uAw+gGP
-# t16I9K7MoX/rqGA8rrkyT85IIFOt5h/3THNRgyF7n5BEGM+25ucUhKZxPyWQCI4=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIDmnt54jLBV2PZE2pbRWOEPAunNM
+# XTJ7tDe/gmVN/E8aMA0GCSqGSIb3DQEBAQUABIIBAIFX029C4jOxceddn1Up1wSh
+# TYJ2p382HL+rOKOTDR4hViQRe5qU/9VIOzx1/tv9HCSDhULQXflvY35yoH+4PQvk
+# xXimOK52LjKYcIlNz9qoG9AjnsI0OlgPjy9g6iv6E/6nLkdex5WPoObxVVJwXyjl
+# JTRHFdsmD6FaYS4RxdfR2qWr40JtccIqZUIuIEaykpfKO6uqRiWu8DdjE90xXhMN
+# Fi0NH2JMAwkFr4sR0oHEJ5MHfVbkHVqlKrYdl7zAF1LWJbG5dOw9h2Vq8THaYwsv
+# GAiBY1MS+vWtJhOtpztMoFzdNffPHuoBDdEHtSZThVFFDbbH+cZt4He6HeB6PJM=
 # SIG # End signature block

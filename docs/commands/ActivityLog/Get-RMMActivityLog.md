@@ -8,21 +8,21 @@ Retrieves activity logs from the Datto RMM API.
 Global (Default)
 ```
 Get-RMMActivityLog [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>] [-Category <String[]>]
- [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-UseExperimentalDetailClasses]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-SearchQuery <String>]
+ [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 Site
 ```
-Get-RMMActivityLog [-Site <DRMMSite[]>] [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
- [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
+Get-RMMActivityLog -Site <DRMMSite> [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
+ [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-SearchQuery <String>]
  [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 SiteId
 ```
-Get-RMMActivityLog [-SiteId <Int64[]>] [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
- [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>]
+Get-RMMActivityLog -SiteId <Int64> [-Start <DateTime>] [-End <DateTime>] [-Entity <String[]>]
+ [-Category <String[]>] [-Action <String[]>] [-UserId <Int64[]>] [-Order <String>] [-SearchQuery <String>]
  [-UseExperimentalDetailClasses] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
@@ -70,19 +70,26 @@ Get-RMMSite | Get-RMMActivityLog
 
 Retrieves activity logs for last 24 hours for all sites.
 
+EXAMPLE 5
+```powershell
+Get-RMMActivityLog -Start (Get-Date).AddDays(-7) -End (Get-Date) -SearchQuery 'data.filter_id : "filterId" AND device.hostname : "hostname"'
+```
+
+Retrieves activity logs for the past 7 days matching a specific filter ID and hostname using
+a Lucene-style search expression.
+
 ## PARAMETERS
 
 ### -Site
-One or more DRMMSite objects (from Get-RMMSite) to retrieve activity logs for.
-Accepts pipeline
-input.
+A DRMMSite object to retrieve activity logs for.
+Accepts pipeline input from Get-RMMSite.
 
 ```yaml
-Type: DRMMSite[]
+Type: DRMMSite
 Parameter Sets: Site
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
@@ -90,16 +97,16 @@ Accept wildcard characters: False
 ```
 
 ### -SiteId
-One or more site IDs (integer) to retrieve activity logs for.
+The numeric ID of a site to retrieve activity logs for.
 
 ```yaml
-Type: Int64[]
+Type: Int64
 Parameter Sets: SiteId
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -222,6 +229,28 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -SearchQuery
+Filters activity logs using an advanced Lucene-style search expression, identical to the
+Activity Log UI search bar.
+Accepts field searches, wildcards, boolean operators, fuzzy
+matching, and grouped expressions.
+Passed through verbatim - no client-side parsing or
+validation is applied.
+
+See https://rmm.datto.com/help/en/Content/3NEWUI/Analytics/ActivityLog.htm for supported fields and syntax.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -UseExperimentalDetailClasses
 Enables experimental entity/category-specific detail classes for activity logs.
 When specified,
@@ -250,9 +279,10 @@ DRMMSite. You can pipe site objects from Get-RMMSite (uses the Id property).
 DRMMActivityLog. Returns activity log objects with details about the activity.
 ## NOTES
 - Requires an active connection to the Datto RMM API (use Connect-DattoRMM first).
-- Site IDs are batched in groups of 100 to avoid API/query length limits.
 - The API uses integer IDs (not UIDs) for sites and users in this endpoint.
 - Results are paginated automatically.
+- UserId accepts up to 750 values. This safely stays within URL length limits
+  (750 × 7 chars ≈ 5,250 chars, well within the 6KB safe threshold).
 
 ## RELATED LINKS
 
