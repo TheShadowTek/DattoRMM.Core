@@ -196,16 +196,20 @@ function Get-RMMSite {
 
             $APIMethod.Path = "site/$SiteUid"
             $Response = Invoke-ApiMethod @APIMethod
-            $Site = [DRMMSite]::FromAPIMethod($Response)
 
-            if ($ExtendedProperties.Count -gt 0) {
-                
-                Add-SiteExtendedProperties -Site $Site -ExtendedProperties $ExtendedProperties
+            if ($Response) {
+
+                $Site = [DRMMSite]::FromAPIMethod($Response)
+
+                if ($ExtendedProperties.Count -gt 0) {
+                    
+                    Add-SiteExtendedProperties -Site $Site -ExtendedProperties $ExtendedProperties
+
+                }
+
+                return $Site
 
             }
-
-            return $Site
-
         }
 
         'DeletedDevices' {
@@ -284,8 +288,8 @@ function Add-SiteExtendedProperties {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCgCTMCM+8yvXxs
-# bjk9m3ewMmMsg8X9YKZCZE8tVVa2cKCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAe/3kNuaGEDaJz
+# Hk5t4nppaXQEac/P4jjep4CUuL87UqCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -307,11 +311,11 @@ function Add-SiteExtendedProperties {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICyUfo35i/QKvpT8kgkLpXjIOwxJ
-# tBkWrQson8A/3nDLMA0GCSqGSIb3DQEBAQUABIIBAH8FnbF0qOsiuJq4AJSm/M2a
-# oBBziY0hjqIbbweC9nY/LUYE2p0xlI/SairDXxvP2IUXa74YeQq+eI6Zg5vp2ftJ
-# Q9+BE+tWiZr6EutjDI1UTM41NcpTEAIUqJ7nmi21mDTJm4ZoKJRosWzhjO99Dxv6
-# 4Xul8iSt2W+Rb0czM7Ts5VSiS6Cm1kLK/FjLtBjwE6S9NezFzjolFZYJf4LSUSEY
-# H5ky7HVO3Tv9MfF9uLTxpnG6eZ5RbiX+hsuStPX4qv4HxVRoGm8zXvtlD9ymlAPf
-# FRGwXxCkej8upmDjC6YMixyQeKXyQR93RyilnD+B1nsslneS5Gs346817y0uMDs=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIOGasj4+zLaNWCk86W7UaeMqcQZd
+# PWXPxMIAXWuwxqgqMA0GCSqGSIb3DQEBAQUABIIBAJFuSZy0cKUPYrea1OABi9lm
+# 1nC+o0daL73xoFrgItBA2/bowAPtM6JF7M7ic9M4XOe7IsfvxNJhPHw6sJzv2yK9
+# U6dxnPQqCNgQ9du1X2D0QbnFbcxqpimI4hczFzu1D8Rk5DbB6OND2IFm76tQK4iX
+# oAAAtU4UlJxRjH8gqkxux9mc3i1stclVqTXp7415t3xLGWP5sLBuIufxOhdPF5AE
+# dBHSrA+qS4XoBc5paiyiop/toGyJ5iCmI4RzQIHkOFRXqdoxuH2cNi6H/23tbQqg
+# 3+sR7m12kFwmJeppaGDzXX5iRSs1sSc98IwNsQJrnCuIhnmSfO7XQl1mne3CKmg=
 # SIG # End signature block
