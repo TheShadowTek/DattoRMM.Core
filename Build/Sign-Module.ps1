@@ -200,6 +200,15 @@ $publicFunctions = Get-ChildItem -Path $ModulePath -Include '*.ps1' -Recurse |
 	Where-Object { $_.FullName -like "*Public*" }
 $filesToSign += $publicFunctions.FullName
 
+# All .ps1 files in Private (helper functions), excluding _Archive and howtothrottle.ps1
+$privateFunctions = Get-ChildItem -Path $ModulePath -Include '*.ps1' -Recurse |
+	Where-Object {
+		$_.FullName -like "*Private*" -and
+		$_.FullName -notlike "*_Archive*" -and
+		$_.Name -ne 'howtothrottle.ps1'
+	}
+$filesToSign += $privateFunctions.FullName
+
 # All .psd1 files in Private/Data (static data files)
 $dataFiles = Get-ChildItem -Path $ModulePath -Include '*.psd1' -Recurse |
 	Where-Object { $_.FullName -like "*Private\Data*" -or $_.FullName -like "*Private/Data*" }
