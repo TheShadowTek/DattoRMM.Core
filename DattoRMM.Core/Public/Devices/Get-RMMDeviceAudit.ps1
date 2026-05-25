@@ -187,19 +187,23 @@ function Get-RMMDeviceAudit {
         Write-Debug "Getting device audit for DeviceUid: $DeviceUid"
         $Response = Invoke-ApiMethod @APIMethod
 
-        $Audit = [DRMMDeviceAudit]::FromAPIMethod($Response)
-        $Audit.DeviceUid = $DeviceUid
+        if ($Response) {
 
-        # Retrieve software data if requested
-        if ($Software) {
+            $Audit = [DRMMDeviceAudit]::FromAPIMethod($Response)
+            $Audit.DeviceUid = $DeviceUid
 
-            Write-Debug "Getting software data for DeviceUid: $DeviceUid"
-            $SoftwareData = Get-RMMDeviceSoftware -DeviceUid $DeviceUid
-            $Audit.Software = $SoftwareData
+            # Retrieve software data if requested
+            if ($Software) {
+
+                Write-Debug "Getting software data for DeviceUid: $DeviceUid"
+                $SoftwareData = Get-RMMDeviceSoftware -DeviceUid $DeviceUid
+                $Audit.Software = $SoftwareData
+
+            }
+
+            return $Audit
 
         }
-
-        return $Audit
 
     }
 }
@@ -208,8 +212,8 @@ function Get-RMMDeviceAudit {
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDdAjuRBpb8llrs
-# jcRLKysPUUKNR5kIdzOINYHS+0Iox6CCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCaU9I3+lI9tt2U
+# 7jMoVl/eJ3/tejxu9TDuux1VBlkRVaCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -231,11 +235,11 @@ function Get-RMMDeviceAudit {
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIALlBMQm79amveiWbGTR9KZprelE
-# oAsEVnnV6CPVAqp2MA0GCSqGSIb3DQEBAQUABIIBAH8xDoZlAf1rNld1WJmMluO5
-# CCuKQ0mew0bx8T159kjeCzSnX4OZHFdo2nyvHXlW/o3JSnZnSl6jfir22PF3MKKv
-# Y4GBy48g732suj0A77A901/Bc6+ruTXQo3HDgyydi/aPDT05vePlw9q+vSae/ZKR
-# R+zbRElUxCmpmexWkpYernmUyEPt4+YYnf9xn+omT2kZweUeNmJ2/sQe6tqK8czS
-# i0EdD477+WDuCtTRLRqAoFLLH0s7BaMq7wmVQnDBo4OGKEoMByByVbIx7I2LablX
-# PA6bj0m0VJ+SzlXGDMc1Ci5h2VWE0jvVz1BtYgGGq1XEN6eTnnca710h+GYU2PQ=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIPmZgZPMZySmwZQiQcxU+Asv/ZDg
+# Odpr859TXSrDdLA8MA0GCSqGSIb3DQEBAQUABIIBACWZYN5VuliJKuqnXj3JRa6Q
+# UFwfvD9En7t1AsGxZb+clPqimk6cRo5hqTnEUHQq0y7A6h1JlLFqLZYkOQmjqpB+
+# NOqmvhptbZlHNTi5V1rEV+Sr6/T+Rp4JqcaER2QAM753WM+Xgl5dTjau+gO1cj0X
+# u42qIgf7V5U+8wThaau6MIyWJiyYC1FrXX43Xrhj1IN6y6E0WDDnH38PxuvAKSni
+# pIAOlpoeuPeK1o7Qx6rzNqwcU+FCpsugdFdELA5xkZEhUiPF1bcMp/wJ4w9ulIo4
+# aa/5tv1BGEms6ZGJY+vTkkKW7SgnJ4glVlbGkBAwWb7NvIFxnB6cWHecOpbspb0=
 # SIG # End signature block
