@@ -10,7 +10,7 @@ The DattoRMM.Core module provides an object-oriented interface to the Datto RMM 
 
 ### Requirements
 
-- PowerShell 7.0 or later (Core edition only).
+- PowerShell 7.4 or later (Core edition only).
 - A Datto RMM account with API access enabled.
 - An API key and secret generated from the Datto RMM web portal.
 
