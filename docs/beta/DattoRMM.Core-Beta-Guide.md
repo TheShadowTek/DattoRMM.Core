@@ -19,7 +19,7 @@ For detailed worked examples (Azure Automation, CSV exports, type extensions, UD
 | Platform | Status |
 |---|---|
 | **Windows** | Primary development and testing platform. Fully supported. |
-| **Azure Automation** | Limited testing, core functionality validated. |
+| **Azure Automation** | Runbook deployment validated. Managed Identity and Key Vault credential patterns confirmed. |
 | **Linux** | Limited testing on Ubuntu 24.04.1 LTS only. Expected to work on other distributions, but not yet verified. |
 | **macOS** | No testing performed. Expected to work under PowerShell 7.4+, but not verified. |
 
@@ -31,11 +31,20 @@ If you are running on Linux or macOS, **OS-specific feedback is especially valua
 
 ### Installation
 
-Copy the module files to your PowerShell module path, or import directly:
+Install from the PowerShell Gallery:
+
+```powershell
+Install-Module DattoRMM.Core -AllowPrerelease
+```
+
+Or import directly from a local path:
 
 ```powershell
 Import-Module ./DattoRMM.Core.psd1
 ```
+
+> [!NOTE]
+> Windows users with `AllSigned` or `RemoteSigned` execution policy must trust the module's signing certificate before import. See [INSTALL.md](../../INSTALL.md) for full setup instructions including certificate trust and Azure Automation deployment.
 
 ### Connecting
 
@@ -59,6 +68,13 @@ Connect-DattoRMM -Credential $Cred
 ```powershell
 Connect-DattoRMM -Credential (Get-Secret -Name 'DattoRMM-APIKeys')
 ```
+
+> [!NOTE]
+> Some Datto RMM accounts use a legacy single-bucket rate-limit model. If you encounter throttling errors earlier than expected, add `-LegacyThrottle` when connecting:
+>
+> ```powershell
+> Connect-DattoRMM -Key "your-api-key" -Secret $Secret -LegacyThrottle
+> ```
 
 ---
 
@@ -89,6 +105,18 @@ Get-RMMSite | Export-Csv Sites.csv
 Get-RMMDevice | Export-Csv Devices.csv
 Get-RMMAlert -Status All | Export-Csv Alerts.csv
 ```
+
+> [!TIP]
+> For flattened CSV export that handles nested properties automatically, use `Export-RMMObjectCsv` instead. Built-in transforms cover Sites, Devices, and Alerts; user-defined transforms extend the system to any custom column layout.
+>
+> ```powershell
+> Get-RMMSite | Export-RMMObjectCsv -Path .\Sites.csv
+> Get-RMMDevice | Export-RMMObjectCsv -Path .\Devices.csv
+> Get-RMMAlert -Status All | Export-RMMObjectCsv -Path .\Alerts.csv
+> ```
+>
+> See [about_DattoRMM.CoreExport](../about/about_DattoRMM.CoreExport.md) for the full transform system reference.
+
 ### Example: Filter and Resolve Alerts
 
 ```powershell
@@ -104,6 +132,58 @@ Set-RMMConfig -PageSize 100
 Get-RMMSite | Get-RMMDevice | <AzureTableBatchFunction>
 ```
 
+
+---
+
+## Working with Typed Objects
+
+All DattoRMM.Core commands return strongly-typed PowerShell classes rather than `PSCustomObject` or raw hashtables. Every object has documented properties, typed nested members, and helper methods you can call directly.
+
+### Discovering Properties and Methods
+
+Use `Get-Member` to see everything available on any object:
+
+```powershell
+# All properties and methods on a device
+Get-RMMDevice | Select-Object -First 1 | Get-Member
+
+# Methods only
+Get-RMMDevice | Select-Object -First 1 | Get-Member -MemberType Method
+```
+
+### Accessing Nested Typed Objects
+
+Most objects carry typed nested members. Dot-notation works naturally in the pipeline:
+
+```powershell
+$Device = Get-RMMDevice -Hostname 'SRV-DC01'
+$Device.DeviceType.Category       # e.g., "Server"
+$Device.Antivirus.ProductName     # e.g., "Windows Defender"
+$Device.PatchManagement.Status    # e.g., "Approved"
+$Device.Udfs.Udf1                 # UDF string value
+```
+
+Alert contexts are also polymorphic typed objects:
+
+```powershell
+$Alert = Get-RMMAlert -Status Open | Select-Object -First 1
+$Alert.AlertContext.GetType().Name    # e.g., "DRMMAlertContextDiskUsage"
+$Alert.AlertSourceInfo.SiteName
+```
+
+### Calling Class Methods
+
+```powershell
+# Parse a UDF value as delimited data
+$Device.GetUdfAsCsv(10, ';', @('Role', 'Department', 'Location'))
+
+# Parse job component stdout as CSV
+$JobResult.StdOut | ForEach-Object {$_.GetStdDataAsCsv()}
+```
+
+### Class Reference
+
+Class reference documentation for all types is in `docs/about/classes/`. Each domain folder contains a page per class with full property and method listings.
 
 ---
 
@@ -123,34 +203,50 @@ Set the profile for your session:
 Set-RMMConfig -ThrottleProfile Cautious
 ```
 
-For concurrent/long-running tests, open multiple PowerShell windows and run:
+For concurrent/long-running tests, open multiple PowerShell windows and run test commands:
 
 ```powershell
-# Example stress test
-# Run in several windows to test throttle and monitor API behavior
-# Use Ctrl+c to cancel at any time, or adjust iterations for comfort
+# Stress test — run in several windows simultaneously
+# Ctrl+C to cancel at any time; adjust the iteration count for comfort
 $DebugPreference = 'Continue'
-1..100 | Foreach-Object {Write-Host "Stress test: $_"; Get-RMMSite | Get-RMMAlert -Status All | Out-Null}
+
+# Read heavy testing
+1..100 | ForEach-Object {Write-Host "Stress read test: $_"; Get-RMMSite | Get-RMMDevice | Get-RMMAudit | Out-Null}
+
+# Write test
+1..100 | ForEach-Object {Write-Host "Stress write test: $_"; Set-RMMDeviceUdf -DeviceUid '628d9f36-694e-4d65-8433-e7de99f5e192' -UdfNumber 300 -UdfValue (Get-Date)}
+```
+
+To monitor throttle utilisation in real time, open a separate shell and run alongside the stress test:
+
+```powershell
+# Live throttle monitor — refreshes every 5 seconds
+while ($true) {
+    Get-RMMThrottleStatus |
+        Select-Object -ExpandProperty Buckets |
+        Sort-Object Utilisation -Descending |
+        Format-Table
+    Start-Sleep -Seconds 5
+}
 ```
 
 ---
 
 ## Alert Contexts
 
-Some alert contexts generated by default monitors in the new UI are undocumented in the OpenAPI definition. The module includes classes for all documented contexts and a default for unrecognised ones.
+Some alert contexts generated by default monitors in the new UI are undocumented in the Datto RMM API specification. The module includes typed classes for all documented contexts and falls back to `DRMMAlertContextGeneric` for unrecognised ones — no data is lost.
 
-**Help us improve:**  
-If you encounter an alert context not listed in the docs, please export its details and share them for reference and feedback to Datto.
+For identification scripts, a list of known unrecognised types, and submission guidance, see [about_DattoRMM.CoreAlertContextDiscovery](../about/about_DattoRMM.CoreAlertContextDiscovery.md).
 
-Example to export alert context classes:
+---
 
-```powershell
-(Get-RMMAlert -Status All -Debug).AlertContext | 
-  Where-Object { $_.Class -notin 'comp_script_ctx', 'online_offline_status_ctx' } |
-  Sort-Object Class -Unique |
-  Select-Object Class, @{n='Properties';e={ $_.Properties.Keys -join ';' }} |
-  Export-Csv AlertContexts.csv
-```
+## Activity Log Details
+
+Activity log `Details` objects are fully polymorphic and entirely undocumented. Unlike alert contexts, all details are returned as `DRMMActivityLogDetailsGeneric` by default — typed dispatch requires `-UseExperimentalDetailClasses`. The dispatch hierarchy is three levels deep: Entity → Category → Action.
+
+Currently mapped combinations are limited (Device/job/deployment and Device/job/create). Coverage depends entirely on real-world data from beta testers and may never be complete without a published API schema.
+
+For schema collection scripts, an explanation of the hierarchy, and submission guidance, see [about_DattoRMM.CoreActivityLogDiscovery](../about/about_DattoRMM.CoreActivityLogDiscovery.md).
 
 ---
 
@@ -171,7 +267,7 @@ Example to export alert context classes:
 
 ## Feedback
 
-Please report issues, undocumented alert contexts, or suggestions via GitHub Issues or your feedback channel.
+Please report issues, undocumented alert contexts, or suggestions via [GitHub Issues](https://github.com/TheShadowTek/DattoRMM.Core/issues).
 
 ---
 
@@ -182,6 +278,8 @@ Please report issues, undocumented alert contexts, or suggestions via GitHub Iss
 - [Beta Examples](DattoRMM.Core-Beta-Examples.md) — Detailed worked examples (Azure Automation, CSV exports, type extensions, UDF expansion)
 - [Authentication](../about/about_DattoRMM.CoreAuthentication.md) — All credential methods including Key Vault and SecretStore
 - [Configuration](../about/about_DattoRMM.CoreConfiguration.md) — Platform, throttle, and persistence settings
+- [Alert Context Discovery](../about/about_DattoRMM.CoreAlertContextDiscovery.md) — Identify and report unrecognised alert context types
+- [Activity Log Discovery](../about/about_DattoRMM.CoreActivityLogDiscovery.md) — Identify and report undocumented activity log detail combinations
 - In-module help: `Get-Help <Command>`
 - About topics: `Get-Help about_DattoRMM.Core`, `Get-Help about_DattoRMM.CoreThrottling`
 

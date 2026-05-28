@@ -115,7 +115,18 @@ In the Azure portal, attach a schedule to the Runbook and optionally override `S
 
 ## CSV Device Export — Flattened Site-Device Report
 
-A script that exports all devices grouped by site to a single flat CSV, suitable for reporting, import into other tools, or Excel analysis. The challenge is that `DRMMDevice` objects contain nested properties (`Udfs`, `DeviceType`, `Antivirus`, `PatchManagement`) that need to be flattened for CSV.
+A script that exports all devices grouped by site to a single flat CSV, suitable for reporting, import into other tools, or Excel analysis.
+
+> [!TIP]
+> For standard column layouts without writing custom `Select-Object` expressions, use `Export-RMMObjectCsv`. It handles nested property flattening automatically and supports user-defined transforms for custom column layouts.
+>
+> ```powershell
+> Get-RMMSite | Get-RMMDevice | Export-RMMObjectCsv -Path .\Devices.csv
+> ```
+>
+> See [about_DattoRMM.CoreExport](../about/about_DattoRMM.CoreExport.md) for details.
+
+The example below demonstrates the underlying `Select-Object` flattening technique — useful when you need precise control over which properties and nested paths appear in the output, or when building a column layout outside the built-in transforms.
 
 ### Script
 
@@ -267,17 +278,21 @@ Save the following as `DattoRMM.Core.User.Types.ps1xml` in a location of your ch
 </Types>
 ```
 
-### Step 2: Load the Extension
+### Step 2: Save to the Profile Folder
 
-Load the custom types file at the start of your script or in your PowerShell profile:
+The module automatically detects and loads any `Types.ps1xml` file placed in `$HOME/.DattoRMM.Core/` whose name matches the convention `DattoRMM.Core.<name>.Types.ps1xml`. Move your file there — using the filename from Step 1 — and it will load the next time the module imports, with no additional code required:
+
+```
+$HOME/.DattoRMM.Core/DattoRMM.Core.User.Types.ps1xml
+```
+
+If you need the extensions available immediately in an active session without re-importing the module, call `Update-TypeData` directly:
 
 ```powershell
-# Load the module
-Import-Module DattoRMM.Core
-
-# Load custom type extensions
 Update-TypeData -PrependPath "$HOME/.DattoRMM.Core/DattoRMM.Core.User.Types.ps1xml"
 ```
+
+See [about_DattoRMM.CoreTypeExtensions](../about/about_DattoRMM.CoreTypeExtensions.md) for the naming convention, load order, and multiple-file support.
 
 ### Step 3: Use the New Properties
 
@@ -355,7 +370,7 @@ You can also create a custom Format file to control how sites display in the con
 </Configuration>
 ```
 
-Load it alongside the types extension:
+Save the format file to `$HOME/.DattoRMM.Core/DattoRMM.Core.User.Format.ps1xml` and it will auto-load the next time the module imports, alongside the types extension. To apply it immediately in an active session:
 
 ```powershell
 Update-FormatData -PrependPath "$HOME/.DattoRMM.Core/DattoRMM.Core.User.Format.ps1xml"

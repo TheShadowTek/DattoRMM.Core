@@ -32,11 +32,8 @@ The throttling engine is fully functional and protects against account‑wide li
 #### Activity Log Schema Coverage
 Some activity log entry types remain undocumented. The module handles these safely using generic classes, and dedicated types will be added as anonymised schema data becomes available from testers.
 
-#### Class Structure Cleanup
-The remaining large classes file will be refactored before v1 to improve readability and contributor experience. This does not affect runtime behaviour.
-
 #### Platform Coverage
-The module is developed and tested primarily on Windows. Limited testing has been performed on Linux (Ubuntu 24.04.1 LTS). No testing has been performed on macOS. The module is expected to work on all platforms supported by PowerShell 7.4+, but OS-specific feedback is especially valuable during the beta.
+The module is developed and tested primarily on Windows. Azure Automation Account runbook deployment has been validated, including Managed Identity and Key Vault credential patterns. Limited testing has been performed on Linux (Ubuntu 24.04.1 LTS). No testing has been performed on macOS. The module is expected to work on all platforms supported by PowerShell 7.4+, and OS-specific feedback is especially valuable during the beta.
 
 ---
 
@@ -62,33 +59,19 @@ The module’s architecture is stable; refinements are additive.
 
 ## OPTIONAL ANONYMISED DATA CONTRIBUTION
 
-To expand coverage for undocumented activity log entries and alert contexts, testers can optionally provide anonymised schema data.
+To expand coverage for undocumented activity log details and alert contexts, testers can optionally provide anonymised schema data.
 
-Only structural information is collected:
+Only structural information is collected — discriminator values, property names, and property types. No values, identifiers, or environment-specific data are included.
 
-- `@class` discriminator  
-- Property names  
-- Property types  
-
-No values, identifiers, or environment‑specific data are included.
-
-A dedicated script/command will be provided to generate this report.
+- For **alert context** collection scripts and submission guidance, see [about_DattoRMM.CoreAlertContextDiscovery](../about/about_DattoRMM.CoreAlertContextDiscovery.md).
+- For **activity log details** collection scripts and submission guidance, see [about_DattoRMM.CoreActivityLogDiscovery](../about/about_DattoRMM.CoreActivityLogDiscovery.md).
 
 ---
 
 ## FEATURES COMING IN v1 (OR EARLIER)
 
-### Structured CSV Export
-Improved CSV export options are planned for common object types such as sites, devices, and alerts. These exports will use stable, predictable column ordering, avoid nested object noise, and produce automation‑friendly output.
-
 ### Additional Typed Classes
 As anonymised schema data becomes available, new typed classes will be added for undocumented activity log entries, undocumented alert contexts, and any new structures introduced during the beta period.
-
-### Type and Format File Restructuring
-The current monolithic `DattoRMM.Core.Types.ps1xml` and `DattoRMM.Core.Format.ps1xml` files will be split into smaller, domain-organised files before v1 to improve maintainability and contribution experience.
-
-### Custom Type and Format Auto-Loading
-The module will automatically detect and load user-defined `.ps1xml` type and format files from the configuration folder (`$HOME/.DattoRMM.Core/`). This will allow users to extend the type system — for example, adding derived properties to site or device objects — without modifying the module or maintaining separate profile scripts.
 
 ---
 
@@ -98,10 +81,6 @@ v1 will be declared when:
 
 - Throttling behaviour is fully tuned  
 - Activity log and alert context coverage is more complete  
-- Class structures are refactored  
-- Type and format ps1xml files are restructured  
-- Custom type/format auto-loading from the config folder is implemented  
-- Export enhancements are in place  
 - Documentation is fully aligned with the module's architecture  
 - Cross-platform testing coverage is sufficient (Linux, macOS)
 
@@ -116,4 +95,8 @@ The beta period remains open‑ended to ensure the module reaches the right leve
 - [about_DattoRMM.Core](../about/about_DattoRMM.Core.md)  
 - [about_DattoRMM.CoreThrottling](../about/about_DattoRMM.CoreThrottling.md)  
 - [about_DattoRMM.CoreAlertContextDiscovery](../about/about_DattoRMM.CoreAlertContextDiscovery.md)  
-- [about_DattoRMM.CoreConfiguration](../about/about_DattoRMM.CoreConfiguration.md)
+- [about_DattoRMM.CoreActivityLogDiscovery](../about/about_DattoRMM.CoreActivityLogDiscovery.md)  
+- [about_DattoRMM.CoreConfiguration](../about/about_DattoRMM.CoreConfiguration.md)  
+- [about_DattoRMM.CoreExport](../about/about_DattoRMM.CoreExport.md)  
+- [about_DattoRMM.CoreTypeExtensions](../about/about_DattoRMM.CoreTypeExtensions.md)  
+- [about_DattoRMM.CoreFormatExtensions](../about/about_DattoRMM.CoreFormatExtensions.md)
