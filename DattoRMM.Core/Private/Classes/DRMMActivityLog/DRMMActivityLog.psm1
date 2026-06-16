@@ -192,6 +192,20 @@ class DRMMActivityLogDetails : DRMMObject {
             'USER_user_generate.api.keys' {[DRMMActivityLogDetailsUserUserGenerateApiKeys]::FromActivityLogDetail($DetailsHashtable); break}
             {$_ -match '^USER_user_'} {[DRMMActivityLogDetailsUserUserGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             
+            # USER entity - agent category
+            'USER_agent_event' {[DRMMActivityLogDetailsUserAgentEvent]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_agent_file' {[DRMMActivityLogDetailsUserAgentFile]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_agent_rs' {[DRMMActivityLogDetailsUserAgentRs]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_agent_shot' {[DRMMActivityLogDetailsUserAgentShot]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_agent_'} {[DRMMActivityLogDetailsUserAgentGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # USER entity - policy category
+            'USER_policy_create.and.push.changes' {[DRMMActivityLogDetailsUserPolicyCreateAndPushChanges]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_policy_edit' {[DRMMActivityLogDetailsUserPolicyEdit]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_policy_edit.and.push.changes' {[DRMMActivityLogDetailsUserPolicyEditAndPushChanges]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_policy_toggle' {[DRMMActivityLogDetailsUserPolicyToggle]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_policy_'} {[DRMMActivityLogDetailsUserPolicyGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
             # USER entity - unknown category (entity-level fallback)
             {$_ -match '^USER_'} {[DRMMActivityLogDetailsUserGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             
@@ -1473,6 +1487,448 @@ class DRMMActivityLogDetailsUserUserGenerateApiKeys : DRMMActivityLogDetailsUser
         [DRMMActivityLogDetailsUserUser]::PopulateCategoryProperties($Details, $ActivityLogDetail)
 
         # No generate.api.keys-specific properties identified beyond category base
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER agent-related activity log details, containing properties common to all agent session actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserAgent class serves as a base class for USER entity agent category activity logs. It encapsulates 6 properties common to all observed agent session actions — DataDeviceId, DataDeviceName, DataDeviceUid, DataDirect, DataEnd, and DataStart — in addition to the 10 entity-level properties inherited from DRMMActivityLogEntityUser. Specific agent action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserAgent : DRMMActivityLogEntityUser {
+
+    # The identifier of the device the agent session was performed on.
+    [string]$DataDeviceId
+    # The display name of the device the agent session was performed on.
+    [string]$DataDeviceName
+    # The unique identifier (UID) of the device the agent session was performed on.
+    [string]$DataDeviceUid
+    # Indicates whether the agent session was a direct connection.
+    [string]$DataDirect
+    # The end time or timestamp of the agent session.
+    [string]$DataEnd
+    # The start time or timestamp of the agent session.
+    [string]$DataStart
+
+    DRMMActivityLogDetailsUserAgent() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserAgent]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate agent category properties
+        $Details.DataDeviceId = $ActivityLogDetail.'data.device_id'
+        $Details.DataDeviceName = $ActivityLogDetail.'data.device_name'
+        $Details.DataDeviceUid = $ActivityLogDetail.'data.device_uid'
+        $Details.DataDirect = $ActivityLogDetail.'data.direct'
+        $Details.DataEnd = $ActivityLogDetail.'data.end'
+        $Details.DataStart = $ActivityLogDetail.'data.start'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER agent activity log details for unknown agent actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserAgentGeneric class is used for USER entity agent category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 16 base properties common to all USER agent activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsUserAgentGeneric : DRMMActivityLogDetailsUserAgent {
+
+    DRMMActivityLogDetailsUserAgentGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserAgentGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserAgentGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserAgent]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username',
+                'data.device_id', 'data.device_name', 'data.device_uid',
+                'data.direct', 'data.end', 'data.start'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category agent, and action event, which includes specific properties related to agent event activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserAgentEvent class models the details of an agent event activity log entry. It inherits the 16 common USER agent properties from DRMMActivityLogDetailsUserAgent. No additional properties beyond the category base have been observed for event actions.
+#>
+class DRMMActivityLogDetailsUserAgentEvent : DRMMActivityLogDetailsUserAgent {
+
+    DRMMActivityLogDetailsUserAgentEvent() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserAgentEvent] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserAgentEvent]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserAgent]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # No event-specific properties identified beyond category base
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category agent, and action file, which includes specific properties related to agent file transfer activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserAgentFile class models the details of an agent file transfer activity log entry. It inherits the 16 common USER agent properties from DRMMActivityLogDetailsUserAgent and adds the DataDetails property containing additional detail about the file transfer operation.
+#>
+class DRMMActivityLogDetailsUserAgentFile : DRMMActivityLogDetailsUserAgent {
+
+    # Additional detail about the agent file transfer operation.
+    [string]$DataDetails
+
+    DRMMActivityLogDetailsUserAgentFile() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserAgentFile] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserAgentFile]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserAgent]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate file-specific properties
+        $Details.DataDetails = $ActivityLogDetail.'data.details'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category agent, and action rs (remote support), which includes specific properties related to agent remote support activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserAgentRs class models the details of an agent remote support activity log entry. It inherits the 16 common USER agent properties from DRMMActivityLogDetailsUserAgent and adds the DataDetails property containing additional detail about the remote support session.
+#>
+class DRMMActivityLogDetailsUserAgentRs : DRMMActivityLogDetailsUserAgent {
+
+    # Additional detail about the agent remote support session.
+    [string]$DataDetails
+
+    DRMMActivityLogDetailsUserAgentRs() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserAgentRs] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserAgentRs]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserAgent]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate rs-specific properties
+        $Details.DataDetails = $ActivityLogDetail.'data.details'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category agent, and action shot (screenshot), which includes specific properties related to agent screenshot activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserAgentShot class models the details of an agent screenshot activity log entry. It inherits the 16 common USER agent properties from DRMMActivityLogDetailsUserAgent and adds the DataDetails property containing additional detail about the screenshot operation.
+#>
+class DRMMActivityLogDetailsUserAgentShot : DRMMActivityLogDetailsUserAgent {
+
+    # Additional detail about the agent screenshot operation.
+    [string]$DataDetails
+
+    DRMMActivityLogDetailsUserAgentShot() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserAgentShot] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserAgentShot]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserAgent]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate shot-specific properties
+        $Details.DataDetails = $ActivityLogDetail.'data.details'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER policy-related activity log details, containing properties common to all policy actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserPolicy class serves as a base class for USER entity policy category activity logs. It encapsulates 3 properties common to all observed policy actions — DataPolicyId, DataPolicyName, and DataType — in addition to the 10 entity-level properties inherited from DRMMActivityLogEntityUser. Specific policy action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserPolicy : DRMMActivityLogEntityUser {
+
+    # The identifier of the policy that was affected.
+    [string]$DataPolicyId
+    # The display name of the policy that was affected.
+    [string]$DataPolicyName
+    # The type of the policy that was affected.
+    [string]$DataType
+
+    DRMMActivityLogDetailsUserPolicy() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserPolicy]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate policy category properties
+        $Details.DataPolicyId = $ActivityLogDetail.'data.policy_id'
+        $Details.DataPolicyName = $ActivityLogDetail.'data.policy_name'
+        $Details.DataType = $ActivityLogDetail.'data.type'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER policy activity log details for unknown policy actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserPolicyGeneric class is used for USER entity policy category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 13 base properties common to all USER policy activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsUserPolicyGeneric : DRMMActivityLogDetailsUserPolicy {
+
+    DRMMActivityLogDetailsUserPolicyGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserPolicyGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserPolicyGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserPolicy]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username',
+                'data.policy_id', 'data.policy_name', 'data.type'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category policy, and action create.and.push.changes, which includes specific properties related to policy creation and push activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserPolicyCreateAndPushChanges class models the details of a policy create-and-push activity log entry. It inherits the 13 common USER policy properties from DRMMActivityLogDetailsUserPolicy. No additional properties beyond the category base have been observed for this action.
+#>
+class DRMMActivityLogDetailsUserPolicyCreateAndPushChanges : DRMMActivityLogDetailsUserPolicy {
+
+    DRMMActivityLogDetailsUserPolicyCreateAndPushChanges() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserPolicyCreateAndPushChanges] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserPolicyCreateAndPushChanges]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserPolicy]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # No create.and.push.changes-specific properties identified beyond category base
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category policy, and action edit, which includes specific properties related to policy edit activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserPolicyEdit class models the details of a policy edit activity log entry. It inherits the 13 common USER policy properties from DRMMActivityLogDetailsUserPolicy. No additional properties beyond the category base have been observed for this action.
+#>
+class DRMMActivityLogDetailsUserPolicyEdit : DRMMActivityLogDetailsUserPolicy {
+
+    DRMMActivityLogDetailsUserPolicyEdit() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserPolicyEdit] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserPolicyEdit]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserPolicy]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # No edit-specific properties identified beyond category base
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category policy, and action edit.and.push.changes, which includes specific properties related to policy edit-and-push activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserPolicyEditAndPushChanges class models the details of a policy edit-and-push activity log entry. It inherits the 13 common USER policy properties from DRMMActivityLogDetailsUserPolicy. No additional properties beyond the category base have been observed for this action.
+#>
+class DRMMActivityLogDetailsUserPolicyEditAndPushChanges : DRMMActivityLogDetailsUserPolicy {
+
+    DRMMActivityLogDetailsUserPolicyEditAndPushChanges() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserPolicyEditAndPushChanges] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserPolicyEditAndPushChanges]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserPolicy]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # No edit.and.push.changes-specific properties identified beyond category base
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category policy, and action toggle, which includes specific properties related to policy toggle activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserPolicyToggle class models the details of a policy toggle activity log entry. It inherits the 13 common USER policy properties from DRMMActivityLogDetailsUserPolicy and adds the DataActive property that indicates the new active state of the policy after the toggle.
+#>
+class DRMMActivityLogDetailsUserPolicyToggle : DRMMActivityLogDetailsUserPolicy {
+
+    # The active state of the policy after the toggle operation.
+    [string]$DataActive
+
+    DRMMActivityLogDetailsUserPolicyToggle() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserPolicyToggle] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserPolicyToggle]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserPolicy]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate toggle-specific properties
+        $Details.DataActive = $ActivityLogDetail.'data.active'
 
         return $Details
 
