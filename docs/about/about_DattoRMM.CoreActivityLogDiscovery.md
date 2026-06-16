@@ -114,7 +114,16 @@ $GenericClasses = @(
     'DRMMActivityLogDetailsDeviceJobGeneric',
     'DRMMActivityLogDetailsDeviceRemoteGeneric',
     'DRMMActivityLogDetailsDeviceDeviceGeneric',
-    'DRMMActivityLogDetailsUserGeneric'
+    'DRMMActivityLogDetailsDevicePatchGeneric',
+    'DRMMActivityLogDetailsUserGeneric',
+    'DRMMActivityLogDetailsUserAccountGeneric',
+    'DRMMActivityLogDetailsUserComponentGeneric',
+    'DRMMActivityLogDetailsUserDeviceGeneric',
+    'DRMMActivityLogDetailsUserMonitorGeneric',
+    'DRMMActivityLogDetailsUserSiteGeneric',
+    'DRMMActivityLogDetailsUserUserGeneric',
+    'DRMMActivityLogDetailsUserAgentGeneric',
+    'DRMMActivityLogDetailsUserPolicyGeneric'
 )
 
 Get-RMMActivityLog -UseExperimentalDetailClasses -Force |
@@ -145,7 +154,16 @@ $GenericClasses = @(
     'DRMMActivityLogDetailsDeviceJobGeneric',
     'DRMMActivityLogDetailsDeviceRemoteGeneric',
     'DRMMActivityLogDetailsDeviceDeviceGeneric',
-    'DRMMActivityLogDetailsUserGeneric'
+    'DRMMActivityLogDetailsDevicePatchGeneric',
+    'DRMMActivityLogDetailsUserGeneric',
+    'DRMMActivityLogDetailsUserAccountGeneric',
+    'DRMMActivityLogDetailsUserComponentGeneric',
+    'DRMMActivityLogDetailsUserDeviceGeneric',
+    'DRMMActivityLogDetailsUserMonitorGeneric',
+    'DRMMActivityLogDetailsUserSiteGeneric',
+    'DRMMActivityLogDetailsUserUserGeneric',
+    'DRMMActivityLogDetailsUserAgentGeneric',
+    'DRMMActivityLogDetailsUserPolicyGeneric'
 )
 
 $Logs = Get-RMMActivityLog -UseExperimentalDetailClasses -Force `
@@ -218,7 +236,16 @@ $GenericClasses = @(
     'DRMMActivityLogDetailsDeviceJobGeneric',
     'DRMMActivityLogDetailsDeviceRemoteGeneric',
     'DRMMActivityLogDetailsDeviceDeviceGeneric',
-    'DRMMActivityLogDetailsUserGeneric'
+    'DRMMActivityLogDetailsDevicePatchGeneric',
+    'DRMMActivityLogDetailsUserGeneric',
+    'DRMMActivityLogDetailsUserAccountGeneric',
+    'DRMMActivityLogDetailsUserComponentGeneric',
+    'DRMMActivityLogDetailsUserDeviceGeneric',
+    'DRMMActivityLogDetailsUserMonitorGeneric',
+    'DRMMActivityLogDetailsUserSiteGeneric',
+    'DRMMActivityLogDetailsUserUserGeneric',
+    'DRMMActivityLogDetailsUserAgentGeneric',
+    'DRMMActivityLogDetailsUserPolicyGeneric'
 )
 
 Get-RMMSite | Get-RMMActivityLog -UseExperimentalDetailClasses -Force `
