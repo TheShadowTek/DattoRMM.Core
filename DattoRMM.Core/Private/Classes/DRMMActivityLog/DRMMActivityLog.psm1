@@ -157,6 +157,10 @@ class DRMMActivityLogDetails : DRMMObject {
             'DEVICE_device_move.device' {[DRMMActivityLogDetailsDeviceDeviceMoveDevice]::FromActivityLogDetail($DetailsHashtable); break}
             {$_ -match '^DEVICE_device_'} {[DRMMActivityLogDetailsDeviceDeviceGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             
+            # DEVICE entity - patch category
+            'DEVICE_patch_audit' {[DRMMActivityLogDetailsDevicePatchAudit]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^DEVICE_patch_'} {[DRMMActivityLogDetailsDevicePatchGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
             # DEVICE entity - unknown category (entity-level fallback)
             {$_ -match '^DEVICE_'} {[DRMMActivityLogDetailsDeviceGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             
@@ -331,7 +335,7 @@ class DRMMActivityLogDetailsDeviceGeneric : DRMMActivityLogEntityDevice {
 .SYNOPSIS
     Base class for USER entity activity log details, containing properties common to all USER activities.
 .DESCRIPTION
-    The DRMMActivityLogEntityUser class serves as a base class for all USER entity activity logs. As of this implementation, USER entity activities have not been observed in the wild, so this class is a placeholder for future expansion. It will likely contain properties such as UserId, UserUsername, Entity, EventAction, EventCategory, and Uid once USER activities are documented.
+    The DRMMActivityLogEntityUser class serves as a base class for all USER entity activity logs, regardless of category. It encapsulates the 10 core properties that appear in all USER activities: Entity, EventAction, EventCategory, Uid, SourceForwardedIp, UserEmail, UserFirstName, UserId, UserLastName, and UserUsername. These properties are common across all observed USER entity combinations. Category-specific classes (account, agent, component, device, monitor, policy, site, user) inherit from this class and add their category-specific properties.
 #>
 class DRMMActivityLogEntityUser : DRMMActivityLogDetails {
 
@@ -339,10 +343,22 @@ class DRMMActivityLogEntityUser : DRMMActivityLogDetails {
     [string]$Entity
     # The specific action that was performed in the user activity.
     [string]$EventAction
-    # The category of the user event.
+    # The category of the user event (e.g., account, agent, policy, site).
     [string]$EventCategory
     # The unique identifier of the activity log detail entry.
     [guid]$Uid
+    # The forwarded IP address of the source that performed the user activity.
+    [string]$SourceForwardedIp
+    # The email address of the user who performed the activity.
+    [string]$UserEmail
+    # The first name of the user who performed the activity.
+    [string]$UserFirstName
+    # The identifier of the user who performed the activity.
+    [long]$UserId
+    # The last name of the user who performed the activity.
+    [string]$UserLastName
+    # The username of the user who performed the activity.
+    [string]$UserUsername
 
     DRMMActivityLogEntityUser() : base() {
 
@@ -354,6 +370,12 @@ class DRMMActivityLogEntityUser : DRMMActivityLogDetails {
         $Details.EventAction = $ActivityLogDetail.'event.action'
         $Details.EventCategory = $ActivityLogDetail.'event.category'
         $Details.Uid = $ActivityLogDetail.'uid'
+        $Details.SourceForwardedIp = $ActivityLogDetail.'source.forwarded_ip'
+        $Details.UserEmail = $ActivityLogDetail.'user.email'
+        $Details.UserFirstName = $ActivityLogDetail.'user.firstname'
+        $Details.UserId = $ActivityLogDetail.'user.id'
+        $Details.UserLastName = $ActivityLogDetail.'user.lastname'
+        $Details.UserUsername = $ActivityLogDetail.'user.username'
 
     }
 }
@@ -362,7 +384,7 @@ class DRMMActivityLogEntityUser : DRMMActivityLogDetails {
 .SYNOPSIS
     Represents a generic USER entity activity log for unknown categories, with entity-level properties and dynamic additional properties.
 .DESCRIPTION
-    The DRMMActivityLogDetailsUserGeneric class is used for USER entity activity logs. As of this implementation, USER entity activities have not been observed in the wild, so this class serves as a placeholder and generic handler. It inherits base properties common to USER activities and dynamically adds any additional properties found in the response. This ensures graceful handling when USER activities are encountered.
+    The DRMMActivityLogDetailsUserGeneric class is used for USER entity activity logs where the category is not yet mapped to a dedicated class. It inherits the 10 base properties common to all USER activities (Entity, EventAction, EventCategory, Uid, SourceForwardedIp, UserEmail, UserFirstName, UserId, UserLastName, UserUsername) and dynamically adds any additional properties found in the response. This ensures type safety for known entity-level properties while maintaining flexibility for unknown categories.
 #>
 class DRMMActivityLogDetailsUserGeneric : DRMMActivityLogEntityUser {
 
@@ -385,7 +407,18 @@ class DRMMActivityLogDetailsUserGeneric : DRMMActivityLogEntityUser {
 
         # O(1) membership test for known entity property keys
         $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
-            [string[]]@('entity', 'event.action', 'event.category', 'uid'),
+            [string[]]@(
+                'entity',
+                'event.action',
+                'event.category',
+                'uid',
+                'source.forwarded_ip',
+                'user.email',
+                'user.firstname',
+                'user.id',
+                'user.lastname',
+                'user.username'
+            ),
             [System.StringComparer]::Ordinal
         )
 
@@ -1015,6 +1048,157 @@ class DRMMActivityLogDetailsDeviceDeviceMoveDevice : DRMMActivityLogDetailsDevic
         $Details.UserId = $ActivityLogDetail.'user.id'
         $Details.UserLastName = $ActivityLogDetail.'user.lastname'
         $Details.UserUsername = $ActivityLogDetail.'user.username'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for DEVICE patch-related activity log details, containing properties common to all patch actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDevicePatch class serves as a base class for DEVICE entity patch category activity logs. It encapsulates properties that are common across different patch actions, including patch activity result, status, run date, site information, and source forwarding details, in addition to the entity-level DEVICE properties inherited from DRMMActivityLogEntityDevice. Specific patch action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsDevicePatch : DRMMActivityLogEntityDevice {
+
+    # Informational message associated with the patch activity.
+    [string]$PatchActivityInfo
+    # The result description of the patch activity.
+    [string]$PatchActivityResult
+    # The date and time when the patch activity ran.
+    [nullable[datetime]]$PatchActivityRunDate
+    # Indicates whether the patch activity completed successfully.
+    [bool]$PatchActivitySuccess
+    # The name of the site where the patch activity occurred.
+    [string]$SiteName
+    # The forwarded IP address of the source that initiated the patch activity.
+    [string]$SourceForwardedIp
+
+    DRMMActivityLogDetailsDevicePatch() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsDevicePatch]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityDevice]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate patch category properties
+        $Details.PatchActivityInfo = $ActivityLogDetail.'patch_activity.info'
+        $Details.PatchActivityResult = $ActivityLogDetail.'patch_activity.result'
+        $Details.SiteName = $ActivityLogDetail.'site.name'
+        $Details.SourceForwardedIp = $ActivityLogDetail.'source.forwarded_ip'
+        $Details.PatchActivitySuccess = $ActivityLogDetail.'patch_activity.success'
+
+        if ($null -ne $ActivityLogDetail.'patch_activity.run_date') {
+
+            $Details.PatchActivityRunDate = [DRMMObject]::ParseApiDateTime($ActivityLogDetail.'patch_activity.run_date')
+
+        } else {
+
+            $Details.PatchActivityRunDate = $null
+
+        }
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic DEVICE patch activity log details for unknown patch actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDevicePatchGeneric class is used for DEVICE entity patch category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 12 base properties common to all DEVICE patch activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsDevicePatchGeneric : DRMMActivityLogDetailsDevicePatch {
+
+    DRMMActivityLogDetailsDevicePatchGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDevicePatchGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsDevicePatchGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsDevicePatch]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'device.hostname', 'device.uid', 'entity', 'event.action', 'event.category', 'uid',
+                'patch_activity.info', 'patch_activity.result', 'patch_activity.run_date', 'patch_activity.success',
+                'site.name', 'source.forwarded_ip'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity DEVICE, category patch, and action audit, which includes specific properties related to patch audit activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsDevicePatchAudit class models the details of a patch audit activity log entry. It inherits common patch properties from DRMMActivityLogDetailsDevicePatch and adds the audit-specific DataPatchAudit property that identifies the patch audit entry associated with the activity.
+#>
+class DRMMActivityLogDetailsDevicePatchAudit : DRMMActivityLogDetailsDevicePatch {
+
+    # The identifier or descriptor of the patch audit entry associated with the activity.
+    [string]$DataPatchAudit
+
+    DRMMActivityLogDetailsDevicePatchAudit() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsDevicePatchAudit] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsDevicePatchAudit]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsDevicePatch]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate audit-specific properties
+        $Details.DataPatchAudit = $ActivityLogDetail.'data.patch_audit'
 
         return $Details
 

@@ -43,6 +43,10 @@ When `-UseExperimentalDetailClasses` is used, the module attempts to dispatch de
 | `DRMMActivityLogDetailsDeviceGeneric` | Category fallback | Entity is `Device`; category not yet mapped |
 | `DRMMActivityLogDetailsDeviceJob` | Category base | Entity is `Device`, category is `job` — base class only, not directly instantiated |
 | `DRMMActivityLogDetailsDeviceJobGeneric` | Action fallback | Entity is `Device`, category is `job`; action not yet mapped |
+| `DRMMActivityLogDetailsDeviceRemote` | Category base | Entity is `Device`, category is `remote` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsDeviceRemoteGeneric` | Action fallback | Entity is `Device`, category is `remote`; action not yet mapped |
+| `DRMMActivityLogDetailsDeviceDevice` | Category base | Entity is `Device`, category is `device` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsDeviceDeviceGeneric` | Action fallback | Entity is `Device`, category is `device`; action not yet mapped |
 | `DRMMActivityLogEntityUser` | Entity base | Entity is `User` — base class only, not directly instantiated |
 | `DRMMActivityLogDetailsUserGeneric` | User fallback | Entity is `User`; any category/action |
 
@@ -54,6 +58,9 @@ The following Entity/Category/Action combinations have dedicated typed classes:
 |---|---|---|---|
 | `Device` | `job` | `deployment` | `DRMMActivityLogDetailsDeviceJobDeployment` |
 | `Device` | `job` | `create` | `DRMMActivityLogDetailsDeviceJobCreate` |
+| `Device` | `remote` | `chat` | `DRMMActivityLogDetailsDeviceRemoteChat` |
+| `Device` | `remote` | `jrto` | `DRMMActivityLogDetailsDeviceRemoteJrto` |
+| `Device` | `device` | `move.device` | `DRMMActivityLogDetailsDeviceDeviceMoveDevice` |
 
 All other combinations fall back to the appropriate generic class in the hierarchy. This list will grow as anonymised schema data is contributed by testers.
 
@@ -68,7 +75,7 @@ All other combinations fall back to the appropriate generic class in the hierarc
 | **Coverage likelihood** | Approachable — bounded by the API spec | Open-ended — may never be complete |
 
 > [!NOTE]
-> `User` entity activities have not been observed in testing. `DRMMActivityLogDetailsUserGeneric` exists as a handler but no `User`-specific typed classes have been built. Any `User` entity data from your environment is particularly valuable.
+> No typed classes for `User` entity categories have been built yet — all user activity falls back to `DRMMActivityLogDetailsUserGeneric`. If you have user activities in your environment, the schema collection scripts will capture them. User category data is particularly useful as there are many observed category/action combinations with common shared properties that could support a structured class hierarchy.
 
 ### Accessing Dynamic Properties
 
@@ -105,6 +112,8 @@ $GenericClasses = @(
     'DRMMActivityLogDetailsGeneric',
     'DRMMActivityLogDetailsDeviceGeneric',
     'DRMMActivityLogDetailsDeviceJobGeneric',
+    'DRMMActivityLogDetailsDeviceRemoteGeneric',
+    'DRMMActivityLogDetailsDeviceDeviceGeneric',
     'DRMMActivityLogDetailsUserGeneric'
 )
 
@@ -134,6 +143,8 @@ $GenericClasses = @(
     'DRMMActivityLogDetailsGeneric',
     'DRMMActivityLogDetailsDeviceGeneric',
     'DRMMActivityLogDetailsDeviceJobGeneric',
+    'DRMMActivityLogDetailsDeviceRemoteGeneric',
+    'DRMMActivityLogDetailsDeviceDeviceGeneric',
     'DRMMActivityLogDetailsUserGeneric'
 )
 
@@ -205,6 +216,8 @@ $GenericClasses = @(
     'DRMMActivityLogDetailsGeneric',
     'DRMMActivityLogDetailsDeviceGeneric',
     'DRMMActivityLogDetailsDeviceJobGeneric',
+    'DRMMActivityLogDetailsDeviceRemoteGeneric',
+    'DRMMActivityLogDetailsDeviceDeviceGeneric',
     'DRMMActivityLogDetailsUserGeneric'
 )
 
