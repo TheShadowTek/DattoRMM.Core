@@ -164,6 +164,34 @@ class DRMMActivityLogDetails : DRMMObject {
             # DEVICE entity - unknown category (entity-level fallback)
             {$_ -match '^DEVICE_'} {[DRMMActivityLogDetailsDeviceGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             
+            # USER entity - account category
+            'USER_account_change.settings' {[DRMMActivityLogDetailsUserAccountChangeSettings]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_account_login' {[DRMMActivityLogDetailsUserAccountLogin]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_account_'} {[DRMMActivityLogDetailsUserAccountGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # USER entity - component category
+            'USER_component_add.from.comstore' {[DRMMActivityLogDetailsUserComponentAddFromComstore]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_component_'} {[DRMMActivityLogDetailsUserComponentGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # USER entity - device category
+            'USER_device_edit' {[DRMMActivityLogDetailsUserDeviceEdit]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_device_move.device' {[DRMMActivityLogDetailsUserDeviceMoveDevice]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_device_'} {[DRMMActivityLogDetailsUserDeviceGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # USER entity - monitor category
+            'USER_monitor_create' {[DRMMActivityLogDetailsUserMonitorCreate]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_monitor_edit' {[DRMMActivityLogDetailsUserMonitorEdit]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_monitor_'} {[DRMMActivityLogDetailsUserMonitorGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # USER entity - site category
+            'USER_site_create' {[DRMMActivityLogDetailsUserSiteCreate]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_site_'} {[DRMMActivityLogDetailsUserSiteGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # USER entity - user category
+            'USER_user_edit' {[DRMMActivityLogDetailsUserUserEdit]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_user_generate.api.keys' {[DRMMActivityLogDetailsUserUserGenerateApiKeys]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_user_'} {[DRMMActivityLogDetailsUserUserGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
             # USER entity - unknown category (entity-level fallback)
             {$_ -match '^USER_'} {[DRMMActivityLogDetailsUserGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             
@@ -451,6 +479,1000 @@ class DRMMActivityLogDetailsUserGeneric : DRMMActivityLogEntityUser {
 
             }
         }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER account-related activity log details, containing properties common to all account actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserAccount class serves as a base class for USER entity account category activity logs. All observed account actions share only the 10 entity-level properties inherited from DRMMActivityLogEntityUser. No additional category-level properties have been identified. Specific account action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserAccount : DRMMActivityLogEntityUser {
+
+    DRMMActivityLogDetailsUserAccount() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserAccount]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER account activity log details for unknown account actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserAccountGeneric class is used for USER entity account category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 10 base properties common to all USER activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsUserAccountGeneric : DRMMActivityLogDetailsUserAccount {
+
+    DRMMActivityLogDetailsUserAccountGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserAccountGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserAccountGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserAccount]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category account, and action change.settings, which includes specific properties related to account settings change activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserAccountChangeSettings class models the details of a user account settings change activity log entry. It inherits the 10 common USER entity properties from DRMMActivityLogDetailsUserAccount and adds the DataAccessControl property that describes the access control setting that was changed.
+#>
+class DRMMActivityLogDetailsUserAccountChangeSettings : DRMMActivityLogDetailsUserAccount {
+
+    # The access control setting that was changed during the account settings modification.
+    [string]$DataAccessControl
+
+    DRMMActivityLogDetailsUserAccountChangeSettings() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserAccountChangeSettings] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserAccountChangeSettings]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserAccount]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate change.settings-specific properties
+        $Details.DataAccessControl = $ActivityLogDetail.'data.access_control'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category account, and action login, which includes specific properties related to user login activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserAccountLogin class models the details of a user account login activity log entry. It inherits the 10 common USER entity properties from DRMMActivityLogDetailsUserAccount and adds the DataSource property that identifies the source or method used for the login.
+#>
+class DRMMActivityLogDetailsUserAccountLogin : DRMMActivityLogDetailsUserAccount {
+
+    # The source or method used for the login (e.g., web, api).
+    [string]$DataSource
+
+    DRMMActivityLogDetailsUserAccountLogin() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserAccountLogin] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserAccountLogin]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserAccount]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate login-specific properties
+        $Details.DataSource = $ActivityLogDetail.'data.source'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER component-related activity log details, containing properties common to all component actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserComponent class serves as a base class for USER entity component category activity logs. All observed component actions share only the 10 entity-level properties inherited from DRMMActivityLogEntityUser. No additional category-level properties have been identified. Specific component action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserComponent : DRMMActivityLogEntityUser {
+
+    DRMMActivityLogDetailsUserComponent() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserComponent]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER component activity log details for unknown component actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserComponentGeneric class is used for USER entity component category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 10 base properties common to all USER activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsUserComponentGeneric : DRMMActivityLogDetailsUserComponent {
+
+    DRMMActivityLogDetailsUserComponentGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserComponentGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserComponentGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserComponent]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category component, and action add.from.comstore, which includes specific properties related to adding a component from the component store.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserComponentAddFromComstore class models the details of a component store addition activity log entry. It inherits the 10 common USER entity properties from DRMMActivityLogDetailsUserComponent and adds three properties identifying the component that was added: its numeric ID, display name, and unique identifier.
+#>
+class DRMMActivityLogDetailsUserComponentAddFromComstore : DRMMActivityLogDetailsUserComponent {
+
+    # The numeric identifier of the component that was added from the component store.
+    [string]$DataComponentId
+    # The display name of the component that was added from the component store.
+    [string]$DataComponentName
+    # The unique identifier (UID) of the component that was added from the component store.
+    [string]$DataComponentUid
+
+    DRMMActivityLogDetailsUserComponentAddFromComstore() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserComponentAddFromComstore] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserComponentAddFromComstore]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserComponent]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate add.from.comstore-specific properties
+        $Details.DataComponentId = $ActivityLogDetail.'data.component_id'
+        $Details.DataComponentName = $ActivityLogDetail.'data.component_name'
+        $Details.DataComponentUid = $ActivityLogDetail.'data.component_uid'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER device-related activity log details, containing properties common to all device actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserDevice class serves as a base class for USER entity device category activity logs. All observed device actions share only the 10 entity-level properties inherited from DRMMActivityLogEntityUser. No additional category-level properties have been identified. Specific device action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserDevice : DRMMActivityLogEntityUser {
+
+    DRMMActivityLogDetailsUserDevice() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserDevice]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER device activity log details for unknown device actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserDeviceGeneric class is used for USER entity device category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 10 base properties common to all USER activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsUserDeviceGeneric : DRMMActivityLogDetailsUserDevice {
+
+    DRMMActivityLogDetailsUserDeviceGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserDeviceGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserDeviceGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserDevice]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category device, and action edit, with dynamic properties for the fields that were changed.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserDeviceEdit class models the details of a device edit activity log entry. It inherits the 10 common USER entity properties from DRMMActivityLogDetailsUserDevice and dynamically adds all additional properties returned by the API. The edit payload varies unpredictably — any UDF field (data.udf1 through data.udfN), multiple UDF fields simultaneously, or other device fields may appear depending on what was changed in the UI. No fixed typed properties are defined beyond the entity base; all edit-specific fields are captured as dynamic members.
+#>
+class DRMMActivityLogDetailsUserDeviceEdit : DRMMActivityLogDetailsUserDevice {
+
+    DRMMActivityLogDetailsUserDeviceEdit() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserDeviceEdit] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserDeviceEdit]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserDevice]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add all remaining properties dynamically — edit payload is unpredictable (any UDF field, multiple fields, etc.)
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category device, and action move.device, which includes specific properties related to device site move activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserDeviceMoveDevice class models the details of a user-initiated device site move activity log entry. It inherits the 10 common USER entity properties from DRMMActivityLogDetailsUserDevice and adds properties identifying the device and destination site involved in the move.
+#>
+class DRMMActivityLogDetailsUserDeviceMoveDevice : DRMMActivityLogDetailsUserDevice {
+
+    # The hostname of the device that was moved.
+    [string]$DataDeviceHostname
+    # The identifier of the device that was moved.
+    [string]$DataDeviceId
+    # The unique identifier (UID) of the device that was moved.
+    [string]$DataDeviceUid
+    # The identifier of the site the device was moved to.
+    [string]$DataSiteId
+    # The name of the site the device was moved to.
+    [string]$DataSiteName
+    # The unique identifier (UID) of the site the device was moved to.
+    [string]$DataSiteUid
+
+    DRMMActivityLogDetailsUserDeviceMoveDevice() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserDeviceMoveDevice] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserDeviceMoveDevice]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserDevice]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate move.device-specific properties
+        $Details.DataDeviceHostname = $ActivityLogDetail.'data.device_hostname'
+        $Details.DataDeviceId = $ActivityLogDetail.'data.device_id'
+        $Details.DataDeviceUid = $ActivityLogDetail.'data.device_uid'
+        $Details.DataSiteId = $ActivityLogDetail.'data.site_id'
+        $Details.DataSiteName = $ActivityLogDetail.'data.site_name'
+        $Details.DataSiteUid = $ActivityLogDetail.'data.site_uid'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER monitor-related activity log details, containing properties common to all monitor actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserMonitor class serves as a base class for USER entity monitor category activity logs. It encapsulates two properties common to all observed monitor actions — DataIsDeviceMonitor and DataMonitorId — in addition to the 10 entity-level properties inherited from DRMMActivityLogEntityUser. Specific monitor action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserMonitor : DRMMActivityLogEntityUser {
+
+    # Indicates whether the monitor is a device-level monitor rather than a policy-level monitor.
+    [string]$DataIsDeviceMonitor
+    # The identifier of the monitor that was created or edited.
+    [string]$DataMonitorId
+
+    DRMMActivityLogDetailsUserMonitor() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserMonitor]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate monitor category properties
+        $Details.DataIsDeviceMonitor = $ActivityLogDetail.'data.is_device_monitor'
+        $Details.DataMonitorId = $ActivityLogDetail.'data.monitor_id'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER monitor activity log details for unknown monitor actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserMonitorGeneric class is used for USER entity monitor category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 12 base properties common to all USER monitor activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsUserMonitorGeneric : DRMMActivityLogDetailsUserMonitor {
+
+    DRMMActivityLogDetailsUserMonitorGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserMonitorGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserMonitorGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserMonitor]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username',
+                'data.is_device_monitor', 'data.monitor_id'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category monitor, and action create, which includes specific properties related to monitor creation activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserMonitorCreate class models the details of a monitor creation activity log entry. It inherits the 12 common USER monitor properties from DRMMActivityLogDetailsUserMonitor and adds the DataPolicyId property that identifies the policy the monitor was created under, if applicable.
+#>
+class DRMMActivityLogDetailsUserMonitorCreate : DRMMActivityLogDetailsUserMonitor {
+
+    # The identifier of the policy the monitor was created under, if applicable.
+    [string]$DataPolicyId
+
+    DRMMActivityLogDetailsUserMonitorCreate() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserMonitorCreate] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserMonitorCreate]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserMonitor]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate create-specific properties
+        $Details.DataPolicyId = $ActivityLogDetail.'data.policy_id'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category monitor, and action edit, which includes specific properties related to monitor edit activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserMonitorEdit class models the details of a monitor edit activity log entry. It inherits the 12 common USER monitor properties from DRMMActivityLogDetailsUserMonitor. No additional properties beyond the category base have been observed for edit actions.
+#>
+class DRMMActivityLogDetailsUserMonitorEdit : DRMMActivityLogDetailsUserMonitor {
+
+    DRMMActivityLogDetailsUserMonitorEdit() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserMonitorEdit] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserMonitorEdit]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserMonitor]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # No edit-specific properties identified beyond category base
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER site-related activity log details, containing properties common to all site actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserSite class serves as a base class for USER entity site category activity logs. All observed site actions share only the 10 entity-level properties inherited from DRMMActivityLogEntityUser. No additional category-level properties have been identified. Specific site action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserSite : DRMMActivityLogEntityUser {
+
+    DRMMActivityLogDetailsUserSite() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserSite]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER site activity log details for unknown site actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserSiteGeneric class is used for USER entity site category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 10 base properties common to all USER activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsUserSiteGeneric : DRMMActivityLogDetailsUserSite {
+
+    DRMMActivityLogDetailsUserSiteGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserSiteGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserSiteGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserSite]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category site, and action create, which includes specific properties related to site creation activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserSiteCreate class models the details of a site creation activity log entry. It inherits the 10 common USER entity properties from DRMMActivityLogDetailsUserSite and adds four properties describing the newly created site: its description, numeric identifier, display name, and unique identifier.
+#>
+class DRMMActivityLogDetailsUserSiteCreate : DRMMActivityLogDetailsUserSite {
+
+    # The description provided for the newly created site.
+    [string]$DataSiteDescription
+    # The numeric identifier assigned to the newly created site.
+    [string]$DataSiteId
+    # The display name of the newly created site.
+    [string]$DataSiteName
+    # The unique identifier (UID) assigned to the newly created site.
+    [string]$DataSiteUid
+
+    DRMMActivityLogDetailsUserSiteCreate() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserSiteCreate] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserSiteCreate]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserSite]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate create-specific properties
+        $Details.DataSiteDescription = $ActivityLogDetail.'data.site_description'
+        $Details.DataSiteId = $ActivityLogDetail.'data.site_id'
+        $Details.DataSiteName = $ActivityLogDetail.'data.site_name'
+        $Details.DataSiteUid = $ActivityLogDetail.'data.site_uid'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER user-related activity log details, containing properties common to all user management actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserUser class serves as a base class for USER entity user category activity logs. It encapsulates two properties common to all observed user management actions — DataUserId and DataUserName — in addition to the 10 entity-level properties inherited from DRMMActivityLogEntityUser. Specific user action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserUser : DRMMActivityLogEntityUser {
+
+    # The identifier of the user account that is the subject of the activity.
+    [string]$DataUserId
+    # The username of the user account that is the subject of the activity.
+    [string]$DataUserName
+
+    DRMMActivityLogDetailsUserUser() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserUser]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate user category properties
+        $Details.DataUserId = $ActivityLogDetail.'data.user_id'
+        $Details.DataUserName = $ActivityLogDetail.'data.user_name'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER user activity log details for unknown user management actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserUserGeneric class is used for USER entity user category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 12 base properties common to all USER user management activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsUserUserGeneric : DRMMActivityLogDetailsUserUser {
+
+    DRMMActivityLogDetailsUserUserGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserUserGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserUserGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserUser]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username',
+                'data.user_id', 'data.user_name'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category user, and action edit, which includes specific properties related to user account edit activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserUserEdit class models the details of a user account edit activity log entry. It inherits the 12 common USER user management properties from DRMMActivityLogDetailsUserUser and adds typed properties for the 6 observed edit fields (roles changed, email, enabled state, first name, last name). Any additional properties not covered by the known typed fields are dynamically added as members, as the edit payload may vary depending on what was changed.
+#>
+class DRMMActivityLogDetailsUserUserEdit : DRMMActivityLogDetailsUserUser {
+
+    # The roles that were removed from the user account during the edit.
+    [string]$DataDeletedRoles
+    # The roles that were added to the user account during the edit.
+    [string]$DataNewRoles
+    # The email address of the user account that was edited.
+    [string]$DataUserEmail
+    # Indicates whether the user account is enabled after the edit.
+    [string]$DataUserEnabled
+    # The first name of the user account that was edited.
+    [string]$DataUserFirstname
+    # The last name of the user account that was edited.
+    [string]$DataUserLastname
+
+    DRMMActivityLogDetailsUserUserEdit() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserUserEdit] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserUserEdit]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserUser]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate known edit-specific properties
+        $Details.DataDeletedRoles = $ActivityLogDetail.'data.deleted_roles'
+        $Details.DataNewRoles = $ActivityLogDetail.'data.new_roles'
+        $Details.DataUserEmail = $ActivityLogDetail.'data.user_email'
+        $Details.DataUserEnabled = $ActivityLogDetail.'data.user_enabled'
+        $Details.DataUserFirstname = $ActivityLogDetail.'data.user_firstname'
+        $Details.DataUserLastname = $ActivityLogDetail.'data.user_lastname'
+
+        # O(1) membership test — excludes base + all known edit properties
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username',
+                'data.user_id', 'data.user_name',
+                'data.deleted_roles', 'data.new_roles', 'data.user_email',
+                'data.user_enabled', 'data.user_firstname', 'data.user_lastname'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Dynamically add any remaining properties not covered by typed fields
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    # If date parsing fails, add the original value
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category user, and action generate.api.keys, which includes specific properties related to API key generation activities.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserUserGenerateApiKeys class models the details of an API key generation activity log entry. It inherits the 12 common USER user management properties from DRMMActivityLogDetailsUserUser. No additional properties beyond the category base have been observed for this action.
+#>
+class DRMMActivityLogDetailsUserUserGenerateApiKeys : DRMMActivityLogDetailsUserUser {
+
+    DRMMActivityLogDetailsUserUserGenerateApiKeys() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserUserGenerateApiKeys] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserUserGenerateApiKeys]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserUser]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # No generate.api.keys-specific properties identified beyond category base
 
         return $Details
 
