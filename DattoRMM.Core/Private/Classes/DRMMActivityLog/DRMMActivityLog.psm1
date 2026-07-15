@@ -238,6 +238,14 @@ class DRMMActivityLogDetails : DRMMObject {
             'USER_filter_delete' {[DRMMActivityLogDetailsUserFilterDelete]::FromActivityLogDetail($DetailsHashtable); break}
             {$_ -match '^USER_filter_'}  {[DRMMActivityLogDetailsUserFilterGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             
+            # USER entity - job category
+            'USER_job_create'  {[DRMMActivityLogDetailsUserJobCreate]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_job_delete'  {[DRMMActivityLogDetailsUserJobDelete]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_job_edit'    {[DRMMActivityLogDetailsUserJobEdit]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_job_rerun'   {[DRMMActivityLogDetailsUserJobRerun]::FromActivityLogDetail($DetailsHashtable); break}
+            'USER_job_retire'  {[DRMMActivityLogDetailsUserJobRetire]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_job_'}   {[DRMMActivityLogDetailsUserJobGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
             # USER entity - unknown category (entity-level fallback)
             {$_ -match '^USER_'} {[DRMMActivityLogDetailsUserGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             
@@ -3151,6 +3159,264 @@ class DRMMActivityLogDetailsUserFilterDelete : DRMMActivityLogDetailsUserFilter 
 
         # Populate delete-specific properties
         $Details.DataType = $ActivityLogDetail.'data.type'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER job-related activity log details, containing properties common to all job actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserJob class serves as a base class for USER entity job category activity logs. It encapsulates two properties common to most observed job actions — DataJobId and DataJobName — in addition to the 10 entity-level properties inherited from DRMMActivityLogEntityUser. Specific job action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserJob : DRMMActivityLogEntityUser {
+
+    # The numeric identifier of the job associated with the activity.
+    [long]$DataJobId
+    # The display name of the job associated with the activity.
+    [string]$DataJobName
+
+    DRMMActivityLogDetailsUserJob() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserJob]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate job category properties
+        $Details.DataJobId = $ActivityLogDetail.'data.job_id'
+        $Details.DataJobName = $ActivityLogDetail.'data.job_name'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER job activity log details for unknown job actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserJobGeneric class is used for USER entity job category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 12 base properties common to all USER job activities and dynamically adds any additional properties found in the response that are not part of the base class. This ensures type safety for known properties while maintaining flexibility for unknown actions.
+#>
+class DRMMActivityLogDetailsUserJobGeneric : DRMMActivityLogDetailsUserJob {
+
+    DRMMActivityLogDetailsUserJobGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserJobGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserJobGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserJob]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username',
+                'data.job_id', 'data.job_name'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category job, and action create, which captures the details of a newly created job.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserJobCreate class models the details of a job creation activity log entry. It inherits the 12 common USER job properties from DRMMActivityLogDetailsUserJob and adds three properties: DataJobUid, the unique identifier of the new job; DataType, the type classification of the job; and DataJobStatus, the initial status of the job.
+#>
+class DRMMActivityLogDetailsUserJobCreate : DRMMActivityLogDetailsUserJob {
+
+    # The unique identifier (UID) of the job that was created.
+    [guid]$DataJobUid
+    # The type classification of the job (e.g., script, patch).
+    [string]$DataType
+
+    DRMMActivityLogDetailsUserJobCreate() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserJobCreate] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserJobCreate]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserJob]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate create-specific properties
+        $Details.DataJobUid = $ActivityLogDetail.'data.job_uid'
+        $Details.DataType = $ActivityLogDetail.'data.type'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category job, and action delete, which captures the details of a deleted job.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserJobDelete class models the details of a job deletion activity log entry. It inherits the 12 common USER job properties from DRMMActivityLogDetailsUserJob. No additional properties beyond the category base have been observed for delete actions.
+#>
+class DRMMActivityLogDetailsUserJobDelete : DRMMActivityLogDetailsUserJob {
+
+    DRMMActivityLogDetailsUserJobDelete() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserJobDelete] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserJobDelete]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserJob]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # No delete-specific properties identified beyond category base
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category job, and action edit, which captures the details of an edited job.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserJobEdit class models the details of a job edit activity log entry. It inherits the 12 common USER job properties from DRMMActivityLogDetailsUserJob and adds two properties: DataJobUid, the unique identifier of the edited job; and DataType, the type classification of the job.
+#>
+class DRMMActivityLogDetailsUserJobEdit : DRMMActivityLogDetailsUserJob {
+
+    # The unique identifier (UID) of the job that was edited.
+    [guid]$DataJobUid
+    # The type classification of the job (e.g., script, patch).
+    [string]$DataType
+
+    DRMMActivityLogDetailsUserJobEdit() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserJobEdit] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserJobEdit]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserJob]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate edit-specific properties
+        $Details.DataJobUid = $ActivityLogDetail.'data.job_uid'
+        $Details.DataType = $ActivityLogDetail.'data.type'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category job, and action rerun, which captures the details of a job that was re-executed against a set of devices.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserJobRerun class models the details of a job rerun activity log entry. It inherits the 12 common USER job properties from DRMMActivityLogDetailsUserJob and adds three properties: DataDeviceUids, the list of device UIDs the job was re-run against; DataJobUid, the unique identifier of the re-run job; and DataType, the type classification of the job.
+#>
+class DRMMActivityLogDetailsUserJobRerun : DRMMActivityLogDetailsUserJob {
+
+    # The list of device UIDs the job was re-run against.
+    [string]$DataDeviceUids
+    # The unique identifier (UID) of the job that was re-run.
+    [guid]$DataJobUid
+    # The type classification of the job (e.g., script, patch).
+    [string]$DataType
+
+    DRMMActivityLogDetailsUserJobRerun() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserJobRerun] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserJobRerun]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserJob]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate rerun-specific properties
+        $Details.DataDeviceUids = $ActivityLogDetail.'data.device_uids'
+        $Details.DataJobUid = $ActivityLogDetail.'data.job_uid'
+        $Details.DataType = $ActivityLogDetail.'data.type'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category job, and action retire, which captures the details of one or more retired jobs.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserJobRetire class models the details of a job retirement activity log entry. It inherits the 10 entity-level USER properties from DRMMActivityLogDetailsUserJob and adds the DataRetiredJobsIds property, which contains the identifiers of the jobs that were retired. Note that retire actions do not populate the category-level DataJobId or DataJobName fields.
+#>
+class DRMMActivityLogDetailsUserJobRetire : DRMMActivityLogDetailsUserJob {
+
+    # The identifiers of the jobs that were retired.
+    [string]$DataRetiredJobsIds
+
+    DRMMActivityLogDetailsUserJobRetire() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserJobRetire] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserJobRetire]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserJob]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # Populate retire-specific properties
+        $Details.DataRetiredJobsIds = $ActivityLogDetail.'data.retired_jobs_ids'
 
         return $Details
 
