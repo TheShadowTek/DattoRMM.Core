@@ -246,6 +246,14 @@ class DRMMActivityLogDetails : DRMMObject {
             'USER_job_retire'  {[DRMMActivityLogDetailsUserJobRetire]::FromActivityLogDetail($DetailsHashtable); break}
             {$_ -match '^USER_job_'}   {[DRMMActivityLogDetailsUserJobGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             
+            # USER entity - web.remote.chat category (must precede web.remote to avoid partial match)
+            'USER_web.remote.chat_session'           {[DRMMActivityLogDetailsUserWebRemoteChatSession]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_web\.remote\.chat_'}  {[DRMMActivityLogDetailsUserWebRemoteChatGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
+            # USER entity - web.remote category
+            'USER_web.remote_rto'                    {[DRMMActivityLogDetailsUserWebRemoteRto]::FromActivityLogDetail($DetailsHashtable); break}
+            {$_ -match '^USER_web\.remote_'}         {[DRMMActivityLogDetailsUserWebRemoteGeneric]::FromActivityLogDetail($DetailsHashtable); break}
+            
             # USER entity - unknown category (entity-level fallback)
             {$_ -match '^USER_'} {[DRMMActivityLogDetailsUserGeneric]::FromActivityLogDetail($DetailsHashtable); break}
             
@@ -3417,6 +3425,281 @@ class DRMMActivityLogDetailsUserJobRetire : DRMMActivityLogDetailsUserJob {
 
         # Populate retire-specific properties
         $Details.DataRetiredJobsIds = $ActivityLogDetail.'data.retired_jobs_ids'
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER web.remote-related activity log details, containing properties common to all web remote session actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserWebRemote class serves as a base class for USER entity web.remote category activity logs. It encapsulates six properties common to all observed web remote session actions — DataDetails, DataDeviceId, DataDeviceName, DataDeviceUid, DataEnd, and DataStart — in addition to the 10 entity-level properties inherited from DRMMActivityLogEntityUser. Specific web remote action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserWebRemote : DRMMActivityLogEntityUser {
+
+    # Additional detail about the web remote session.
+    [string]$DataDetails
+    # The identifier of the device the web remote session was performed on.
+    [string]$DataDeviceId
+    # The display name of the device the web remote session was performed on.
+    [string]$DataDeviceName
+    # The unique identifier (UID) of the device the web remote session was performed on.
+    [string]$DataDeviceUid
+    # The end time or timestamp of the web remote session.
+    [string]$DataEnd
+    # The start time or timestamp of the web remote session.
+    [string]$DataStart
+
+    DRMMActivityLogDetailsUserWebRemote() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserWebRemote]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate web.remote category properties
+        $Details.DataDetails = $ActivityLogDetail.'data.details'
+        $Details.DataDeviceId = $ActivityLogDetail.'data.device_id'
+        $Details.DataDeviceName = $ActivityLogDetail.'data.device_name'
+        $Details.DataDeviceUid = $ActivityLogDetail.'data.device_uid'
+        $Details.DataEnd = $ActivityLogDetail.'data.end'
+        $Details.DataStart = $ActivityLogDetail.'data.start'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER web.remote activity log details for unknown web remote actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserWebRemoteGeneric class is used for USER entity web.remote category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 16 base properties common to all USER web.remote activities and dynamically adds any additional properties found in the response that are not part of the base class.
+#>
+class DRMMActivityLogDetailsUserWebRemoteGeneric : DRMMActivityLogDetailsUserWebRemote {
+
+    DRMMActivityLogDetailsUserWebRemoteGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserWebRemoteGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserWebRemoteGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserWebRemote]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username',
+                'data.details', 'data.device_id', 'data.device_name', 'data.device_uid',
+                'data.end', 'data.start'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category web.remote, and action rto, which captures the details of a web remote take-over session.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserWebRemoteRto class models the details of a web remote take-over (rto) session activity log entry. It inherits all 16 common USER web.remote properties from DRMMActivityLogDetailsUserWebRemote. No additional properties beyond the category base have been observed for rto actions.
+#>
+class DRMMActivityLogDetailsUserWebRemoteRto : DRMMActivityLogDetailsUserWebRemote {
+
+    DRMMActivityLogDetailsUserWebRemoteRto() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserWebRemoteRto] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserWebRemoteRto]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserWebRemote]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # No rto-specific properties identified beyond category base
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Base class for USER web.remote.chat-related activity log details, containing properties common to all web remote chat session actions.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserWebRemoteChat class serves as a base class for USER entity web.remote.chat category activity logs. It encapsulates five properties common to all observed web remote chat session actions — DataDetails, DataDeviceId, DataDeviceName, DataDeviceUid, and DataStart — in addition to the 10 entity-level properties inherited from DRMMActivityLogEntityUser. Specific web remote chat action types inherit from this class and add their unique properties.
+#>
+class DRMMActivityLogDetailsUserWebRemoteChat : DRMMActivityLogEntityUser {
+
+    # Additional detail about the web remote chat session.
+    [string]$DataDetails
+    # The identifier of the device the web remote chat session was performed on.
+    [string]$DataDeviceId
+    # The display name of the device the web remote chat session was performed on.
+    [string]$DataDeviceName
+    # The unique identifier (UID) of the device the web remote chat session was performed on.
+    [string]$DataDeviceUid
+    # The start time or timestamp of the web remote chat session.
+    [string]$DataStart
+
+    DRMMActivityLogDetailsUserWebRemoteChat() : base() {
+
+    }
+
+    static [void] PopulateCategoryProperties([DRMMActivityLogDetailsUserWebRemoteChat]$Details, [hashtable]$ActivityLogDetail) {
+
+        # Populate entity-level properties
+        [DRMMActivityLogEntityUser]::PopulateEntityProperties($Details, $ActivityLogDetail)
+
+        # Populate web.remote.chat category properties
+        $Details.DataDetails = $ActivityLogDetail.'data.details'
+        $Details.DataDeviceId = $ActivityLogDetail.'data.device_id'
+        $Details.DataDeviceName = $ActivityLogDetail.'data.device_name'
+        $Details.DataDeviceUid = $ActivityLogDetail.'data.device_uid'
+        $Details.DataStart = $ActivityLogDetail.'data.start'
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents a generic USER web.remote.chat activity log details for unknown web remote chat actions, with base properties and dynamic additional properties.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserWebRemoteChatGeneric class is used for USER entity web.remote.chat category activity logs where the specific action is not yet mapped to a dedicated class. It inherits the 15 base properties common to all USER web.remote.chat activities and dynamically adds any additional properties found in the response that are not part of the base class.
+#>
+class DRMMActivityLogDetailsUserWebRemoteChatGeneric : DRMMActivityLogDetailsUserWebRemoteChat {
+
+    DRMMActivityLogDetailsUserWebRemoteChatGeneric() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserWebRemoteChatGeneric] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        if ($null -eq $ActivityLogDetail) {
+
+            return $null
+
+        }
+
+        $Details = [DRMMActivityLogDetailsUserWebRemoteChatGeneric]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserWebRemoteChat]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # O(1) membership test for known base property keys
+        $ExcludedKeys = [System.Collections.Generic.HashSet[string]]::new(
+            [string[]]@(
+                'entity', 'event.action', 'event.category', 'uid',
+                'source.forwarded_ip',
+                'user.email', 'user.firstname', 'user.id', 'user.lastname', 'user.username',
+                'data.details', 'data.device_id', 'data.device_name', 'data.device_uid',
+                'data.start'
+            ),
+            [System.StringComparer]::Ordinal
+        )
+
+        # Add any additional properties not in the base class
+        foreach ($Key in $ActivityLogDetail.Keys) {
+
+            if ($ExcludedKeys.Contains($Key)) {
+
+                continue
+
+            }
+
+            if ($Key.IndexOf('date', [System.StringComparison]::OrdinalIgnoreCase) -ge 0 -and $null -ne $ActivityLogDetail[$Key]) {
+
+                try {
+
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue ([DRMMObject]::ParseApiDateTime($ActivityLogDetail[$Key]))
+
+                } catch {
+
+                    Write-Debug "Failed to parse date property '$Key' with value '$($ActivityLogDetail[$Key])'"
+                    $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+                }
+
+            } else {
+
+                $Details | Add-Member -NotePropertyName $Key -NotePropertyValue $ActivityLogDetail[$Key]
+
+            }
+
+        }
+
+        return $Details
+
+    }
+}
+
+<#
+.SYNOPSIS
+    Represents an activity log of entity USER, category web.remote.chat, and action session, which captures the details of a web remote chat session.
+.DESCRIPTION
+    The DRMMActivityLogDetailsUserWebRemoteChatSession class models the details of a web remote chat session activity log entry. It inherits all 15 common USER web.remote.chat properties from DRMMActivityLogDetailsUserWebRemoteChat. No additional properties beyond the category base have been observed for session actions.
+#>
+class DRMMActivityLogDetailsUserWebRemoteChatSession : DRMMActivityLogDetailsUserWebRemoteChat {
+
+    DRMMActivityLogDetailsUserWebRemoteChatSession() : base() {
+
+    }
+
+    static [DRMMActivityLogDetailsUserWebRemoteChatSession] FromActivityLogDetail([hashtable]$ActivityLogDetail) {
+
+        $Details = [DRMMActivityLogDetailsUserWebRemoteChatSession]::new()
+
+        # Populate base properties
+        [DRMMActivityLogDetailsUserWebRemoteChat]::PopulateCategoryProperties($Details, $ActivityLogDetail)
+
+        # No session-specific properties identified beyond category base
 
         return $Details
 
