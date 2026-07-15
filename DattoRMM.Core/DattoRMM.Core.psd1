@@ -187,7 +187,7 @@ PrivateData = @{
         ReleaseNotes = 'See CHANGELOG.md at https://github.com/TheShadowTek/DattoRMM.Core/blob/main/CHANGELOG.md'
 
         # Prerelease string of this module
-        Prerelease = 'beta1'
+        #Prerelease = 'beta1'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false
@@ -211,8 +211,8 @@ PrivateData = @{
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDt65pzglmz0/Sa
-# /Ppi1CjIi6HSJovRwWU7JXmPezWZpKCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCk+O3siQXXxh5N
+# aeCchlUZglrTnztr8C7FG5sUjHcxg6CCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -234,11 +234,11 @@ PrivateData = @{
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIH/DpEbeIlV8VQG6gs9mjNlCcUkT
-# VptplILhO5eIQPtmMA0GCSqGSIb3DQEBAQUABIIBABlO7HxZ6NGRgxuQ239jgyuu
-# sC9ButENxzs0e2HmT19FD2pw7EgEMrmpeqLyqAVjcI7dQtl3TlOAoZFE9fcR13Db
-# kCxUKBoWZXTta6VxoY/MBAN+mga6Q5cR2Cbodf5iNbb/G3A2p51LdebqnCSLdUoz
-# hjv2msLXT7fswpfJ+IqaMviNhguWrmsQFn57vuD2zjBABx/wqtYMpXwq0ambG657
-# mjb4mOJh7wlyOL4B7xNWvUMbMXBqb6TezeJ4/pCul7PJAC1c4RsxqLs7+vm+2pDH
-# 0opVBwjggrkU2nW2fYk0gfiqU6wspbdHmQcD1jUSi8nkPT1JjMS3MSvaKTqhdWc=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEICa4EvDgKRVeVYGMcgT4DPKUhZxu
+# hlSouqkbr3Yxq7WXMA0GCSqGSIb3DQEBAQUABIIBAHAgkV1db5ZCC75mzn1tooMR
+# lxq9iHmDv0DiqFgd2Lt9m3iwN2BWtzUCbIcfhldcotJWuGS7ybQu+5sCN+tianE3
+# jfQ3WNi7nV69ECNICgVX7Y8CZFIhYgOZPhhKpagZxhn79U7HsQ4oTcV0rNWbn542
+# oGdcUDrmt+2ivVPUDtWbmahFzCb5NvO99uCyzm+h2v3ed6vuAJQHx301OyliNKxy
+# RtqxlmUtQrge2Qj008245X4qp9c5xrudD43wbY04GM3GDy/72lBSSBuYKrT1exC1
+# 1mkcJsr4oDW7ovjN6Ghf92qZcUzd1im/RWcKRtN0DM07CCLObRcam8tKDt4dWJU=
 # SIG # End signature block
