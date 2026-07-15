@@ -28,7 +28,7 @@ See [INSTALL.md](INSTALL.md) for full instructions including execution policy, c
 
 ```powershell
 # Prerelease
-Install-Module DattoRMM.Core -AllowPrerelease
+Install-Module DattoRMM.Core
 ```
 
 ## Quick Start
