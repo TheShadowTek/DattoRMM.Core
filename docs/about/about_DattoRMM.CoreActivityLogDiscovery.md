@@ -47,8 +47,40 @@ When `-UseExperimentalDetailClasses` is used, the module attempts to dispatch de
 | `DRMMActivityLogDetailsDeviceRemoteGeneric` | Action fallback | Entity is `Device`, category is `remote`; action not yet mapped |
 | `DRMMActivityLogDetailsDeviceDevice` | Category base | Entity is `Device`, category is `device` — base class only, not directly instantiated |
 | `DRMMActivityLogDetailsDeviceDeviceGeneric` | Action fallback | Entity is `Device`, category is `device`; action not yet mapped |
+| `DRMMActivityLogDetailsDevicePatch` | Category base | Entity is `Device`, category is `patch` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsDevicePatchGeneric` | Action fallback | Entity is `Device`, category is `patch`; action not yet mapped |
 | `DRMMActivityLogEntityUser` | Entity base | Entity is `User` — base class only, not directly instantiated |
-| `DRMMActivityLogDetailsUserGeneric` | User fallback | Entity is `User`; any category/action |
+| `DRMMActivityLogDetailsUserGeneric` | User fallback | Entity is `User`; category not mapped |
+| `DRMMActivityLogDetailsUserAccount` | Category base | Entity is `User`, category is `account` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserAccountGeneric` | Action fallback | Entity is `User`, category is `account`; action not yet mapped |
+| `DRMMActivityLogDetailsUserAgent` | Category base | Entity is `User`, category is `agent` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserAgentGeneric` | Action fallback | Entity is `User`, category is `agent`; action not yet mapped |
+| `DRMMActivityLogDetailsUserAuthUser` | Category base | Entity is `User`, category is `authUser` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserAuthUserGeneric` | Action fallback | Entity is `User`, category is `authUser`; action not yet mapped |
+| `DRMMActivityLogDetailsUserBranding` | Category base | Entity is `User`, category is `branding` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserBrandingGeneric` | Action fallback | Entity is `User`, category is `branding`; action not yet mapped |
+| `DRMMActivityLogDetailsUserComponent` | Category base | Entity is `User`, category is `component` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserComponentGeneric` | Action fallback | Entity is `User`, category is `component`; action not yet mapped |
+| `DRMMActivityLogDetailsUserDevice` | Category base | Entity is `User`, category is `device` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserDeviceGeneric` | Action fallback | Entity is `User`, category is `device`; action not yet mapped |
+| `DRMMActivityLogDetailsUserEmailRecipient` | Category base | Entity is `User`, category is `email.recipient` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserEmailRecipientGeneric` | Action fallback | Entity is `User`, category is `email.recipient`; action not yet mapped |
+| `DRMMActivityLogDetailsUserFilter` | Category base | Entity is `User`, category is `filter` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserFilterGeneric` | Action fallback | Entity is `User`, category is `filter`; action not yet mapped |
+| `DRMMActivityLogDetailsUserJob` | Category base | Entity is `User`, category is `job` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserJobGeneric` | Action fallback | Entity is `User`, category is `job`; action not yet mapped |
+| `DRMMActivityLogDetailsUserMonitor` | Category base | Entity is `User`, category is `monitor` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserMonitorGeneric` | Action fallback | Entity is `User`, category is `monitor`; action not yet mapped |
+| `DRMMActivityLogDetailsUserPolicy` | Category base | Entity is `User`, category is `policy` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserPolicyGeneric` | Action fallback | Entity is `User`, category is `policy`; action not yet mapped |
+| `DRMMActivityLogDetailsUserSite` | Category base | Entity is `User`, category is `site` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserSiteGeneric` | Action fallback | Entity is `User`, category is `site`; action not yet mapped |
+| `DRMMActivityLogDetailsUserUser` | Category base | Entity is `User`, category is `user` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserUserGeneric` | Action fallback | Entity is `User`, category is `user`; action not yet mapped |
+| `DRMMActivityLogDetailsUserWebRemote` | Category base | Entity is `User`, category is `web.remote` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserWebRemoteGeneric` | Action fallback | Entity is `User`, category is `web.remote`; action not yet mapped |
+| `DRMMActivityLogDetailsUserWebRemoteChat` | Category base | Entity is `User`, category is `web.remote.chat` — base class only, not directly instantiated |
+| `DRMMActivityLogDetailsUserWebRemoteChatGeneric` | Action fallback | Entity is `User`, category is `web.remote.chat`; action not yet mapped |
 
 ### Currently Mapped Combinations
 
@@ -56,11 +88,57 @@ The following Entity/Category/Action combinations have dedicated typed classes:
 
 | Entity | Category | Action | Class |
 |---|---|---|---|
-| `Device` | `job` | `deployment` | `DRMMActivityLogDetailsDeviceJobDeployment` |
+| `Device` | `device` | `move.device` | `DRMMActivityLogDetailsDeviceDeviceMoveDevice` |
 | `Device` | `job` | `create` | `DRMMActivityLogDetailsDeviceJobCreate` |
+| `Device` | `job` | `deployment` | `DRMMActivityLogDetailsDeviceJobDeployment` |
+| `Device` | `patch` | `audit` | `DRMMActivityLogDetailsDevicePatchAudit` |
 | `Device` | `remote` | `chat` | `DRMMActivityLogDetailsDeviceRemoteChat` |
 | `Device` | `remote` | `jrto` | `DRMMActivityLogDetailsDeviceRemoteJrto` |
-| `Device` | `device` | `move.device` | `DRMMActivityLogDetailsDeviceDeviceMoveDevice` |
+| `User` | `account` | `change.settings` | `DRMMActivityLogDetailsUserAccountChangeSettings` |
+| `User` | `account` | `login` | `DRMMActivityLogDetailsUserAccountLogin` |
+| `User` | `account` | `logout` | `DRMMActivityLogDetailsUserAccountLogout` |
+| `User` | `account` | `update` | `DRMMActivityLogDetailsUserAccountUpdate` |
+| `User` | `agent` | `event` | `DRMMActivityLogDetailsUserAgentEvent` |
+| `User` | `agent` | `file` | `DRMMActivityLogDetailsUserAgentFile` |
+| `User` | `agent` | `rs` | `DRMMActivityLogDetailsUserAgentRs` |
+| `User` | `agent` | `shot` | `DRMMActivityLogDetailsUserAgentShot` |
+| `User` | `authUser` | `generate.api.keys` | `DRMMActivityLogDetailsUserAuthUserGenerateApiKeys` |
+| `User` | `branding` | `push.changes` | `DRMMActivityLogDetailsUserBrandingPushChanges` |
+| `User` | `component` | `add.from.comstore` | `DRMMActivityLogDetailsUserComponentAddFromComstore` |
+| `User` | `component` | `create` | `DRMMActivityLogDetailsUserComponentCreate` |
+| `User` | `component` | `delete` | `DRMMActivityLogDetailsUserComponentDelete` |
+| `User` | `component` | `update` | `DRMMActivityLogDetailsUserComponentUpdate` |
+| `User` | `device` | `approved` | `DRMMActivityLogDetailsUserDeviceApproved` |
+| `User` | `device` | `delete` | `DRMMActivityLogDetailsUserDeviceDelete` |
+| `User` | `device` | `edit` | `DRMMActivityLogDetailsUserDeviceEdit` |
+| `User` | `device` | `move.device` | `DRMMActivityLogDetailsUserDeviceMoveDevice` |
+| `User` | `device` | `remove` | `DRMMActivityLogDetailsUserDeviceRemove` |
+| `User` | `email.recipient` | `update` | `DRMMActivityLogDetailsUserEmailRecipientUpdate` |
+| `User` | `filter` | `create` | `DRMMActivityLogDetailsUserFilterCreate` |
+| `User` | `filter` | `delete` | `DRMMActivityLogDetailsUserFilterDelete` |
+| `User` | `job` | `create` | `DRMMActivityLogDetailsUserJobCreate` |
+| `User` | `job` | `delete` | `DRMMActivityLogDetailsUserJobDelete` |
+| `User` | `job` | `edit` | `DRMMActivityLogDetailsUserJobEdit` |
+| `User` | `job` | `rerun` | `DRMMActivityLogDetailsUserJobRerun` |
+| `User` | `job` | `retire` | `DRMMActivityLogDetailsUserJobRetire` |
+| `User` | `monitor` | `create` | `DRMMActivityLogDetailsUserMonitorCreate` |
+| `User` | `monitor` | `edit` | `DRMMActivityLogDetailsUserMonitorEdit` |
+| `User` | `monitor` | `resolve.alert` | `DRMMActivityLogDetailsUserMonitorResolveAlert` |
+| `User` | `policy` | `create.and.push.changes` | `DRMMActivityLogDetailsUserPolicyCreateAndPushChanges` |
+| `User` | `policy` | `delete` | `DRMMActivityLogDetailsUserPolicyDelete` |
+| `User` | `policy` | `edit` | `DRMMActivityLogDetailsUserPolicyEdit` |
+| `User` | `policy` | `edit.and.push.changes` | `DRMMActivityLogDetailsUserPolicyEditAndPushChanges` |
+| `User` | `policy` | `toggle` | `DRMMActivityLogDetailsUserPolicyToggle` |
+| `User` | `site` | `change.settings` | `DRMMActivityLogDetailsUserSiteChangeSettings` |
+| `User` | `site` | `create` | `DRMMActivityLogDetailsUserSiteCreate` |
+| `User` | `site` | `delete` | `DRMMActivityLogDetailsUserSiteDelete` |
+| `User` | `site` | `edit` | `DRMMActivityLogDetailsUserSiteEdit` |
+| `User` | `site` | `update` | `DRMMActivityLogDetailsUserSiteUpdate` |
+| `User` | `user` | `create` | `DRMMActivityLogDetailsUserUserCreate` |
+| `User` | `user` | `edit` | `DRMMActivityLogDetailsUserUserEdit` |
+| `User` | `user` | `generate.api.keys` | `DRMMActivityLogDetailsUserUserGenerateApiKeys` |
+| `User` | `web.remote` | `rto` | `DRMMActivityLogDetailsUserWebRemoteRto` |
+| `User` | `web.remote.chat` | `session` | `DRMMActivityLogDetailsUserWebRemoteChatSession` |
 
 All other combinations fall back to the appropriate generic class in the hierarchy. This list will grow as anonymised schema data is contributed by testers.
 
@@ -75,7 +153,7 @@ All other combinations fall back to the appropriate generic class in the hierarc
 | **Coverage likelihood** | Approachable — bounded by the API spec | Open-ended — may never be complete |
 
 > [!NOTE]
-> No typed classes for `User` entity categories have been built yet — all user activity falls back to `DRMMActivityLogDetailsUserGeneric`. If you have user activities in your environment, the schema collection scripts will capture them. User category data is particularly useful as there are many observed category/action combinations with common shared properties that could support a structured class hierarchy.
+> Coverage for `User` entity categories has expanded significantly. Eleven `User` categories are now mapped with dedicated typed classes. The `$GenericClasses` arrays in the collection scripts below reflect all currently dispatched generic fallbacks — any combination falling to a generic in that list is a candidate for a future typed class. If your environment produces entries that return `DRMMActivityLogDetailsGeneric` (rather than a deeper entity or category generic), the entity value is unrecognised — this is the most fundamental gap and worth reporting.
 
 ### Accessing Dynamic Properties
 
@@ -91,7 +169,11 @@ $Logs[0].Details.PSObject.Properties | Select-Object Name, Value
 $Logs[0].Details.JobName
 ```
 
-For objects that inherit from `DRMMActivityLogEntityDevice` or `DRMMActivityLogDetailsDeviceJob`, the inherited typed properties (`Entity`, `EventCategory`, `EventAction`, `DeviceHostname`, `DeviceUid`, `Uid`, and job-specific fields) are always accessible directly. Dynamic properties for unmapped fields are in addition to those.
+For objects that inherit from `DRMMActivityLogEntityDevice` or a DEVICE category base such as `DRMMActivityLogDetailsDeviceJob`, the inherited typed properties (`Entity`, `EventCategory`, `EventAction`, `DeviceHostname`, `DeviceUid`, `Uid`, and any category-specific fields) are always accessible directly.
+
+For objects that inherit from `DRMMActivityLogEntityUser` or a USER category base such as `DRMMActivityLogDetailsUserAccount`, the 10 entity-level typed properties (`Entity`, `EventCategory`, `EventAction`, `Uid`, `SourceForwardedIp`, `UserEmail`, `UserFirstName`, `UserId`, `UserLastName`, `UserUsername`) are always accessible directly, along with any category-specific typed properties.
+
+Dynamic properties for unmapped fields are in addition to those typed properties in all cases.
 
 ---
 
@@ -111,19 +193,26 @@ Lists every unmapped Entity/Category/Action combination in the last 24 hours acr
 $GenericClasses = @(
     'DRMMActivityLogDetailsGeneric',
     'DRMMActivityLogDetailsDeviceGeneric',
-    'DRMMActivityLogDetailsDeviceJobGeneric',
-    'DRMMActivityLogDetailsDeviceRemoteGeneric',
     'DRMMActivityLogDetailsDeviceDeviceGeneric',
+    'DRMMActivityLogDetailsDeviceJobGeneric',
     'DRMMActivityLogDetailsDevicePatchGeneric',
+    'DRMMActivityLogDetailsDeviceRemoteGeneric',
     'DRMMActivityLogDetailsUserGeneric',
     'DRMMActivityLogDetailsUserAccountGeneric',
+    'DRMMActivityLogDetailsUserAgentGeneric',
+    'DRMMActivityLogDetailsUserAuthUserGeneric',
+    'DRMMActivityLogDetailsUserBrandingGeneric',
     'DRMMActivityLogDetailsUserComponentGeneric',
     'DRMMActivityLogDetailsUserDeviceGeneric',
+    'DRMMActivityLogDetailsUserEmailRecipientGeneric',
+    'DRMMActivityLogDetailsUserFilterGeneric',
+    'DRMMActivityLogDetailsUserJobGeneric',
     'DRMMActivityLogDetailsUserMonitorGeneric',
+    'DRMMActivityLogDetailsUserPolicyGeneric',
     'DRMMActivityLogDetailsUserSiteGeneric',
     'DRMMActivityLogDetailsUserUserGeneric',
-    'DRMMActivityLogDetailsUserAgentGeneric',
-    'DRMMActivityLogDetailsUserPolicyGeneric'
+    'DRMMActivityLogDetailsUserWebRemoteChatGeneric',
+    'DRMMActivityLogDetailsUserWebRemoteGeneric'
 )
 
 Get-RMMActivityLog -UseExperimentalDetailClasses -Force |
@@ -151,19 +240,26 @@ Collects the Entity/Category/Action combination, the generic class name, propert
 $GenericClasses = @(
     'DRMMActivityLogDetailsGeneric',
     'DRMMActivityLogDetailsDeviceGeneric',
-    'DRMMActivityLogDetailsDeviceJobGeneric',
-    'DRMMActivityLogDetailsDeviceRemoteGeneric',
     'DRMMActivityLogDetailsDeviceDeviceGeneric',
+    'DRMMActivityLogDetailsDeviceJobGeneric',
     'DRMMActivityLogDetailsDevicePatchGeneric',
+    'DRMMActivityLogDetailsDeviceRemoteGeneric',
     'DRMMActivityLogDetailsUserGeneric',
     'DRMMActivityLogDetailsUserAccountGeneric',
+    'DRMMActivityLogDetailsUserAgentGeneric',
+    'DRMMActivityLogDetailsUserAuthUserGeneric',
+    'DRMMActivityLogDetailsUserBrandingGeneric',
     'DRMMActivityLogDetailsUserComponentGeneric',
     'DRMMActivityLogDetailsUserDeviceGeneric',
+    'DRMMActivityLogDetailsUserEmailRecipientGeneric',
+    'DRMMActivityLogDetailsUserFilterGeneric',
+    'DRMMActivityLogDetailsUserJobGeneric',
     'DRMMActivityLogDetailsUserMonitorGeneric',
+    'DRMMActivityLogDetailsUserPolicyGeneric',
     'DRMMActivityLogDetailsUserSiteGeneric',
     'DRMMActivityLogDetailsUserUserGeneric',
-    'DRMMActivityLogDetailsUserAgentGeneric',
-    'DRMMActivityLogDetailsUserPolicyGeneric'
+    'DRMMActivityLogDetailsUserWebRemoteChatGeneric',
+    'DRMMActivityLogDetailsUserWebRemoteGeneric'
 )
 
 $Logs = Get-RMMActivityLog -UseExperimentalDetailClasses -Force `
@@ -233,19 +329,26 @@ For broader coverage in large environments:
 $GenericClasses = @(
     'DRMMActivityLogDetailsGeneric',
     'DRMMActivityLogDetailsDeviceGeneric',
-    'DRMMActivityLogDetailsDeviceJobGeneric',
-    'DRMMActivityLogDetailsDeviceRemoteGeneric',
     'DRMMActivityLogDetailsDeviceDeviceGeneric',
+    'DRMMActivityLogDetailsDeviceJobGeneric',
     'DRMMActivityLogDetailsDevicePatchGeneric',
+    'DRMMActivityLogDetailsDeviceRemoteGeneric',
     'DRMMActivityLogDetailsUserGeneric',
     'DRMMActivityLogDetailsUserAccountGeneric',
+    'DRMMActivityLogDetailsUserAgentGeneric',
+    'DRMMActivityLogDetailsUserAuthUserGeneric',
+    'DRMMActivityLogDetailsUserBrandingGeneric',
     'DRMMActivityLogDetailsUserComponentGeneric',
     'DRMMActivityLogDetailsUserDeviceGeneric',
+    'DRMMActivityLogDetailsUserEmailRecipientGeneric',
+    'DRMMActivityLogDetailsUserFilterGeneric',
+    'DRMMActivityLogDetailsUserJobGeneric',
     'DRMMActivityLogDetailsUserMonitorGeneric',
+    'DRMMActivityLogDetailsUserPolicyGeneric',
     'DRMMActivityLogDetailsUserSiteGeneric',
     'DRMMActivityLogDetailsUserUserGeneric',
-    'DRMMActivityLogDetailsUserAgentGeneric',
-    'DRMMActivityLogDetailsUserPolicyGeneric'
+    'DRMMActivityLogDetailsUserWebRemoteChatGeneric',
+    'DRMMActivityLogDetailsUserWebRemoteGeneric'
 )
 
 Get-RMMSite | Get-RMMActivityLog -UseExperimentalDetailClasses -Force `

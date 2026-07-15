@@ -6,7 +6,7 @@ Base class for USER entity activity log details, containing properties common to
 
 ## LONG DESCRIPTION
 
-The DRMMActivityLogEntityUser class serves as a base class for all USER entity activity logs. As of this implementation, USER entity activities have not been observed in the wild, so this class is a placeholder for future expansion. It will likely contain properties such as UserId, UserUsername, Entity, EventAction, EventCategory, and Uid once USER activities are documented.
+The DRMMActivityLogEntityUser class serves as a base class for all USER entity activity logs, regardless of category. It encapsulates the 10 core properties that appear in all USER activities: Entity, EventAction, EventCategory, Uid, SourceForwardedIp, UserEmail, UserFirstName, UserId, UserLastName, and UserUsername. These properties are common across all observed USER entity combinations. Category-specific classes (account, agent, component, device, monitor, policy, site, user) inherit from this class and add their category-specific properties.
 
 This class inherits from [DRMMActivityLogDetails](./about_DRMMActivityLogDetails.md).
 
@@ -16,10 +16,16 @@ The DRMMActivityLogEntityUser class exposes the following properties:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| Entity        | string | The entity type of the activity log entry (e.g., USER). |
-| EventAction   | string | The specific action that was performed in the user activity. |
-| EventCategory | string | The category of the user event. |
-| Uid           | guid   | The unique identifier of the activity log detail entry. |
+| Entity            | string | The entity type of the activity log entry (e.g., USER). |
+| EventAction       | string | The specific action that was performed in the user activity. |
+| EventCategory     | string | The category of the user event (e.g., account, agent, policy, site). |
+| Uid               | guid   | The unique identifier of the activity log detail entry. |
+| SourceForwardedIp | string | The forwarded IP address of the source that performed the user activity. |
+| UserEmail         | string | The email address of the user who performed the activity. |
+| UserFirstName     | string | The first name of the user who performed the activity. |
+| UserId            | long   | The identifier of the user who performed the activity. |
+| UserLastName      | string | The last name of the user who performed the activity. |
+| UserUsername      | string | The username of the user who performed the activity. |
 
 ## METHODS
 
