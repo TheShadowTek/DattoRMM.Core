@@ -2,10 +2,6 @@
 
 A PowerShell module for the Datto RMM API v2. Provides typed, object-oriented access to devices, sites, alerts, jobs, filters, variables, and account management with built-in adaptive throttling and secure credential handling.
 
-> **🚧 Beta Release**
->
-> This module is currently in public beta. It is stable and suitable for real-world use, but some areas are still being refined based on tester feedback before v1. Command names, parameter sets, and the object model are stable and will not change. See the [Beta Overview](docs/beta/about_DattoRMM.CoreBeta.md) for current status, known limitations, and the roadmap to v1.
-
 > **⚠️ Legacy Rate-Limit Compatibility**
 > 
 > Some Datto RMM accounts use a legacy single-bucket rate-limit model. Use the `-LegacyThrottle` switch on `Connect-DattoRMM` to enable compatibility. See [Known Issues](#known-issues) for details.
