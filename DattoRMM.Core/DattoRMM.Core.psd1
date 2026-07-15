@@ -8,7 +8,7 @@
 RootModule = 'DattoRMM.Core.psm1'
 
 # Version number of this module. 
-ModuleVersion = '0.5.58'
+ModuleVersion = '0.6.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -26,7 +26,7 @@ CompanyName = 'Robert Faddes'
 Copyright = '(c) 2025-2026 Robert Faddes. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'PowerShell module for interfacing with Datto RMM API v2'
+Description = 'PowerShell module for the Datto RMM API v2. Provides typed, object-oriented access to devices, sites, alerts, jobs, components, filters, and variables with built-in adaptive throttling, secure credential handling, and CSV export support. Requires PowerShell 7.4+.'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '7.4'
@@ -169,7 +169,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('Datto', 'RMM', 'API', 'PowerShell')
+        Tags = @('Datto', 'DattoRMM', 'RMM', 'API', 'REST', 'Automation', 'MSP', 'Monitoring', 'Alerts', 'Devices', 'Sites')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/TheShadowTek/DattoRMM.Core/blob/main/LICENSE'
@@ -187,7 +187,7 @@ PrivateData = @{
         ReleaseNotes = 'See CHANGELOG.md at https://github.com/TheShadowTek/DattoRMM.Core/blob/main/CHANGELOG.md'
 
         # Prerelease string of this module
-        Prerelease = 'beta'
+        Prerelease = 'beta1'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false
@@ -211,8 +211,8 @@ PrivateData = @{
 # SIG # Begin signature block
 # MIIF+wYJKoZIhvcNAQcCoIIF7DCCBegCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCho7G3BoXtdO54
-# vFvV5o5AIbqupCIX3p6yORR/B0BJaaCCA04wggNKMIICMqADAgECAhB464iXHfI6
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDt65pzglmz0/Sa
+# /Ppi1CjIi6HSJovRwWU7JXmPezWZpKCCA04wggNKMIICMqADAgECAhB464iXHfI6
 # gksEkDDTyrNsMA0GCSqGSIb3DQEBCwUAMD0xFjAUBgNVBAoMDVJvYmVydCBGYWRk
 # ZXMxIzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nMB4XDTI2MDMz
 # MTAwMTMzMFoXDTI4MDMzMTAwMjMzMFowPTEWMBQGA1UECgwNUm9iZXJ0IEZhZGRl
@@ -234,11 +234,11 @@ PrivateData = @{
 # IzAhBgNVBAMMGkRhdHRvUk1NLkNvcmUgQ29kZSBTaWduaW5nAhB464iXHfI6gksE
 # kDDTyrNsMA0GCWCGSAFlAwQCAQUAoIGEMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
 # gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwG
-# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIHHL6/4sr9IjU8yXICJCNqsSAvHL
-# dHtIhwfcB+mhTZGGMA0GCSqGSIb3DQEBAQUABIIBAFy9CKdkWArMmHEbih9vbwOz
-# LU0ePyvHsRWVXi1L8vau3cTPYfFJeuAC+Fk4Cz1LzLHpbyLsA7Nq+30yH4fAAHv1
-# hjl5uqkUei2xi/jKJuoF9l8ibBN3JIIYcczUAhtG/CBSmt5D5LQBoEyLzCKSN9l2
-# PG7mJtGG6zoMXeAEuvAM7x+palH9pgGzKULf4dcBzBk/g/DpOY/871C57hNFJmBh
-# 9bHlfrC+qmQnLulIUU7mbzovTA1idjolnNQSCQ8Oitj+z055nbpNA3cU2q5zFIHc
-# XFaUy7ssN0Y/rutb2vJW3Q1ceLClb9n4QXu+QtLAWGFMacD7rSNU3sVkvl8hsrs=
+# CisGAQQBgjcCARUwLwYJKoZIhvcNAQkEMSIEIH/DpEbeIlV8VQG6gs9mjNlCcUkT
+# VptplILhO5eIQPtmMA0GCSqGSIb3DQEBAQUABIIBABlO7HxZ6NGRgxuQ239jgyuu
+# sC9ButENxzs0e2HmT19FD2pw7EgEMrmpeqLyqAVjcI7dQtl3TlOAoZFE9fcR13Db
+# kCxUKBoWZXTta6VxoY/MBAN+mga6Q5cR2Cbodf5iNbb/G3A2p51LdebqnCSLdUoz
+# hjv2msLXT7fswpfJ+IqaMviNhguWrmsQFn57vuD2zjBABx/wqtYMpXwq0ambG657
+# mjb4mOJh7wlyOL4B7xNWvUMbMXBqb6TezeJ4/pCul7PJAC1c4RsxqLs7+vm+2pDH
+# 0opVBwjggrkU2nW2fYk0gfiqU6wspbdHmQcD1jUSi8nkPT1JjMS3MSvaKTqhdWc=
 # SIG # End signature block

@@ -1,4 +1,8 @@
 <#
+    Copyright (c) 2025-2026 Robert Faddes
+    SPDX-License-Identifier: MPL-2.0
+#>
+<#
     PII-Safe Output Pack — Export Transforms
     DattoRMM.Core user-defined ExportTransforms.psd1
 
@@ -120,3 +124,4 @@
         )
     }
 }
+

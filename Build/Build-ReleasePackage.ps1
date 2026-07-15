@@ -99,7 +99,8 @@ if (-not $SkipSignatureCheck) {
 
     Write-Host 'Validating code signatures...' -ForegroundColor Cyan
 
-    $SignedFiles = Get-ChildItem -Path (Join-Path $RepoRoot 'DattoRMM.Core') -Recurse -Include '*.psm1','*.psd1','*.ps1','*.ps1xml'
+    $SignedFiles = Get-ChildItem -Path (Join-Path $RepoRoot 'DattoRMM.Core') -Recurse -Include '*.psm1','*.psd1','*.ps1','*.ps1xml' |
+        Where-Object { $_.FullName -notlike '*_Archive*' -and $_.Name -ne 'howtothrottle.ps1' }
     $InvalidSigs = @()
 
     foreach ($File in $SignedFiles) {

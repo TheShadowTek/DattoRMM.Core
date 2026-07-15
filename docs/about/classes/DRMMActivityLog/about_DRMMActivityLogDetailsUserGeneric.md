@@ -6,7 +6,7 @@ Represents a generic USER entity activity log for unknown categories, with entit
 
 ## LONG DESCRIPTION
 
-The DRMMActivityLogDetailsUserGeneric class is used for USER entity activity logs. As of this implementation, USER entity activities have not been observed in the wild, so this class serves as a placeholder and generic handler. It inherits base properties common to USER activities and dynamically adds any additional properties found in the response. This ensures graceful handling when USER activities are encountered.
+The DRMMActivityLogDetailsUserGeneric class is used for USER entity activity logs where the category is not yet mapped to a dedicated class. It inherits the 10 base properties common to all USER activities (Entity, EventAction, EventCategory, Uid, SourceForwardedIp, UserEmail, UserFirstName, UserId, UserLastName, UserUsername) and dynamically adds any additional properties found in the response. This ensures type safety for known entity-level properties while maintaining flexibility for unknown categories.
 
 This class inherits from [DRMMActivityLogEntityUser](./about_DRMMActivityLogEntityUser.md).
 

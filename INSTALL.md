@@ -6,106 +6,22 @@
 |---|---|
 | **PowerShell** | 7.4 or later (PowerShell Core only — Windows PowerShell 5.1 is not supported) |
 | **Platform** | Cross‑platform (PowerShell 7.4+) |
-| **Execution Policy** | See [Step 2](#step-2--execution-policy) below |
+| **Execution Policy** | See [Code Signing](#code-signing-and-execution-policy) below |
 
 ---
 
-## Step 1 — Download and Unblock the Package
+## Install from PowerShell Gallery
 
-Download the latest `DattoRMM.Core-<version>.zip` from the [Releases](../../releases) page.
-
-**Unblock the zip file before extracting it.** Windows marks files downloaded from the internet as untrusted. Unblocking the zip before extraction prevents that mark from being applied to every extracted file individually.
-
-You can do this in one of two ways:
-
-**Option A — File Explorer (easiest):**
-1. Right-click `DattoRMM.Core-<version>.zip`
-2. Select **Properties**
-3. At the bottom of the General tab, tick **Unblock**
-4. Click **OK**
-
-**Option B — PowerShell:**
-```powershell
-Unblock-File -Path ".\DattoRMM.Core-<version>.zip"
-```
-
-Once unblocked, extract the zip. You should see the following structure:
-
-```
-DattoRMM.Core-<version>/
-├── DattoRMM.Core/              ← the module (used in Steps 2 and 3)
-├── docs/                       ← full documentation
-├── DattoRMM.Core-CodeSigning.cer
-├── CHANGELOG.md
-├── INSTALL.md
-├── LICENSE
-├── README.md
-└── SECURITY.md
-```
-
-All commands below assume you are running from inside the extracted folder.
-
----
-
-## Step 2 — Execution Policy
-
-PowerShell's execution policy controls whether signed scripts are required to run. Choose **one** of the options below.
-
-### Option A — Recommended: Trust the Code Signing Certificate
-
-This is the most secure option. It trusts only this module's signing certificate without relaxing your execution policy globally.
-
-> This beta release is signed with a self-signed certificate. A CA-issued certificate will be used from v1.0 onwards.
-
-Run **as Administrator**:
+**Prerelease (current):**
 
 ```powershell
-$CerPath = Resolve-Path ".\DattoRMM.Core-CodeSigning.cer"
-$Cer = [System.Security.Cryptography.X509Certificates.X509Certificate2]::new($CerPath)
-
-$Store = [System.Security.Cryptography.X509Certificates.X509Store]::new("TrustedPublisher", "LocalMachine")
-$Store.Open("ReadWrite")
-$Store.Add($Cer)
-$Store.Close()
+Install-Module DattoRMM.Core -AllowPrerelease
 ```
 
-Then ensure your execution policy permits signed scripts (this is the default on most systems):
+**Stable release:**
 
 ```powershell
-# Check current policy
-Get-ExecutionPolicy -List
-
-# Set if required (run as Administrator)
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
-```
-
-### Option B — Quick Start: Bypass Execution Policy for the Session
-
-If you want to evaluate the module without importing a certificate, you can load it in a session-scoped bypass. **This does not change your system policy permanently.**
-
-```powershell
-pwsh -ExecutionPolicy Bypass -NoLogo
-```
-
-Or within an existing session, import the module directly:
-
-```powershell
-Import-Module ".\DattoRMM.Core\DattoRMM.Core.psd1" -Force
-```
-
-> Note: Session-scoped bypass (`Bypass`) only affects the current PowerShell window. Your system execution policy is unchanged.
-
----
-
-## Step 3 — Install the Module
-
-The commands below copy the `DattoRMM.Core` subfolder from the extracted package to a PowerShell module path. Run them from inside the extracted zip folder (the one containing `INSTALL.md`, `README.md`, etc.) — not from inside the `DattoRMM.Core` subfolder itself.
-
-### Install for the current user only (no Administrator required)
-
-```powershell
-$Destination = "$env:USERPROFILE\Documents\PowerShell\Modules\DattoRMM.Core"
-Copy-Item -Path ".\DattoRMM.Core" -Destination $Destination -Recurse -Force
+Install-Module DattoRMM.Core
 ```
 
 After installing, import as normal:
@@ -114,22 +30,37 @@ After installing, import as normal:
 Import-Module DattoRMM.Core
 ```
 
-### Install for all users on the machine (requires Administrator)
+---
+
+## Code Signing and Execution Policy
+
+The module is code-signed with a self-signed certificate. On Windows, if your execution policy is `RemoteSigned` or `AllSigned`, PowerShell requires the signing certificate to be trusted before the module can load.
+
+> A CA-issued certificate will replace the self-signed certificate from v1.0 onwards. Once that is in place, no certificate installation is required.
+
+### Trust the Signing Certificate
+
+Download `DattoRMM.Core-CodeSigning.cer` from the [repository](https://github.com/TheShadowTek/DattoRMM.Core).
+
+Run **as Administrator**:
 
 ```powershell
-$Destination = "C:\Program Files\PowerShell\Modules\DattoRMM.Core"
-Copy-Item -Path ".\DattoRMM.Core" -Destination $Destination -Recurse -Force
+$CerPath = '<path to DattoRMM.Core-CodeSigning.cer>'
+$Cer = [System.Security.Cryptography.X509Certificates.X509Certificate2]::new($CerPath)
+
+$Store = [System.Security.Cryptography.X509Certificates.X509Store]::new('TrustedPublisher', 'LocalMachine')
+$Store.Open('ReadWrite')
+$Store.Add($Cer)
+$Store.Close()
 ```
 
-### Run from a folder without installing
+### Skip Signature Check (development only)
 
-If you prefer not to install to a module path, import directly from the extracted folder:
+On machines where signature enforcement is not required:
 
 ```powershell
-Import-Module ".\DattoRMM.Core\DattoRMM.Core.psd1"
+Import-Module DattoRMM.Core -SkipPublisherCheck
 ```
-
-> This is useful for testing or running from a script directory. The module will not be available in new sessions unless the `Import-Module` call is added to your PowerShell profile.
 
 ---
 
@@ -145,37 +76,39 @@ Expected output will show the module name, version, and path.
 
 ## Uninstalling
 
-Remove the module folder from the path where it was installed:
-
 ```powershell
-# User scope
-Remove-Item "$env:USERPROFILE\Documents\PowerShell\Modules\DattoRMM.Core" -Recurse -Force
-
-# System scope (requires Administrator)
-Remove-Item "C:\Program Files\PowerShell\Modules\DattoRMM.Core" -Recurse -Force
+Uninstall-Module DattoRMM.Core
 ```
 
 ---
 
 ## Azure Automation Runtime Environment
 
-DattoRMM.Core requires PowerShell 7.4. Ensure your Runtime Environment targets **PowerShell 7.4** before importing the module.
+DattoRMM.Core requires PowerShell 7.4 or later. Ensure your Runtime Environment targets **PowerShell 7.4 or later** before installing.
 
-### Prepare the Package
+### Stable Releases — Install from the Portal
 
-Azure Automation expects the zip to contain the module folder at the root of the archive. The release zip (`DattoRMM.Core-<version>.zip`) is already structured correctly — `DattoRMM.Core/` sits at the zip root. The additional documentation files included in the package (README, CHANGELOG, etc.) do not affect the import. Use the zip as downloaded — do **not** extract it first.
+1. Open your **Azure Automation Account** in the portal
+2. Under **Process Automation**, select **Runtime Environments**
+3. Select the Runtime Environment targeting **PowerShell 7.4 or later**
+4. Select **Browse Gallery**, search for `DattoRMM.Core`, and install
 
-### Upload via the Azure Portal
+### Prerelease — Runtime Environment Limitation
 
-1. Rename zip from `DattoRMM.Core-<version>.zip` to `DattoRMM.Core.zip`
-2. Open your **Azure Automation Account** in the portal
-3. Under **Process Automation**, select **Runtime Environments**
-4. Select the Runtime Environment that targets **PowerShell 7.4**
-5. Select **Add a file**
-6. Browse to and select `DattoRMM.Core.zip`
-7. Click **Save**
+The Azure Automation portal does not support installing prerelease packages from the gallery, and there is no supported programmatic path for adding prerelease modules directly to a modern Runtime Environment.
 
-Allow a few minutes for the import to complete. Status will show as **Available** when ready.
+For prerelease testing in Azure Automation, the following approaches are available:
+
+**Wait for a stable release** — recommended for production runbooks.
+
+**Zip upload (known to work from the repository folder):**
+
+1. Zip the **contents** of the `DattoRMM.Core` module folder so that the module files (`DattoRMM.Core.psd1`, `DattoRMM.Core.psm1`, etc.) sit at the root of the archive — the zip must be named `DattoRMM.Core.zip`.
+2. In the portal, open the Runtime Environment, select **Add a file**, and upload `DattoRMM.Core.zip`.
+
+> **Note:** This has been tested using the module folder directly from the repository. It has not been tested against a module installed via PowerShellGet v3, which stores modules under a version-named subfolder (`DattoRMM.Core\<version>\`). If installing from a local PSModules path with that layout, zip the inner version subfolder's contents rather than the parent folder.
+
+**Legacy account modules + Add from Library (unverified):** Some sources suggest using `New-AzAutomationModule -ContentLink` to load a module into the legacy account-level module store, after which it may appear as an option when adding modules to a Runtime Environment. This has not been confirmed — the portal's "Add from Library" option likely refers only to the PSGallery browse, not the legacy module store.
 
 ---
 

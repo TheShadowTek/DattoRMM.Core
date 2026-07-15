@@ -2,6 +2,10 @@
 
 A PowerShell module for the Datto RMM API v2. Provides typed, object-oriented access to devices, sites, alerts, jobs, filters, variables, and account management with built-in adaptive throttling and secure credential handling.
 
+> **🚧 Beta Release**
+>
+> This module is currently in public beta. It is stable and suitable for real-world use, but some areas are still being refined based on tester feedback before v1. Command names, parameter sets, and the object model are stable and will not change. See the [Beta Overview](docs/beta/about_DattoRMM.CoreBeta.md) for current status, known limitations, and the roadmap to v1.
+
 > **⚠️ Legacy Rate-Limit Compatibility**
 > 
 > Some Datto RMM accounts use a legacy single-bucket rate-limit model. Use the `-LegacyThrottle` switch on `Connect-DattoRMM` to enable compatibility. See [Known Issues](#known-issues) for details.
@@ -20,12 +24,11 @@ A PowerShell module for the Datto RMM API v2. Provides typed, object-oriented ac
 
 ## Installation
 
-See [INSTALL.md](INSTALL.md) for full instructions including execution policy options, certificate trust, user and system scope install, and Azure Automation.
-
-Quick start — import directly from an extracted folder:
+See [INSTALL.md](INSTALL.md) for full instructions including execution policy, certificate trust, and Azure Automation.
 
 ```powershell
-Import-Module .\DattoRMM.Core\DattoRMM.Core.psd1
+# Prerelease
+Install-Module DattoRMM.Core -AllowPrerelease
 ```
 
 ## Quick Start
@@ -93,7 +96,7 @@ Run `Get-Help <CommandName>` for detailed parameter and usage information, or se
 
 | Topic | Description |
 |---|---|
-| [Installation](INSTALL.md) | Download, unblock, execution policy, user/system/folder install, Azure Automation |
+| [Installation](INSTALL.md) | PowerShell Gallery install, code signing and certificate trust, Azure Automation |
 | [Changelog](CHANGELOG.md) | Version history and release notes |
 | [Security Policy](SECURITY.md) | Vulnerability reporting and credential security design |
 | [Module Overview](docs/about/about_DattoRMM.Core.md) | Architecture, design principles, and feature summary |
